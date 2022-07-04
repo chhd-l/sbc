@@ -263,3 +263,45 @@ export function deleteProduct(params = {}) {
     })
   });
 }
+
+/**
+ * refill添加商品
+ */
+ export function refillAddProduct(params = {}) {
+  return Fetch<TResult>('/subscription/next/refill', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...params
+    })
+  });
+}
+
+/**
+ * refill修改商品
+ */
+export function refillModifyProduct(params = {}) {
+  return Fetch<TResult>('/subscription/next/refill', {
+    method: 'PUT',
+    body: JSON.stringify({
+      ...params
+    })
+  });
+}
+
+/**
+ * refill查询商品
+ */
+ export function refillgetProduct(subscribeId) {
+  return Fetch<TResult>(`/subscription/next/refill/${subscribeId}`, {
+    method: 'GET'
+  });
+}
+
+/**
+ * refill查询商品折扣
+ */
+ export function getrefillcode() {
+  return Fetch<TResult>(`/subscription/next/refill/code`, {
+    method: 'GET'
+  });
+}

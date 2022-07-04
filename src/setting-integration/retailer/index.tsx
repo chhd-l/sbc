@@ -34,7 +34,6 @@ export default class Hub extends Component<any, any> {
     this.setState({ loading: false });
     if (res.code === Const.SUCCESS_CODE) {
       let params = res.context.buyFromRetailerContext ? JSON.parse(decryptAES(res.context.buyFromRetailerContext)) : {};
-
       this.setState({
         enabled: !!params.retailerEnable || false,
         type: params.type || '',
@@ -44,7 +43,8 @@ export default class Hub extends Component<any, any> {
         retailerProductsIds: params.idRetailProducts || '',
         vetProductsIds: params.idVetProducts || '',
         trackingPrefixId: params.trackingIdPrefix || '',
-        url: params.url || '',
+        sptUrl: params.sptUrl || '',
+        vetUrl: params.vetUrl || '',
       });
     } else {
       message.warn(res.message);
@@ -64,7 +64,8 @@ export default class Hub extends Component<any, any> {
           retailerProductsIds,
           vetProductsIds,
           trackingPrefixId,
-          url
+          sptUrl,
+          vetUrl,
         } = this.state;
 
         const params = {
@@ -76,7 +77,8 @@ export default class Hub extends Component<any, any> {
           idRetailProducts: retailerProductsIds,
           idVetProducts: vetProductsIds,
           trackingIdPrefix: trackingPrefixId,
-          url: url,
+          sptUrl,
+          vetUrl,
         };
 
         this.setState({ loading: true });
@@ -121,7 +123,8 @@ export default class Hub extends Component<any, any> {
       retailerProductsIds,
       vetProductsIds,
       trackingPrefixId,
-      url
+      sptUrl,
+      vetUrl,
     } = this.state;
 
     return (
@@ -228,18 +231,29 @@ export default class Hub extends Component<any, any> {
                       }
                       {
                         /*type 选择URL*/
-                        type === 'URL' && (
-                          <Form.Item label={<FormattedMessage id='Setting.URL' />}>
-                            {getFieldDecorator('url', {
-                              initialValue: url,
+                        type === 'URL' &&
+                          <>
+                          <Form.Item label={<FormattedMessage id='Setting.sptUrl' />}>
+                            {getFieldDecorator('sptUrl', {
+                              initialValue: sptUrl,
                               rules: [
                                 { required: true }
                               ]
                             })(
-                              <Input onChange={(e) => this.onChange('url', e.target.value)}/>
+                              <Input onChange={(e) => this.onChange('sptUrl', e.target.value)}/>
                             )}
                           </Form.Item>
-                        )
+                          <Form.Item label={<FormattedMessage id='Setting.vetUrl' />}>
+                            {getFieldDecorator('vetUrl', {
+                              initialValue: vetUrl,
+                              rules: [
+                                { required: true }
+                              ]
+                            })(
+                              <Input onChange={(e) => this.onChange('vetUrl', e.target.value)}/>
+                            )}
+                          </Form.Item>
+                          </>
                       }
                     </>
                   )}

@@ -69,7 +69,7 @@ export default class List extends React.Component<any, any> {
         <CouponModal
           isModalVisible={isModalVisible}
           setVisible={setModalVisible}
-          couponId={couponId}/>
+          couponId={couponId} />
         <DataGrid
           loading={loading}
           rowKey={(record) => record.couponId}
@@ -84,15 +84,15 @@ export default class List extends React.Component<any, any> {
           }}
         >
           <DataGrid.Column className="max-td" title={<FormattedMessage id="Marketing.CouponName" />}
-                           dataIndex="couponName" key="couponName" />
+            dataIndex="couponName" key="couponName" />
           <DataGrid.Column className="max-td" title={<FormattedMessage id="Marketing.PromotionType" />}
-                           dataIndex="couponPurchaseType" key="couponPurchaseType"
-                           render={(couponPurchaseType) => {
-                             return PROMOTION_TYPE[couponPurchaseType];
-                           }}
+            dataIndex="couponPurchaseType" key="couponPurchaseType"
+            render={(couponPurchaseType) => {
+              return PROMOTION_TYPE[couponPurchaseType];
+            }}
           />
           <DataGrid.Column title={`Face value(${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)})`}
-                           dataIndex="denominationStr" key="denominationStr" />
+            dataIndex="denominationStr" key="denominationStr" />
           <DataGrid.Column title={<FormattedMessage id="Marketing.ValidPerio" />} dataIndex="validity" key="validity" />
           {/* <DataGrid.Column
           title="优惠券分类"
@@ -104,7 +104,12 @@ export default class List extends React.Component<any, any> {
         /> */}
           {/* <DataGrid.Column title="Use range" dataIndex="scopeNamesStr" key="scopeNamesStr" render={(value) => (value.length > 12 ? `${value.substring(0, 12)}...` : value)} /> */}
           <DataGrid.Column title={<FormattedMessage id="Marketing.Status" />} dataIndex="couponStatusStr"
-                           key="couponStatusStr" />
+            key="couponStatusStr" />
+          <DataGrid.Column
+            title={<FormattedMessage id="Marketing.createName" />}
+            dataIndex="createName"
+            key={'createName'}
+          />
           <DataGrid.Column
             title={<FormattedMessage id="Marketing.Operation" />}
             key="operate"
@@ -121,10 +126,10 @@ export default class List extends React.Component<any, any> {
                       }}
                       style={{ marginRight: 10 }}
                     >
-                         <Tooltip placement="top" title={<FormattedMessage id="Marketing.generate" />}>
+                      <Tooltip placement="top" title={<FormattedMessage id="Marketing.generate" />}>
                         <span className="icon iconfont iconcopy" style={{ fontSize: 20 }}></span>
                       </Tooltip>
-                      </span>
+                    </span>
                   )}
                   <AuthWrapper functionName={'f_coupon_detail'}>
                     {text == 0 && ( //0 有活动
@@ -135,9 +140,9 @@ export default class List extends React.Component<any, any> {
                         }}
                         style={{ marginRight: 10 }}
                       >
-                         <Tooltip placement="top" title={<FormattedMessage id="Marketing.Export" />}>
-                        <span className="icon iconfont iconOffShelves" style={{ fontSize: 20 }}></span>
-                      </Tooltip>
+                        <Tooltip placement="top" title={<FormattedMessage id="Marketing.Export" />}>
+                          <span className="icon iconfont iconOffShelves" style={{ fontSize: 20 }}></span>
+                        </Tooltip>
                       </span>
                     )}
                   </AuthWrapper>
@@ -163,7 +168,7 @@ export default class List extends React.Component<any, any> {
                         }
                       >
                         <Tooltip placement="top" title={<FormattedMessage id="Marketing.Edit" />}>
-                            <span className="icon iconfont iconEdit" style={{ fontSize: 20 }}></span>
+                          <span className="icon iconfont iconEdit" style={{ fontSize: 20 }}></span>
                         </Tooltip>
                       </span>
                     )}
@@ -177,18 +182,18 @@ export default class List extends React.Component<any, any> {
                         copyCoupon((record as any).couponId);
                       }}
                     >
-                        <Tooltip placement="top" title={<FormattedMessage id="Marketing.Copy" />}>
-                            <span className="icon iconfont iconbtn-addsubvisionsaddcategory"
-                                  style={{ fontSize: 20 }}></span>
-                        </Tooltip>
+                      <Tooltip placement="top" title={<FormattedMessage id="Marketing.Copy" />}>
+                        <span className="icon iconfont iconbtn-addsubvisionsaddcategory"
+                          style={{ fontSize: 20 }}></span>
+                      </Tooltip>
                     </span>
                   </AuthWrapper>
 
                   <AuthWrapper functionName={'f_delete_coupon'}>
                     {text == 1 && (
                       <Popconfirm title={<FormattedMessage id="Marketing.deleteThisCoupon" />}
-                                  onConfirm={() => deleteCoupon((record as any).couponId)} okText="Yes"
-                                  cancelText="Cancel">
+                        onConfirm={() => deleteCoupon((record as any).couponId)} okText="Yes"
+                        cancelText="Cancel">
                         <Tooltip placement="top" title={<FormattedMessage id="Marketing.Delete" />}>
                           <a>
                             <span className="icon iconfont iconDelete" style={{ fontSize: 20 }}></span>

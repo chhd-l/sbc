@@ -54,5 +54,10 @@ export const enumConst = {
     3: <FormattedMessage id="Marketing.Freeshipping" />,
     4: <FormattedMessage id="Marketing.Gifts" />,
     5: <FormattedMessage id="Marketing.leaflet" />,
+  },
+  appliesType: {
+    0: <FormattedMessage id="Marketing.All" />,
+    1: <FormattedMessage id="Marketing.MostExpensive" />,
+    2: <FormattedMessage id="Marketing.Cheapest" />
   }
 }

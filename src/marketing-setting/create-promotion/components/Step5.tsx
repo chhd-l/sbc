@@ -12,7 +12,7 @@ function Step5({ form }) {
   const { changeFormData, formData, match, setStep, formItemLayout } = useContext<any>(FormContext);
   const { getFieldDecorator, validateFields, setFieldsValue, setFields, getFieldsValue } = form;
   const [couponPromotionType, setCouponPromotionType] = useState(0);
-  const [promotionAppliesType, setPromotionAppliesType] = useState(0);
+  const [appliesType, setAppliesType] = useState(0);
 
   const [selectedGiftRows, setSelectedGiftRows] = useState<any>(fromJS([]));
   const [fullGiftLevelList, setFullGiftLevelList] = useState<any>([]);
@@ -354,6 +354,44 @@ function Step5({ form }) {
                     />
                   )}
                 </Form.Item>
+                {formData.Conditions.promotionType === 2 && (
+                  <Form.Item label={<FormattedMessage id="Marketing.LimitThePromotionTo" />}>
+                    {getFieldDecorator('subscriptionRefillLimit', {
+                      initialValue: formData.Advantage.subscriptionRefillLimit,
+                      rules: [
+                        {
+                          validator: (_rule, value, callback) => {
+                            let rule = /^(?:[1-5][0-9]?)$/;
+                            if (value) {
+                              if (!rule.test(value) || (value > 50 || value < 0)) {
+                                callback(
+                                  (window as any).RCi18n({
+                                    id: 'Marketing.InputValuefrom1to50'
+                                  })
+                                )
+
+                              }
+                            }
+                            callback();
+                          }
+                        }
+                      ]
+                    })(
+                      <Input
+                        style={{ width: 150 }}
+                        placeholder={
+                          (window as any).RCi18n({
+                            id: 'Marketing.InputValuefrom1to50'
+                          })
+                        }
+                      />
+                    )}
+                    <span>
+                      &nbsp;
+                      <FormattedMessage id="Marketing.refills" />
+                    </span>
+                  </Form.Item>
+                )}
               </>
             )}
             {couponPromotionType === 1 && (
@@ -581,20 +619,20 @@ function Step5({ form }) {
                   </div>
                 </Form.Item>
                 <Form.Item label={<FormattedMessage id="Marketing.promotionAppliesType" />}>
-                  {getFieldDecorator('promotionAppliesType', {
-                    initialValue: promotionAppliesType,
-                    rules: [
-                      {
-                        required: true,
-                        message: (window as any).RCi18n({
-                          id: 'Marketing.PleaseSelectOne'
-                        })
-                      }
-                    ]
+                  {getFieldDecorator('appliesType', {
+                    initialValue: appliesType,
+                    // rules: [
+                    //   {
+                    //     required: true,
+                    //     message: (window as any).RCi18n({
+                    //       id: 'Marketing.PleaseSelectOne'
+                    //     })
+                    //   }
+                    // ]
                   })(
                     <Radio.Group
                       onChange={(e) => {
-                        setPromotionAppliesType(e.target.value);
+                        setAppliesType(e.target.value);
                       }}
                     >
                       <Radio value={0}>
@@ -609,59 +647,102 @@ function Step5({ form }) {
                     </Radio.Group>
                   )}
                 </Form.Item>
+                {formData.Conditions.promotionType === 2 && (
+                  <Form.Item label={<FormattedMessage id="Marketing.LimitThePromotionTo" />}>
+                    {getFieldDecorator('subscriptionRefillLimit', {
+                      initialValue: formData.Advantage.subscriptionRefillLimit,
+                      rules: [
+                        {
+                          validator: (_rule, value, callback) => {
+                            let rule = /^(?:[1-5][0-9]?)$/;
+                            if (value) {
+                              if (!rule.test(value) || (value > 50 || value < 0)) {
+                                callback(
+                                  (window as any).RCi18n({
+                                    id: 'Marketing.InputValuefrom1to50'
+                                  })
+                                )
+
+                              }
+                            }
+                            callback();
+                          }
+                        }
+                      ]
+                    })(
+                      <Input
+                        style={{ width: 150 }}
+                        placeholder={
+                          (window as any).RCi18n({
+                            id: 'Marketing.InputValuefrom1to50'
+                          })
+                        }
+                      />
+                    )}
+                    <span>
+                      &nbsp;
+                      <FormattedMessage id="Marketing.refills" />
+                    </span>
+                  </Form.Item>
+                )}
+
+
+
               </>
             )}
           </>
         ) : (
           <>
             {couponPromotionType === 0 && (
-              <Form.Item
-                {...formItemLayout}
-                label={<FormattedMessage id="Marketing.PromotionValue" />}
-                required={true}
-              >
-                {getFieldDecorator('denomination', {
-                  initialValue: formData.Advantage.denomination,
-                  rules: [
-                    {
-                      required: true,
-                      message: (window as any).RCi18n({
-                        id: 'Marketing.theFaceValueOfCoupon'
-                      })
-                    },
-                    {
-                      validator: (_rule, value, callback) => {
-                        if (value) {
-                          if (!ValidConst.noZeroNumber.test(value) || value < 1 || value > 99999) {
-                            callback(
-                              (window as any).RCi18n({
-                                id: 'Marketing.IntegersBetweenAreAllowed'
-                              })
-                            );
-                            return;
+              <>
+                <Form.Item
+                  {...formItemLayout}
+                  label={<FormattedMessage id="Marketing.PromotionValue" />}
+                  required={true}
+                >
+                  {getFieldDecorator('denomination', {
+                    initialValue: formData.Advantage.denomination,
+                    rules: [
+                      {
+                        required: true,
+                        message: (window as any).RCi18n({
+                          id: 'Marketing.theFaceValueOfCoupon'
+                        })
+                      },
+                      {
+                        validator: (_rule, value, callback) => {
+                          if (value) {
+                            if (!ValidConst.noZeroNumber.test(value) || value < 1 || value > 99999) {
+                              callback(
+                                (window as any).RCi18n({
+                                  id: 'Marketing.IntegersBetweenAreAllowed'
+                                })
+                              );
+                              return;
+                            }
+                            if (
+                              formData.Conditions.fullMoney &&
+                              Number(value) > Number(formData.Conditions.fullMoney)
+                            ) {
+                              callback('Value cannot be greater than the previous value.');
+                            }
                           }
-                          if (
-                            formData.Conditions.fullMoney &&
-                            Number(value) > Number(formData.Conditions.fullMoney)
-                          ) {
-                            callback('Value cannot be greater than the previous value.');
-                          }
+                          callback();
                         }
-                        callback();
                       }
-                    }
-                  ]
-                })(
-                  <Input
-                    placeholder={(window as any).RCi18n({
-                      id: 'Marketing.integerfrom1to99999'
-                    })}
-                    addonBefore={sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                    maxLength={5}
-                    style={{ width: 360 }}
-                  />
-                )}
-              </Form.Item>
+                    ]
+                  })(
+                    <Input
+                      placeholder={(window as any).RCi18n({
+                        id: 'Marketing.integerfrom1to99999'
+                      })}
+                      addonBefore={sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                      maxLength={5}
+                      style={{ width: 360 }}
+                    />
+                  )}
+                </Form.Item>
+              </>
             )}
             {couponPromotionType === 1 && (
               <>
@@ -746,8 +827,8 @@ function Step5({ form }) {
                   </div>
                 </Form.Item>
                 <Form.Item label={<FormattedMessage id="Marketing.promotionAppliesType" />}>
-                  {getFieldDecorator('promotionAppliesType', {
-                    initialValue: promotionAppliesType,
+                  {getFieldDecorator('appliesType', {
+                    initialValue: appliesType,
                     rules: [
                       {
                         required: true,
@@ -759,7 +840,7 @@ function Step5({ form }) {
                   })(
                     <Radio.Group
                       onChange={(e) => {
-                        setPromotionAppliesType(e.target.value);
+                        setAppliesType(e.target.value);
                       }}
                     >
                       <Radio value={0}>
@@ -774,6 +855,45 @@ function Step5({ form }) {
                     </Radio.Group>
                   )}
                 </Form.Item>
+                {/* {formData.Conditions.promotionType === 2 && (
+                  <Form.Item label={<FormattedMessage id="Marketing.LimitThePromotionTo" />}>
+                    {getFieldDecorator('subscriptionRefillLimit', {
+                      initialValue: formData.Advantage.subscriptionRefillLimit,
+                      rules: [
+                        {
+                          validator: (_rule, value, callback) => {
+                            let rule = /^(?:[1-5][0-9]?)$/;
+                            if (value) {
+                              if (!rule.test(value) || (value > 50 || value < 0)) {
+                                callback(
+                                  (window as any).RCi18n({
+                                    id: 'Marketing.InputValuefrom1to50'
+                                  })
+                                )
+
+                              }
+                            }
+                            callback();
+                          }
+                        }
+                      ]
+                    })(
+                      <Input
+                        style={{ width: 150 }}
+                        placeholder={
+                          (window as any).RCi18n({
+                            id: 'Marketing.InputValuefrom1to50'
+                          })
+                        }
+                      />
+                    )}
+                    <span>
+                      &nbsp;
+                      <FormattedMessage id="Marketing.refills" />
+                    </span>
+                  </Form.Item>
+                )} */}
+
               </>
             )}
           </>

@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
-import {FormattedMessage} from 'react-intl';
-import {Button, Col, Form, Icon, InputNumber, Popconfirm, Row, Select, Table, Input} from 'antd';
-import {Const, RCi18n} from 'qmkit';
-import {GoodsModal} from 'biz';
-import {fromJS} from 'immutable';
+import React, { Component } from 'react';
+import { FormattedMessage } from 'react-intl';
+import { Button, Col, Form, Icon, InputNumber, Popconfirm, Row, Select, Table, Input } from 'antd';
+import { Const, RCi18n } from 'qmkit';
+import { GoodsModal } from 'biz';
+import { fromJS } from 'immutable';
 import * as commonWebapi from '@/benefit-setting/webapi';
 
 
@@ -87,7 +87,7 @@ export default class BenefitList extends Component<any, any>{
 
     initDataSource = (initData) => {
         if (!initData) return;
-        let {fullGiftLevelList} = initData;
+        let { fullGiftLevelList } = initData;
 
         if (Array.isArray(fullGiftLevelList) && fullGiftLevelList.length > 0) {
             let initDataSource = fullGiftLevelList.map(item => {
@@ -128,12 +128,12 @@ export default class BenefitList extends Component<any, any>{
 
         const dataSource = [...this.state.dataSource];
         // 最后一个重置数据
-        if (Array.isArray(dataSource) && dataSource.length === 1){
+        if (Array.isArray(dataSource) && dataSource.length === 1) {
             this.setState({
                 dataSource: [],
                 count: 0,
             })
-        }else {
+        } else {
             this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
 
         }
@@ -143,7 +143,7 @@ export default class BenefitList extends Component<any, any>{
         console.log(`selected ${value}`);
         const dataSource = [...this.state.dataSource];
         let index = dataSource.findIndex(item => item.key === record.key);
-        if ( index > -1 ){
+        if (index > -1) {
             dataSource[index].deliveryNumber = Number(value);
         }
         this.setState({
@@ -173,7 +173,7 @@ export default class BenefitList extends Component<any, any>{
         });
     };
 
-    onDelGiftItem= (record, item) => {
+    onDelGiftItem = (record, item) => {
         if (!record || !item) return;
         // 删除当前行数据
         let dataSource = [...this.state.dataSource];
@@ -200,7 +200,7 @@ export default class BenefitList extends Component<any, any>{
 
         // 选中gift,更新dataSource
         let index = dataSource.findIndex((item) => item.key === currentSelected.key);
-        if (index > -1 ) {
+        if (index > -1) {
             dataSource[index].gifts = selectedRows.toJS();
             dataSource[index].selectedSkuIds = selectedSkuIds;
             dataSource[index].selectedRows = selectedRows;
@@ -215,27 +215,27 @@ export default class BenefitList extends Component<any, any>{
     }
 
     closeGoodsModal = () => {
-        this.setState({visible: false});
+        this.setState({ visible: false });
     }
 
     openGoodsModal = (currentSelected) => {
 
         if (!currentSelected) return;
-        let {selectedSkuIds,selectedRows} = currentSelected;
+        let { selectedSkuIds, selectedRows } = currentSelected;
         this.currentSelected = currentSelected;
         // 当前行存在已选中产品，
-        if (Array.isArray(selectedSkuIds) && selectedSkuIds.length > 0){
+        if (Array.isArray(selectedSkuIds) && selectedSkuIds.length > 0) {
             this.setState({
                 selectedSkuIds,
                 selectedRows,
             })
-        }else { // 没有已选产品则为空
+        } else { // 没有已选产品则为空
             this.setState({
                 selectedSkuIds: [],
                 selectedRows: [],
             })
         }
-        this.setState({visible: true});
+        this.setState({ visible: true });
     };
 
     getColumns = () => {
@@ -255,7 +255,7 @@ export default class BenefitList extends Component<any, any>{
 
         return [
             {
-                title: <strong>{`${RCi18n({id: 'Subscription.Delivery number'})}`}</strong>,
+                title: <strong>{`${RCi18n({ id: 'Subscription.Delivery number' })}`}</strong>,
                 dataIndex: 'deliveryNumber',
                 className: 'deliveryNumber-warp',
                 width: '20%',
@@ -270,7 +270,7 @@ export default class BenefitList extends Component<any, any>{
                                         rules: [
                                             {
                                                 required: true,
-                                                message: RCi18n({id: 'Subscription.PleaseInputDeliveryNumber'})
+                                                message: RCi18n({ id: 'Subscription.PleaseInputDeliveryNumber' })
                                             },
                                         ],
                                         initialValue: record.deliveryNumber || null
@@ -279,14 +279,14 @@ export default class BenefitList extends Component<any, any>{
                                             onChange={(value) => this.handleDeliveryNumberChange(value, record)}
                                             className='deliveryNumber-select'
                                         >
-                                                    {deliveryNumberData.map(item => (
-                                                        <Option
-                                                            key={item.id}
-                                                            value={item.priority}
-                                                        >
-                                                            <strong>{item.name}</strong>
-                                                        </Option>))}
-                                                </Select>
+                                            {deliveryNumberData.map(item => (
+                                                <Option
+                                                    key={item.id}
+                                                    value={item.priority}
+                                                >
+                                                    <strong>{item.name}</strong>
+                                                </Option>))}
+                                        </Select>
                                     )
                                 }
                             </Form.Item>
@@ -295,7 +295,7 @@ export default class BenefitList extends Component<any, any>{
                 }
             },
             {
-                title: <strong>{`${RCi18n({id: 'Subscription.Gift'})}`}</strong>,
+                title: <strong>{`${RCi18n({ id: 'Subscription.Gift' })}`}</strong>,
                 dataIndex: 'gifts',
                 width: '40%',
                 render: (rowInfo, record, index) => {
@@ -303,74 +303,178 @@ export default class BenefitList extends Component<any, any>{
                         <Row key={record.key}>
                             <Col span={24}>
                                 <div className="space-between-align">
-                                    <div style={{paddingTop: 6}}>
+                                    <div style={{ paddingTop: 6 }}>
                                         {' '}
                                         <Icon
-                                            style={{paddingRight: 8, fontSize: '24px', color: 'red', cursor: 'pointer'}}
+                                            style={{ paddingRight: 8, fontSize: '24px', color: 'red', cursor: 'pointer' }}
                                             type="plus-circle"
                                             onClick={(e) => this.openGoodsModal(record)}
                                         />
                                     </div>
-                                    <div style={{lineHeight: 2}}>
+                                    <div style={{ lineHeight: 2 }}>
                                         {record.gifts &&
-                                        record.gifts.map((item, recordIndex) => {
-                                            return (
-                                                <div className="space-between-align" key={item.goodsInfoId}
-                                                     style={{paddingLeft: 5}}>
-                                                    <span style={{
-                                                        paddingLeft: 5,
-                                                        paddingRight: 5
-                                                    }}>{item.goodsInfoNo}</span>
-                                                    <Form.Item label='' style={styles.tableFormItem}>
-                                                        {
-                                                            getFieldDecorator(`benefitList[${index}].gifts[${recordIndex}].productNum`, {
-                                                                initialValue: item.productNum || 1,
-                                                                rules: [
-                                                                    {
-                                                                        required: true, message:
-                                                                            (window as any).RCi18n({
-                                                                                id: 'Marketing.greaterthan0andlessthan999'
-                                                                            })
-                                                                    }
-                                                                ]
-                                                            })(
-                                                                <InputNumber
-                                                                    style={{
-                                                                        width: '60px',
-                                                                        height: '28px',
-                                                                        textAlign: 'center'
-                                                                    }}
-                                                                    key={item.goodsInfoId || recordIndex}
-                                                                    min={1}
-                                                                    max={999}
-                                                                />
-                                                            )
-                                                        }
-                                                    </Form.Item>
-                                                    <Form.Item label='' style={{width: 0, height: 0, visibility: 'hidden'}}>
-                                                        {
-                                                            getFieldDecorator(`benefitList[${index}].gifts[${recordIndex}].productId`, {
-                                                                initialValue: item.goodsInfoId,
-                                                            })(
-                                                                <Input
-                                                                    style={{
-                                                                        width: '0',
-                                                                        height: '0',
-                                                                        textAlign: 'center'
-                                                                    }}
-                                                                />
-                                                            )
-                                                        }
-                                                    </Form.Item>
-
-                                                    <a
-                                                        style={{paddingLeft: 5}}
-                                                        className="iconfont iconDelete"
-                                                        onClick={() => this.onDelGiftItem(record, item)}
-                                                    />
-                                                </div>
-                                            );
-                                        })}
+                                            record.gifts.map((item, recordIndex) => {
+                                                return (
+                                                    <div className="space-between-align" key={item.goodsInfoId}
+                                                        style={{ paddingLeft: 5 }}>
+                                                        <span style={{
+                                                            paddingLeft: 5,
+                                                            paddingRight: 5
+                                                        }}>{item.goodsInfoNo}</span>
+                                                        <Form.Item label='' style={styles.tableFormItem}>
+                                                            {
+                                                                getFieldDecorator(`benefitList[${index}].gifts[${recordIndex}].productNum`, {
+                                                                    initialValue: item.productNum || 1,
+                                                                    rules: [
+                                                                        {
+                                                                            required: true, message:
+                                                                                (window as any).RCi18n({
+                                                                                    id: 'Marketing.greaterthan0andlessthan999'
+                                                                                })
+                                                                        }
+                                                                    ]
+                                                                })(
+                                                                    <InputNumber
+                                                                        style={{
+                                                                            width: '60px',
+                                                                            height: '28px',
+                                                                            textAlign: 'center'
+                                                                        }}
+                                                                        key={item.goodsInfoId || recordIndex}
+                                                                        min={1}
+                                                                        max={999}
+                                                                    />
+                                                                )
+                                                            }
+                                                        </Form.Item>
+                                                        <Form.Item label='' style={{ width: 0, height: 0, visibility: 'hidden' }}>
+                                                            {
+                                                                getFieldDecorator(`benefitList[${index}].gifts[${recordIndex}].productId`, {
+                                                                    initialValue: item.goodsInfoId,
+                                                                })(
+                                                                    <Input
+                                                                        style={{
+                                                                            width: '0',
+                                                                            height: '0',
+                                                                            textAlign: 'center'
+                                                                        }}
+                                                                    />
+                                                                )
+                                                            }
+                                                        </Form.Item>
+                                                        <Form.Item label='' style={{ width: 0, height: 0, visibility: 'hidden' }}>
+                                                            {
+                                                                getFieldDecorator(`benefitList[${index}].gifts[${recordIndex}].goodsInfoId`, {
+                                                                    initialValue: item.goodsInfoId,
+                                                                })(
+                                                                    <Input
+                                                                        style={{
+                                                                            width: '0',
+                                                                            height: '0',
+                                                                            textAlign: 'center'
+                                                                        }}
+                                                                    />
+                                                                )
+                                                            }
+                                                        </Form.Item>
+                                                        <Form.Item label='' style={{ width: 0, height: 0, visibility: 'hidden' }}>
+                                                            {
+                                                                getFieldDecorator(`benefitList[${index}].gifts[${recordIndex}].goodsInfoNo`, {
+                                                                    initialValue: item.goodsInfoNo,
+                                                                })(
+                                                                    <Input
+                                                                        style={{
+                                                                            width: '0',
+                                                                            height: '0',
+                                                                            textAlign: 'center'
+                                                                        }}
+                                                                    />
+                                                                )
+                                                            }
+                                                        </Form.Item>
+                                                        <Form.Item label='' style={{ width: 0, height: 0, visibility: 'hidden' }}>
+                                                            {
+                                                                getFieldDecorator(`benefitList[${index}].gifts[${recordIndex}].goodsInfoName`, {
+                                                                    initialValue: item.goodsInfoName,
+                                                                })(
+                                                                    <Input
+                                                                        style={{
+                                                                            width: '0',
+                                                                            height: '0',
+                                                                            textAlign: 'center'
+                                                                        }}
+                                                                    />
+                                                                )
+                                                            }
+                                                        </Form.Item>
+                                                        <Form.Item label='' style={{ width: 0, height: 0, visibility: 'hidden' }}>
+                                                            {
+                                                                getFieldDecorator(`benefitList[${index}].gifts[${recordIndex}].goodsInfoImg`, {
+                                                                    initialValue: item.goodsInfoImg,
+                                                                })(
+                                                                    <Input
+                                                                        style={{
+                                                                            width: '0',
+                                                                            height: '0',
+                                                                            textAlign: 'center'
+                                                                        }}
+                                                                    />
+                                                                )
+                                                            }
+                                                        </Form.Item>
+                                                        <Form.Item label='' style={{ width: 0, height: 0, visibility: 'hidden' }}>
+                                                            {
+                                                                getFieldDecorator(`benefitList[${index}].gifts[${recordIndex}].goodsId`, {
+                                                                    initialValue: item?.goods?.goodsId,
+                                                                })(
+                                                                    <Input
+                                                                        style={{
+                                                                            width: '0',
+                                                                            height: '0',
+                                                                            textAlign: 'center'
+                                                                        }}
+                                                                    />
+                                                                )
+                                                            }
+                                                        </Form.Item>
+                                                        <Form.Item label='' style={{ width: 0, height: 0, visibility: 'hidden' }}>
+                                                            {
+                                                                getFieldDecorator(`benefitList[${index}].gifts[${recordIndex}].goodsNo`, {
+                                                                    initialValue: item?.goods?.goodsNo,
+                                                                })(
+                                                                    <Input
+                                                                        style={{
+                                                                            width: '0',
+                                                                            height: '0',
+                                                                            textAlign: 'center'
+                                                                        }}
+                                                                    />
+                                                                )
+                                                            }
+                                                        </Form.Item>
+                                                        <Form.Item label='' style={{ width: 0, height: 0, visibility: 'hidden' }}>
+                                                            {
+                                                                getFieldDecorator(`benefitList[${index}].gifts[${recordIndex}].goodsImg`, {
+                                                                    initialValue: item?.goods?.goodsImg,
+                                                                })(
+                                                                    <Input
+                                                                        style={{
+                                                                            width: '0',
+                                                                            height: '0',
+                                                                            textAlign: 'center'
+                                                                        }}
+                                                                    />
+                                                                )
+                                                            }
+                                                        </Form.Item>
+                                                        <a
+                                                            style={{ paddingLeft: 5 }}
+                                                            className="iconfont iconDelete"
+                                                            onClick={() => this.onDelGiftItem(record, item)}
+                                                        />
+                                                    </div>
+                                                );
+                                            })}
                                     </div>
                                 </div>
                             </Col>
@@ -380,7 +484,7 @@ export default class BenefitList extends Component<any, any>{
 
             },
             {
-                title: <strong>{`${RCi18n({id: 'Subscription.Operation'})}`}</strong>,
+                title: <strong>{`${RCi18n({ id: 'Subscription.Operation' })}`}</strong>,
                 dataIndex: 'Operation',
                 width: '20%',
                 render: (text, record) => {
@@ -393,9 +497,9 @@ export default class BenefitList extends Component<any, any>{
                             {/*/>*/}
                         </div>
                         <div>
-                            <Popconfirm title={RCi18n({id: 'Subscription.SureToDelete'})}
-                                        onConfirm={() => this.handleDelete(record.key)}>
-                                <a style={{paddingLeft: 5}} className="iconfont iconDelete"/>
+                            <Popconfirm title={RCi18n({ id: 'Subscription.SureToDelete' })}
+                                onConfirm={() => this.handleDelete(record.key)}>
+                                <a style={{ paddingLeft: 5 }} className="iconfont iconDelete" />
                             </Popconfirm>
                         </div>
                     </div>;
@@ -409,7 +513,7 @@ export default class BenefitList extends Component<any, any>{
 
         return (
             <Form.Item>
-                {getFieldDecorator('gif-errors')(<input hidden/>)}
+                {getFieldDecorator('gif-errors')(<input hidden />)}
             </Form.Item>
         );
     }

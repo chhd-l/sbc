@@ -73,16 +73,16 @@ class SearchForm extends React.Component<any, any> {
                 getPopupContainer={() => document.getElementById('page-content')}
                 label={<FormattedMessage id="Marketing.PromotionType" />}
                 // style={{ width: 170 }}
-                defaultValue="0"
+                defaultValue="Alltype"
                 onChange={(value) => {
-                  value = value === '' ? null : value;
+                  value = value === 'Alltype' ? null : value;
                   onFormChange({
                     field: 'promotionType',
                     value
                   });
                 }}
               >
-                {/* <Option value=""><FormattedMessage id="Marketing.Alltype" /></Option> */}
+                <Option value='Alltype'><FormattedMessage id="Marketing.Alltype" /></Option>
                 <Option value="0"><FormattedMessage id="Marketing.All" /></Option>
                 <Option value="1"><FormattedMessage id="Marketing.Autoship" /></Option>
                 {Const.SITE_NAME !== 'MYVETRECO' && <Option value="2"><FormattedMessage id="Marketing.Clubpromotion" /></Option>}
@@ -270,8 +270,8 @@ class SearchForm extends React.Component<any, any> {
     let startValue = null;
     let endValue = null;
     if (MomentTimeArr.length > 0) {
-      startTime = MomentTimeArr[0]?.format(Const.DAY_FORMAT) + ':00';
-      endTime = MomentTimeArr[1]?.format(Const.DAY_FORMAT) + ':00';
+      startTime = MomentTimeArr[0]?.format(Const.DATE_FORMAT) + ':00';
+      endTime = MomentTimeArr[1]?.format(Const.DATE_FORMAT) + ':00';
       startValue = MomentTimeArr[0];
       endValue = MomentTimeArr[1]
     }

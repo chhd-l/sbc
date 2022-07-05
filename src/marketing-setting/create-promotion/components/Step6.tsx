@@ -800,6 +800,16 @@ export default function Step6({ setLoading }) {
                     </div>
                   </div>
                 )}
+                {formData.Advantage.couponPromotionType === 1 && (
+                  <div className="step-summary-item">
+                    <div className="step-summary-sub-title">
+                      <FormattedMessage id="Marketing.appliesType" />:
+                    </div>
+                    <div className="step-summary-item-text">
+                      {enumConst.appliesType[formData.Advantage.appliesType]}
+                    </div>
+                  </div>
+                )}
               </>
             )}
             {formData.Advantage.couponPromotionType === 4 ||

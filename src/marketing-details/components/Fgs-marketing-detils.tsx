@@ -219,6 +219,18 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
                 {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
               </Col>
             </Row>
+            <Row className="step-summary-item">
+              <Col className="step-summary-sub-title">
+                <FormattedMessage id="Marketing.appliesType" />:
+              </Col>
+              <Col className="step-summary-item-text">{enumConst.appliesType[data?.appliesType]}</Col>
+            </Row>
+            {data?.subscriptionRefillLimit && <Row className="step-summary-item">
+              <Col className="step-summary-sub-title">
+                <FormattedMessage id="Marketing.subscriptionRefillLimit" />:
+              </Col>
+              <Col className="step-summary-item-text">{data?.subscriptionRefillLimit} <FormattedMessage id="Marketing.refills" /></Col>
+            </Row>}
           </>
           break;
         case 3:

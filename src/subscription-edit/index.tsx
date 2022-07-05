@@ -288,8 +288,17 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             timeSlot: subscriptionDetail.consignee.timeSlot
           };
           const isSubscriptionRefill = await webapi.refillgetProduct(subscriptionDetail.subscribeId);
+          const subscriptionNextRefillPromotionVO = isSubscriptionRefill?.res?.context?.subscriptionNextRefillPromotionVO;
 
-          console.log('isSubscriptionRefill', isSubscriptionRefill)
+          console.log('isSubscriptionRefill', isSubscriptionRefill);
+          subscriptionDetail.noStartTradeList = subscriptionDetail.noStartTradeList.map((item) => {
+            return {
+              ...item,
+              ProductName: subscriptionNextRefillPromotionVO?.productName,
+              tradePrice: { ...item.tradePrice, discountsPrice: item?.tradePrice?.discountsPrice + (1 - (subscriptionNextRefillPromotionVO?.discount ? subscriptionNextRefillPromotionVO?.discount : 1)) * item?.tradePrice?.totalPrice }
+            }
+          })
+
           this.setState(
             {
               subscribeGoods: subscribeGoods,
@@ -1245,7 +1254,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     });
   };
   addProductskuSelectedBackFun = async (selectedSkuIds, selectedRows: any) => {
-    const { subscriptionId, goodsInfo, subscriptionType, subscriptionStatus, deliveryAddressId, curChangeProductItem, subscriptionNextRefillPromotion } = this.state;
+    const { subscriptionId, goodsInfo, subscriptionType, subscriptionStatus, deliveryAddressId, curChangeProductItem, subscriptionNextRefillPromotion, noStartOrder } = this.state;
     if (!Array.isArray(selectedSkuIds) || !Array.isArray(selectedRows?.toJS())) return;
     if (selectedSkuIds.length === 0 || selectedRows?.toJS()?.length === 0) return;
 
@@ -1339,7 +1348,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     }
   }
   skuSelectedBackFun = async (selectedSkuIds, selectedRows: any) => {
-    const { subscriptionId, goodsInfo, subscriptionType, subscriptionStatus, deliveryAddressId, curChangeProductItem } = this.state;
+    const { subscriptionId, goodsInfo, subscriptionType, subscriptionStatus, deliveryAddressId, curChangeProductItem, subscriptionNextRefillPromotion } = this.state;
     if (!Array.isArray(selectedSkuIds) || !Array.isArray(selectedRows?.toJS())) return;
     if (selectedSkuIds.length === 0 || selectedRows?.toJS()?.length === 0) return;
     // 法国、俄罗斯、土耳其需要选择错误提示
@@ -1386,6 +1395,25 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       // }
       let { res } = await webapi.changeSubscriptionGoods(params);
       if (res.code === Const.SUCCESS_CODE) {
+        if (subscriptionNextRefillPromotion?.refillPromotionId) {
+          // 商品改变成功之后再删除这个订阅号下绑定的折扣和商品
+          await webapi.refilldelProduct({
+            refillPromotionId: subscriptionNextRefillPromotion.refillPromotionId,
+            productId: null,
+            productName: null,
+            productNum: null,
+            subscribeId: subscriptionId,
+            type: 0
+          });
+          await webapi.refilldelProduct({
+            refillPromotionId: subscriptionNextRefillPromotion.refillPromotionId,
+            couponCode: null,
+            discount: null,
+            subscribeId: subscriptionId,
+            type: 1
+          });
+        }
+
         message.success(RCi18n({ id: 'PetOwner.OperateSuccessfully' }));
         this.getSubscriptionDetail();
       } else {
@@ -1867,6 +1895,20 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             {record.tradeItems && record.tradeItems[0].nextDeliveryTime
               ? moment(record.tradeItems[0].nextDeliveryTime).format('YYYY-MM-DD')
               : '-'}
+          </div>
+        )
+      },
+      {
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="Subscription.Gift" />
+          </span>
+        ),
+        key: 'ProductName',
+        width: '10%',
+        render: (text, record) => (
+          <div>
+            {record?.ProductName ? record?.ProductName : 'None'}
           </div>
         )
       },

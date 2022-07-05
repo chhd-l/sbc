@@ -41,6 +41,7 @@ function Step5({ form }) {
     ]);
     if (match.params.id) {
       setCouponPromotionType(formData.Advantage.couponPromotionType);
+      setAppliesType(formData.Advantage.appliesType)
       if (
         formData.subType === 4 ||
         formData.subType === 5 ||
@@ -374,11 +375,12 @@ function Step5({ form }) {
                             }
                             callback();
                           }
-                        }
+                        },
                       ]
                     })(
                       <Input
                         style={{ width: 150 }}
+                        type={'number'}
                         placeholder={
                           (window as any).RCi18n({
                             id: 'Marketing.InputValuefrom1to50'
@@ -672,6 +674,7 @@ function Step5({ form }) {
                     })(
                       <Input
                         style={{ width: 150 }}
+                        type='number'
                         placeholder={
                           (window as any).RCi18n({
                             id: 'Marketing.InputValuefrom1to50'

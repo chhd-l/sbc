@@ -342,7 +342,9 @@ export default function index({ ...props }) {
             detail.subType === 14 || detail.subType === 15 ? detail.fullLeafletLevelList : [],
           selectedLeafletRows: detail.goodsList?.goodsInfoPage?.content.filter((item) => {
             return leafletIds.includes(item.goodsInfoId);
-          })
+          }),
+          appliesType: detail?.appliesType,
+          subscriptionRefillLimit: detail?.subscriptionRefillLimit
         },
         /**
          * 类型
@@ -424,7 +426,8 @@ export default function index({ ...props }) {
               : [],
           selectedGiftRows: goodsList?.goodsInfoPage?.content.filter((item) => {
             return giftIds.includes(item.goodsInfoId);
-          })
+          }),
+          appliesType: detail?.appliesType
         },
         storeId: detail.storeId
       });

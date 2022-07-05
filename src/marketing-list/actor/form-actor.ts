@@ -15,7 +15,7 @@ export default class FormActor extends Actor {
         //区
         endTime: null,
         //目标客户
-        promotionType: '0',
+        promotionType: null,
         //查询类型
         queryTab: '0',
 

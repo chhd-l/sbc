@@ -179,6 +179,12 @@ const CouponDetails = (props: MarketingDetailsProps) => {
             </Col>
             <Col className="step-summary-item-text">{data?.limitAmount}{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</Col>
           </Row>
+          <Row className="step-summary-item">
+            <Col className="step-summary-sub-title">
+              <FormattedMessage id="Marketing.appliesType" />:
+            </Col>
+            <Col className="step-summary-item-text">{enumConst.appliesType[data?.appliesType]}</Col>
+          </Row>
 
         </>)
         break;

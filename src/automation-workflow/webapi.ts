@@ -73,3 +73,9 @@ export function getAllPetOwnerTaggings() {
     })
   });
 }
+export function automationUploadFile(params) {
+  return Fetch<TResult>('/automation/excel/import', {
+    method: 'POST',
+    body: params
+  });
+}

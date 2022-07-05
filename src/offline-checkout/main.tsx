@@ -367,7 +367,8 @@ class Checkout extends React.Component<any, any> {
           .map((c) => ({
             id: c.id,
             selectedFlag: selectedConsents.indexOf(c.id) > -1
-          }))
+          })),
+        useBackendOktaTokenFlag: true
       });
     }
   };

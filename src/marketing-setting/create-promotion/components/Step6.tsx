@@ -359,7 +359,7 @@ export default function Step6({ setLoading }) {
           restSubscriptionLimitAmount: formData.Advantage.restSubscriptionLimitAmount,
           restSubscriptionOrderDiscount: formData.Advantage.restSubscriptionOrderDiscount,
           subType: subType,
-          subscriptionRefillLimit: formData.Advantage.subscriptionRefillLimit,
+          subscriptionRefillLimit: formData.Advantage.subscriptionRefillLimit - 0,
           appliesType: formData.Advantage.appliesType,
           isClub: false //未用到
         };

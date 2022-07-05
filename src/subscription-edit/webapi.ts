@@ -277,6 +277,18 @@ export function deleteProduct(params = {}) {
 }
 
 /**
+ * refill删除商品
+ */
+ export function refilldelProduct(params = {}) {
+  return Fetch<TResult>('/subscription/next/refill', {
+    method: 'DELETE',
+    body: JSON.stringify({
+      ...params
+    })
+  });
+}
+
+/**
  * refill修改商品
  */
 export function refillModifyProduct(params = {}) {

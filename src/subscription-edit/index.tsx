@@ -2106,10 +2106,24 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         )
       },
       {
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="Subscription.Gift" />
+          </span>
+        ),
+        key: 'ProductName',
+        width: '10%',
+        render: (text, record) => (
+          <div>
+            {record?.ProductName ? record?.ProductName : 'None'}
+          </div>
+        )
+      },
+      {
         title: <FormattedMessage id="Subscription.Operation" />,
         dataIndex: '',
         key: 'x',
-        width: '10%',
+        // width: '10%',
         render: (text, record) => (
           <>
             {record.id ? (

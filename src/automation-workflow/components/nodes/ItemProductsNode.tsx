@@ -12,7 +12,7 @@ export default class ItemProductsNode extends Component {
         const model = item.getModel();
 
         const text = substringName(model.name, 15, 25);
-        const iconName = 'product';
+        const iconName = '编组 53';
         group.addShape('text', {
           attrs: {
             x: 30,
@@ -27,13 +27,13 @@ export default class ItemProductsNode extends Component {
         });
         group.addShape('text', {
           attrs: {
-            x: -15,
-            y: getBrowserType() === 'FF' ? -10 : -15,
+            x: -20,
+            y: getBrowserType() === 'FF' ? -14 : -20,
             fill: model.color,
             text: getIcon(iconName),
             fontFamily: 'iconfont',
             textBaseline: 'top',
-            fontSize: 30
+            fontSize: 40
           },
           draggable: true
         });

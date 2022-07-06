@@ -24,6 +24,7 @@ export default class NodeProperties extends Component<any, any> {
         eventType: undefined,
         startCampaignTime: null,
         templateId: '',
+        priceIncreaseTime: '',
         waitCampaignTime: null
       },
       taggingSource: [],
@@ -36,6 +37,7 @@ export default class NodeProperties extends Component<any, any> {
   updateValue(type, value) {
     let data = this.state.formParam;
     data[type] = value;
+    console.log('updateValue', data);
     this.setState(
       {
         formParam: data
@@ -88,6 +90,7 @@ export default class NodeProperties extends Component<any, any> {
         reminderType,
         variableType,
         variableValue, // task
+        path, //product
         ...otherParam
       }
     } = nextProps;
@@ -124,6 +127,9 @@ export default class NodeProperties extends Component<any, any> {
             }
           },
           { vetData: { days, beforeOrAfter } },
+          {
+            productData: { path }
+          },
           {
             taskData: {
               taskName,
@@ -254,12 +260,14 @@ export default class NodeProperties extends Component<any, any> {
               updateValue={this.updateValue}
               templateId={formParam.templateId}
               templateList={templateList}
+              priceIncreaseTime={formParam.priceIncreaseTime}
             />
           ) : null}
           {model.nodeType === 'Products' ? (
             <ChooseProductForm
               nodeId={model.id}
               updateValue={this.updateValue}
+              productData={formParam.productData}
               // templateId={formParam.templateId}
               // templateList={templateList}
             />

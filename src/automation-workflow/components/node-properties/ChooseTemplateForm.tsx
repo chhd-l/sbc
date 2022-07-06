@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Form, Row, Icon, Select, Card, Modal, message, Button } from 'antd';
+import { Form, Row, Icon, Select, Card, Modal, message, Button, DatePicker } from 'antd';
 import * as webapi from '@/automation-workflow/webapi';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import moment from 'moment';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -10,7 +11,8 @@ export default class ChooseTemplataeForm extends Component<any, any> {
     super(props);
     this.state = {
       form: {
-        selectValue: undefined
+        selectValue: undefined,
+        selectTemplate: null
       },
       modalVisible: false,
       emailContent: '',
@@ -51,12 +53,23 @@ export default class ChooseTemplataeForm extends Component<any, any> {
     let template = templateList.find((x) => x.templateId === value);
     this.setState({
       form: {
-        selectValue: value
+        selectValue: value,
+        selectTemplate: template
       }
     });
     updateValue('templateId', value);
     updateValue('templateName', template.messageTemplate);
   }
+
+  onTimeChange = (_, value) => {
+    //     this.setState({
+    //   form: {
+    //     selectValue: value,
+    //     selectTemplate: template
+    //   }
+    // });
+    this.props.updateValue('priceIncreaseTime', value);
+  };
 
   handlePreview() {
     const { form } = this.state;
@@ -77,14 +90,14 @@ export default class ChooseTemplataeForm extends Component<any, any> {
             emailContent: res.context.emailTemplateHtml
           });
         } else {
-          message.error(res.message || <FormattedMessage id="Public.GetDataFailed"/>);
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
           this.setState({
             previewLoading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || <FormattedMessage id="Public.GetDataFailed"/>);
+        message.error(err || <FormattedMessage id="Public.GetDataFailed" />);
         this.setState({
           previewLoading: false
         });
@@ -95,11 +108,20 @@ export default class ChooseTemplataeForm extends Component<any, any> {
   }
   render() {
     const { form, title, modalVisible, previewLoading, emailContent, selectLoading } = this.state;
-    const { templateList } = this.props;
+    const { templateList, priceIncreaseTime } = this.props;
+    console.log(this.props, 'this.props');
+    const isPriceIncreaseTemplate =
+      form.selectTemplate?.messageTemplate.toLowerCase().includes('price') ||
+      form.selectTemplate?.messageTemplate.toLowerCase().includes('increase');
+
     return (
       <React.Fragment>
         <FormItem label="Choose an Email template" colon={false}>
-          <Icon type="eye" className={'icon-eye' + (!form.selectValue ? ' disable' : '')} onClick={() => this.handlePreview()} />
+          <Icon
+            type="eye"
+            className={'icon-eye' + (!form.selectValue ? ' disable' : '')}
+            onClick={() => this.handlePreview()}
+          />
           <Select
             allowClear
             onChange={(value) => {
@@ -120,9 +142,21 @@ export default class ChooseTemplataeForm extends Component<any, any> {
             ))}
           </Select>
         </FormItem>
+        {isPriceIncreaseTemplate && (
+          <DatePicker
+            showTime
+            placeholder="Select Time"
+            onChange={this.onTimeChange}
+            value={priceIncreaseTime ? moment(priceIncreaseTime) : null}
+          />
+        )}
         <Modal
           footer={[
-            <Button type="primary" className="ui-white" onClick={() => this.setState({ modalVisible: false })}>
+            <Button
+              type="primary"
+              className="ui-white"
+              onClick={() => this.setState({ modalVisible: false })}
+            >
               OK
             </Button>
           ]}
@@ -134,7 +168,13 @@ export default class ChooseTemplataeForm extends Component<any, any> {
           width="850px"
         >
           <Card bordered={false} loading={previewLoading} className="previewCard">
-            <iframe ref="previewIframe" srcDoc={emailContent} width="100%" height="700px" frameBorder="0"></iframe>
+            <iframe
+              ref="previewIframe"
+              srcDoc={emailContent}
+              width="100%"
+              height="700px"
+              frameBorder="0"
+            ></iframe>
           </Card>
         </Modal>
       </React.Fragment>

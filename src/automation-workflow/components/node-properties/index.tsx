@@ -10,6 +10,7 @@ import ChooseTaskForm from './ChooseTaskForm';
 import ChooseTemplateForm from './ChooseTemplateForm';
 import * as webapi from '@/automation-workflow/webapi';
 import { Const } from 'qmkit';
+import ChooseProductForm from './ChooseProductForm';
 
 const FormItem = Form.Item;
 
@@ -100,10 +101,47 @@ export default class NodeProperties extends Component<any, any> {
           { startCampaignTime: { timeType, time, recurrenceType, recurrenceValue } },
           { waitCampaignTime: { atSpecialTime, specialTime, timeAmountValue, timeAmountType } },
           { conditionDataList: conditionDataList },
-          { taggingData: { chooseType, taggingList, abTestType, percentageValue, aCountValue, bCountValue } },
-          { orderData: { between, and, isOrderStatus, orderStatus, isBusinessType, businessType, isChannelType, channelType } },
+          {
+            taggingData: {
+              chooseType,
+              taggingList,
+              abTestType,
+              percentageValue,
+              aCountValue,
+              bCountValue
+            }
+          },
+          {
+            orderData: {
+              between,
+              and,
+              isOrderStatus,
+              orderStatus,
+              isBusinessType,
+              businessType,
+              isChannelType,
+              channelType
+            }
+          },
           { vetData: { days, beforeOrAfter } },
-          { taskData: { taskName, assistantId, assistantName, goldenMoment, contactPlan, priority, actionType, startTime, dueTimeNumber, dueTimeType, reminderNumber, reminderType, variableType, variableValue } }
+          {
+            taskData: {
+              taskName,
+              assistantId,
+              assistantName,
+              goldenMoment,
+              contactPlan,
+              priority,
+              actionType,
+              startTime,
+              dueTimeNumber,
+              dueTimeType,
+              reminderNumber,
+              reminderType,
+              variableType,
+              variableValue
+            }
+          }
         )
       };
     }
@@ -112,16 +150,26 @@ export default class NodeProperties extends Component<any, any> {
   }
 
   componentDidMount() {
-    Promise.all([webapi.getAllPetOwnerTaggings(), webapi.getGlodenMomentList(), webapi.getSendGirdTemplates()])
+    Promise.all([
+      webapi.getAllPetOwnerTaggings(),
+      webapi.getGlodenMomentList(),
+      webapi.getSendGirdTemplates()
+    ])
       .then((data) => {
         const tagignRes = data[0].res;
         const goldenMomentRes = data[1].res;
         const templateRes = data[2].res;
-        if (tagignRes.code === Const.SUCCESS_CODE && goldenMomentRes.code === Const.SUCCESS_CODE && templateRes.code === Const.SUCCESS_CODE) {
+        if (
+          tagignRes.code === Const.SUCCESS_CODE &&
+          goldenMomentRes.code === Const.SUCCESS_CODE &&
+          templateRes.code === Const.SUCCESS_CODE
+        ) {
           this.setState({
             taggingSource: tagignRes.context.segmentList,
             goldenMomentList: goldenMomentRes.context.sysDictionaryVOS,
-            templateList: templateRes.context.messageTemplateResponseList ? templateRes.context.messageTemplateResponseList : []
+            templateList: templateRes.context.messageTemplateResponseList
+              ? templateRes.context.messageTemplateResponseList
+              : []
           });
         } else {
           message.error('Get data failed');
@@ -149,14 +197,73 @@ export default class NodeProperties extends Component<any, any> {
               }}
             />
           </FormItem>
-          {model.nodeType === 'EventTrigger' ? <ChooseEventForm nodeId={model.id} updateValue={this.updateValue} eventType={formParam.eventType} /> : null}
-          {model.nodeType === 'TimeTrigger' ? <ChooseStartTimeForm nodeId={model.id} updateValue={this.updateValue} startCampaignTime={formParam.startCampaignTime} /> : null}
-          {model.nodeType === 'Wait' ? <ChooseWaitForm nodeId={model.id} updateValue={this.updateValue} waitCampaignTime={formParam.waitCampaignTime} /> : null}
-          {model.nodeType === 'IfAndElse' ? <ChooseIfElseForm nodeId={model.id} updateValue={this.updateValue} conditionData={formParam.conditionDataList} /> : null}
-          {model.nodeType === 'Task' ? <ChooseTaskForm nodeId={model.id} updateValue={this.updateValue} taskData={formParam.taskData} goldenMomentList={goldenMomentList} /> : null}
-          {model.nodeType === 'Tagging' ? <ChooseTaggingForm nodeId={model.id} updateValue={this.updateValue} taggingData={formParam.taggingData} taggingSource={taggingSource} /> : null}
-          {model.nodeType === 'Order' ? <ChooseOrderForm nodeId={model.id} updateValue={this.updateValue} orderData={formParam.orderData} /> : null}
-          {model.nodeType === 'SendEmail' ? <ChooseTemplateForm nodeId={model.id} updateValue={this.updateValue} templateId={formParam.templateId} templateList={templateList} /> : null}
+          {model.nodeType === 'EventTrigger' ? (
+            <ChooseEventForm
+              nodeId={model.id}
+              updateValue={this.updateValue}
+              eventType={formParam.eventType}
+            />
+          ) : null}
+          {model.nodeType === 'TimeTrigger' ? (
+            <ChooseStartTimeForm
+              nodeId={model.id}
+              updateValue={this.updateValue}
+              startCampaignTime={formParam.startCampaignTime}
+            />
+          ) : null}
+          {model.nodeType === 'Wait' ? (
+            <ChooseWaitForm
+              nodeId={model.id}
+              updateValue={this.updateValue}
+              waitCampaignTime={formParam.waitCampaignTime}
+            />
+          ) : null}
+          {model.nodeType === 'IfAndElse' ? (
+            <ChooseIfElseForm
+              nodeId={model.id}
+              updateValue={this.updateValue}
+              conditionData={formParam.conditionDataList}
+            />
+          ) : null}
+          {model.nodeType === 'Task' ? (
+            <ChooseTaskForm
+              nodeId={model.id}
+              updateValue={this.updateValue}
+              taskData={formParam.taskData}
+              goldenMomentList={goldenMomentList}
+            />
+          ) : null}
+          {model.nodeType === 'Tagging' ? (
+            <ChooseTaggingForm
+              nodeId={model.id}
+              updateValue={this.updateValue}
+              taggingData={formParam.taggingData}
+              taggingSource={taggingSource}
+            />
+          ) : null}
+          {model.nodeType === 'Order' ? (
+            <ChooseOrderForm
+              nodeId={model.id}
+              updateValue={this.updateValue}
+              orderData={formParam.orderData}
+            />
+          ) : null}
+          {model.nodeType === 'SendEmail' ? (
+            <ChooseTemplateForm
+              nodeId={model.id}
+              updateValue={this.updateValue}
+              templateId={formParam.templateId}
+              templateList={templateList}
+            />
+          ) : null}
+          {model.nodeType === 'Products' ? (
+            <ChooseProductForm
+              nodeId={model.id}
+              updateValue={this.updateValue}
+              // templateId={formParam.templateId}
+              // templateList={templateList}
+            />
+          ) : null}
         </Form>
       </div>
     );

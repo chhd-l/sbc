@@ -16,6 +16,7 @@ import { history, Headline } from 'qmkit';
 import * as webapi from './webapi';
 import { Const } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
+import ItemProductsNode from './components/nodes/ItemProductsNode';
 
 const { TabPane } = Tabs;
 
@@ -70,7 +71,13 @@ export default withPropsAPI(
     saveProperties(formData) {
       const { currentItem } = this.state;
       if (currentItem) {
-        let tmpParam = { name: formData.name, eventType: null, templateId: null, templateName: null, conditionDataList: null };
+        let tmpParam = {
+          name: formData.name,
+          eventType: null,
+          templateId: null,
+          templateName: null,
+          conditionDataList: null
+        };
         switch (formData.nodeType) {
           case 'TimeTrigger':
             tmpParam = { ...tmpParam, ...formData.startCampaignTime };
@@ -97,10 +104,14 @@ export default withPropsAPI(
           case 'Order':
             tmpParam = { ...tmpParam, ...formData.orderData };
             break;
+          case 'Products':
+            tmpParam = { ...tmpParam, ...formData.productData };
+            break;
           case 'VetCheckUp':
             tmpParam = { ...tmpParam, ...formData.vetData };
             break;
         }
+        debugger;
         this.props.propsAPI.update(currentItem, tmpParam);
       }
     }
@@ -111,7 +122,11 @@ export default withPropsAPI(
         saveLoading: true
       });
       webapi
-        .updateAutomationNodes({ workflow: JSON.stringify(flowdata), id: this.props.id, updateWorkflow: true })
+        .updateAutomationNodes({
+          workflow: JSON.stringify(flowdata),
+          id: this.props.id,
+          updateWorkflow: true
+        })
         .then((data) => {
           const { res } = data;
           if (res.code === 'K-000000') {
@@ -135,7 +150,11 @@ export default withPropsAPI(
         });
     }
     onAfterChange(e) {
-      if (e.action === 'add' && e.item.type === 'edge' && e.item.source.model.nodeType === 'IfAndElse') {
+      if (
+        e.action === 'add' &&
+        e.item.type === 'edge' &&
+        e.item.source.model.nodeType === 'IfAndElse'
+      ) {
         if (e.item.source._anchorPoints[0].id) {
           e.item.model.lable = 'true';
         } else {
@@ -154,7 +173,11 @@ export default withPropsAPI(
                 <Headline title={name} />
               </Col>
               <Col span={12} style={{ textAlign: 'right' }}>
-                <Button type="primary" style={{ marginRight: '10px' }} onClick={() => this.doSave()}>
+                <Button
+                  type="primary"
+                  style={{ marginRight: '10px' }}
+                  onClick={() => this.doSave()}
+                >
                   Save
                 </Button>
                 <Button onClick={() => history.push('/automations')}>Cancel</Button>
@@ -194,7 +217,10 @@ export default withPropsAPI(
                     </TabPane>
                     {activeKey === 'Item Properties' ? (
                       <TabPane tab="Item Properties" key="Item Properties">
-                        <NodeProperties model={currentItem && currentItem.model} saveProperties={this.saveProperties} />
+                        <NodeProperties
+                          model={currentItem && currentItem.model}
+                          saveProperties={this.saveProperties}
+                        />
                       </TabPane>
                     ) : null}
                   </Tabs>
@@ -210,6 +236,7 @@ export default withPropsAPI(
             <ItemTaskNode />
             <ItemVetCheckUpNode />
             <ItemWaitNode />
+            <ItemProductsNode />
           </div>
         </div>
       );

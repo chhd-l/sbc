@@ -38,7 +38,10 @@ export default class FlowItemPanel extends Component {
                   recurrenceValue: null
                 }}
               >
-                <span className="icon iconfont iconkaishi item-icon" style={{ color: color.yellow }} />
+                <span
+                  className="icon iconfont iconkaishi item-icon"
+                  style={{ color: color.yellow }}
+                />
                 <br />
                 <span className="item-text">
                   Start
@@ -63,7 +66,10 @@ export default class FlowItemPanel extends Component {
                   eventType: ''
                 }}
               >
-                <span className="icon iconfont iconkaishi item-icon" style={{ color: color.blue }} />
+                <span
+                  className="icon iconfont iconkaishi item-icon"
+                  style={{ color: color.blue }}
+                />
                 <br />
                 <span className="item-text">
                   Start
@@ -88,7 +94,10 @@ export default class FlowItemPanel extends Component {
                   nodeType: 'End'
                 }}
               >
-                <span className="icon iconfont iconjieshu item-icon" style={{ color: color.grey }} />
+                <span
+                  className="icon iconfont iconjieshu item-icon"
+                  style={{ color: color.grey }}
+                />
                 <br />
                 <span className="item-text">End</span>
               </Item>
@@ -108,7 +117,10 @@ export default class FlowItemPanel extends Component {
                   nodeType: 'Wait'
                 }}
               >
-                <span className="icon iconfont icondengdai item-icon" style={{ color: color.yellow }} />
+                <span
+                  className="icon iconfont icondengdai item-icon"
+                  style={{ color: color.yellow }}
+                />
                 <br />
                 <span className="item-text">Wait</span>
               </Item>
@@ -126,7 +138,10 @@ export default class FlowItemPanel extends Component {
                   nodeType: 'IfAndElse'
                 }}
               >
-                <span className="icon iconfont icontiaojianfenzhi item-icon" style={{ color: color.green }} />
+                <span
+                  className="icon iconfont icontiaojianfenzhi item-icon"
+                  style={{ color: color.green }}
+                />
                 <br />
                 <span className="item-text">If/Else</span>
               </Item>
@@ -165,7 +180,10 @@ export default class FlowItemPanel extends Component {
                   templateId: ''
                 }}
               >
-                <span className="icon iconfont iconyoujian item-icon" style={{ color: color.pink }} />
+                <span
+                  className="icon iconfont iconyoujian item-icon"
+                  style={{ color: color.pink }}
+                />
                 <br />
                 <span className="item-text">Send Email</span>
               </Item>
@@ -185,9 +203,33 @@ export default class FlowItemPanel extends Component {
                   nodeType: 'Tagging'
                 }}
               >
-                <span className="icon iconfont iconai-connection item-icon" style={{ color: color.green }} />
+                <span
+                  className="icon iconfont iconai-connection item-icon"
+                  style={{ color: color.green }}
+                />
                 <br />
                 <span className="item-text">Tagging</span>
+              </Item>
+              <Item
+                type="node"
+                model={{
+                  size: [40, 40],
+                  shape: 'item-products-node',
+                  label: 'Products',
+                  labelBottom: 'Products',
+                  labelOffsetY: 25,
+                  labelOffsetX: 63,
+                  name: 'Item Name',
+                  color: color.grey,
+                  nodeType: 'Products'
+                }}
+              >
+                <span
+                  className="icon iconfont iconitem-products-node item-icon"
+                  style={{ color: color.grey }}
+                />
+                <br />
+                <span className="item-text">Products</span>
               </Item>
               {/* <Item
                 type="node"

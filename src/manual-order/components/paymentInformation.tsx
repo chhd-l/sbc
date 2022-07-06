@@ -41,20 +41,19 @@ export default class PaymentInformation extends React.Component<any, any> {
     } else {
       return (
         <h2>
-          {['PAYING', 'PAID'].indexOf(context?.trade?.tradeState?.payState) > -1 ||
-          context?.trade?.paymentItem.toLowerCase() === 'adyen_moto' ||
-          context?.trade?.paymentItem === 'ZEROPRICE' ? (
-            <FormattedMessage id="Order.successfully" />
-          ) : (
-            <FormattedMessage id="Order.failure" />
-          )}
-
-          <CopyToClipboard text={customer.customerAccount}>
-            <span>{customer.customerAccount}</span>
-          </CopyToClipboard>
           <div>
             <Row>
               <Col span={12}>
+                <p style={{ marginTop: 10, textAlign: 'right' }}>
+                  {['PAYING', 'PAID'].indexOf(context?.trade?.tradeState?.payState) > -1 ||
+                  context?.trade?.paymentItem.toLowerCase() === 'adyen_moto' ||
+                  context?.trade?.paymentItem === 'ZEROPRICE' ? (
+                    <FormattedMessage id="Order.successfully" />
+                  ) : (
+                    <FormattedMessage id="Order.failure" />
+                  )}
+                  ：
+                </p>
                 <p style={{ marginTop: 10, textAlign: 'right' }}>
                   <FormattedMessage id="Order.number" />
                   {context?.trade?.supplier.storeId === 123457909 &&
@@ -90,6 +89,11 @@ export default class PaymentInformation extends React.Component<any, any> {
                   )}
               </Col>
               <Col span={12}>
+                <p style={{ marginTop: 10, textAlign: 'left' }}>
+                  <CopyToClipboard text={customer.customerAccount}>
+                    <a>{customer.customerAccount}</a>
+                  </CopyToClipboard>
+                </p>
                 <p style={{ marginTop: 10, textAlign: 'left' }}>
                   <CopyToClipboard text={context?.tid ?? ''}>
                     <a> {context?.tid ?? ''} </a>

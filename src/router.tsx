@@ -1,4 +1,5 @@
-import LoginCallback from './login-callback';
+// import LoginCallback from './login-callback';
+import { LoginCallback } from '@okta/okta-react';
 
 const routes = [
   //首页

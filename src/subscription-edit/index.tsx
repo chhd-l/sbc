@@ -1919,26 +1919,31 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'x',
         render: (text, record) => (
           <div>
-            <a
-              style={styles.edit}
-              onClick={() => {
-                this.setState({
-                  addProductVisible: true
-                })
-              }}
-            >
-              <Icon component={addDiscount} />
-            </a>
+            <AuthWrapper functionName="f_subscription_add_gift">
+              <a
+                style={styles.edit}
+                onClick={() => {
+                  this.setState({
+                    addProductVisible: true
+                  })
+                }}
+              >
+                <Icon component={addDiscount} />
+              </a>
+            </AuthWrapper>
 
-            <a
-              className="iconfont icontianjia"
-              style={styles.edit}
-              onClick={() => {
-                this.setState({
-                  addDiscountVisible: true
-                })
-              }}
-            />
+            <AuthWrapper functionName="f_subscription_add_discount">
+              <a
+                className="iconfont icontianjia"
+                style={styles.edit}
+                onClick={() => {
+                  this.setState({
+                    addDiscountVisible: true
+                  })
+                }}
+              />
+            </AuthWrapper>
+
             <Popover
               content={content}
               trigger="click"
@@ -2106,10 +2111,24 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         )
       },
       {
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="Subscription.Gift" />
+          </span>
+        ),
+        key: 'ProductName',
+        width: '10%',
+        render: (text, record) => (
+          <div>
+            {record?.ProductName ? record?.ProductName : 'None'}
+          </div>
+        )
+      },
+      {
         title: <FormattedMessage id="Subscription.Operation" />,
         dataIndex: '',
         key: 'x',
-        width: '10%',
+        // width: '10%',
         render: (text, record) => (
           <>
             {record.id ? (

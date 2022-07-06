@@ -220,13 +220,13 @@ export default class FlowItemPanel extends Component {
                   labelOffsetY: 25,
                   labelOffsetX: 63,
                   name: 'Item Name',
-                  color: color.green,
+                  color: color.grey,
                   nodeType: 'Products'
                 }}
               >
                 <span
-                  className="icon iconfont iconai-connection item-icon"
-                  style={{ color: color.green }}
+                  className="icon iconfont iconitem-products-node item-icon"
+                  style={{ color: color.grey }}
                 />
                 <br />
                 <span className="item-text">Products</span>

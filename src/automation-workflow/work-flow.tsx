@@ -104,10 +104,14 @@ export default withPropsAPI(
           case 'Order':
             tmpParam = { ...tmpParam, ...formData.orderData };
             break;
+          case 'Products':
+            tmpParam = { ...tmpParam, ...formData.productData };
+            break;
           case 'VetCheckUp':
             tmpParam = { ...tmpParam, ...formData.vetData };
             break;
         }
+        debugger;
         this.props.propsAPI.update(currentItem, tmpParam);
       }
     }

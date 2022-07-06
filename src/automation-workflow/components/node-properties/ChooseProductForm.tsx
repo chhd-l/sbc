@@ -12,36 +12,48 @@ import {
   Alert,
   Upload
 } from 'antd';
-import { Const } from 'qmkit';
+import { Const, util } from 'qmkit';
 import * as webapi from '@/automation-workflow/webapi';
 import { FormattedMessage } from 'react-intl';
+import { useParams } from 'react-router-dom';
+import { DraggerProps } from 'antd/lib/upload';
+
 const { Dragger } = Upload;
 const FormItem = Form.Item;
 const header = {
   Accept: 'application/json',
   authorization: 'Bearer ' + (window as any).token
 };
-export default function ChooseProductForm(props) {
+export default function ChooseProductForm({ updateValue, productData }) {
+  console.log('productDataproductDataproductData ', productData);
+  const { id } = useParams();
   const [fileData, setFileData] = useState({
     file: null,
     uploading: false
     // isImport: true
   });
-  // const { form, title, modalVisible, previewLoading, emailContent, selectLoading } = this.state;
-  const uploadProps = {
+  const uploadProps: DraggerProps = {
     name: 'file',
     showUploadList: false,
     accept: '.xls,.xlsx',
     headers: header,
+    data: { campaignId: id },
     action: Const.HOST + '/automation/excel/import',
-    onChange: (info) => {
-      const status = info.file.status;
+
+    onChange: (f) => {
+      console.log(f, 'fff');
+      // const { response } = file;
+      // response.con
+      // updateValue('productData', { path: 999 });
+      // return;
+      // const status = info.file.status;
       // if (status == 'uploading') {
       //   const fileName = '';
       //   setFileData({ file: fileName, uploading: false });
       // }
       if (status === 'done') {
         setFileData((f) => ({ ...f, uploading: true }));
+        // updateValue('priceIncreaseTime', f);
         // let fileName = '';
         // let ext = '';
         // loading = false;
@@ -62,18 +74,31 @@ export default function ChooseProductForm(props) {
         // message.error('上传失败');
         // loading = false;
         // this.setState({ loading, err });
+        updateValue('productData', { path: fileData.file });
       }
     }
   };
-
-  // const handleUpload = async () => {
-  //   debugger;
-  //   const fd = new FormData();
-  //   fd.append('files[]', fileData.file);
-  //   // fd.append('userName', userName.value)
-  //   // fd.append('age','18')
-  //   const importRes: any = await webapi.automationUploadFile(fd);
-  // };
+  const toDownTempl = () => {
+    // 参数加密
+    let base64 = new util.Base64();
+    const token = (window as any).token;
+    if (token) {
+      let result = JSON.stringify({ token: token });
+      let encrypted = base64.urlEncode(result);
+      const exportHref = Const.HOST + `/goods/excel/template/${encrypted}`;
+      window.open(exportHref);
+    } else {
+      message.error('请登录');
+    }
+  };
+  const handleUpload = async () => {
+    debugger;
+    const fd = new FormData();
+    fd.append('files[]', fileData.file);
+    // fd.append('userName', userName.value)
+    // fd.append('age','18')
+    const importRes: any = await webapi.automationUploadFile(fd);
+  };
 
   return (
     <div className="chooseProductForm">
@@ -96,7 +121,7 @@ export default function ChooseProductForm(props) {
           type="error"
         />
       </FormItem>
-      <Button type="primary" icon="upload" className="upload-btn">
+      <Button type="primary" icon="upload" className="upload-btn" onClick={toDownTempl}>
         <FormattedMessage id="Product.Downloadproductimporttemplate" />
       </Button>
       <h4>
@@ -118,7 +143,7 @@ export default function ChooseProductForm(props) {
         loading={fileData.uploading}
         type="primary"
         icon="upload"
-        // onClick={handleUpload}
+        onClick={handleUpload}
         className="upload-btn"
       >
         <FormattedMessage id="Product.confirmToImport" />

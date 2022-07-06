@@ -1919,26 +1919,31 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'x',
         render: (text, record) => (
           <div>
-            <a
-              style={styles.edit}
-              onClick={() => {
-                this.setState({
-                  addProductVisible: true
-                })
-              }}
-            >
-              <Icon component={addDiscount} />
-            </a>
+            <AuthWrapper functionName="f_subscription_add_gift">
+              <a
+                style={styles.edit}
+                onClick={() => {
+                  this.setState({
+                    addProductVisible: true
+                  })
+                }}
+              >
+                <Icon component={addDiscount} />
+              </a>
+            </AuthWrapper>
 
-            <a
-              className="iconfont icontianjia"
-              style={styles.edit}
-              onClick={() => {
-                this.setState({
-                  addDiscountVisible: true
-                })
-              }}
-            />
+            <AuthWrapper functionName="f_subscription_add_discount">
+              <a
+                className="iconfont icontianjia"
+                style={styles.edit}
+                onClick={() => {
+                  this.setState({
+                    addDiscountVisible: true
+                  })
+                }}
+              />
+            </AuthWrapper>
+
             <Popover
               content={content}
               trigger="click"

@@ -1276,7 +1276,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       };
       let resp;
 
-      if (subscriptionNextRefillPromotion?.productId && subscriptionNextRefillPromotion?.productName) {
+      if (subscriptionNextRefillPromotion?.productId) {
         params = {
           ...params,
           refillPromotionId: subscriptionNextRefillPromotion?.refillPromotionId,
@@ -1321,7 +1321,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       };
       let resp;
 
-      if (subscriptionNextRefillPromotion?.couponCode && subscriptionNextRefillPromotion?.discount) {
+      if (subscriptionNextRefillPromotion?.couponCode) {
         params = {
           ...params,
           refillPromotionId: subscriptionNextRefillPromotion?.refillPromotionId,

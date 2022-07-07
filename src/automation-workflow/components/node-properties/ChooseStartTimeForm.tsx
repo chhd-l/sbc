@@ -7,7 +7,7 @@ import moment from 'moment';
 import { Form, Row, Col, Input, Radio, TimePicker, DatePicker } from 'antd';
 
 const FormItem = Form.Item;
-
+let id = 0;
 export default class ChooseStartTimeForm extends Component<any, any> {
   constructor(props) {
     super(props);
@@ -19,7 +19,7 @@ export default class ChooseStartTimeForm extends Component<any, any> {
         endInfo: null
       },
       nodeId: '',
-      DatePickerList: [{ sort: '0', specificTime: null }]
+      DatePickerList: [{ sort: id, specificTime: null }]
     };
     this.onChange = this.onChange.bind(this);
     this.onTimePickerChange = this.onTimePickerChange.bind(this);
@@ -51,16 +51,21 @@ export default class ChooseStartTimeForm extends Component<any, any> {
           timeType: '',
           specificTime: null,
           endInfo: null
-        }
+        },
+        DatePickerList: [{ sort: id++, specificTime: null }]
       });
     } else {
+      const DatePickerList = startCampaignTime.time
+        .split(',')
+        .map((i) => ({ sort: id++, specificTime: i }));
       this.setState({
         form: {
           timeType: startCampaignTime.timeType,
           recurrenceType: startCampaignTime.recurrenceType,
           specificTime: startCampaignTime.time,
           endInfo: startCampaignTime.recurrenceValue
-        }
+        },
+        DatePickerList
       });
     }
   }
@@ -118,33 +123,39 @@ export default class ChooseStartTimeForm extends Component<any, any> {
   }
   DatePickerAdd(index) {
     const { form, DatePickerList } = this.state;
-    const date = +new Date();
-    const obj = { sort: `${date}`, specificTime: null }
-    DatePickerList.push(obj)
+
+    const obj = { sort: id++, specificTime: null };
+    DatePickerList.push(obj);
     this.setState({
+      form: { ...form, specificTime: DatePickerList.map((i) => i.specificTime).join(',') },
       DatePickerList: [...DatePickerList]
-    })
+    });
   }
 
   DatePickerDel(index) {
     const { form, DatePickerList } = this.state;
     DatePickerList.splice(index, 1);
     this.setState({
+      form: { ...form, specificTime: DatePickerList.map((i) => i.specificTime).join(',') },
       DatePickerList: [...DatePickerList]
-    })
+    });
   }
   DatePickerChange(index, dateString) {
     const { form, DatePickerList } = this.state;
     DatePickerList[index].specificTime = dateString;
     this.setState({
+      form: { ...form, specificTime: DatePickerList.map((i) => i.specificTime).join(',') },
       DatePickerList: [...DatePickerList]
-    })
+    });
   }
   render() {
     const { form, DatePickerList } = this.state;
     const { startCampaignTime } = this.props;
     let momentedSpecificTime = form && form.specificTime ? moment(form.specificTime) : null;
-    let momentedPointTime = form && form.endInfo && form.endInfo.pointTime ? moment(form.endInfo.pointTime, 'HH:mm:ss') : null;
+    let momentedPointTime =
+      form && form.endInfo && form.endInfo.pointTime
+        ? moment(form.endInfo.pointTime, 'HH:mm:ss')
+        : null;
     return (
       <React.Fragment>
         <FormItem label="Choose when to start campaign" colon={false}>
@@ -169,7 +180,11 @@ export default class ChooseStartTimeForm extends Component<any, any> {
               <Col span={24}>
                 <Radio value="recurrence">
                   Recurrence at {'  '}
-                  <TimePicker value={momentedPointTime} use12Hours onChange={this.onTimePickerChange} />
+                  <TimePicker
+                    value={momentedPointTime}
+                    use12Hours
+                    onChange={this.onTimePickerChange}
+                  />
                 </Radio>
               </Col>
               <Col span={23} push={1}>
@@ -197,10 +212,30 @@ export default class ChooseStartTimeForm extends Component<any, any> {
                     <Col span="16" push={1} className="ui-border-left">
                       <Row gutter={24}>
                         <Col span="23" push={1}>
-                          {form.recurrenceType === 'daily' ? <ChooseRecurrenceDailyForm endInfo={form.endInfo} updateEndInfo={this.updateEndInfo} /> : null}
-                          {form.recurrenceType === 'weekly' ? <ChooseRecurrenceWeeklyForm endInfo={form.endInfo} updateEndInfo={this.updateEndInfo} /> : null}
-                          {form.recurrenceType === 'monthly' ? <ChooseRecurrenceMonthlyForm endInfo={form.endInfo} updateEndInfo={this.updateEndInfo} /> : null}
-                          {form.recurrenceType === 'yearly' ? <ChooseRecurrenceYearlyForm endInfo={form.endInfo} updateEndInfo={this.updateEndInfo} /> : null}
+                          {form.recurrenceType === 'daily' ? (
+                            <ChooseRecurrenceDailyForm
+                              endInfo={form.endInfo}
+                              updateEndInfo={this.updateEndInfo}
+                            />
+                          ) : null}
+                          {form.recurrenceType === 'weekly' ? (
+                            <ChooseRecurrenceWeeklyForm
+                              endInfo={form.endInfo}
+                              updateEndInfo={this.updateEndInfo}
+                            />
+                          ) : null}
+                          {form.recurrenceType === 'monthly' ? (
+                            <ChooseRecurrenceMonthlyForm
+                              endInfo={form.endInfo}
+                              updateEndInfo={this.updateEndInfo}
+                            />
+                          ) : null}
+                          {form.recurrenceType === 'yearly' ? (
+                            <ChooseRecurrenceYearlyForm
+                              endInfo={form.endInfo}
+                              updateEndInfo={this.updateEndInfo}
+                            />
+                          ) : null}
                         </Col>
                       </Row>
                     </Col>
@@ -211,9 +246,10 @@ export default class ChooseStartTimeForm extends Component<any, any> {
                 <Radio value="specificTime">At a specific date/time</Radio>
               </Col>
               <Col span={24} push={1}>
-                {DatePickerList && DatePickerList.map((item, index) => (
-                  <Row>
-                    {/* <DatePicker
+                {DatePickerList &&
+                  DatePickerList.map((item, index) => (
+                    <Row>
+                      {/* <DatePicker
                       showTime
                       placeholder="Select Time"
                       onChange={(value, dateString) => {
@@ -224,23 +260,37 @@ export default class ChooseStartTimeForm extends Component<any, any> {
                       }}
                       value={momentedSpecificTime}
                     /> */}
-                    <DatePicker
-                      showTime
-                      placeholder="Select Time"
-                      onChange={(value, dateString) => {
-                        this.onChange('specificTime', dateString);
-                        this.onChange('timeType', 'specificTime');
-                        this.onChange('recurrenceType', '');
-                        this.onChange('endInfo', null);
-                        this.DatePickerChange(index, dateString);
-                      }}
-                      value={item.specificTime ? moment(item.specificTime) : null}
-                    />
-                    <a className='iconfont iconjia' style={{ marginLeft: '20px', fontSize: '20px' }} onClick={() => this.DatePickerAdd(index)}></a>
-                    <a className='iconfont iconjian2' style={{ marginLeft: '5px', fontSize: '20px', color: 'rgba(0, 0, 0, 0.65)' }} onClick={() => this.DatePickerDel(index)}></a>
-                  </Row>
-                ))}
-
+                      <DatePicker
+                        showTime
+                        placeholder="Select Time"
+                        onChange={(value, dateString) => {
+                          this.onChange(
+                            'specificTime',
+                            DatePickerList.map((i) => i.specificTime).join(',')
+                          );
+                          this.onChange('timeType', 'specificTime');
+                          this.onChange('recurrenceType', '');
+                          this.onChange('endInfo', null);
+                          this.DatePickerChange(index, dateString);
+                        }}
+                        value={item.specificTime ? moment(item.specificTime) : null}
+                      />
+                      <a
+                        className="iconfont iconjia"
+                        style={{ marginLeft: '20px', fontSize: '20px' }}
+                        onClick={() => this.DatePickerAdd(index)}
+                      ></a>
+                      <a
+                        className="iconfont iconjian2"
+                        style={{
+                          marginLeft: '5px',
+                          fontSize: '20px',
+                          color: 'rgba(0, 0, 0, 0.65)'
+                        }}
+                        onClick={() => this.DatePickerDel(index)}
+                      ></a>
+                    </Row>
+                  ))}
               </Col>
             </Radio.Group>
           </Row>

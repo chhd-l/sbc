@@ -5,6 +5,9 @@ import { RCi18n } from 'qmkit';
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
+import AttributeValueList from './attribute-value-list';
+import arrayMove from 'array-move';
+import './index.less'
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -122,6 +125,12 @@ class AttributeLibrary extends Component<any, any> {
   genID() {
     let date = moment().format('YYYYMMDDHHmmssSSS');
     return 'AV' + date;
+  }
+
+  onSortEnd=({oldIndex, newIndex})=>{
+    this.setState({
+      attributeValueList: arrayMove(this.state.attributeValueList, oldIndex, newIndex),
+    })
   }
 
   removeTemp = (id) => {
@@ -390,132 +399,6 @@ class AttributeLibrary extends Component<any, any> {
     return attributeValue.join(';');
   };
 
-  renderForm = (obj) => {
-    const { getFieldDecorator, getFieldValue } = this.props.form;
-    const formItemLayout = {
-      labelCol: {
-        sm: { span: 11 }
-      },
-      wrapperCol: {
-        sm: { span: 12 }
-      }
-    };
-    const formItemLayoutWithOutLabel = {
-      wrapperCol: {
-        sm: { span: 12, offset: 11 }
-      }
-    };
-    const secondFormItemWithOutLabel = {
-      wrapperCol: {
-        sm: { span: 20, offset: 0 }
-      }
-    };
-    if (obj && obj.length > 0) {
-      const formItems = obj.map((k, index) => (
-        <div key={k.tempId}>
-          <Row>
-            <Col span={13}>
-              <FormItem
-                label={
-                  index === 0 ? (
-                    <span>
-                      <span
-                        style={{
-                          color: 'red',
-                          fontFamily: 'SimSun',
-                          marginRight: '4px',
-                          fontSize: '12px'
-                        }}
-                      >
-                        {' '}
-                        *
-                      </span>
-                      <FormattedMessage id="Product.AttributeValue" />&nbsp;
-                      <Tooltip title={RCi18n({id:'Order.modifiedErr'})}>
-                        <Icon type="question-circle-o" />
-                      </Tooltip>
-                    </span>
-                  ) : (
-                    ''
-                  )
-                }
-                {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-                required={false}
-                key={'value_' + (k.id || k.tempId)}
-              >
-                {getFieldDecorator('attributeValue_' + (k.id || k.tempId), {
-                  validateTrigger: ['onChange', 'onBlur'],
-                  rules: [
-                    {
-                      required: true,
-                      whitespace: true,
-                      message: RCi18n({id:'Product.PleaseInputAttributeValue'})
-                    }
-                  ]
-                })(
-                  <Input
-                    placeholder={RCi18n({id:'Product.Attributevalue'})}
-                    disabled={!checkAuth('f_attribute_value_edit')}
-                    style={{ marginRight: 8 }}
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onChangeValue(k.id || k.tempId, value, 'attribute');
-                    }}
-                  />
-                )}
-              </FormItem>
-            </Col>
-            <Col span={7}>
-              <FormItem {...secondFormItemWithOutLabel}>
-                {getFieldDecorator('displayValue_' + (k.id || k.tempId), {
-                  validateTrigger: ['onChange', 'onBlur'],
-                  rules: [
-                    {
-                      required: true,
-                      whitespace: true,
-                      message: RCi18n({id:'Product.PleaseInputDisplayValue'})
-                    }
-                  ]
-                })(
-                  <Input
-                    placeholder={RCi18n({id:'Product.DisplayValue'})}
-                    style={{ marginRight: 8 }}
-                    disabled={!checkAuth('f_attribute_value_edit')}
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onChangeValue(k.id || k.tempId, value, 'display');
-                    }}
-                  />
-                )}
-              </FormItem>
-            </Col>
-            {checkAuth('f_attribute_value_edit') ? (
-              <Col span={2} style={{ marginTop: '10px' }}>
-                <span>
-                  {obj.length > 1 ? (
-                    <>
-                      {k.id ? (
-                        <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.removeRemote(k.id)} okText="Confirm" cancelText="Cancel">
-                          <Icon className="dynamic-delete-button" type="minus-circle-o" />
-                        </Popconfirm>
-                      ) : (
-                        <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.removeTemp(k.tempId)} okText="Confirm" cancelText="Cancel">
-                          <Icon className="dynamic-delete-button" type="minus-circle-o" />
-                        </Popconfirm>
-                      )}
-                    </>
-                  ) : null}
-                  <Icon className="dynamic-delete-button" type="plus-circle-o" style={{ marginLeft: 8 }} onClick={() => this.add()} />
-                </span>
-              </Col>
-            ) : null}
-          </Row>
-        </div>
-      ));
-      return formItems;
-    }
-  };
-
   _renderNameSelect = () => {
     return (
       <Select
@@ -781,7 +664,20 @@ class AttributeLibrary extends Component<any, any> {
                   </Radio.Group>
                 )}
               </FormItem>
-              {this.renderForm(attributeValueList)}
+              <div style={{position: 'relative'}}>
+              <AttributeValueList
+              form={this.props.form}
+                list={attributeValueList}
+                onChangeValue={(id, value, type)=>this.onChangeValue(id, value, type)}
+                add={()=>this.add()}
+                removeRemote={(id)=>this.removeRemote(id)}
+                removeTemp={(id)=>this.removeTemp(id)}
+                onSortEnd={this.onSortEnd}
+                distance = {1}
+                helperClass='sortableHelper-list'
+                useDragHandle
+              />
+              </div>
             </Form>
           </Modal>
         </Spin>

@@ -289,23 +289,29 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
           return <>
             <Row className="step-summary-item">
               <Col className="step-summary-sub-title">
-                <FormattedMessage id="Marketing.FirstSubscriptionOrderDiscount" />:
+                <FormattedMessage id="Marketing.FirstSubRec" />:
               </Col>
               <Col className="step-summary-item-text">
-                {level.firstSubscriptionOrderDiscount ? ((1 - level.firstSubscriptionOrderDiscount) * 100).toFixed(0) + '%' : null}
+                {level.firstSubscriptionOrderReduction + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
               </Col>
             </Row>
-            {level.firstSubscriptionLimitAmount && (
+            {level.restSubscriptionOrderReduction && (
               <Row className="step-summary-item">
                 <Col className="step-summary-sub-title">
-                  <FormattedMessage id="Marketing.FirstSubscriptionLimitAmount" />:
+                  <FormattedMessage id="Marketing.RestSubRec" />:
                 </Col>
                 <Col className="step-summary-item-text">
-                  {level.firstSubscriptionLimitAmount +
+                  {level.restSubscriptionOrderReduction +
                     sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                 </Col>
               </Row>
             )}
+            {data?.subscriptionRefillLimit && <Row className="step-summary-item">
+              <Col className="step-summary-sub-title">
+                <FormattedMessage id="Marketing.subscriptionRefillLimit" />:
+              </Col>
+              <Col className="step-summary-item-text">{data?.subscriptionRefillLimit} <FormattedMessage id="Marketing.refills" /></Col>
+            </Row>}
 
           </>
           break;

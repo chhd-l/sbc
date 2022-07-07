@@ -291,11 +291,17 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           const subscriptionNextRefillPromotionVO = isSubscriptionRefill?.res?.context?.subscriptionNextRefillPromotionVO;
 
           console.log('isSubscriptionRefill', isSubscriptionRefill);
+          let sum = 0;
+          for (let i = 0; i < goodsInfo.length; i++) {
+            if (goodsInfo[i].subscribeNum && goodsInfo[i].originalPrice) {
+              sum += +goodsInfo[i].subscribeNum * +goodsInfo[i].originalPrice;
+            }
+          }
           subscriptionDetail.noStartTradeList = subscriptionDetail.noStartTradeList.map((item) => {
             return {
               ...item,
               ProductName: subscriptionNextRefillPromotionVO?.productName,
-              tradePrice: { ...item.tradePrice, discountsPrice: item?.tradePrice?.discountsPrice + (1 - (subscriptionNextRefillPromotionVO?.discount ? subscriptionNextRefillPromotionVO?.discount : 1)) * item?.tradePrice?.totalPrice }
+              tradePrice: { ...item.tradePrice, discountsPrice: item?.tradePrice?.discountsPrice + (1 - (subscriptionNextRefillPromotionVO?.discount ? subscriptionNextRefillPromotionVO?.discount : 1)) * (sum - this.state.subscriptionDiscountPrice) }
             }
           })
 
@@ -1276,7 +1282,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       };
       let resp;
 
-      if (subscriptionNextRefillPromotion?.productId && subscriptionNextRefillPromotion?.productName) {
+      if (subscriptionNextRefillPromotion?.productId) {
         params = {
           ...params,
           refillPromotionId: subscriptionNextRefillPromotion?.refillPromotionId,
@@ -1321,7 +1327,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       };
       let resp;
 
-      if (subscriptionNextRefillPromotion?.couponCode && subscriptionNextRefillPromotion?.discount) {
+      if (subscriptionNextRefillPromotion?.couponCode) {
         params = {
           ...params,
           refillPromotionId: subscriptionNextRefillPromotion?.refillPromotionId,
@@ -1919,26 +1925,31 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'x',
         render: (text, record) => (
           <div>
-            <a
-              style={styles.edit}
-              onClick={() => {
-                this.setState({
-                  addProductVisible: true
-                })
-              }}
-            >
-              <Icon component={addDiscount} />
-            </a>
+            <AuthWrapper functionName="f_subscription_add_gift">
+              <a
+                style={styles.edit}
+                onClick={() => {
+                  this.setState({
+                    addProductVisible: true
+                  })
+                }}
+              >
+                <Icon component={addDiscount} />
+              </a>
+            </AuthWrapper>
 
-            <a
-              className="iconfont icontianjia"
-              style={styles.edit}
-              onClick={() => {
-                this.setState({
-                  addDiscountVisible: true
-                })
-              }}
-            />
+            <AuthWrapper functionName="f_subscription_add_discount">
+              <a
+                className="iconfont icontianjia"
+                style={styles.edit}
+                onClick={() => {
+                  this.setState({
+                    addDiscountVisible: true
+                  })
+                }}
+              />
+            </AuthWrapper>
+
             <Popover
               content={content}
               trigger="click"
@@ -2106,10 +2117,24 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         )
       },
       {
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="Subscription.Gift" />
+          </span>
+        ),
+        key: 'ProductName',
+        width: '10%',
+        render: (text, record) => (
+          <div>
+            {record?.gifts.length > 0 ? record?.gifts[0].skuName : 'None'}
+          </div>
+        )
+      },
+      {
         title: <FormattedMessage id="Subscription.Operation" />,
         dataIndex: '',
         key: 'x',
-        width: '10%',
+        // width: '10%',
         render: (text, record) => (
           <>
             {record.id ? (

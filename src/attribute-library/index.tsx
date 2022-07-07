@@ -5,6 +5,7 @@ import { RCi18n } from 'qmkit';
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
+import AttributeValueList from './attribute-value-list';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -781,7 +782,15 @@ class AttributeLibrary extends Component<any, any> {
                   </Radio.Group>
                 )}
               </FormItem>
-              {this.renderForm(attributeValueList)}
+              {/* {this.renderForm(attributeValueList)} */}
+              <AttributeValueList
+              form={this.props.form}
+                list={attributeValueList}
+                onChangeValue={(id, value, type)=>this.onChangeValue(id, value, type)}
+                add={()=>this.add()}
+                removeRemote={(id)=>this.removeRemote(id)}
+                removeTemp={(id)=>this.removeTemp(id)}
+              />
             </Form>
           </Modal>
         </Spin>

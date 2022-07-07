@@ -236,6 +236,7 @@ export default function Step6({ setLoading }) {
            * 其他
            */
           subType: subType,
+          subscriptionRefillLimit: formData.Advantage.subscriptionRefillLimit - 0,
           isClub: false //未用到
         };
         if (match.params.id && match.params.type === 'promotion') {
@@ -684,6 +685,16 @@ export default function Step6({ setLoading }) {
                         <div className="step-summary-item-text">
                           {formData.Advantage.restSubscriptionOrderReduction +
                             sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                        </div>
+                      </div>
+                    )}
+                    {formData.Advantage.subscriptionRefillLimit && (
+                      <div className="step-summary-item">
+                        <div className="step-summary-sub-title">
+                          <FormattedMessage id="Marketing.subscriptionRefillLimit" />:
+                        </div>
+                        <div className="step-summary-item-text">
+                          {formData.Advantage.subscriptionRefillLimit} <FormattedMessage id="Marketing.refills" />
                         </div>
                       </div>
                     )}

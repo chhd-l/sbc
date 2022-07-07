@@ -291,11 +291,17 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           const subscriptionNextRefillPromotionVO = isSubscriptionRefill?.res?.context?.subscriptionNextRefillPromotionVO;
 
           console.log('isSubscriptionRefill', isSubscriptionRefill);
+          let sum = 0;
+          for (let i = 0; i < goodsInfo.length; i++) {
+            if (goodsInfo[i].subscribeNum && goodsInfo[i].originalPrice) {
+              sum += +goodsInfo[i].subscribeNum * +goodsInfo[i].originalPrice;
+            }
+          }
           subscriptionDetail.noStartTradeList = subscriptionDetail.noStartTradeList.map((item) => {
             return {
               ...item,
               ProductName: subscriptionNextRefillPromotionVO?.productName,
-              tradePrice: { ...item.tradePrice, discountsPrice: item?.tradePrice?.discountsPrice + (1 - (subscriptionNextRefillPromotionVO?.discount ? subscriptionNextRefillPromotionVO?.discount : 1)) * (this.subTotal() - this.state.subscriptionDiscountPrice) }
+              tradePrice: { ...item.tradePrice, discountsPrice: item?.tradePrice?.discountsPrice + (1 - (subscriptionNextRefillPromotionVO?.discount ? subscriptionNextRefillPromotionVO?.discount : 1)) * (sum - this.state.subscriptionDiscountPrice) }
             }
           })
 

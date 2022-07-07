@@ -295,7 +295,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             return {
               ...item,
               ProductName: subscriptionNextRefillPromotionVO?.productName,
-              tradePrice: { ...item.tradePrice, discountsPrice: item?.tradePrice?.discountsPrice + (1 - (subscriptionNextRefillPromotionVO?.discount ? subscriptionNextRefillPromotionVO?.discount : 1)) * item?.tradePrice?.totalPrice }
+              tradePrice: { ...item.tradePrice, discountsPrice: item?.tradePrice?.discountsPrice + (1 - (subscriptionNextRefillPromotionVO?.discount ? subscriptionNextRefillPromotionVO?.discount : 1)) * (this.subTotal() - this.state.subscriptionDiscountPrice) }
             }
           })
 
@@ -1276,7 +1276,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       };
       let resp;
 
-      if (subscriptionNextRefillPromotion?.productId && subscriptionNextRefillPromotion?.productName) {
+      if (subscriptionNextRefillPromotion?.productId) {
         params = {
           ...params,
           refillPromotionId: subscriptionNextRefillPromotion?.refillPromotionId,
@@ -1321,7 +1321,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       };
       let resp;
 
-      if (subscriptionNextRefillPromotion?.couponCode && subscriptionNextRefillPromotion?.discount) {
+      if (subscriptionNextRefillPromotion?.couponCode) {
         params = {
           ...params,
           refillPromotionId: subscriptionNextRefillPromotion?.refillPromotionId,
@@ -2120,7 +2120,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         width: '10%',
         render: (text, record) => (
           <div>
-            {record?.ProductName ? record?.ProductName : 'None'}
+            {record?.gifts.length > 0 ? record?.gifts[0].skuName : 'None'}
           </div>
         )
       },

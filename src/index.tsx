@@ -23,6 +23,7 @@ import 'moment/locale/es';
 import 'moment/locale/de';
 import 'moment/locale/sv';
 import 'moment/locale/ja';
+import 'moment/locale/nl';
 import { IntlProvider } from 'react-intl';
 import { cache } from 'qmkit';
 import { language, antLanguage, getDynamicLanguage } from '../web_modules/qmkit/lang';

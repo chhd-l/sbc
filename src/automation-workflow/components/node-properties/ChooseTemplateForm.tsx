@@ -12,7 +12,8 @@ export default class ChooseTemplataeForm extends Component<any, any> {
     this.state = {
       form: {
         selectValue: undefined,
-        selectTemplate: null
+        selectTemplate: null,
+        priceIncreaseTime: ''
       },
       modalVisible: false,
       emailContent: '',
@@ -40,11 +41,9 @@ export default class ChooseTemplataeForm extends Component<any, any> {
         nodeId: nextProps.nodeId
       });
     }
-    const { templateId } = nextProps;
+    const { templateId, priceIncreaseTime } = nextProps;
     this.setState({
-      form: {
-        selectValue: templateId ? templateId : undefined
-      }
+      form: { priceIncreaseTime, selectValue: templateId ? templateId : undefined }
     });
   }
 
@@ -53,6 +52,7 @@ export default class ChooseTemplataeForm extends Component<any, any> {
     let template = templateList.find((x) => x.templateId === value);
     this.setState({
       form: {
+        ...this.state.form,
         selectValue: value,
         selectTemplate: template
       }
@@ -62,12 +62,12 @@ export default class ChooseTemplataeForm extends Component<any, any> {
   }
 
   onTimeChange = (_, value) => {
-    //     this.setState({
-    //   form: {
-    //     selectValue: value,
-    //     selectTemplate: template
-    //   }
-    // });
+    this.setState({
+      form: {
+        ...this.state.form,
+        priceIncreaseTime: value
+      }
+    });
     this.props.updateValue('priceIncreaseTime', value);
   };
 
@@ -108,11 +108,11 @@ export default class ChooseTemplataeForm extends Component<any, any> {
   }
   render() {
     const { form, title, modalVisible, previewLoading, emailContent, selectLoading } = this.state;
-    const { templateList, priceIncreaseTime } = this.props;
-    console.log(this.props, 'this.props');
-    const isPriceIncreaseTemplate =
-      form.selectTemplate?.messageTemplate.toLowerCase().includes('price') ||
-      form.selectTemplate?.messageTemplate.toLowerCase().includes('increase');
+    const { templateList } = this.props;
+    console.log(this.props, form, 'this.props');
+    const isPriceIncreaseTemplate = ['price', 'increase'].find((i) =>
+      form.selectTemplate?.messageTemplate.toLowerCase().includes(i)
+    );
 
     return (
       <React.Fragment>
@@ -146,8 +146,10 @@ export default class ChooseTemplataeForm extends Component<any, any> {
           <DatePicker
             showTime
             placeholder="Select Time"
+            format="YYYY-MM-DD"
+            style={{ marginTop: '20px' }}
             onChange={this.onTimeChange}
-            value={priceIncreaseTime ? moment(priceIncreaseTime) : null}
+            value={form.priceIncreaseTime ? moment(form.priceIncreaseTime) : null}
           />
         )}
         <Modal

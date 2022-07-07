@@ -75,8 +75,10 @@ export default withPropsAPI(
           name: formData.name,
           eventType: null,
           templateId: null,
+          path: '',
           templateName: null,
-          conditionDataList: null
+          conditionDataList: null,
+          priceIncreaseTime: ''
         };
         switch (formData.nodeType) {
           case 'TimeTrigger':
@@ -88,6 +90,7 @@ export default withPropsAPI(
           case 'SendEmail':
             tmpParam.templateId = formData.templateId;
             tmpParam.templateName = formData.templateName;
+            tmpParam.priceIncreaseTime = formData.priceIncreaseTime;
             break;
           case 'Wait':
             tmpParam = { ...tmpParam, ...formData.waitCampaignTime };
@@ -105,13 +108,12 @@ export default withPropsAPI(
             tmpParam = { ...tmpParam, ...formData.orderData };
             break;
           case 'Products':
-            tmpParam = { ...tmpParam, ...formData.productData };
+            tmpParam.path = formData.productData.path;
             break;
           case 'VetCheckUp':
             tmpParam = { ...tmpParam, ...formData.vetData };
             break;
         }
-        debugger;
         this.props.propsAPI.update(currentItem, tmpParam);
       }
     }

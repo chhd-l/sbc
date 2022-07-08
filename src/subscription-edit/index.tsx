@@ -293,7 +293,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           const isSubscriptionRefill = await webapi.refillgetProduct(subscriptionDetail.subscribeId);
           const subscriptionNextRefillPromotionVO = isSubscriptionRefill?.res?.context?.subscriptionNextRefillPromotionVO;
 
-          console.log('isSubscriptionRefill', isSubscriptionRefill);
           let sum = 0;
           for (let i = 0; i < goodsInfo.length; i++) {
             if (goodsInfo[i].subscribeNum && goodsInfo[i].originalPrice) {
@@ -1132,7 +1131,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   // 设置价格长度
   getSubscriptionPrice = (num: any) => {
     const { subscriptionType } = this.state;
-    console.log('Enjoy discount getSubscriptionPrice ', num)
     if (num > 0) {
       let nlen = num.toString().split('.')[1]?.length;
       // subscriptionType == 'Individualization' ? nlen = 4 : nlen = 2;

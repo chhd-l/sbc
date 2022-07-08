@@ -300,8 +300,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             }
           }
           let NextRefilldiscountsPrice = 0;
-          if (subscriptionNextRefillPromotionVO?.discount) {
-            NextRefilldiscountsPrice = parseFloat(((1 - (subscriptionNextRefillPromotionVO?.discount ? subscriptionNextRefillPromotionVO?.discount : 1)) * (sum - this.state.subscriptionDiscountPrice)).toFixed(2))
+          if (subscriptionNextRefillPromotionVO?.discount && subscriptionNextRefillPromotionVO?.discount !== 1) {
+            NextRefilldiscountsPrice = parseFloat(((1 - subscriptionNextRefillPromotionVO?.discount) * (sum - this.state.subscriptionDiscountPrice)).toFixed(2))
+          } else {
+            NextRefilldiscountsPrice = 0
           }
 
           console.log('NextRefilldiscountsPrice', NextRefilldiscountsPrice)

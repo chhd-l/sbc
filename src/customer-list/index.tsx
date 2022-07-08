@@ -1,6 +1,6 @@
 import React from 'react';
 import { Breadcrumb, Table, Form, Button, Input, Divider, Select, Spin, message, Modal, Row, Col, Tooltip, TreeSelect } from 'antd';
-import { Headline, AuthWrapper, util, BreadCrumb, SelectGroup, TreeSelectGroup, RCi18n,cache } from 'qmkit';
+import { Headline, AuthWrapper, util, BreadCrumb, SelectGroup, TreeSelectGroup, RCi18n, cache } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import IMask from 'imask';
@@ -27,14 +27,14 @@ export default class Customer extends React.Component<any, any> {
           dataIndex: 'customerName',
           key: 'consumerName',
           width: '15%',
-          render: (text, record) => <p>{[record.firstName, record.lastName].join(' ')}</p>
+          render: (text, record) => <p>{record.customerName}</p>
         },
         {
           title: RCi18n({ id: 'PetOwner.ConsumerType' }),
           dataIndex: 'customerLevelId',
           key: 'consumerType',
           width: '15%',
-          render: (text, record) => <p>{text === 233 ? RCi18n({id:'PetOwner.Guest'}) : record.customerClubFlag === 1 ? RCi18n({id:'PetOwner.ClubMember'}) : RCi18n({id:'PetOwner.NormalMember'})}</p>
+          render: (text, record) => <p>{text === 233 ? RCi18n({ id: 'PetOwner.Guest' }) : record.customerClubFlag === 1 ? RCi18n({ id: 'PetOwner.ClubMember' }) : RCi18n({ id: 'PetOwner.NormalMember' })}</p>
         },
         {
           title: RCi18n({ id: 'PetOwner.Email' }),
@@ -74,7 +74,7 @@ export default class Customer extends React.Component<any, any> {
           width: '10%',
           render: (text, record) => (
             <span>
-              <Tooltip placement="top" title={RCi18n({id:'PetOwner.Details'})}>
+              <Tooltip placement="top" title={RCi18n({ id: 'PetOwner.Details' })}>
                 <Link to={record.customerLevelId !== 233 ? `/petowner-details/${record.customerId}/${record.customerAccount}` : `/customer-details/Guest/${record.customerId}/${record.customerAccount}`} className="iconfont iconDetails"></Link>
               </Tooltip>
               {record.customerLevelId !== 233 ? (
@@ -119,12 +119,12 @@ export default class Customer extends React.Component<any, any> {
       customerTypeArr: [
         {
           value: 'Normal Member',
-          name: RCi18n({id:'PetOwner.NormalMember'}),
+          name: RCi18n({ id: 'PetOwner.NormalMember' }),
           id: 234
         },
         {
           value: 'Club Member',
-          name: RCi18n({id:'PetOwner.ClubMember'}),
+          name: RCi18n({ id: 'PetOwner.ClubMember' }),
           id: 235
         },
         {
@@ -135,7 +135,7 @@ export default class Customer extends React.Component<any, any> {
       ],
       subscriptionTypeList: [],
       loading: false,
-      phoneReg:[]
+      phoneReg: []
     };
     this.onFormChange = this.onFormChange.bind(this);
     this.onSearch = this.onSearch.bind(this);
@@ -164,22 +164,22 @@ export default class Customer extends React.Component<any, any> {
     });
   };
 
-  getPhoneNumberDefaultFormat = () =>{
-    webapi.getPhoneNumberFormat().then((data) =>{
+  getPhoneNumberDefaultFormat = () => {
+    webapi.getPhoneNumberFormat().then((data) => {
       const phoneFormat = data.res.context.configVOList?.[0]?.context || "00000000000";
       const phoneNumberFormat = phoneFormat?.split(",");
-      const phoneReg = phoneNumberFormat.map((item:string) =>{
-        return {mask:item}
+      const phoneReg = phoneNumberFormat.map((item: string) => {
+        return { mask: item }
       })
       this.setState({
         phoneReg
-      },()=>{
+      }, () => {
         this.setPhoneNumberReg();
       })
     })
   }
-   // 设置手机号输入限制
-   setPhoneNumberReg = () => {
+  // 设置手机号输入限制
+  setPhoneNumberReg = () => {
     let element = document.getElementById('petOwnerPhoneNumber');
     // 静态前端维护的电话格式改成接口获取
     // let phoneReg = [];
@@ -406,7 +406,7 @@ export default class Customer extends React.Component<any, any> {
                   <FormItem>
                     <Input
                       addonBefore={
-                        <p style={styles.label} title={RCi18n({id:'PetOwner.Email'})}>
+                        <p style={styles.label} title={RCi18n({ id: 'PetOwner.Email' })}>
                           <FormattedMessage id="PetOwner.Email" />
                         </p>
                       }
@@ -424,7 +424,7 @@ export default class Customer extends React.Component<any, any> {
                   <FormItem>
                     <Input
                       addonBefore={
-                        <p style={styles.label} title={RCi18n({id:'PetOwner.PhoneNumber'})}>
+                        <p style={styles.label} title={RCi18n({ id: 'PetOwner.PhoneNumber' })}>
                           <FormattedMessage id="PetOwner.PhoneNumber" />
                         </p>
                       }
@@ -465,18 +465,18 @@ export default class Customer extends React.Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <Input
-                        addonBefore={
-                          <p style={styles.label} title={RCi18n({id:'PetOwner.City'})}>
-                            <FormattedMessage id="PetOwner.City" />
-                          </p>
-                        }
-                        onChange={(e) => {
-                          const value = (e.target as any).value;
-                          this.onFormChange({
-                            field: 'city',
-                            value
-                          });
-                        }}
+                      addonBefore={
+                        <p style={styles.label} title={RCi18n({ id: 'PetOwner.City' })}>
+                          <FormattedMessage id="PetOwner.City" />
+                        </p>
+                      }
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'city',
+                          value
+                        });
+                      }}
                     />
                   </FormItem>
                 </Col>
@@ -486,14 +486,14 @@ export default class Customer extends React.Component<any, any> {
                 <Col span={24} style={{ textAlign: 'center' }}>
                   <FormItem>
                     <Button
-                        type="primary"
-                        htmlType="submit"
-                        icon="search"
-                        shape="round"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          this.onSearch();
-                        }}
+                      type="primary"
+                      htmlType="submit"
+                      icon="search"
+                      shape="round"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        this.onSearch();
+                      }}
                     >
                       <span>
                         <FormattedMessage id="PetOwner.search" />
@@ -518,7 +518,7 @@ export default class Customer extends React.Component<any, any> {
             </Form>
           </div>
           <div className="container">
-           
+
             <Table
               columns={columns}
               rowKey="customerDetailId"

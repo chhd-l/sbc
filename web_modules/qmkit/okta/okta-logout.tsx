@@ -21,7 +21,10 @@ const OktaLogout = (props) => {
         redirectUri = window.origin + '/logout';
         issure = Const.REACT_APP_PRESCRIBER_ISSUER;
       }
-      if (sessionStorage.getItem(cache.OKTA_ROUTER_TYPE) === 'staff') {
+      if (
+        sessionStorage.getItem(cache.OKTA_ROUTER_TYPE) === 'staff' ||
+        sessionStorage.getItem(cache.OKTA_ROUTER_TYPE) === 'prescriber'
+      ) {
         oktaAuth.signOut({
           postLogoutRedirectUri:
             window.location.origin +

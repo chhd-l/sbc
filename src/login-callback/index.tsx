@@ -48,14 +48,14 @@ const LoginCallback = () => {
 
   if (displayError) {
     const error = authState.error;
-    if (error.name && error.message) {
+    if (error?.name && error?.message) {
       return (
         <p>
           {error.name}: {error.message}
         </p>
       );
     }
-    return <p>Error: {error.toString()}</p>;
+    return <p>Error: {displayError.toString()}</p>;
   }
 
   return null;

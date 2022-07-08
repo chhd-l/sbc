@@ -46,10 +46,13 @@ let LoginHome = (props) => {
     }
 
     if (authState.isAuthenticated) {
-      let routerType = getRoutType(props.parent.location.search);
-      login(routerType, authState.accessToken.accessToken);
+      // oktaAuth.signInWithRedirect('/login?type=prescriber');不支持参数，改为直接取session值
+      let routerType = sessionStorage.getItem(cache.OKTA_ROUTER_TYPE);
+      // let routerType = getRoutType(props.parent.location.search);
+      // okta登录成功后，通过jwt接口置换我们自己的token，以及执行login逻辑
+      login(routerType, authState.accessToken.value);
     }
-  }, [authState, oktaAuth]);
+  }, [authState.isAuthenticated]);
   return (authState.isAuthenticated && sessionStorage.getItem(cache.OKTA_ROUTER_TYPE)) || toOkta ? (
     <div>
       <div style={styles.noBackgroundContainer}>

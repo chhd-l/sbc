@@ -10,18 +10,18 @@ import { accountCreate } from '../myvetreco-logins/create-account/webapi';
 // 基于oktaLoginCallback组件修改登录逻辑
 // https://github.com/okta/okta-react/blob/3.0/src/LoginCallback.js
 const LoginCallback = () => {
-  const { authService, authState } = useOktaAuth();
+  const { authService, authState, oktaAuth } = useOktaAuth();
   const authStateReady = !authState.isPending;
   const storeTokensFromRedirect = async () => {
     const { tokens } = await authService._oktaAuth.token.parseFromUrl();
 
     if (tokens.idToken) {
-      authService._oktaAuth.tokenManager.add('idToken', tokens.idToken);
+      oktaAuth.tokenManager.add('idToken', tokens.idToken);
     }
     if (tokens.accessToken) {
-      authService._oktaAuth.tokenManager.add('accessToken', tokens.accessToken);
+      oktaAuth.tokenManager.add('accessToken', tokens.accessToken);
     }
-    await authService.updateAuthState();
+    await oktaAuth.authStateManager.updateAuthState();
     return authService.getAuthState();
   };
   useMount(async () => {

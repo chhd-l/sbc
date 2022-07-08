@@ -12,7 +12,7 @@ import { FormattedMessage } from 'react-intl';
 import MyvetrecoLoginForm from '../../myvetreco-logins/login';
 
 let LoginHome = (props) => {
-  let { authState, authService } = useOktaAuth();
+  let { authState, oktaAuth } = useOktaAuth();
   let toOkta = props.parent.location.search === '?toOkta=true';
   let fromPox = props.parent.location.search === '?toOkta=staff';
   let loginpPercriberOkta = () => {
@@ -26,15 +26,15 @@ let LoginHome = (props) => {
     switchRouter();
     switchedRouter = true;
   };
- 
+
   useEffect(() => {
     if (!authState.isAuthenticated) {
       if (switchedRouter) {
         let loginType = sessionStorage.getItem(cache.OKTA_ROUTER_TYPE);
         if (loginType === 'staff') {
-          authService.login('/login?type=staff');
+          oktaAuth.signInWithRedirect('/login?type=staff');
         } else if (loginType === 'prescriber') {
-          authService.login('/login?type=prescriber');
+          oktaAuth.signInWithRedirect('/login?type=prescriber');
         }
         return;
       }
@@ -47,16 +47,18 @@ let LoginHome = (props) => {
 
     if (authState.isAuthenticated) {
       let routerType = getRoutType(props.parent.location.search);
-      login(routerType, authState.accessToken);
+      login(routerType, authState.accessToken.accessToken);
     }
-  }, [authState, authService]);
+  }, [authState, oktaAuth]);
   return (authState.isAuthenticated && sessionStorage.getItem(cache.OKTA_ROUTER_TYPE)) || toOkta ? (
     <div>
       <div style={styles.noBackgroundContainer}>
         <Spin spinning={true}></Spin>
       </div>
     </div>
-  ) : Const.SITE_NAME === 'MYVETRECO' ? (<MyvetrecoLoginForm useOkta={true} onLogin={loginpPercriberOkta} />) : (
+  ) : Const.SITE_NAME === 'MYVETRECO' ? (
+    <MyvetrecoLoginForm useOkta={true} onLogin={loginpPercriberOkta} />
+  ) : (
     <div>
       <div style={styles.container}>
         <Row style={{ top: '20px' }}>

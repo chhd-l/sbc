@@ -38,7 +38,7 @@ class ProductList extends React.Component<any, any> {
   componentDidUpdate(prevProps) {
     // 典型用法（不要忘记比较 props）：
     if (this.props.initData && !prevProps.initData) {
-        this.initDataSource(this.props.initData);
+      this.initDataSource(this.props.initData);
     }
   }
 
@@ -48,48 +48,49 @@ class ProductList extends React.Component<any, any> {
     form.setFieldsValue({
       benefitList: [{
         gifts: selectedRows.map(item => ({ productId: item.goodsInfoId, productNum: item.productNum ?? 1 })),
+
         deliveryNumber: 1,
       }]
     });
   };
 
   initDataSource = (initData) => {
-      if (!initData) return;
-      let {fullGiftLevelList} = initData;
+    if (!initData) return;
+    let { fullGiftLevelList } = initData;
 
-      if (Array.isArray(fullGiftLevelList) && fullGiftLevelList.length > 0) {
-          let initDataSource = fullGiftLevelList.map(item => {
-              let {
-                  giftLevelId,
-                  deliveryNumber,
-                  fullGiftDetailList
-              } = item;
+    if (Array.isArray(fullGiftLevelList) && fullGiftLevelList.length > 0) {
+      let initDataSource = fullGiftLevelList.map(item => {
+        let {
+          giftLevelId,
+          deliveryNumber,
+          fullGiftDetailList
+        } = item;
 
-              let selectedSkuIds = fullGiftDetailList.map(item => item.productId)
-              let selectedRows = initData.goodsList.goodsInfoPage.content.filter(item => selectedSkuIds.includes(item.goodsInfoId));
-              // 添加数量属性
-              let gifts = selectedRows.map(item => {
-                  let productNum = fullGiftDetailList.find(gifItem => gifItem.productId === item.goodsInfoId).productNum;
-                  return {
-                      ...item,
-                      productNum,
-                  }
-              })
+        let selectedSkuIds = fullGiftDetailList.map(item => item.productId)
+        let selectedRows = initData.goodsList.goodsInfoPage.content.filter(item => selectedSkuIds.includes(item.goodsInfoId));
+        // 添加数量属性
+        let gifts = selectedRows.map(item => {
+          let productNum = fullGiftDetailList.find(gifItem => gifItem.productId === item.goodsInfoId).productNum;
+          return {
+            ...item,
+            productNum,
+          }
+        })
 
-              return {
-                  gifts,
-                  selectedSkuIds,
-                  selectedRows: selectedRows,
-                  key: giftLevelId,
-                  deliveryNumber: deliveryNumber,
-              }
-          })
+        return {
+          gifts,
+          selectedSkuIds,
+          selectedRows: selectedRows,
+          key: giftLevelId,
+          deliveryNumber: deliveryNumber,
+        }
+      })
 
-          this.setState({
-              selectedSkuIds: initDataSource[0].selectedSkuIds,
-              selectedRows: initDataSource[0].gifts
-          }, this.changeForm);
-      }
+      this.setState({
+        selectedSkuIds: initDataSource[0].selectedSkuIds,
+        selectedRows: initDataSource[0].gifts
+      }, this.changeForm);
+    }
 
   };
 
@@ -104,7 +105,7 @@ class ProductList extends React.Component<any, any> {
         </Button>
 
         <FormItem>
-          {getFieldDecorator('benefitList', {initialValue:[]})(<div></div>)}
+          {getFieldDecorator('benefitList', { initialValue: [] })(<div></div>)}
         </FormItem>
 
         <DataGrid scroll={{ y: 500 }} size="small" rowKey={(record) => record.goodsInfoId} dataSource={selectedRows} pagination={false}>
@@ -132,7 +133,7 @@ class ProductList extends React.Component<any, any> {
             }}
           />
 
-          <Column  title={<FormattedMessage id="Marketing.Category" />} key="cateName" dataIndex="cateName" />
+          <Column title={<FormattedMessage id="Marketing.Category" />} key="cateName" dataIndex="cateName" />
 
           <Column
             title={<FormattedMessage id="Marketing.Brand" />}
@@ -185,7 +186,8 @@ class ProductList extends React.Component<any, any> {
                   {getFieldDecorator(`${row.goodsInfoId}level_detail${detailIndex}`, {
                     initialValue: _record.productNum ?? 1,
                     rules: [
-                      { required: true, message:
+                      {
+                        required: true, message:
                           (window as any).RCi18n({
                             id: 'Marketing.greaterthan0andlessthan999'
                           })
@@ -230,8 +232,8 @@ class ProductList extends React.Component<any, any> {
             }}
           />
         </DataGrid>
-              
-          
+
+
         {goodsModal && goodsModal._modalVisible && (
           <GoodsModal
             skuLimit={20}
@@ -261,7 +263,7 @@ class ProductList extends React.Component<any, any> {
     }, this.changeForm);
   };
 
-  
+
 
   /**
    * sku选择之后的回调事件

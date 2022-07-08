@@ -1314,7 +1314,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       try {
         this.setState({ loading: true });
         let resp;
-        if (subscriptionNextRefillPromotion?.productId) {
+        if (subscriptionNextRefillPromotion?.productId || subscriptionNextRefillPromotion?.refillPromotionId) {
           params = {
             ...params,
             refillPromotionId: subscriptionNextRefillPromotion?.refillPromotionId,
@@ -1367,7 +1367,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       };
       let resp;
 
-      if (subscriptionNextRefillPromotion?.couponCode) {
+      if (subscriptionNextRefillPromotion?.couponCode || subscriptionNextRefillPromotion?.refillPromotionId) {
         params = {
           ...params,
           refillPromotionId: subscriptionNextRefillPromotion?.refillPromotionId,

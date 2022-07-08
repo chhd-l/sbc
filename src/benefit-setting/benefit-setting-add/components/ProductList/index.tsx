@@ -45,10 +45,20 @@ class ProductList extends React.Component<any, any> {
   changeForm = () => {
     const { form } = this.props;
     const { selectedRows } = this.state;
+    console.log('selectedRows', selectedRows)
     form.setFieldsValue({
       benefitList: [{
-        gifts: selectedRows.map(item => ({ productId: item.goodsInfoId, productNum: item.productNum ?? 1 })),
-
+        gifts: selectedRows.map(item => ({
+          productId: item.goodsInfoId,
+          productNum: item.productNum ?? 1,
+          goodsInfoId: item?.goodsInfoId,
+          goodsInfoNo: item?.goodsInfoNo,
+          goodsInfoName: item?.goodsInfoName,
+          goodsInfoImg: item?.goodsInfoImg,
+          goodsId: item?.goods?.goodsId,
+          goodsNo: item?.goods?.goodsNo,
+          goodsImg: item?.goods?.goodsImg
+        })),
         deliveryNumber: 1,
       }]
     });

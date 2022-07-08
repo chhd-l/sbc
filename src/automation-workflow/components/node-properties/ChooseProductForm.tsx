@@ -1,19 +1,6 @@
-import React, { Component, useState } from 'react';
-import {
-  Form,
-  Tooltip,
-  Row,
-  Icon,
-  Select,
-  Card,
-  Modal,
-  message,
-  Button,
-  Alert,
-  Upload
-} from 'antd';
+import React, { useState } from 'react';
+import { Form, Icon, message, Button, Alert, Upload } from 'antd';
 import { Const, RCi18n, util } from 'qmkit';
-import * as webapi from '@/automation-workflow/webapi';
 import { FormattedMessage } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { DraggerProps } from 'antd/lib/upload';
@@ -30,7 +17,6 @@ export default function ChooseProductForm({ updateValue, productData }) {
   const [fileData, setFileData] = useState({
     file: null,
     uploadBtnEnable: false
-    // isImport: true
   });
   const uploadProps: DraggerProps = {
     name: 'file',
@@ -46,9 +32,10 @@ export default function ChooseProductForm({ updateValue, productData }) {
           status
         }
       } = file;
-      if (status === 'done') {
+      if (status === 'uploading') {
+        setFileData({ file: context, uploadBtnEnable: false });
+      } else if (status === 'done') {
         if (code === Const.SUCCESS_CODE) {
-          message.success(RCi18n({ id: 'Setting.Operatesuccessfully' }));
           setFileData({ file: context, uploadBtnEnable: true });
         }
       }
@@ -58,16 +45,13 @@ export default function ChooseProductForm({ updateValue, productData }) {
     // 参数加密
     let base64 = new util.Base64();
     const token = (window as any).token;
-    if (token) {
-      let result = JSON.stringify({ token: token });
-      let encrypted = base64.urlEncode(result);
-      const exportHref = Const.HOST + `/automation/excel/template/${encrypted}`;
-      window.open(exportHref);
-    } else {
-      message.error('请登录');
-    }
+    let result = JSON.stringify({ token: token });
+    let encrypted = base64.urlEncode(result);
+    const exportHref = Const.HOST + `/automation/excel/template/${encrypted}`;
+    window.open(exportHref);
   };
   const handleUpload = async () => {
+    message.success(RCi18n({ id: 'Setting.Operatesuccessfully' }));
     updateValue('productData', { path: fileData.file });
   };
 

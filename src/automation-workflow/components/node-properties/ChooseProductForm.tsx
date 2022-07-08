@@ -12,7 +12,7 @@ import {
   Alert,
   Upload
 } from 'antd';
-import { Const, util } from 'qmkit';
+import { Const, RCi18n, util } from 'qmkit';
 import * as webapi from '@/automation-workflow/webapi';
 import { FormattedMessage } from 'react-intl';
 import { useParams } from 'react-router-dom';
@@ -29,7 +29,7 @@ export default function ChooseProductForm({ updateValue, productData }) {
   const { id } = useParams();
   const [fileData, setFileData] = useState({
     file: null,
-    uploading: false
+    uploadBtnEnable: false
     // isImport: true
   });
   const uploadProps: DraggerProps = {
@@ -39,42 +39,18 @@ export default function ChooseProductForm({ updateValue, productData }) {
     headers: header,
     data: { campaignId: id },
     action: Const.HOST + '/automation/excel/import',
-
-    onChange: (f) => {
-      console.log(f, 'fff');
-      // const { response } = file;
-      // response.con
-      // updateValue('productData', { path: 999 });
-      // return;
-      // const status = info.file.status;
-      // if (status == 'uploading') {
-      //   const fileName = '';
-      //   setFileData({ file: fileName, uploading: false });
-      // }
+    onChange: (file) => {
+      const {
+        file: {
+          response: { context, code },
+          status
+        }
+      } = file;
       if (status === 'done') {
-        setFileData((f) => ({ ...f, uploading: true }));
-        // updateValue('priceIncreaseTime', f);
-        // let fileName = '';
-        // let ext = '';
-        // loading = false;
-        // if (info.file.response.code == Const.SUCCESS_CODE) {
-        //   fileName = info.file.name;
-        //   let isImport = false;
-        //   this.setState({ isImport });
-        //   message.success(fileName + '上传成功');
-        // } else {
-        //   if (info.file.response === 'Method Not Allowed') {
-        //     message.error('此功能您没有权限访问');
-        //   } else {
-        //     message.error(info.file.response.message);
-        //   }
-        // }
-        // this.setState({ ext, fileName, loading, err });
-      } else if (status === 'error') {
-        // message.error('上传失败');
-        // loading = false;
-        // this.setState({ loading, err });
-        updateValue('productData', { path: fileData.file });
+        if (code === Const.SUCCESS_CODE) {
+          message.success(RCi18n({ id: 'Setting.Operatesuccessfully' }));
+          setFileData({ file: context, uploadBtnEnable: true });
+        }
       }
     }
   };
@@ -85,19 +61,14 @@ export default function ChooseProductForm({ updateValue, productData }) {
     if (token) {
       let result = JSON.stringify({ token: token });
       let encrypted = base64.urlEncode(result);
-      const exportHref = Const.HOST + `/goods/excel/template/${encrypted}`;
+      const exportHref = Const.HOST + `/automation/excel/template/${encrypted}`;
       window.open(exportHref);
     } else {
       message.error('请登录');
     }
   };
   const handleUpload = async () => {
-    debugger;
-    const fd = new FormData();
-    fd.append('files[]', fileData.file);
-    // fd.append('userName', userName.value)
-    // fd.append('age','18')
-    const importRes: any = await webapi.automationUploadFile(fd);
+    updateValue('productData', { path: fileData.file });
   };
 
   return (
@@ -139,8 +110,7 @@ export default function ChooseProductForm({ updateValue, productData }) {
         </p>
       </Dragger>
       <Button
-        disabled={!fileData.file}
-        loading={fileData.uploading}
+        disabled={!fileData.uploadBtnEnable}
         type="primary"
         icon="upload"
         onClick={handleUpload}

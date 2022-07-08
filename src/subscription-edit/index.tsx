@@ -300,11 +300,17 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               sum += +goodsInfo[i].subscribeNum * +goodsInfo[i].originalPrice;
             }
           }
+          let NextRefilldiscountsPrice = 0;
+          if (subscriptionNextRefillPromotionVO?.discount) {
+            NextRefilldiscountsPrice = parseFloat(((1 - (subscriptionNextRefillPromotionVO?.discount ? subscriptionNextRefillPromotionVO?.discount : 1)) * (sum - this.state.subscriptionDiscountPrice)).toFixed(2))
+          }
+
+          console.log('NextRefilldiscountsPrice', NextRefilldiscountsPrice)
           subscriptionDetail.noStartTradeList = subscriptionDetail.noStartTradeList.map((item) => {
             return {
               ...item,
               ProductName: subscriptionNextRefillPromotionVO?.productName,
-              tradePrice: { ...item.tradePrice, discountsPrice: item?.tradePrice?.discountsPrice + (1 - (subscriptionNextRefillPromotionVO?.discount ? subscriptionNextRefillPromotionVO?.discount : 1)) * (sum - this.state.subscriptionDiscountPrice) }
+              tradePrice: { ...item.tradePrice, discountsPrice: subscriptionNextRefillPromotionVO?.discount ? parseFloat((item?.tradePrice?.discountsPrice + NextRefilldiscountsPrice).toFixed(2)) : item?.tradePrice?.discountsPrice }
             }
           })
 
@@ -1126,6 +1132,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   // 设置价格长度
   getSubscriptionPrice = (num: any) => {
     const { subscriptionType } = this.state;
+    console.log('Enjoy discount getSubscriptionPrice ', num)
     if (num > 0) {
       let nlen = num.toString().split('.')[1]?.length;
       // subscriptionType == 'Individualization' ? nlen = 4 : nlen = 2;

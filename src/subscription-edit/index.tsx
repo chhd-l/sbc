@@ -293,18 +293,23 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           const isSubscriptionRefill = await webapi.refillgetProduct(subscriptionDetail.subscribeId);
           const subscriptionNextRefillPromotionVO = isSubscriptionRefill?.res?.context?.subscriptionNextRefillPromotionVO;
 
-          console.log('isSubscriptionRefill', isSubscriptionRefill);
           let sum = 0;
           for (let i = 0; i < goodsInfo.length; i++) {
             if (goodsInfo[i].subscribeNum && goodsInfo[i].originalPrice) {
               sum += +goodsInfo[i].subscribeNum * +goodsInfo[i].originalPrice;
             }
           }
+          let NextRefilldiscountsPrice = 0;
+          if (subscriptionNextRefillPromotionVO?.discount) {
+            NextRefilldiscountsPrice = parseFloat(((1 - (subscriptionNextRefillPromotionVO?.discount ? subscriptionNextRefillPromotionVO?.discount : 1)) * (sum - this.state.subscriptionDiscountPrice)).toFixed(2))
+          }
+
+          console.log('NextRefilldiscountsPrice', NextRefilldiscountsPrice)
           subscriptionDetail.noStartTradeList = subscriptionDetail.noStartTradeList.map((item) => {
             return {
               ...item,
               ProductName: subscriptionNextRefillPromotionVO?.productName,
-              tradePrice: { ...item.tradePrice, discountsPrice: item?.tradePrice?.discountsPrice + (1 - (subscriptionNextRefillPromotionVO?.discount ? subscriptionNextRefillPromotionVO?.discount : 1)) * (sum - this.state.subscriptionDiscountPrice) }
+              tradePrice: { ...item.tradePrice, discountsPrice: subscriptionNextRefillPromotionVO?.discount ? parseFloat((item?.tradePrice?.discountsPrice + NextRefilldiscountsPrice).toFixed(2)) : item?.tradePrice?.discountsPrice }
             }
           })
 
@@ -1309,7 +1314,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       try {
         this.setState({ loading: true });
         let resp;
-        if (subscriptionNextRefillPromotion?.productId) {
+        if (subscriptionNextRefillPromotion?.productId || subscriptionNextRefillPromotion?.refillPromotionId) {
           params = {
             ...params,
             refillPromotionId: subscriptionNextRefillPromotion?.refillPromotionId,
@@ -1362,7 +1367,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       };
       let resp;
 
-      if (subscriptionNextRefillPromotion?.couponCode) {
+      if (subscriptionNextRefillPromotion?.couponCode || subscriptionNextRefillPromotion?.refillPromotionId) {
         params = {
           ...params,
           refillPromotionId: subscriptionNextRefillPromotion?.refillPromotionId,

@@ -81,13 +81,19 @@ export default class tasks extends Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
-          res.context.tasks.map((item) => {
-            item.showBasicInfo = item.status !== 'Completed';
-          });
-          this.setState({
-            taskList: res.context.tasks || [],
-            taskLoading: false
-          });
+          if (res?.context) {
+            res?.context?.tasks.map((item) => {
+              item.showBasicInfo = item.status !== 'Completed';
+            });
+            this.setState({
+              taskList: res?.context?.tasks || [],
+              taskLoading: false
+            });
+          } else {
+            this.setState({
+              taskLoading: false
+            });
+          }
         } else {
           message.error(res.message || (window as any).RCi18n({ id: 'Public.GetDataFailed' }));
           this.setState({

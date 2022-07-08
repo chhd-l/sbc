@@ -26,6 +26,8 @@ import { debug } from 'console';
 import { RadioChangeEvent } from 'antd/lib/radio';
 import addDiscount from '../../web_modules/qmkit/images/icon/addDiscount.svg';
 import ChangeDisacount from './component/ChangeDisacount';
+import { parseInt } from 'lodash';
+import { re } from 'mathjs';
 
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -189,8 +191,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       const { res } = data;
       console.log('res', res)
       if (res.code === Const.SUCCESS_CODE) {
+        const refillcodeList = res.context.map((item) => ({ ...item, couponName: (100 - (100 * item?.couponDiscount)) !== 0 ? (100 - Math.round(100 * item?.couponDiscount)) + '%' : 'None' }))
         this.setState({
-          refillcode: res.context
+          refillcode: refillcodeList
         })
       }
     }).catch((err) => {
@@ -1261,18 +1264,41 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   };
   addProductskuSelectedBackFun = async (selectedSkuIds, selectedRows: any) => {
     const { subscriptionId, goodsInfo, subscriptionType, subscriptionStatus, deliveryAddressId, curChangeProductItem, subscriptionNextRefillPromotion, noStartOrder } = this.state;
-    if (!Array.isArray(selectedSkuIds) || !Array.isArray(selectedRows?.toJS())) return;
-    if (selectedSkuIds.length === 0 || selectedRows?.toJS()?.length === 0) return;
-
-    console.log('selectedRows?.toJS()', selectedRows?.toJS());
-    this.setState({
-      selectedSkuIds: selectedSkuIds,
-      selectedRows: selectedRows
-    });
-    const goods = selectedRows?.toJS()[0];
-    try {
+    let params;
+    if (selectedSkuIds?.length === 0 || selectedRows?.toJS()?.length === 0) {
       this.setState({ loading: true });
-      let params: any = {
+      await webapi.refilldelProduct({
+        refillPromotionId: subscriptionNextRefillPromotion?.refillPromotionId,
+        productId: null,
+        productName: null,
+        productNum: null,
+        subscribeId: subscriptionId,
+        type: 0
+      }).then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          console.log('refilldelProductres', res)
+          message.success(RCi18n({ id: 'PetOwner.OperateSuccessfully' }));
+          this.getSubscriptionDetail();
+        } else {
+          throw new Error(RCi18n({ id: 'PetOwner.Unsuccessful' }))
+        }
+      }).catch((err) => {
+        this.setState({ loading: false });
+        message.error(err.message);
+      }).finally(() => {
+        this.closeProductModal();
+      })
+      // await webapi.refilldelProduct({
+      //   refillPromotionId: subscriptionNextRefillPromotion.refillPromotionId,
+      //   couponCode: null,
+      //   discount: null,
+      //   subscribeId: subscriptionId,
+      //   type: 1
+      // });
+    } else {
+      const goods = selectedRows?.toJS()[0];
+      params = {
         productId: goods.goodsInfoId,
         productName: goods.goodsInfoName,
         // 数量默认1个
@@ -1280,31 +1306,40 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         subscribeId: subscriptionId,
         type: 0
       };
-      let resp;
-
-      if (subscriptionNextRefillPromotion?.productId) {
-        params = {
-          ...params,
-          refillPromotionId: subscriptionNextRefillPromotion?.refillPromotionId,
-        };
-        let { res } = await webapi.refillModifyProduct(params);
-        resp = res
-      } else {
-        let { res } = await webapi.refillAddProduct(params);
-        resp = res
+      try {
+        this.setState({ loading: true });
+        let resp;
+        if (subscriptionNextRefillPromotion?.productId) {
+          params = {
+            ...params,
+            refillPromotionId: subscriptionNextRefillPromotion?.refillPromotionId,
+          };
+          let { res } = await webapi.refillModifyProduct(params);
+          resp = res
+        } else {
+          let { res } = await webapi.refillAddProduct(params);
+          resp = res
+        }
+        if (resp.code === Const.SUCCESS_CODE) {
+          message.success(RCi18n({ id: 'PetOwner.OperateSuccessfully' }));
+          this.getSubscriptionDetail();
+        } else {
+          throw new Error(RCi18n({ id: 'PetOwner.Unsuccessful' }))
+        }
+      } catch (err) {
+        this.setState({ loading: false });
+        message.error(err.message);
+      } finally {
+        this.closeProductModal();
       }
-      if (resp.code === Const.SUCCESS_CODE) {
-        message.success(RCi18n({ id: 'PetOwner.OperateSuccessfully' }));
-        this.getSubscriptionDetail();
-      } else {
-        throw new Error(RCi18n({ id: 'PetOwner.Unsuccessful' }))
-      }
-    } catch (err) {
-      this.setState({ loading: false });
-      message.error(err.message);
-    } finally {
-      this.closeProductModal();
     }
+
+    this.setState({
+      selectedSkuIds: selectedSkuIds,
+      selectedRows: selectedRows
+    });
+
+
   }
   DisacountChange = (index) => {
     const { refillcode } = this.state;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Icon, message, Button, Alert, Upload, notification } from 'antd';
+import { Form, Icon, message, Button, Alert, Upload, notification, Spin } from 'antd';
 import { Const, RCi18n, util } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { useParams } from 'react-router-dom';
@@ -15,7 +15,8 @@ export default function ChooseProductForm({ updateValue }) {
   const { id } = useParams();
   const [fileData, setFileData] = useState({
     file: null,
-    uploadBtnEnable: false
+    uploadBtnEnable: false,
+    loading: false
   });
   const uploadProps: DraggerProps = {
     name: 'file',
@@ -23,7 +24,7 @@ export default function ChooseProductForm({ updateValue }) {
     accept: '.xls,.xlsx',
     action: Const.HOST + '/automation/excel/import',
     beforeUpload: (file) => {
-      setFileData({ file, uploadBtnEnable: true });
+      setFileData((s) => ({ ...s, file, uploadBtnEnable: true }));
       return false;
     }
   };
@@ -38,6 +39,7 @@ export default function ChooseProductForm({ updateValue }) {
   };
   const handleUpload = async () => {
     try {
+      setFileData((s) => ({ ...s, loading: true }));
       const formData = new FormData();
       formData.append('campaignId', id);
       formData.append('file', fileData.file);
@@ -49,7 +51,7 @@ export default function ChooseProductForm({ updateValue }) {
       const { context, code, message: msg } = await resp.json();
       if (code === Const.SUCCESS_CODE) {
         message.success(RCi18n({ id: 'Setting.Operatesuccessfully' }));
-        setFileData({ file: null, uploadBtnEnable: false });
+        setFileData({ loading: false, file: null, uploadBtnEnable: false });
         updateValue('productData', { path: context });
       } else {
         notification.error({
@@ -58,6 +60,7 @@ export default function ChooseProductForm({ updateValue }) {
           key: 'error_pop',
           description: msg
         });
+        setFileData((s) => ({ ...s, loading: false }));
       }
     } catch (error) {
       notification.error({
@@ -66,6 +69,7 @@ export default function ChooseProductForm({ updateValue }) {
         key: 'error_pop',
         description: error
       });
+      setFileData((s) => ({ ...s, loading: false }));
     }
   };
 
@@ -96,14 +100,18 @@ export default function ChooseProductForm({ updateValue }) {
       <h4>
         <span className="red-number">2</span>Upload data
       </h4>
+
       <Dragger {...uploadProps}>
-        <p className="ant-upload-drag-icon">
-          <Icon type="inbox" />
-        </p>
-        <p className="ant-upload-text">
-          <FormattedMessage id="Product.chooseFileToUpload" />
-        </p>
+        <Spin spinning={fileData.loading}>
+          <p className="ant-upload-drag-icon">
+            <Icon type="inbox" />
+          </p>
+          <p className="ant-upload-text">
+            <FormattedMessage id="Product.chooseFileToUpload" />
+          </p>
+        </Spin>
       </Dragger>
+
       <div className="desc-container">
         <p>{fileData.file?.name}</p>
         <p className="ant-upload-hint">

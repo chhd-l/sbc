@@ -220,7 +220,7 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
                 {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
               </Col>
             </Row>
-            {data?.appliesType && (
+            {isNumber(data?.appliesType) && (
               <Row className="step-summary-item">
                 <Col className="step-summary-sub-title">
                   <FormattedMessage id="Marketing.appliesType" />:
@@ -229,7 +229,7 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
               </Row>
             )}
 
-            {data?.subscriptionRefillLimit && <Row className="step-summary-item">
+            {isNumber(data?.subscriptionRefillLimit) && <Row className="step-summary-item">
               <Col className="step-summary-sub-title">
                 <FormattedMessage id="Marketing.subscriptionRefillLimit" />:
               </Col>
@@ -293,21 +293,21 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
                 <FormattedMessage id="Marketing.FirstSubRec" />:
               </Col>
               <Col className="step-summary-item-text">
-                {level.firstSubscriptionOrderReduction + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                {level?.firstSubscriptionOrderReduction + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
               </Col>
             </Row>
-            {level.restSubscriptionOrderReduction && (
+            {level?.restSubscriptionOrderReduction && (
               <Row className="step-summary-item">
                 <Col className="step-summary-sub-title">
                   <FormattedMessage id="Marketing.RestSubRec" />:
                 </Col>
                 <Col className="step-summary-item-text">
-                  {level.restSubscriptionOrderReduction +
+                  {level?.restSubscriptionOrderReduction +
                     sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                 </Col>
               </Row>
             )}
-            {data?.subscriptionRefillLimit && <Row className="step-summary-item">
+            {isNumber(data?.subscriptionRefillLimit) && <Row className="step-summary-item">
               <Col className="step-summary-sub-title">
                 <FormattedMessage id="Marketing.subscriptionRefillLimit" />:
               </Col>
@@ -323,49 +323,49 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
                 <FormattedMessage id="Marketing.FirstSubscriptionOrderDiscount" />:
               </Col>
               <Col className="step-summary-item-text">
-                {level.firstSubscriptionOrderDiscount ? ((1 - level.firstSubscriptionOrderDiscount) * 100).toFixed(0) + '%' : null}
+                {isNumber(level.firstSubscriptionOrderDiscount) ? ((1 - level.firstSubscriptionOrderDiscount) * 100).toFixed(0) + '%' : null}
               </Col>
             </Row>
-            {level.firstSubscriptionLimitAmount && (
+            {level?.firstSubscriptionLimitAmount && (
               <Row className="step-summary-item">
                 <Col className="step-summary-sub-title">
                   <FormattedMessage id="Marketing.FirstSubscriptionLimitAmount" />:
                 </Col>
                 <Col className="step-summary-item-text">
-                  {level.firstSubscriptionLimitAmount +
+                  {level?.firstSubscriptionLimitAmount +
                     sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                 </Col>
               </Row>
             )}
-            {level.restSubscriptionOrderDiscount && (
+            {isNumber(level?.restSubscriptionOrderDiscount) && (
               <Row className="step-summary-item">
                 <Col className="step-summary-sub-title">
                   <FormattedMessage id="Marketing.RestSubscriptionOrderDiscount" />:
                 </Col>
                 <Col className="step-summary-item-text">
-                  {level.restSubscriptionOrderDiscount ? ((1 - level.restSubscriptionOrderDiscount) * 100).toFixed(0) + '%' : null}
+                  {level?.restSubscriptionOrderDiscount ? ((1 - level.restSubscriptionOrderDiscount) * 100).toFixed(0) + '%' : null}
                 </Col>
               </Row>
             )}
-            {level.restSubscriptionLimitAmount && (
+            {level?.restSubscriptionLimitAmount && (
               <Row className="step-summary-item">
                 <Col className="step-summary-sub-title">
                   <FormattedMessage id="Marketing.RestSubscriptionLimitAmount" />:
                 </Col>
                 <Col className="step-summary-item-text">
-                  {level.restSubscriptionLimitAmount +
+                  {level?.restSubscriptionLimitAmount +
                     sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                 </Col>
               </Row>
             )}
-            {data?.appliesType && (<Row className="step-summary-item">
+            {isNumber(data?.appliesType) && (<Row className="step-summary-item">
               <Col className="step-summary-sub-title">
                 <FormattedMessage id="Marketing.appliesType" />:
               </Col>
               <Col className="step-summary-item-text">{enumConst.appliesType[data?.appliesType]}</Col>
             </Row>)}
 
-            {data?.subscriptionRefillLimit && <Row className="step-summary-item">
+            {isNumber(data?.subscriptionRefillLimit) && <Row className="step-summary-item">
               <Col className="step-summary-sub-title">
                 <FormattedMessage id="Marketing.subscriptionRefillLimit" />:
               </Col>

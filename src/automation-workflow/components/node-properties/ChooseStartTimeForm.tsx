@@ -64,9 +64,12 @@ export default class ChooseStartTimeForm extends Component<any, ChooseStartTimeF
         }
       });
     } else {
-      const specificTimeList = startCampaignTime.time
-        .split(',')
-        .map((i) => ({ sort: id++, specificTime: i }));
+      let specificTimeList = [{ sort: id++, specificTime: null }];
+      if (startCampaignTime.time) {
+        specificTimeList = startCampaignTime.time
+          ?.split(',')
+          .map((i) => ({ sort: id++, specificTime: i }));
+      }
       this.setState({
         form: {
           timeType: startCampaignTime.timeType,

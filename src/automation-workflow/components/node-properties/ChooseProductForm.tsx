@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Icon, message, Button, Alert, Upload } from 'antd';
+import { Form, Icon, message, Button, Alert, Upload, notification } from 'antd';
 import { Const, RCi18n, util } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { useParams } from 'react-router-dom';
@@ -11,8 +11,7 @@ const header = {
   Accept: 'application/json',
   authorization: 'Bearer ' + (window as any).token
 };
-export default function ChooseProductForm({ updateValue, productData }) {
-  console.log('productDataproductDataproductData ', productData);
+export default function ChooseProductForm({ updateValue }) {
   const { id } = useParams();
   const [fileData, setFileData] = useState({
     file: null,
@@ -22,21 +21,10 @@ export default function ChooseProductForm({ updateValue, productData }) {
     name: 'file',
     showUploadList: false,
     accept: '.xls,.xlsx',
-    headers: header,
-    data: { campaignId: id },
     action: Const.HOST + '/automation/excel/import',
-    onChange: (file) => {
-      const {
-        file: {
-          response: { context, code },
-          status
-        }
-      } = file;
-      if (status === 'done') {
-        if (code === Const.SUCCESS_CODE) {
-          setFileData({ file: context, uploadBtnEnable: true });
-        }
-      }
+    beforeUpload: (file) => {
+      setFileData({ file, uploadBtnEnable: true });
+      return false;
     }
   };
   const toDownTempl = () => {
@@ -49,9 +37,36 @@ export default function ChooseProductForm({ updateValue, productData }) {
     window.open(exportHref);
   };
   const handleUpload = async () => {
-    message.success(RCi18n({ id: 'Setting.Operatesuccessfully' }));
-    setFileData({ file: null, uploadBtnEnable: false });
-    updateValue('productData', { path: fileData.file });
+    try {
+      const formData = new FormData();
+      formData.append('campaignId', id);
+      formData.append('file', fileData.file);
+      const resp = await fetch(Const.HOST + '/automation/excel/import', {
+        method: 'POST',
+        headers: header,
+        body: formData
+      });
+      const { context, code, message: msg } = await resp.json();
+      if (code === Const.SUCCESS_CODE) {
+        message.success(RCi18n({ id: 'Setting.Operatesuccessfully' }));
+        setFileData({ file: null, uploadBtnEnable: false });
+        updateValue('productData', { path: context });
+      } else {
+        notification.error({
+          message: 'System Notification',
+          duration: 3,
+          key: 'error_pop',
+          description: msg
+        });
+      }
+    } catch (error) {
+      notification.error({
+        message: 'System Notification',
+        duration: 3,
+        key: 'error_pop',
+        description: error
+      });
+    }
   };
 
   return (
@@ -88,19 +103,22 @@ export default function ChooseProductForm({ updateValue, productData }) {
         <p className="ant-upload-text">
           <FormattedMessage id="Product.chooseFileToUpload" />
         </p>
+      </Dragger>
+      <div className="desc-container">
+        <p>{fileData.file?.name}</p>
         <p className="ant-upload-hint">
           <FormattedMessage id="Product.importInfo2" />
         </p>
-      </Dragger>
-      <Button
-        disabled={!fileData.uploadBtnEnable}
-        type="primary"
-        icon="upload"
-        onClick={handleUpload}
-        className="upload-btn"
-      >
-        <FormattedMessage id="Product.confirmToImport" />
-      </Button>
+        <Button
+          disabled={!fileData.uploadBtnEnable}
+          type="primary"
+          icon="upload"
+          onClick={handleUpload}
+          className="upload-btn"
+        >
+          <FormattedMessage id="Product.confirmToImport" />
+        </Button>
+      </div>
     </div>
   );
 }

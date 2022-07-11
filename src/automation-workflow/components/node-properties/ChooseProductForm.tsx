@@ -32,9 +32,7 @@ export default function ChooseProductForm({ updateValue, productData }) {
           status
         }
       } = file;
-      if (status === 'uploading') {
-        setFileData({ file: context, uploadBtnEnable: false });
-      } else if (status === 'done') {
+      if (status === 'done') {
         if (code === Const.SUCCESS_CODE) {
           setFileData({ file: context, uploadBtnEnable: true });
         }
@@ -52,6 +50,7 @@ export default function ChooseProductForm({ updateValue, productData }) {
   };
   const handleUpload = async () => {
     message.success(RCi18n({ id: 'Setting.Operatesuccessfully' }));
+    setFileData({ file: null, uploadBtnEnable: false });
     updateValue('productData', { path: fileData.file });
   };
 

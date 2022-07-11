@@ -8,6 +8,7 @@ import { FormattedMessage } from 'react-intl';
 import { enumConst } from '@/marketing-setting/create-promotion/enum';
 import '../index.less';
 import BarLine from '@/marketing-details/components/BarLine';
+import { isNumber } from 'lodash';
 type MarketingDetailsProps = {};
 const MAK_TYPE = {
   0: 'Promotion details',
@@ -170,7 +171,7 @@ const CouponDetails = (props: MarketingDetailsProps) => {
               <FormattedMessage id="Marketing.CouponValue" />:
             </Col>
             <Col className="step-summary-item-text">
-              {data?.couponDiscount ? ((1 - data?.couponDiscount) * 100).toFixed(0) + '%' : null}
+              {isNumber(data?.couponDiscount) ? ((1 - data?.couponDiscount) * 100).toFixed(0) + '%' : null}
             </Col>
           </Row>
           <Row className="step-summary-item">
@@ -218,7 +219,7 @@ const CouponDetails = (props: MarketingDetailsProps) => {
               <FormattedMessage id="Marketing.CouponValue" />:
             </Col>
             <Col className="step-summary-item-text">
-              {data?.couponDiscount ? ((1 - data?.couponDiscount) * 100).toFixed(0) + '%' : null}
+              {isNumber(data?.couponDiscount) ? ((1 - data?.couponDiscount) * 100).toFixed(0) + '%' : null}
             </Col>
           </Row>
 

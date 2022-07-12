@@ -19,7 +19,7 @@ const Logo = Const.SITE_NAME === 'MYVETRECO' ? logo : fgsLogo;
 function CreateAccount({ form }) {
   const { getFieldDecorator } = form;
   const base64 = new util.Base64();
-  let { authService } = useOktaAuth();
+  let { oktaAuth } = useOktaAuth();
   const [loading, setLoading] = useState(false);
   // 是否okta登录
   const { data: oktaRegistered, run: accountCheck } = useRequest(
@@ -53,7 +53,9 @@ function CreateAccount({ form }) {
           sessionStorage.setItem('myvet-eamil-to-okta', values.email);
           sessionStorage.setItem('myvet-recommendationCode-to-okta', values.recommendationCode);
           sessionStorage.setItem(cache.OKTA_ROUTER_TYPE, 'prescriber');
-          authService.login('/login?type=prescriber');
+          oktaAuth.signOut({
+            postLogoutRedirectUri: window.location.origin + '/login?type=prescriber'
+          });
           return;
         }
         createStoreAccount({

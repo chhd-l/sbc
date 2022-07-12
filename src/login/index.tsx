@@ -28,7 +28,7 @@ export default withOktaAuth(class Login extends React.Component<any, any> {
            issure = Const.REACT_APP_PRESCRIBER_ISSUER;
          }
         if(sessionStorage.getItem(cache.OKTA_ROUTER_TYPE) === 'staff') {
-          this.props.authService.logout('/logout?type=' + sessionStorage.getItem(cache.OKTA_ROUTER_TYPE))
+          this.props.oktaAuth.signOut({postLogoutRedirectUri:window.location.origin + '/logout?type=' + sessionStorage.getItem(cache.OKTA_ROUTER_TYPE)})
         } else {
           window.location.href = `${issure}/v1/logout?id_token_hint=${idToken}&post_logout_redirect_uri=${redirectUri}`;
         }

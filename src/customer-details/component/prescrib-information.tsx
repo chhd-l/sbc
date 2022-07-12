@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table, Popover, Input, Button } from 'antd';
-import { Const, RCi18n } from 'qmkit';
+import { cache, Const, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { getPrescriberList, editPrescriberId } from '../webapi';
 
@@ -9,6 +9,7 @@ interface Iprop {
   customerId: string;
 }
 
+const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || '';
 export default class PrescribInformation extends React.Component<Iprop, any> {
   constructor(props: Iprop) {
     super(props);
@@ -103,46 +104,47 @@ export default class PrescribInformation extends React.Component<Iprop, any> {
     const { list, pagination, loading, editLoading } = this.state;
     const columns = [
       {
-        title: RCi18n({id:"PetOwner.PrescriberID"}),
+        title: RCi18n({ id: "PetOwner.PrescriberID" }),
         dataIndex: 'prescriberId',
         key: 'id',
         render: (text, row) => (
           <div>
-            <span style={{marginRight: 5}}>{text}</span>
+            <span style={{ marginRight: 5 }}>{text}</span>
             <Popover
               visible={row.editVisible}
               placement="right"
               content={
-                <Input.Group compact style={{width: 320}}>
-                  <Input style={{width:'70%'}} value={row.newPrescriberId} onChange={(e) => this.onChangeNewPrescriberId(row.id, e.target.value)} />
-                  <Button type="primary" style={{width:'30%'}} loading={editLoading} onClick={() => this.onSavePrescriberId(row.id)}><FormattedMessage id="PetOwner.Save" /></Button>
+                <Input.Group compact style={{ width: 320 }}>
+                  <Input style={{ width: '70%' }} value={row.newPrescriberId} onChange={(e) => this.onChangeNewPrescriberId(row.id, e.target.value)} />
+                  <Button type="primary" style={{ width: '30%' }} loading={editLoading} onClick={() => this.onSavePrescriberId(row.id)}><FormattedMessage id="PetOwner.Save" /></Button>
                 </Input.Group>
               }
               onVisibleChange={(visible) => this.handleVisibleChange(row.id, visible)}
               trigger="click"
             >
-              <a className="iconfont iconEdit"></a>
+              {/* 123457910--us */}
+              {[123457910].includes(storeId) && <a className="iconfont iconEdit"></a>}
             </Popover>
           </div>
         )
       },
       {
-        title: RCi18n({id:"PetOwner.PrescriberName"}),
+        title: RCi18n({ id: "PetOwner.PrescriberName" }),
         dataIndex: 'prescriberName',
         key: 'name'
       },
       {
-        title: RCi18n({id:"PetOwner.PrescriberPhone"}),
+        title: RCi18n({ id: "PetOwner.PrescriberPhone" }),
         dataIndex: 'phone',
         key: 'phone'
       },
       {
-        title: RCi18n({id:"PetOwner.PrescriberCity"}),
+        title: RCi18n({ id: "PetOwner.PrescriberCity" }),
         dataIndex: 'primaryCity',
         key: 'city'
       },
       {
-        title: RCi18n({id:"PetOwner.PrescriberType"}),
+        title: RCi18n({ id: "PetOwner.PrescriberType" }),
         dataIndex: 'prescriberType',
         key: 'type'
       }

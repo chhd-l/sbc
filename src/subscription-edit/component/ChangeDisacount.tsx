@@ -27,7 +27,8 @@ function ChangeDisacount(props) {
 
   const renderSelect = () => {
     return props.refillcode.map((item, index) => {
-      return <Option value={index} key={item.couponId}>{item.couponName}</Option>
+      const couName = (1 - item?.couponDiscount) === 0 ? "None" : Math.round(100 - (item?.couponDiscount * 100)) + '%';
+      return <Option value={index} key={item.couponId}>{couName}</Option>
     })
   }
   // couponCode

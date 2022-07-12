@@ -24,20 +24,20 @@ export default withOktaAuth(
 
     async componentDidMount() {
       // this.search('123457908-098111')
-      window.token = sessionStorage.getItem('token-for-verify')
-      debugger
-     let userId = sessionStorage.getItem(cache.LOGIN_ACCOUNT_NAME)
-     if(userId){
-      debugger
-      let {res} = await webApi.findPrescriberIdAndStoreBy({userId})
-      console.info('/......',res)
-      debugger
-      let {storeId,prescriberId} = res.context
-      if(prescriberId){
-        let storeIdAndPrescriberId = `${storeId}-${prescriberId}`
-        this.search(storeIdAndPrescriberId)
+      window.token = sessionStorage.getItem('token-for-verify');
+      debugger;
+      let userId = sessionStorage.getItem(cache.LOGIN_ACCOUNT_NAME);
+      if (userId) {
+        debugger;
+        let { res } = await webApi.findPrescriberIdAndStoreBy({ userId });
+        console.info('/......', res);
+        debugger;
+        let { storeId, prescriberId } = res.context;
+        if (prescriberId) {
+          let storeIdAndPrescriberId = `${storeId}-${prescriberId}`;
+          this.search(storeIdAndPrescriberId);
+        }
       }
-     }
 
       document.getElementById('consents').addEventListener('click', (e) => {
         if (e.target.localName === 'span') {
@@ -46,7 +46,9 @@ export default withOktaAuth(
           let allList = [...this.state.requiredConsents, ...this.state.optionalConsents];
           let selectConsent = allList.find((x) => x.id === parentId);
           if (selectConsent) {
-            let detali = selectConsent.detailList ? selectConsent.detailList.find((x) => x.contentTitle === keyWords) : { contentBody: '' };
+            let detali = selectConsent.detailList
+              ? selectConsent.detailList.find((x) => x.contentTitle === keyWords)
+              : { contentBody: '' };
             this.state.requiredConsents.map((requiredItem) => {
               if (requiredItem.id === parentId) {
                 requiredItem.detailHtml = requiredItem.detailHtml ? '' : detali.contentBody;
@@ -96,8 +98,10 @@ export default withOktaAuth(
             </FormItem>
             <FormItem style={{ marginTop: 10 }}>
               {getFieldDecorator('prescriberId', {
-                rules: [{ required: true, message: RCi18n({id:'Public.InputClinetID'}) }]
-              })(<Input size="large"  type="hidden" placeholder={RCi18n({id:'Public.ClientID'})} />)}
+                rules: [{ required: true, message: RCi18n({ id: 'Public.InputClinetID' }) }]
+              })(
+                <Input size="large" type="hidden" placeholder={RCi18n({ id: 'Public.ClientID' })} />
+              )}
             </FormItem>
             {/*<label style={styles.labelClientName}>*/}
             {/*  <span style={{ color: '#E1021A' }}>*</span> Ich erkläre mich mit den <a href={`${Const.SHOPDOMINDE}/Terms-And-Conditions`}>Nutzungsbedingungen</a> einverstanden und habe die <a href="https://www.royalcanin.com/de/about-us/data-protection">Datenschutzerklärung</a> zur Kenntnis genommen.*/}
@@ -105,21 +109,40 @@ export default withOktaAuth(
             <FormItem style={{ marginTop: 10 }}>
               {getFieldDecorator('prescriberName', {
                 rules: [{ required: false }]
-              })(<Input type="hidden" size="large" disabled={true} placeholder={RCi18n({id:'Public.ClientName'})} />)}
+              })(
+                <Input
+                  type="hidden"
+                  size="large"
+                  disabled={true}
+                  placeholder={RCi18n({ id: 'Public.ClientName' })}
+                />
+              )}
             </FormItem>
             <FormItem style={{ marginTop: 10 }}>
-              <Checkbox.Group style={{ width: '100%', maxHeight: '200px', overflowY: 'auto' }} onChange={this.consentChange}>
+              <Checkbox.Group
+                style={{ width: '100%', maxHeight: '200px', overflowY: 'auto' }}
+                onChange={this.consentChange}
+              >
                 <Row id="consents">
                   {this.state.requiredConsents.map((x, index) => {
                     return (
                       <Col span={24} key={index}>
                         <Row>
                           <Col span={2}>
-                            <span style={{color:'#ff4d4f'}}>{`* `}</span><Checkbox value={x.id} key={x.id}></Checkbox>
+                            <span style={{ color: '#ff4d4f' }}>{`* `}</span>
+                            <Checkbox value={x.id} key={x.id}></Checkbox>
                           </Col>
                           <Col span={22}>
-                            <div id={x.id} dangerouslySetInnerHTML={{ __html: x.consentTitle }}></div>
-                            {x.detailHtml ? <div style={{ padding: '10px 0' }} dangerouslySetInnerHTML={{ __html: x.detailHtml }}></div> : null}
+                            <div
+                              id={x.id}
+                              dangerouslySetInnerHTML={{ __html: x.consentTitle }}
+                            ></div>
+                            {x.detailHtml ? (
+                              <div
+                                style={{ padding: '10px 0' }}
+                                dangerouslySetInnerHTML={{ __html: x.detailHtml }}
+                              ></div>
+                            ) : null}
                             {this.renderReuired(x.id)}
                           </Col>
                         </Row>
@@ -132,11 +155,20 @@ export default withOktaAuth(
                       <Col span={24} key={index}>
                         <Row>
                           <Col span={2}>
-                          <span style={{color:'#fff'}}>{`* `}</span> <Checkbox value={x.id} key={x.id}></Checkbox>
+                            <span style={{ color: '#fff' }}>{`* `}</span>{' '}
+                            <Checkbox value={x.id} key={x.id}></Checkbox>
                           </Col>
                           <Col span={22}>
-                            <div id={x.id} dangerouslySetInnerHTML={{ __html: x.consentTitle }}></div>
-                            {x.detailHtml ? <div style={{ padding: '10px 0' }} dangerouslySetInnerHTML={{ __html: x.detailHtml }}></div> : null}
+                            <div
+                              id={x.id}
+                              dangerouslySetInnerHTML={{ __html: x.consentTitle }}
+                            ></div>
+                            {x.detailHtml ? (
+                              <div
+                                style={{ padding: '10px 0' }}
+                                dangerouslySetInnerHTML={{ __html: x.detailHtml }}
+                              ></div>
+                            ) : null}
                           </Col>
                         </Row>
                       </Col>
@@ -151,7 +183,15 @@ export default withOktaAuth(
               </Col>
               <Col span={4}></Col>
               <Col span={10}>
-                <Button type="primary" size="large" htmlType="submit" style={styles.loginBtn} onClick={(e) => this._handlePrcess(e)} disabled={this.state.prcessDisabled} loading={this.state.prcessLoadding}>
+                <Button
+                  type="primary"
+                  size="large"
+                  htmlType="submit"
+                  style={styles.loginBtn}
+                  onClick={(e) => this._handlePrcess(e)}
+                  disabled={this.state.prcessDisabled}
+                  loading={this.state.prcessLoadding}
+                >
                   <FormattedMessage id="Verify.Proceed" />
                 </Button>
               </Col>
@@ -175,7 +215,11 @@ export default withOktaAuth(
     };
 
     renderReuired(id) {
-      return !this.state.checkContentIds.includes(id) && this.state.clickProcess ? <div style={styles.requiredLable}><FormattedMessage id="Verify.required" /></div> : null;
+      return !this.state.checkContentIds.includes(id) && this.state.clickProcess ? (
+        <div style={styles.requiredLable}>
+          <FormattedMessage id="Verify.required" />
+        </div>
+      ) : null;
     }
 
     search = async (value) => {
@@ -183,7 +227,7 @@ export default withOktaAuth(
       form.setFieldsValue({ prescriberId: value });
       const ids = value.split('-');
       if (ids && ids.length < 2) {
-        message.error(RCi18n({id:'Public.NoPrescriber'}));
+        message.error(RCi18n({ id: 'Public.NoPrescriber' }));
         form.setFieldsValue({ prescriberName: '' });
         return;
       }
@@ -195,7 +239,7 @@ export default withOktaAuth(
       if (res.code === Const.SUCCESS_CODE && res.context && res.context.prescriberName) {
         form.setFieldsValue({ prescriberName: res.context.prescriberName });
       } else {
-        message.error(RCi18n({id:'Public.NoPrescriber'}));
+        message.error(RCi18n({ id: 'Public.NoPrescriber' }));
         form.setFieldsValue({ prescriberName: '' });
       }
       const { res: consentRes } = await webApi.getStoreOpenConsentList(param);
@@ -237,11 +281,11 @@ export default withOktaAuth(
         }
       });
       form.validateFields(null, async (errs, values) => {
-      console.info('errs', errs)
+        console.info('errs', errs);
         if (!errs && consentValid) {
           let ids = values.prescriberId.split('-');
           if (ids && ids.length < 2) {
-            message.error(RCi18n({id:'Public.NoPrescriber'}));
+            message.error(RCi18n({ id: 'Public.NoPrescriber' }));
             this.setState({
               prcessLoadding: false
             });
@@ -265,15 +309,24 @@ export default withOktaAuth(
           let oktaToken = this.props.authState.accessToken;
           sessionStorage.setItem(cache.OKTA_TOKEN, oktaToken);
           if (!oktaToken) {
-            message.error(RCi18n({id:'Public.Expired'}));
+            message.error(RCi18n({ id: 'Public.Expired' }));
             this.setState({
               prcessLoadding: false
             });
             let idToken = this.props.authState.idToken;
-            let redirectUri = window.origin + '/logout?type=' + sessionStorage.getItem(cache.OKTA_ROUTER_TYPE);
-            let issure = sessionStorage.getItem(cache.OKTA_ROUTER_TYPE) === 'staff' ? Const.REACT_APP_RC_ISSUER : Const.REACT_APP_PRESCRIBER_ISSUER;
+            let redirectUri =
+              window.origin + '/logout?type=' + sessionStorage.getItem(cache.OKTA_ROUTER_TYPE);
+            let issure =
+              sessionStorage.getItem(cache.OKTA_ROUTER_TYPE) === 'staff'
+                ? Const.REACT_APP_RC_ISSUER
+                : Const.REACT_APP_PRESCRIBER_ISSUER;
             if (sessionStorage.getItem(cache.OKTA_ROUTER_TYPE) === 'staff') {
-              this.props.authService.logout('/logout?type=' + sessionStorage.getItem(cache.OKTA_ROUTER_TYPE));
+              this.props.oktaAuth.signOut({
+                postLogoutRedirectUri:
+                  window.location.origin +
+                  '/logout?type=' +
+                  sessionStorage.getItem(cache.OKTA_ROUTER_TYPE)
+              });
             } else {
               window.location.href = `${issure}/v1/logout?id_token_hint=${idToken}&post_logout_redirect_uri=${redirectUri}`;
             }
@@ -293,7 +346,7 @@ export default withOktaAuth(
             if (res.context === 'needAudit') {
               history.push('/login-notify');
             } else if (res.context === 'alreadyRegister') {
-              message.info(RCi18n({id:'Public.alreadyRegister'}));
+              message.info(RCi18n({ id: 'Public.alreadyRegister' }));
               this.setState({
                 prcessLoadding: false
               });

@@ -606,8 +606,8 @@ class OrderDetailTab extends React.Component<any, any> {
                   <p>
 
                     <FormattedMessage id="Order.Recommenderid" />:{' '}
-                    {/* {firstTradeItems.recommendationId} */}
-                    {firstTradeItems.recommenderId}
+                    {firstTradeItems.recommendationId}
+                    {/* {firstTradeItems.recommenderId} */}
                   </p>
                   <p>
                     <FormattedMessage id="Order.Recommendername" />:{' '}

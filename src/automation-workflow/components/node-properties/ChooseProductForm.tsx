@@ -39,7 +39,7 @@ export default function ChooseProductForm({ updateValue }) {
   };
   const handleUpload = async () => {
     try {
-      setFileData((s) => ({ ...s, loading: true }));
+      setFileData((s) => ({ ...s, loading: true, uploadBtnEnable: false }));
       const formData = new FormData();
       formData.append('campaignId', id);
       formData.append('file', fileData.file);

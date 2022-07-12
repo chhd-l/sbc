@@ -13,9 +13,9 @@ let shouldChangeLanguageSetting = false;
 
 export function getRoutType(callbackUrl: string) {
   var callBackType = ''
-  if (callbackUrl === '?type=staff') {
+  if (callbackUrl.includes('?type=staff')) {
     callBackType = 'staff'
-  } else if (callbackUrl === '?type=prescriber') {
+  } else if (callbackUrl.includes('?type=prescriber')) {
     callBackType = 'prescriber'
   }
 
@@ -255,7 +255,7 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
               history.push(url);
             }
           }
-          callback(res.context)
+          callback && callback(res.context)
           break;
         /**审核未通过*/
         case 2:
@@ -265,9 +265,9 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
           //申请开店
           history.push('/create-store');
       }
-      callback(res.context)
+      callback && callback(res.context)
     } else {
-      callback(res)
+      callback && callback(res)
     }
 
   }
@@ -278,7 +278,7 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
       message.error('No prescriber available')
       history.push('/login', { oktaLogout: true })
     } else {
-      callback(res)
+      callback && callback(res)
       //
     }
   }
@@ -473,7 +473,7 @@ export async function switchLogin(params, callback?: Function) {
             let url = _getUrl(allGradeMenus);
             history.push(url);
           }
-          callback(res)
+          callback && callback(res)
           break;
           /**审核未通过*/
         case 2:
@@ -483,9 +483,9 @@ export async function switchLogin(params, callback?: Function) {
           //申请开店
           history.push('/create-store');
       }
-      callback(res)
+      callback && callback(res)
     } else {
-      callback(res)
+      callback && callback(res)
     }
 
   }
@@ -496,7 +496,7 @@ export async function switchLogin(params, callback?: Function) {
       message.error('No prescriber available')
       history.push('/login', { oktaLogout: true })
     } else {
-      callback(res)
+      callback && callback(res)
       //
     }
   }

@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, Switch } from 'react-router-dom';
 import { Security } from '@okta/okta-react';
+import { OktaAuth, toRelativeUrl } from '@okta/okta-auth-js';
 import { Provider } from 'react-redux';
 import { routeWithSubRoutes, history, util, noop, getRoutType, RCi18n, Const } from 'qmkit';
 import { homeRoutes } from './router';
@@ -59,6 +60,10 @@ const useDynamicLanguage = () => {
   return [loading, dynamicLanguage];
 };
 
+const restoreOriginalUri = async (_oktaAuth, originalUri) => {
+  history.replace(toRelativeUrl(originalUri, window.location.origin));
+};
+
 const PrescriberRouter = () => {
   const [loading, dynamicLanguage] = useDynamicLanguage();
 
@@ -68,7 +73,11 @@ const PrescriberRouter = () => {
         <ConfigProvider locale={antLanguage}>
           <Provider store={store}>
             <Router history={history}>
-              <Security {...configOkta.prescrberOidc}>
+              <Security
+                // {...configOkta.prescrberOidc}
+                oktaAuth={new OktaAuth(configOkta.prescrberOidc)}
+                restoreOriginalUri={restoreOriginalUri}
+              >
                 <div className="father">
                   <Switch>
                     {routeWithSubRoutes(homeRoutes, noop)}
@@ -109,7 +118,11 @@ const RcRouter = () => {
         <ConfigProvider locale={antLanguage}>
           <Provider store={store}>
             <Router history={history}>
-              <Security {...configOkta.RcOidc}>
+              <Security
+                // {...configOkta.RcOidc}
+                oktaAuth={new OktaAuth(configOkta.RcOidc)}
+                restoreOriginalUri={restoreOriginalUri}
+              >
                 <div className="father">
                   <Switch>
                     {routeWithSubRoutes(homeRoutes, noop)}

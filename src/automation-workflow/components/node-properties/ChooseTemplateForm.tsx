@@ -109,10 +109,9 @@ export default class ChooseTemplataeForm extends Component<any, any> {
   render() {
     const { form, title, modalVisible, previewLoading, emailContent, selectLoading } = this.state;
     const { templateList } = this.props;
-    console.log(this.props, form, 'this.props');
-    const isPriceIncreaseTemplate = ['price', 'increase'].find((i) =>
-      form.selectTemplate?.messageTemplate.toLowerCase().includes(i)
-    );
+    // const isPriceIncreaseTemplate = ['price', 'increase'].find((i) =>
+    //   form.selectTemplate?.messageTemplate.toLowerCase().includes(i)
+    // );
 
     return (
       <React.Fragment>
@@ -142,16 +141,14 @@ export default class ChooseTemplataeForm extends Component<any, any> {
             ))}
           </Select>
         </FormItem>
-        {isPriceIncreaseTemplate && (
-          <DatePicker
-            showTime
-            placeholder="Select Time"
-            format="YYYY-MM-DD"
-            style={{ marginTop: '20px' }}
-            onChange={this.onTimeChange}
-            value={form.priceIncreaseTime ? moment(form.priceIncreaseTime) : null}
-          />
-        )}
+        <DatePicker
+          showTime
+          placeholder="Select Time"
+          format="YYYY-MM-DD"
+          style={{ marginTop: '20px' }}
+          onChange={this.onTimeChange}
+          value={form.priceIncreaseTime ? moment(form.priceIncreaseTime) : null}
+        />
         <Modal
           footer={[
             <Button

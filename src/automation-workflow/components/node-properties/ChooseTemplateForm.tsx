@@ -141,14 +141,27 @@ export default class ChooseTemplataeForm extends Component<any, any> {
             ))}
           </Select>
         </FormItem>
-        <DatePicker
-          showTime
-          placeholder="Select Time"
-          format="YYYY-MM-DD"
-          style={{ marginTop: '20px' }}
-          onChange={this.onTimeChange}
-          value={form.priceIncreaseTime ? moment(form.priceIncreaseTime) : null}
+        <FormItem label={<FormattedMessage id="markting.PriceIncreaseDate" />} colon={false}>
+          <DatePicker
+            showTime
+            placeholder="Select Time"
+            format="YYYY-MM-DD"
+            onChange={this.onTimeChange}
+            value={form.priceIncreaseTime ? moment(form.priceIncreaseTime) : null}
+          />
+        </FormItem>
+        <FormItem
+          label={
+            <>
+              <strong>
+                <FormattedMessage id="Marketing.note" />
+              </strong>
+              <FormattedMessage id="Marketing.please contact operation team for price adjustment." />
+            </>
+          }
+          colon={false}
         />
+
         <Modal
           footer={[
             <Button

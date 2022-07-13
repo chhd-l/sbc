@@ -50,7 +50,7 @@ export default class GoodsGrid extends React.Component<any, any> {
 
   render() {
     const { loading, goodsInfoPage, selectedRowKeys, selectedRows, showValidGood } = this.state;
-    const { rowChangeBackFun, visible, goodsCate, isSubsrciptionEdit,pageType } = this.props;
+    const { rowChangeBackFun, visible, goodsCate, isSubsrciptionEdit, pageType } = this.props;
     return (
       <div className="content">
         {/*search*/}
@@ -59,6 +59,7 @@ export default class GoodsGrid extends React.Component<any, any> {
           goodsCate={goodsCate}
           visible={visible}
           isSubsrciptionEdit={isSubsrciptionEdit}
+          pageType={this?.props?.pageType || ''}
         />
 
         <DataGrid
@@ -186,6 +187,10 @@ export default class GoodsGrid extends React.Component<any, any> {
     if (!params.pageSize) {
       params.pageSize = 10;
     }
+    if (['addProduct'].includes(this?.props?.pageType)) {
+      // Commercial Leaflet
+      params.notCateIds = [1821];
+    }
     params.subscriptionFlag = sessionStorage.getItem('PromotionTypeValue') == '1' ? true : false;
     const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
     const isRuFrTr = storeId == 123457907 || storeId == 123457909 || storeId == 123457911;
@@ -231,7 +236,7 @@ export default class GoodsGrid extends React.Component<any, any> {
    */
   searchBackFun = (searchParams) => {
     // 点击搜索将之前勾选的置为空
-    if(this.props.pageType ==='subscriptionEdit'){
+    if (this.props.pageType === 'subscriptionEdit') {
       this.props.rowChangeBackFun([], fromJS([]));
     }
     if (this.props.searchParams) {

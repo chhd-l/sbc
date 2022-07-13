@@ -41,9 +41,15 @@ export default class ChooseTemplataeForm extends Component<any, any> {
         nodeId: nextProps.nodeId
       });
     }
-    const { templateId, priceIncreaseTime } = nextProps;
+    const { templateId, priceIncreaseTime, templateName } = nextProps;
+    const selectTemplate = { messageTemplate: templateName };
+
     this.setState({
-      form: { priceIncreaseTime, selectValue: templateId ? templateId : undefined }
+      form: {
+        priceIncreaseTime,
+        selectValue: templateId ? templateId : undefined,
+        selectTemplate
+      }
     });
   }
 
@@ -109,11 +115,10 @@ export default class ChooseTemplataeForm extends Component<any, any> {
   render() {
     const { form, title, modalVisible, previewLoading, emailContent, selectLoading } = this.state;
     const { templateList } = this.props;
-    console.log(this.props, form, 'this.props');
+    console.log(form.selectTemplate, 'form.selectTemplate');
     const isPriceIncreaseTemplate = ['price', 'increase'].find((i) =>
-      form.selectTemplate?.messageTemplate.toLowerCase().includes(i)
+      form.selectTemplate?.messageTemplate?.toLowerCase().includes(i)
     );
-
     return (
       <React.Fragment>
         <FormItem label="Choose an Email template" colon={false}>
@@ -143,15 +148,30 @@ export default class ChooseTemplataeForm extends Component<any, any> {
           </Select>
         </FormItem>
         {isPriceIncreaseTemplate && (
-          <DatePicker
-            showTime
-            placeholder="Select Time"
-            format="YYYY-MM-DD"
-            style={{ marginTop: '20px' }}
-            onChange={this.onTimeChange}
-            value={form.priceIncreaseTime ? moment(form.priceIncreaseTime) : null}
-          />
+          <>
+            <FormItem label={<FormattedMessage id="markting.PriceIncreaseDate" />} colon={false}>
+              <DatePicker
+                showTime
+                placeholder="Select Time"
+                format="YYYY-MM-DD"
+                onChange={this.onTimeChange}
+                value={form.priceIncreaseTime ? moment(form.priceIncreaseTime) : null}
+              />
+            </FormItem>
+            <FormItem
+              label={
+                <>
+                  <strong>
+                    <FormattedMessage id="Marketing.note" />
+                  </strong>
+                  <FormattedMessage id="Marketing.please contact operation team for price adjustment." />
+                </>
+              }
+              colon={false}
+            />
+          </>
         )}
+
         <Modal
           footer={[
             <Button

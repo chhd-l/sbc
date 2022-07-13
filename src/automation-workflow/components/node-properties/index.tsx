@@ -259,6 +259,7 @@ export default class NodeProperties extends Component<any, any> {
               nodeId={model.id}
               updateValue={this.updateValue}
               templateId={formParam.templateId}
+              templateName={formParam.templateName}
               templateList={templateList}
               priceIncreaseTime={formParam.priceIncreaseTime}
             />

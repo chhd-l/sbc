@@ -1967,7 +1967,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'x',
         render: (text, record) => (
           <div>
-            <AuthWrapper functionName="f_subscription_add_gift">
+            {Const.SITE_NAME !== 'MYVETRECO' && (<AuthWrapper functionName="f_subscription_add_gift">
               <a
                 style={styles.edit}
                 onClick={() => {
@@ -1978,9 +1978,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               >
                 <Icon component={addDiscount} />
               </a>
-            </AuthWrapper>
+            </AuthWrapper>)}
 
-            <AuthWrapper functionName="f_subscription_add_discount">
+            {Const.SITE_NAME !== 'MYVETRECO' && (<AuthWrapper functionName="f_subscription_add_discount">
               <a
                 className="iconfont icontianjia"
                 style={styles.edit}
@@ -1990,7 +1990,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   })
                 }}
               />
-            </AuthWrapper>
+            </AuthWrapper>)}
 
             <Popover
               content={content}

@@ -1151,14 +1151,16 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   getTimeSlot = (params: any) => {
     webapi.getTimeSlot(params).then((data) => {
       let { deliveryDate, timeSlot, timeSlotList, SelectDateStatus } = this.state;
+      // <FormattedMessage id="Unspecified" />
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
         let deliveryDateList: any[];
         if (storeId == 123457919) {
           deliveryDateList = res.context.timeSlots?.map((item) => {
             item?.dateTimeInfos.unshift({ startTime: 'Unspecified', endTime: '', sort: 0 });
-            return item;
+            return { ...item };
           });
+          deliveryDateList.unshift({ date: 'Unspecified', dateTimeInfos: [{ startTime: 'Unspecified', endTime: '', sort: 0 }], weekDay: 0 })
         } else {
           deliveryDateList = res.context.timeSlots;
         }
@@ -2629,7 +2631,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                                       {deliveryDateList &&
                                         deliveryDateList.map((item, index) => (
                                           <Option value={item.date} key={index}>
-                                            {item.date}
+                                            {item.date === 'Unspecified' ? <FormattedMessage id="Unspecified" /> : item.date}
                                           </Option>
                                         ))}
                                     </Select>
@@ -2652,9 +2654,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                                             }
                                             key={index}
                                           >
-                                            {item.startTime +
+                                            {item.startTime === 'Unspecified' ? <FormattedMessage id="Unspecified" /> : (item.startTime +
                                               `${item.endTime ? '-' : ''}` +
-                                              item.endTime}
+                                              item.endTime)}
                                           </Option>
                                         ))}
                                     </Select>

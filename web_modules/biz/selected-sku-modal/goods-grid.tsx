@@ -193,7 +193,7 @@ export default class GoodsGrid extends React.Component<any, any> {
     if (['addProduct'].includes(this?.props?.pageType)) {
       // Commercial Leaflet
       if (cates.length) {
-        const id = cates.filter((item) => (item?.cateName === 'Commercial Leaflet'))[0]?.cateId;
+        const id = cates.filter((item) => (item?.cateName === 'Commercial Leaflet'))[0]?.cateId || null;
         params.notCateIds = [id];
       } else {
         params.notCateIds = [];

@@ -306,7 +306,7 @@ export default withOktaAuth(
 
           // this.state.optionalConsents
 
-          let oktaToken = this.props.authState.accessToken;
+          let oktaToken = this.props.authState.accessToken.value;
           sessionStorage.setItem(cache.OKTA_TOKEN, oktaToken);
           if (!oktaToken) {
             message.error(RCi18n({ id: 'Public.Expired' }));

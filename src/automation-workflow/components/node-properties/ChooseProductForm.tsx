@@ -4,6 +4,7 @@ import { Const, RCi18n, util } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { DraggerProps } from 'antd/lib/upload';
+import { automationGetTemplate } from '@/automation-workflow/webapi';
 
 const { Dragger } = Upload;
 const FormItem = Form.Item;
@@ -28,14 +29,14 @@ export default function ChooseProductForm({ updateValue }) {
       return false;
     }
   };
-  const toDownTempl = () => {
+  const toDownTempl = async () => {
     // 参数加密
     let base64 = new util.Base64();
     const token = (window as any).token;
     let result = JSON.stringify({ token: token });
     let encrypted = base64.urlEncode(result);
-    const exportHref = Const.HOST + `/automation/excel/template/${encrypted}`;
-    window.open(exportHref);
+    const { res } = await automationGetTemplate(encrypted);
+    window.open(res.context);
   };
   const handleUpload = async () => {
     try {

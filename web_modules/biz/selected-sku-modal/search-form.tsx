@@ -73,8 +73,9 @@ export default class SearchForm extends React.Component<any, any> {
   }
 
   //分类循环方法  使用tree-select组件,把扁平化数据转换成适应TreeSelect的数据
-  loop = (oldCateList, cateList, parentCateId) =>
-    cateList
+  loop = (oldCateList, cateList, parentCateId) => {
+    const { pageType } = this.props;
+    return cateList
       .toSeq()
       .filter((cate) => cate.get('cateParentId') === parentCateId)
       .map((item) => {
@@ -87,6 +88,7 @@ export default class SearchForm extends React.Component<any, any> {
               key={item.get('cateId').toString()}
               value={item.get('cateId').toString()}
               title={item.get('cateName').toString()}
+              disabled={['addProduct'].includes(pageType) && ['Leaflet', 'Leaflets', 'Commercial Leaflet'].includes(item.get('cateName').toString())}
             >
               {this.loop(oldCateList, childCates, item.get('cateId'))}
             </TreeNode>
@@ -97,9 +99,11 @@ export default class SearchForm extends React.Component<any, any> {
             key={item.get('cateId').toString()}
             value={item.get('cateId').toString()}
             title={item.get('cateName').toString()}
+            disabled={['addProduct'].includes(pageType) && ['Leaflet', 'Leaflets', 'Commercial Leaflet'].includes(item.get('cateName').toString())}
           />
         );
       });
+  }
 
   render() {
     const { searchParams } = this.state;
@@ -163,7 +167,7 @@ export default class SearchForm extends React.Component<any, any> {
           </FormItem>
           {/* 法国、俄罗斯、土耳其需要subscriptionStatus和subscriptionType筛选条件 */}
           {(storeId == 123457909 || storeId == 123457907 || storeId == 123457911) &&
-          isSubsrciptionEdit ? (
+            isSubsrciptionEdit ? (
             <>
               <FormItem>
                 <SelectGroup

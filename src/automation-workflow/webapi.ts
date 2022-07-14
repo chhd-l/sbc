@@ -79,3 +79,8 @@ export function automationUploadFile(params) {
     body: params
   });
 }
+export function automationGetTemplate(token) {
+  return Fetch<TResult>(`/automation/excel/template/${token}`, {
+    method: 'GET'
+  });
+}

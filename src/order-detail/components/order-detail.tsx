@@ -171,61 +171,61 @@ class OrderDetailTab extends React.Component<any, any> {
     const consignee = detail.get('consignee')
       ? (detail.get('consignee').toJS() as Consignee | null)
       : {
-          detailAddress: '',
-          name: '',
-          phone: '',
-          countryId: '',
-          country: '',
-          city: '',
-          province: '',
-          county: '',
-          cityId: '',
-          address: '',
-          detailAddress1: '',
-          detailAddress2: '',
-          rfc: '',
-          postCode: '',
-          firstName: '',
-          lastName: '',
-          comment: '',
-          entrance: '',
-          apartment: '',
-          area: '',
-          timeSlot: '',
-          deliveryDate: '',
-          workTime: '',
-          firstNameKatakana: '',
-          lastNameKatakana: ''
-        };
+        detailAddress: '',
+        name: '',
+        phone: '',
+        countryId: '',
+        country: '',
+        city: '',
+        province: '',
+        county: '',
+        cityId: '',
+        address: '',
+        detailAddress1: '',
+        detailAddress2: '',
+        rfc: '',
+        postCode: '',
+        firstName: '',
+        lastName: '',
+        comment: '',
+        entrance: '',
+        apartment: '',
+        area: '',
+        timeSlot: '',
+        deliveryDate: '',
+        workTime: '',
+        firstNameKatakana: '',
+        lastNameKatakana: ''
+      };
 
     //发票信息
     const invoice = detail.get('invoice')
       ? (detail.get('invoice').toJS() as Invoice | null)
       : {
-          open: '',
-          type: '',
-          title: '',
-          projectName: '',
-          address: '',
-          address1: '',
-          address2: '',
-          contacts: '',
-          phone: '',
-          provinceId: '',
-          cityId: '',
-          province: '',
-          county: '',
-          countryId: '',
-          country: '',
-          firstName: '',
-          lastName: '',
-          postCode: '',
-          city: '',
-          comment: '',
-          entrance: '',
-          apartment: '',
-          area: ''
-        };
+        open: '',
+        type: '',
+        title: '',
+        projectName: '',
+        address: '',
+        address1: '',
+        address2: '',
+        contacts: '',
+        phone: '',
+        provinceId: '',
+        cityId: '',
+        province: '',
+        county: '',
+        countryId: '',
+        country: '',
+        firstName: '',
+        lastName: '',
+        postCode: '',
+        city: '',
+        comment: '',
+        entrance: '',
+        apartment: '',
+        area: ''
+      };
 
     //交易状态
     const tradeState = detail.get('tradeState');
@@ -242,7 +242,21 @@ class OrderDetailTab extends React.Component<any, any> {
         tradeItems.levelPrice = tradeItems.price;
       }
     });
-    let firstTradeItems = tradeItems && tradeItems.length > 0 ? tradeItems[0] : {};
+    let firstTradeItems = {};
+    if (tradeItems && tradeItems.length > 0) {
+      if (tradeItems.length === 1) {
+        firstTradeItems = tradeItems[0];
+      } else {
+        let recommendationId = tradeItems.find((item) => (item?.recommendationId))?.recommendationId;
+        let recommendationName = tradeItems.find((item) => (item?.recommendationName))?.recommendationName;
+        firstTradeItems = {
+          ...tradeItems[0],
+          recommendationId,
+          recommendationName
+        }
+      }
+    }
+    // firstTradeItems = tradeItems && tradeItems.length > 0 ? tradeItems[0] : {};
     const installmentPrice = tradePrice.installmentPrice;
 
     const deliverWay = detail.get('deliverWay');
@@ -317,8 +331,8 @@ class OrderDetailTab extends React.Component<any, any> {
         width: '8%',
         render: (originalPrice, record) =>
           record.subscriptionPrice > 0 &&
-          record.subscriptionStatus === 1 &&
-          record.isSuperimposeSubscription === 1 ? (
+            record.subscriptionStatus === 1 &&
+            record.isSuperimposeSubscription === 1 ? (
             <>
               {originalPrice === record.subscriptionPrice ? (
                 <div>
@@ -568,8 +582,8 @@ class OrderDetailTab extends React.Component<any, any> {
 
         {/*Subscription panel*/}
         {detail.get('subscribeId') ||
-        detail.get('clinicsId') ||
-        firstTradeItems.recommendationId ? (
+          detail.get('clinicsId') ||
+          firstTradeItems?.recommendationId ? (
           <Row gutter={30} style={{ display: 'flex', alignItems: 'flex-end' }}>
             {detail.get('subscribeId') ? (
               <Col span={12} style={{ alignSelf: 'flex-start' }}>
@@ -591,7 +605,7 @@ class OrderDetailTab extends React.Component<any, any> {
               </Col>
             ) : null}
 
-            {detail.get('clinicsId') || firstTradeItems.recommendationId ? (
+            {detail.get('clinicsId') || firstTradeItems?.recommendationId ? (
               <Col span={12}>
                 <div className="headBox">
                   <h4>
@@ -604,22 +618,24 @@ class OrderDetailTab extends React.Component<any, any> {
                     <FormattedMessage id="Order.Auditorid" />: {detail.get('clinicsId')}
                   </p>
                   <p>
+
                     <FormattedMessage id="Order.Recommenderid" />:{' '}
-                    {firstTradeItems.recommendationId}
+                    {firstTradeItems?.recommendationId}
+                    {/* {firstTradeItems.recommenderId} */}
                   </p>
                   <p>
                     <FormattedMessage id="Order.Recommendername" />:{' '}
-                    {firstTradeItems.recommendationName}
+                    {firstTradeItems?.recommendationName}
                   </p>
                 </div>
               </Col>
             ) : null}
 
             {((detail.get('subscribeId') &&
-              !(detail.get('clinicsId') || firstTradeItems.recommendationId)) ||
+              !(detail.get('clinicsId') || firstTradeItems?.recommendationId)) ||
               (!detail.get('subscribeId') &&
-                (detail.get('clinicsId') || firstTradeItems.recommendationId))) &&
-            showRealStockBtn ? (
+                (detail.get('clinicsId') || firstTradeItems?.recommendationId))) &&
+              showRealStockBtn ? (
               <Col span={12}>
                 <AuthWrapper functionName="fOrderDetail001">
                   <div
@@ -641,10 +657,10 @@ class OrderDetailTab extends React.Component<any, any> {
         ) : null}
 
         {((detail.get('subscribeId') &&
-          (detail.get('clinicsId') || firstTradeItems.recommendationId)) ||
+          (detail.get('clinicsId') || firstTradeItems?.recommendationId)) ||
           (!detail.get('subscribeId') &&
-            !(detail.get('clinicsId') || firstTradeItems.recommendationId))) &&
-        showRealStockBtn ? (
+            !(detail.get('clinicsId') || firstTradeItems?.recommendationId))) &&
+          showRealStockBtn ? (
           <Row gutter={30} style={{ display: 'flex', alignItems: 'flex-end' }}>
             <Col span={24}>
               <AuthWrapper functionName="fOrderDetail001">
@@ -727,11 +743,11 @@ class OrderDetailTab extends React.Component<any, any> {
 
               {tradePrice.promotionVOList && tradePrice.promotionVOList.length > 0
                 ? tradePrice.promotionVOList.map((promotion) => (
-                    <label style={styles.priceItem as any}>
-                      <span style={styles.name}>{promotion.marketingName}</span>
-                      <strong>-{this._handlePriceFormat(promotion.discountPrice)}</strong>
-                    </label>
-                  ))
+                  <label style={styles.priceItem as any}>
+                    <span style={styles.name}>{promotion.marketingName}</span>
+                    <strong>-{this._handlePriceFormat(promotion.discountPrice)}</strong>
+                  </label>
+                ))
                 : null}
 
               {storeId === 123457919 && tradePrice.taxFeePrice > 0 ? (
@@ -774,8 +790,8 @@ class OrderDetailTab extends React.Component<any, any> {
               ) : null}
 
               {storeId === 123457919 &&
-              this.state.switchSerficeFee &&
-              tradePrice.serviceFeePrice !== '' ? (
+                this.state.switchSerficeFee &&
+                tradePrice.serviceFeePrice !== '' ? (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>
                     <FormattedMessage id="Order.serviceFeePrice" />:
@@ -1343,7 +1359,7 @@ class OrderDetailTab extends React.Component<any, any> {
       onOk() {
         retrial(tdId);
       },
-      onCancel() {}
+      onCancel() { }
     });
   };
 
@@ -1364,7 +1380,7 @@ class OrderDetailTab extends React.Component<any, any> {
       onOk() {
         confirm(tdId);
       },
-      onCancel() {}
+      onCancel() { }
     });
   };
   _openPetDetails = (petsInfo) => {

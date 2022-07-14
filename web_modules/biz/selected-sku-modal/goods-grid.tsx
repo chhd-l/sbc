@@ -24,7 +24,7 @@ export default class GoodsGrid extends React.Component<any, any> {
       total: 0,
       goodsInfoPage: {},
       searchParams: this.props.searchParams ? { ...this.props.searchParams } : {},
-      showValidGood: props.showValidGood
+      showValidGood: props.showValidGood,
     };
   }
 
@@ -50,7 +50,7 @@ export default class GoodsGrid extends React.Component<any, any> {
 
   render() {
     const { loading, goodsInfoPage, selectedRowKeys, selectedRows, showValidGood } = this.state;
-    const { rowChangeBackFun, visible, goodsCate, isSubsrciptionEdit,pageType } = this.props;
+    const { rowChangeBackFun, visible, goodsCate, isSubsrciptionEdit, pageType } = this.props;
     return (
       <div className="content">
         {/*search*/}
@@ -59,6 +59,7 @@ export default class GoodsGrid extends React.Component<any, any> {
           goodsCate={goodsCate}
           visible={visible}
           isSubsrciptionEdit={isSubsrciptionEdit}
+          pageType={this?.props?.pageType || ''}
         />
 
         <DataGrid
@@ -186,6 +187,19 @@ export default class GoodsGrid extends React.Component<any, any> {
     if (!params.pageSize) {
       params.pageSize = 10;
     }
+    const fetchCates = await webapi.fetchCateList();
+    const { res: catesRes } = fetchCates as any;
+    const { context: cates } = catesRes;
+    if (['addProduct'].includes(this?.props?.pageType)) {
+      // Commercial Leaflet
+      if (cates.length) {
+        const id = cates.filter((item) => (item?.cateName === 'Commercial Leaflet'))[0]?.cateId || null;
+        params.notCateIds = [id];
+      } else {
+        params.notCateIds = [];
+      }
+
+    }
     params.subscriptionFlag = sessionStorage.getItem('PromotionTypeValue') == '1' ? true : false;
     const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
     const isRuFrTr = storeId == 123457907 || storeId == 123457909 || storeId == 123457911;
@@ -231,7 +245,7 @@ export default class GoodsGrid extends React.Component<any, any> {
    */
   searchBackFun = (searchParams) => {
     // 点击搜索将之前勾选的置为空
-    if(this.props.pageType ==='subscriptionEdit'){
+    if (this.props.pageType === 'subscriptionEdit') {
       this.props.rowChangeBackFun([], fromJS([]));
     }
     if (this.props.searchParams) {

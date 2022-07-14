@@ -24,7 +24,7 @@ export default class GoodsGrid extends React.Component<any, any> {
       total: 0,
       goodsInfoPage: {},
       searchParams: this.props.searchParams ? { ...this.props.searchParams } : {},
-      showValidGood: props.showValidGood
+      showValidGood: props.showValidGood,
     };
   }
 
@@ -187,9 +187,18 @@ export default class GoodsGrid extends React.Component<any, any> {
     if (!params.pageSize) {
       params.pageSize = 10;
     }
+    const fetchCates = await webapi.fetchCateList();
+    const { res: catesRes } = fetchCates as any;
+    const { context: cates } = catesRes;
     if (['addProduct'].includes(this?.props?.pageType)) {
       // Commercial Leaflet
-      params.notCateIds = [1821];
+      if (cates.length) {
+        const id = cates.filter((item) => (item?.cateName === 'Commercial Leaflet'))[0]?.cateId || null;
+        params.notCateIds = [id];
+      } else {
+        params.notCateIds = [];
+      }
+
     }
     params.subscriptionFlag = sessionStorage.getItem('PromotionTypeValue') == '1' ? true : false;
     const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';

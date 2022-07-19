@@ -206,8 +206,8 @@ export default class ManageAllSubscription extends React.Component<any, any> {
               customerId: customerId
                 ? customerId
                 : subscriptionList.length > 0
-                ? subscriptionList[0]?.customerId
-                : ''
+                  ? subscriptionList[0]?.customerId
+                  : ''
             },
             () => {
               if (this.state.customerId) {
@@ -588,7 +588,7 @@ export default class ManageAllSubscription extends React.Component<any, any> {
 
       await webapi
         .updateManageAllSubscription(apiParams)
-        .then(() => {})
+        .then(() => { })
         .catch((error) => {
           this.setState({
             tempolineApiError: error.message,
@@ -602,7 +602,7 @@ export default class ManageAllSubscription extends React.Component<any, any> {
     if (
       deliveryAddressInfo.receiveType !== 'PICK_UP' &&
       (window as any).countryEnum[
-        JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0
+      JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0
       ] === 'ru'
     ) {
       if (
@@ -614,10 +614,10 @@ export default class ManageAllSubscription extends React.Component<any, any> {
         const errMsg = !deliveryAddressInfo.street
           ? RCi18n({ id: 'PetOwner.AddressStreetTip' })
           : !deliveryAddressInfo.postCode
-          ? RCi18n({ id: 'PetOwner.AddressPostCodeTip' })
-          : !deliveryAddressInfo.house
-          ? RCi18n({ id: 'PetOwner.AddressHouseTip' })
-          : RCi18n({ id: 'PetOwner.AddressCityTip' });
+            ? RCi18n({ id: 'PetOwner.AddressPostCodeTip' })
+            : !deliveryAddressInfo.house
+              ? RCi18n({ id: 'PetOwner.AddressHouseTip' })
+              : RCi18n({ id: 'PetOwner.AddressCityTip' });
         message.error(errMsg);
         return;
       }
@@ -702,8 +702,8 @@ export default class ManageAllSubscription extends React.Component<any, any> {
       type === 'skip'
         ? skipManageAllSubscription
         : type === 'cancel'
-        ? cancelManageAllSubscription
-        : pauseManageAllSubscription;
+          ? cancelManageAllSubscription
+          : pauseManageAllSubscription;
     actionName({ subscriptionIdList: this.state.checkedSubscriptionIdList })
       .then((data) => {
         if (data?.res?.code === Const.SUCCESS_CODE) {
@@ -848,9 +848,9 @@ export default class ManageAllSubscription extends React.Component<any, any> {
           timeSlot: timeSlot
             ? timeSlot
             : deliveryDateList[0] &&
-              deliveryDateList[0].dateTimeInfos[0].startTime +
-                '-' +
-                deliveryDateList[0].dateTimeInfos[0].endTime
+            deliveryDateList[0].dateTimeInfos[0].startTime +
+            '-' +
+            deliveryDateList[0].dateTimeInfos[0].endTime
         });
       }
     });
@@ -1095,8 +1095,8 @@ export default class ManageAllSubscription extends React.Component<any, any> {
               {(record.subscriptionType == 'Individualization'
                 ? individualFrequencyList
                 : record.subscriptionType === 'Club'
-                ? frequencyClubList
-                : frequencyList
+                  ? frequencyClubList
+                  : frequencyList
               ).map((item) => (
                 <Option value={item.id} key={item.id}>
                   {item.name}
@@ -1147,8 +1147,8 @@ export default class ManageAllSubscription extends React.Component<any, any> {
           record.deliveryType === 1
             ? 'Home Delivery'
             : record.deliveryType === 2
-            ? 'Pickup Delivery'
-            : ''
+              ? 'Pickup Delivery'
+              : ''
       },
       {
         title: <FormattedMessage id="task.pickPointStatus" />,
@@ -1348,7 +1348,8 @@ export default class ManageAllSubscription extends React.Component<any, any> {
                     <Button
                       style={{ marginTop: '20px' }}
                       onClick={(e) => {
-                        const IdArr = subscriptionList.map((item) => item.subscribeId);
+                        // 去重是为了计算总价格
+                        const IdArr = [...new Set(subscriptionList.map((item) => item.subscribeId))];
                         if (checkedSubscriptionIdList.length === IdArr.length) {
                           this.setState({
                             checkedSubscriptionIdList: []
@@ -1473,8 +1474,8 @@ export default class ManageAllSubscription extends React.Component<any, any> {
                       {deliveryAddressInfo.receiveType === 'PICK_UP'
                         ? null
                         : deliveryAddressInfo.validFlag
-                        ? null
-                        : deliveryAddressInfo.alert && (
+                          ? null
+                          : deliveryAddressInfo.alert && (
                             <PostalCodeMsg text={deliveryAddressInfo.alert} />
                           )}
                     </Col>
@@ -1957,6 +1958,43 @@ export default class ManageAllSubscription extends React.Component<any, any> {
                       {/* homeDelivery地址列表 */}
                       {this.state.isUnfoldedDelivery
                         ? deliveryList.map((item: any) => (
+                          <Card
+                            style={{ width: 602, marginBottom: 10 }}
+                            bodyStyle={{ padding: 10 }}
+                            key={item.deliveryAddressId}
+                          >
+                            <Radio disabled={!item.validFlag} value={item.deliveryAddressId}>
+                              <div style={{ display: 'inline-grid' }}>
+                                <p>{item.firstName + '  ' + item.lastName}</p>
+                                <p>{item.city}</p>
+                                {item.province ? <p>{item.province}</p> : null}
+
+                                <p>{this.getDictValue(countryArr, item.countryId)}</p>
+                                <p>{item.address1}</p>
+                                <p>{item.address2}</p>
+                                {!item.validFlag
+                                  ? item.alert && <PostalCodeMsg text={item.alert} />
+                                  : null}
+                              </div>
+                            </Radio>
+                            <div>
+                              <Button
+                                type="link"
+                                size="small"
+                                onClick={() =>
+                                  this.onOpenAddressForm(
+                                    { ...NEW_ADDRESS_TEMPLATE, ...item },
+                                    'delivery'
+                                  )
+                                }
+                              >
+                                <FormattedMessage id="Subscription.Edit" />
+                              </Button>
+                            </div>
+                          </Card>
+                        ))
+                        : deliveryList.map((item: any, index: any) =>
+                          index < 2 ? (
                             <Card
                               style={{ width: 602, marginBottom: 10 }}
                               bodyStyle={{ padding: 10 }}
@@ -1967,7 +2005,6 @@ export default class ManageAllSubscription extends React.Component<any, any> {
                                   <p>{item.firstName + '  ' + item.lastName}</p>
                                   <p>{item.city}</p>
                                   {item.province ? <p>{item.province}</p> : null}
-
                                   <p>{this.getDictValue(countryArr, item.countryId)}</p>
                                   <p>{item.address1}</p>
                                   <p>{item.address2}</p>
@@ -1991,44 +2028,8 @@ export default class ManageAllSubscription extends React.Component<any, any> {
                                 </Button>
                               </div>
                             </Card>
-                          ))
-                        : deliveryList.map((item: any, index: any) =>
-                            index < 2 ? (
-                              <Card
-                                style={{ width: 602, marginBottom: 10 }}
-                                bodyStyle={{ padding: 10 }}
-                                key={item.deliveryAddressId}
-                              >
-                                <Radio disabled={!item.validFlag} value={item.deliveryAddressId}>
-                                  <div style={{ display: 'inline-grid' }}>
-                                    <p>{item.firstName + '  ' + item.lastName}</p>
-                                    <p>{item.city}</p>
-                                    {item.province ? <p>{item.province}</p> : null}
-                                    <p>{this.getDictValue(countryArr, item.countryId)}</p>
-                                    <p>{item.address1}</p>
-                                    <p>{item.address2}</p>
-                                    {!item.validFlag
-                                      ? item.alert && <PostalCodeMsg text={item.alert} />
-                                      : null}
-                                  </div>
-                                </Radio>
-                                <div>
-                                  <Button
-                                    type="link"
-                                    size="small"
-                                    onClick={() =>
-                                      this.onOpenAddressForm(
-                                        { ...NEW_ADDRESS_TEMPLATE, ...item },
-                                        'delivery'
-                                      )
-                                    }
-                                  >
-                                    <FormattedMessage id="Subscription.Edit" />
-                                  </Button>
-                                </div>
-                              </Card>
-                            ) : null
-                          )}
+                          ) : null
+                        )}
                     </>
                   )}
                 </Radio.Group>
@@ -2134,6 +2135,41 @@ export default class ManageAllSubscription extends React.Component<any, any> {
                 >
                   {this.state.isUnfoldedBilling
                     ? billingList.map((item) => (
+                      <Card
+                        style={{ width: 602, marginBottom: 10 }}
+                        bodyStyle={{ padding: 10 }}
+                        key={item.deliveryAddressId}
+                      >
+                        <Radio value={item.deliveryAddressId}>
+                          <div style={{ display: 'inline-grid' }}>
+                            <p>{item.firstName + '  ' + item.lastName}</p>
+                            <p>
+                              {this.getDictValue(countryArr, item.countryId) +
+                                ',' +
+                                this.getCityName(item)}
+                            </p>
+                            <p>{item.address1}</p>
+                            <p>{item.address2}</p>
+                          </div>
+                        </Radio>
+                        <div>
+                          <Button
+                            type="link"
+                            size="small"
+                            onClick={() =>
+                              this.onOpenAddressForm(
+                                { ...NEW_ADDRESS_TEMPLATE, ...item },
+                                'billing'
+                              )
+                            }
+                          >
+                            <FormattedMessage id="Subscription.Edit" />
+                          </Button>
+                        </div>
+                      </Card>
+                    ))
+                    : billingList.map((item, index) =>
+                      index < 2 ? (
                         <Card
                           style={{ width: 602, marginBottom: 10 }}
                           bodyStyle={{ padding: 10 }}
@@ -2166,43 +2202,8 @@ export default class ManageAllSubscription extends React.Component<any, any> {
                             </Button>
                           </div>
                         </Card>
-                      ))
-                    : billingList.map((item, index) =>
-                        index < 2 ? (
-                          <Card
-                            style={{ width: 602, marginBottom: 10 }}
-                            bodyStyle={{ padding: 10 }}
-                            key={item.deliveryAddressId}
-                          >
-                            <Radio value={item.deliveryAddressId}>
-                              <div style={{ display: 'inline-grid' }}>
-                                <p>{item.firstName + '  ' + item.lastName}</p>
-                                <p>
-                                  {this.getDictValue(countryArr, item.countryId) +
-                                    ',' +
-                                    this.getCityName(item)}
-                                </p>
-                                <p>{item.address1}</p>
-                                <p>{item.address2}</p>
-                              </div>
-                            </Radio>
-                            <div>
-                              <Button
-                                type="link"
-                                size="small"
-                                onClick={() =>
-                                  this.onOpenAddressForm(
-                                    { ...NEW_ADDRESS_TEMPLATE, ...item },
-                                    'billing'
-                                  )
-                                }
-                              >
-                                <FormattedMessage id="Subscription.Edit" />
-                              </Button>
-                            </div>
-                          </Card>
-                        ) : null
-                      )}
+                      ) : null
+                    )}
                 </Radio.Group>
                 {this.state.isUnfoldedBilling || billingList.length <= 2 ? null : (
                   <Button

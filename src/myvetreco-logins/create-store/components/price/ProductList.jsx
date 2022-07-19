@@ -61,14 +61,14 @@ function ProductList({ dataSource = [], title }) {
         <Col span={2}>
           <FormattedMessage id="Product.Cost" />
         </Col>
-        <Col span={5}>
-          <FormattedMessage id="Product.marketpriceexcl" />
+        <Col span={7}>
+          <FormattedMessage id="Product.Marketprice" />
         </Col>
-        <Col span={4}>
+        {/* <Col span={4}>
           <FormattedMessage id="Product.marketpriceincl" />
-        </Col>
-        <Col span={5}>
-          <FormattedMessage id="Product.subscriptionpriceincl" />
+        </Col> */}
+        <Col span={7}>
+          <FormattedMessage id="Order.Subscription price" />
         </Col>
       </Row>
       {/* <List

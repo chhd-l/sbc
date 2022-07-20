@@ -604,7 +604,7 @@ export default class MyHeader extends React.Component {
         <Header className="header" style={{ paddingLeft: '0' }}>
           <div style={styles.headerLeft}>
             <a href="/" style={styles.logoBg}>
-              <img style={styles.logoImg} src={sessionStorage.getItem(cache.SITE_LOGO) ? sessionStorage.getItem(cache.SITE_LOGO) : util.requireLocalSrc('sys/02.jpg')} />
+              <img style={styles.logoImg} src={Const.SITE_NAME === "MYVETRECO" ? util.requireLocalSrc('sys/myvet_logo.png') : sessionStorage.getItem(cache.SITE_LOGO) ? sessionStorage.getItem(cache.SITE_LOGO) : util.requireLocalSrc('sys/02.jpg')} />
             </a>
             <span style={{display: 'inline-block', color: '#333'}}>{storeName}</span>
 

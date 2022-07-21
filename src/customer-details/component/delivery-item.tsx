@@ -140,7 +140,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
       isAddress1ApplySuggestion,
       isAddress1ApplyValidation
     }, () => {
-      // this.setPhoneNumberReg();
+      this.setPhoneNumberReg();
       //设置默认country
       if (!this.props.delivery.countryId && countries.length === 1) {
         this.props.form.setFieldsValue({ countryId: countries[0]['id'] });
@@ -464,7 +464,10 @@ class DeliveryItem extends React.Component<Iprop, any> {
     maskOptions = {
       mask: phoneReg
     };
-    IMask(element, maskOptions);
+    // NL 需要启用输入规则
+    if (storeId === 123457929) {
+      IMask(element, { mask: [{ mask: '(+31) 000 00 00 00' }] });
+    }
   };
 
   renderField = (field: any) => {
@@ -561,7 +564,11 @@ class DeliveryItem extends React.Component<Iprop, any> {
     //   // regExp = /\S/;
     //   regExp = /^[0-9+-\\(\\)\s]{6,25}$/;
     // }
-    const regExp = /^[0-9+-\\(\\)\s]{6,25}$/;
+    let regExp = /^[0-9+-\\(\\)\s]{6,25}$/;
+    // for netherland
+    if (storeId === 123457929) {
+      regExp = /^\(\+[3][1]\)[\s][0-9]{3}[\s][0-9]{2}[\s][0-9]{2}[\s][0-9]{2}$/;
+    }
 
     if (!regExp.test(value)) {
       callback(RCi18n({ id: "PetOwner.theCorrectPhone" }));
@@ -572,7 +579,11 @@ class DeliveryItem extends React.Component<Iprop, any> {
 
   // 邮编校验
   compareZip = async (rule, value, callback) => {
-    if (!/^[0-9A-Za-z-\s]{3,10}$/.test(value)) {
+    // for netherland, postal code validation rule should be special
+    if (
+        (this.state.storeId === 123457929 && !/^\d{4}[a-zA-Z]{2}$/.test(value))
+          || !/^[0-9A-Za-z-\s]{3,10}$/.test(value)
+      ) {
       callback(RCi18n({ id: "PetOwner.theCorrectPostCode" }));
     } else {
       // 邮编黑名单校验

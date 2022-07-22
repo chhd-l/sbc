@@ -27,7 +27,7 @@ function Step4({ form }) {
   const [customerType, setCustomerType] = useState<number>(0)
   const [scopeType, setScopeType] = useState<number>(0)
   const [customProductsType, setCustomProductsType] = useState<number>(0)
-  const [customProductsIncludeType,setCustomProductsIncludeType] = useState<number>(0)
+  const [customProductsIncludeType, setCustomProductsIncludeType] = useState<number>(0)
   const [storeCateList, setStoreCateList] = useState<any>([])
   const [attributeList, setAttributeList] = useState<any>([])
   const [allGroups, setAllGroups] = useState<any>([])
@@ -400,7 +400,7 @@ function Step4({ form }) {
                           <Radio value={0}>
                             <FormattedMessage id="Marketing.AllProducts" />
                           </Radio>
-                          <div style={{height: '10px'}}></div>
+                          <div style={{ height: '10px' }}></div>
                           <Radio value={1}>
                             <FormattedMessage id="Marketing.AtLeastOne" />
                           </Radio>
@@ -639,7 +639,14 @@ function Step4({ form }) {
       </Form>
 
 
-      <GoodsModal visible={goodsModal._modalVisible} selectedSkuIds={goodsModal._selectedSkuIds} selectedRows={goodsModal._selectedRows} onOkBackFun={skuSelectedBackFun} onCancelBackFun={closeGoodsModal} />
+      <GoodsModal
+        visible={goodsModal._modalVisible}
+        selectedSkuIds={goodsModal._selectedSkuIds}
+        selectedRows={goodsModal._selectedRows}
+        onOkBackFun={skuSelectedBackFun}
+        onCancelBackFun={closeGoodsModal}
+        pageType={'addproducts'}
+      />
       <ButtonLayer step={3} toNext={toNext} />
     </div>
   )

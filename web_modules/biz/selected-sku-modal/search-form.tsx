@@ -88,7 +88,7 @@ export default class SearchForm extends React.Component<any, any> {
               key={item.get('cateId').toString()}
               value={item.get('cateId').toString()}
               title={item.get('cateName').toString()}
-              disabled={['addProduct'].includes(pageType) && ['Leaflet', 'Leaflets', 'Commercial Leaflet'].includes(item.get('cateName').toString())}
+              disabled={['addProduct', 'addgift', 'addproducts'].includes(pageType) && ['Leaflet', 'Leaflets', 'Commercial Leaflet'].includes(item.get('cateName').toString())}
             >
               {this.loop(oldCateList, childCates, item.get('cateId'))}
             </TreeNode>
@@ -99,7 +99,7 @@ export default class SearchForm extends React.Component<any, any> {
             key={item.get('cateId').toString()}
             value={item.get('cateId').toString()}
             title={item.get('cateName').toString()}
-            disabled={['addProduct'].includes(pageType) && ['Leaflet', 'Leaflets', 'Commercial Leaflet'].includes(item.get('cateName').toString())}
+            disabled={['addProduct', 'addgift', 'addproducts'].includes(pageType) && ['Leaflet', 'Leaflets', 'Commercial Leaflet'].includes(item.get('cateName').toString())}
           />
         );
       });

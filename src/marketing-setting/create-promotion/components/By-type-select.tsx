@@ -68,7 +68,7 @@ const ByTypeSelect = ({ onChange, value }: ByTypeSelectPropsType) => {
       mode="multiple"
       showArrow
       style={{ width: 350 }}
-      placeholder="Please select"
+      placeholder={(window as any).RCi18n({ id: 'Marketing.PleaseSelect' })}
       onChange={handleChange}
       // onSelect={handleSelect}
       // onDeselect={handleDeselect}

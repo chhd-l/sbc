@@ -168,7 +168,7 @@ export default function Step4({ setStep, userInfo, step, sourceStoreId }) {
                   )
                 )
               ),
-              bignumber(1.21)
+              bignumber(1)
             )
           ),
           salePriceExclVat: format(
@@ -184,12 +184,19 @@ export default function Step4({ setStep, userInfo, step, sourceStoreId }) {
               bignumber(
                 format(
                   multiply(
-                    bignumber(allObj.Cat[i].marketPrice),
+                    bignumber(
+                      format(
+                        multiply(
+                          bignumber(allObj.Cat[i].marketPrice),
+                          bignumber(format(multiply(bignumber(salesPercentage), bignumber(0.01))))
+                        )
+                      )
+                    ),
                     bignumber(format(multiply(bignumber(subscriptionPercentage), bignumber(0.01))))
                   )
                 )
               ),
-              bignumber(1.21)
+              bignumber(1)
             )
           )
         };
@@ -210,7 +217,7 @@ export default function Step4({ setStep, userInfo, step, sourceStoreId }) {
                   )
                 )
               ),
-              bignumber(1.21)
+              bignumber(1)
             )
           ),
           salePriceExclVat: format(
@@ -226,12 +233,19 @@ export default function Step4({ setStep, userInfo, step, sourceStoreId }) {
               bignumber(
                 format(
                   multiply(
-                    bignumber(allObj.Dog[i].marketPrice),
+                    bignumber(
+                      format(
+                        multiply(
+                          bignumber(allObj.Dog[i].marketPrice),
+                          bignumber(format(multiply(bignumber(salesPercentage), bignumber(0.01))))
+                        )
+                      )
+                    ),
                     bignumber(format(multiply(bignumber(subscriptionPercentage), bignumber(0.01))))
                   )
                 )
               ),
-              bignumber(1.21)
+              bignumber(1)
             )
           )
         };
@@ -286,7 +300,7 @@ export default function Step4({ setStep, userInfo, step, sourceStoreId }) {
         {isMYVETRECO ? (
           <>
             <div className="step4-myvet-top-content-item">
-              I would like to set market price (excl. VAT) above the cost with .
+              I would like to set market price (incl. VAT) above the cost with .
               <InputNumber
                 min={0}
                 value={salesPercentage - 100}
@@ -319,6 +333,9 @@ export default function Step4({ setStep, userInfo, step, sourceStoreId }) {
             <div className="step4-myvet-top-content-item word small tip">
               By applying this discount, your market price (incl. VAT) and subscription prices will
               be set automatically in following product catalogues.
+            </div>
+            <div className="hpadding-level-4 word small primary">
+              * All prices below include VAT.
             </div>
           </>
         ) : (

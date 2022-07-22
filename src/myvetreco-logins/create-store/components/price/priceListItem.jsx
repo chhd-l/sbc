@@ -14,13 +14,13 @@ function PriceListItem({ listItem, checkedList }) {
   const [isInit, setIsInit] = useState(true);
   const [sales, setSales] = useState(listItem.marketPrice);
   const [subscription, setSubscription] = useState(
-    format(multiply(bignumber(listItem.marketPrice), bignumber(1.21)), {
+    format(multiply(bignumber(listItem.marketPrice), bignumber(1)), {
       notation: 'fixed',
       precision: roundOff
     })
   );
   const [sell, setSell] = useState(
-    format(multiply(bignumber(listItem.marketPrice), bignumber(1.21)), {
+    format(multiply(bignumber(listItem.marketPrice), bignumber(1)), {
       notation: 'fixed',
       precision: roundOff
     })
@@ -45,7 +45,7 @@ function PriceListItem({ listItem, checkedList }) {
         bignumber(format(multiply(bignumber(percentageObj.salesPercentage), bignumber(0.01))))
       )
     );
-    sell = format(multiply(bignumber(sell), bignumber(1.21)));
+    sell = format(multiply(bignumber(sell), bignumber(1)));
     sell = bignumber(sell);
     sell = format(sell, { notation: 'fixed', precision: roundOff });
     setSell(sell);
@@ -71,7 +71,7 @@ function PriceListItem({ listItem, checkedList }) {
         )
       )
     );
-    subscription = format(multiply(bignumber(subscription), bignumber(1.21)));
+    subscription = format(multiply(bignumber(subscription), bignumber(1)));
     subscription = bignumber(subscription);
     subscription = format(subscription, { notation: 'fixed', precision: roundOff });
     setSubscription(subscription);
@@ -99,7 +99,7 @@ function PriceListItem({ listItem, checkedList }) {
 
   const changeSalesPrice = (value) => {
     setSales(value);
-    let sell = format(multiply(bignumber(value), bignumber(1.21)));
+    let sell = format(multiply(bignumber(value), bignumber(1)));
     sell = bignumber(sell);
     // sell = format(round(sell,roundOff))
     sell = format(sell, { notation: 'fixed', precision: roundOff });
@@ -115,11 +115,11 @@ function PriceListItem({ listItem, checkedList }) {
           </Tooltip>
         </Col>
         <Col span={2}>{listItem.marketPrice}</Col>
-        <Col span={5}>
+        <Col span={7}>
           <InputNumber value={sales} precision={2} onChange={(value) => changeSalesPrice(value)} />
         </Col>
-        <Col span={4}>{sell}</Col>
-        <Col span={5}>
+        {/* <Col span={4}>{sell}</Col> */}
+        <Col span={7}>
           <InputNumber
             value={subscription}
             precision={2}

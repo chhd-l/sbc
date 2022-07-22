@@ -661,7 +661,14 @@ function Step4({ form }) {
       </Form>
 
 
-      <GoodsModal visible={goodsModal._modalVisible} selectedSkuIds={goodsModal._selectedSkuIds} selectedRows={goodsModal._selectedRows} onOkBackFun={skuSelectedBackFun} onCancelBackFun={closeGoodsModal} />
+      <GoodsModal
+        visible={goodsModal._modalVisible}
+        selectedSkuIds={goodsModal._selectedSkuIds}
+        selectedRows={goodsModal._selectedRows}
+        onOkBackFun={skuSelectedBackFun}
+        onCancelBackFun={closeGoodsModal}
+        pageType={'addproducts'}
+      />
       <ButtonLayer step={3} toNext={toNext} />
     </div>
   )

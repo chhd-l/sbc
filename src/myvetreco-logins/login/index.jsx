@@ -10,14 +10,17 @@ import { getUserStatus } from './webapi';
 
 const FormItem = Form.Item;
 
-
 function CreateAccount({ form, useOkta, onLogin }) {
   const { getFieldDecorator } = form;
   const [loading, setLoading] = useState(false);
   const base64 = new util.Base64();
   const isRemember = !!localStorage.getItem('isRemember');
-  const account = localStorage.getItem('account') ? base64.decode(localStorage.getItem('account')) : '';
-  const password = localStorage.getItem('password') ? base64.decode(localStorage.getItem('password')) : '';
+  const account = localStorage.getItem('account')
+    ? base64.decode(localStorage.getItem('account'))
+    : '';
+  const password = localStorage.getItem('password')
+    ? base64.decode(localStorage.getItem('password'))
+    : '';
 
   const handleLogin = () => {
     if (useOkta) {
@@ -45,14 +48,13 @@ function CreateAccount({ form, useOkta, onLogin }) {
     }
   };
 
-
   const handleSignUp = () => {
     history.push('/create-account');
   };
-  
+
   const handleForgot = () => {
     history.push('/forget-password');
-  }
+  };
 
   const isMobile = util.isMobileApp();
   return (
@@ -62,55 +64,70 @@ function CreateAccount({ form, useOkta, onLogin }) {
 
         <Form name="login">
           <div className={`login-main ${isMobile ? 'on-mobile' : ''}`}>
-            
-              <div className="login-logo flex-content-center">
-                <div className="logo-img"><img src={logo} alt="" /></div>
-                <span>My VetReco<i className="tm">TM</i></span>
+            <div className="login-logo flex-content-center">
+              <div className="logo-img">
+                <img src={logo} alt="" />
               </div>
+              <span>My VetReco{/* <i className="tm">TM</i> */}</span>
+            </div>
 
-              {!useOkta && <FormItem className="login-input">
+            {!useOkta && (
+              <FormItem className="login-input">
                 {getFieldDecorator('account', {
-                  rules: [{required:true,message:RCi18n({id:'Login.email_address_vld'})}],
+                  rules: [{ required: true, message: RCi18n({ id: 'Login.email_address_vld' }) }],
                   initialValue: account
                 })(
-                  <Input size="large" placeholder={RCi18n({id:'Login.email_address'})} suffix={<i className="iconfont iconemail1" style={{ fontSize: 18, color: '#a0b0bb' }}></i>} />
+                  <Input
+                    size="large"
+                    placeholder={RCi18n({ id: 'Login.email_address' })}
+                    suffix={
+                      <i
+                        className="iconfont iconemail1"
+                        style={{ fontSize: 18, color: '#a0b0bb' }}
+                      ></i>
+                    }
+                  />
                 )}
-              </FormItem>}
+              </FormItem>
+            )}
 
-              {!useOkta && <FormItem className="login-input password">
+            {!useOkta && (
+              <FormItem className="login-input password">
                 {getFieldDecorator('password', {
-                  rules: [{required:true,message:RCi18n({id:'Login.password_vld'})}],
+                  rules: [{ required: true, message: RCi18n({ id: 'Login.password_vld' }) }],
                   initialValue: ''
-                })(
-                  <Input.Password size="large" placeholder={RCi18n({id:'Login.password'})} />
-                )}
-              </FormItem>}
+                })(<Input.Password size="large" placeholder={RCi18n({ id: 'Login.password' })} />)}
+              </FormItem>
+            )}
 
-
-              {!useOkta && <div className="part space-between" >
+            {!useOkta && (
+              <div className="part space-between">
                 <FormItem>
                   {getFieldDecorator('isRemember', {
                     initialValue: isRemember,
                     valuePropName: 'checked'
                   })(
                     <Checkbox>
-                      <span className="checkbox-text">{RCi18n({id:'Login.remember_me'})}</span>
+                      <span className="checkbox-text">{RCi18n({ id: 'Login.remember_me' })}</span>
                     </Checkbox>
                   )}
                 </FormItem>
-                <div className="forgot" onClick={handleForgot}>{RCi18n({id:'Login.forgot_your_password'})}</div>
-              </div>}
+                <div className="forgot" onClick={handleForgot}>
+                  {RCi18n({ id: 'Login.forgot_your_password' })}
+                </div>
+              </div>
+            )}
 
-              <Button loading={loading} type="primary" size="large" block onClick={handleLogin}>{RCi18n({id:'Login.log_in'})}</Button>
+            <Button loading={loading} type="primary" size="large" block onClick={handleLogin}>
+              {RCi18n({ id: 'Login.log_in' })}
+            </Button>
 
-               <div className="text">
-                 {RCi18n({id:"Login.donothaveaccount"})}
-                 <span onClick={handleSignUp}>{RCi18n({id:"Login.getstarted"})}</span>
-               </div>
-            
+            <div className="text">
+              {RCi18n({ id: 'Login.donothaveaccount' })}
+              <span onClick={handleSignUp}>{RCi18n({ id: 'Login.getstarted' })}</span>
+            </div>
           </div>
         </Form>
-
       </div>
     </div>
   );

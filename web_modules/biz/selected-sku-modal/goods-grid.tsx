@@ -190,7 +190,7 @@ export default class GoodsGrid extends React.Component<any, any> {
     const fetchCates = await webapi.fetchCateList();
     const { res: catesRes } = fetchCates as any;
     const { context: cates } = catesRes;
-    if (['addProduct'].includes(this?.props?.pageType)) {
+    if (['addProduct', 'addgift'].includes(this?.props?.pageType)) {
       // Commercial Leaflet
       if (cates.length) {
         const id = cates.filter((item) => (item?.cateName === 'Commercial Leaflet'))[0]?.cateId || null;

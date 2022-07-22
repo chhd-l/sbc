@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Steps } from 'antd';
 import { RCi18n, Const, cache } from 'qmkit';
 import { getUserStatus } from '../login/webapi';
-import logo from '../assets/images/login_logo.png';
+import logo from '../assets/images/myvet_logo.png';
 import fgsLogo from '../../login-admin/img/logo.png';
 import Step1 from './components/Step1';
 import Step2 from './components/Step2';

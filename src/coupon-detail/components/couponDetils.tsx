@@ -9,6 +9,7 @@ import { enumConst } from '@/marketing-setting/create-promotion/enum';
 import '../index.less';
 import BarLine from '@/marketing-details/components/BarLine';
 import { isNumber } from 'lodash';
+import TextArea from 'antd/lib/input/TextArea';
 type MarketingDetailsProps = {};
 const MAK_TYPE = {
   0: 'Promotion details',
@@ -264,6 +265,23 @@ const CouponDetails = (props: MarketingDetailsProps) => {
                 </Col>
                 <Col className="step-summary-item-text">
                   {data?.createName}
+                </Col>
+              </Row>
+              <Row className="step-summary-item">
+                <Col className="step-summary-sub-title">
+                  <FormattedMessage id="Marketing.Description" />:
+                </Col>
+                <Col className="step-summary-item-text">
+                  {data?.description && (
+                    <TextArea
+                      rows={5}
+                      // autoSize={{ minRows: 5, maxRows: 50 }}
+                      value={data?.description}
+                      // style={{ width: '100%' }}
+                      readOnly
+                    />
+                  )}
+
                 </Col>
               </Row>
             </div>

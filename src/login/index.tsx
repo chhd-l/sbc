@@ -40,8 +40,11 @@ export default withOktaAuth(class Login extends React.Component<any, any> {
 
   componentDidMount() {
     this.store.init();
-    this.getCookieBanner()
-    this.getMarsFooter()
+    // okta登录跳转回来不加载footer
+    if (!(this.props.authState?.isAuthenticated && sessionStorage.getItem(cache.OKTA_ROUTER_TYPE))) {
+      this.getCookieBanner()
+      this.getMarsFooter()
+    }
   }
   getCookieBanner = ()=>{
     util.loadJS({

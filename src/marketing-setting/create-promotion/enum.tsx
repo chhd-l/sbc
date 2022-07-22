@@ -24,6 +24,7 @@ export const enumConst = {
     0: <FormattedMessage id="Marketing.all" />,
     '-3': <FormattedMessage id="Marketing.Group" />,
     '-4': <FormattedMessage id="Marketing.Byemail" />,
+    '-5': <FormattedMessage id="Marketing.Bytype" />
   },
   scopeType: {
     0: <FormattedMessage id="Marketing.all" />, //0

@@ -99,7 +99,7 @@ class GiftLevels extends React.Component<any, any> {
     const { getFieldDecorator } = form;
     return (
       <div>
-        {fullGiftLevelList && fullGiftLevelList.length> 0 &&
+        {fullGiftLevelList && fullGiftLevelList.length > 0 &&
           fullGiftLevelList.map((level, index) => {
             return (
               <div key={level.key ? level.key : level.giftLevelId}>
@@ -110,7 +110,8 @@ class GiftLevels extends React.Component<any, any> {
                       <FormItem style={{ display: 'inline-block' }}>
                         {getFieldDecorator(`level_rule_value_${index}`, {
                           rules: [
-                            { required: true, message:
+                            {
+                              required: true, message:
                                 (window as any).RCi18n({
                                   id: 'Marketing.Mustenterrules'
                                 })
@@ -177,7 +178,7 @@ class GiftLevels extends React.Component<any, any> {
                       </span>
                     </div>
                   )}
-                  <Button type="primary" icon="plus" onClick={() => this.openGoodsModal(index)} style={{ marginTop: 3.5,marginBottom:24 }}>
+                  <Button type="primary" icon="plus" onClick={() => this.openGoodsModal(index)} style={{ marginTop: 3.5, marginBottom: 24 }}>
                     {addText || <FormattedMessage id="Marketing.Addgift" />}
                   </Button>
                   {/*&nbsp;&nbsp;*/}
@@ -193,7 +194,7 @@ class GiftLevels extends React.Component<any, any> {
                   {/*  <Option value={0}>The default all give</Option>*/}
                   {/*</Select>*/}
                   &nbsp;&nbsp;&nbsp;
-                  {index > 0 && <a onClick={() => this.deleteLevels(index)}><FormattedMessage id="Marketing.Delete"/></a>}
+                  {index > 0 && <a onClick={() => this.deleteLevels(index)}><FormattedMessage id="Marketing.Delete" /></a>}
                 </HasError>
 
                 <DataGrid scroll={{ y: 500 }} size="small" rowKey={(record) => record.goodsInfoId} dataSource={level.fullGiftDetailList ? this.getSelectedRowByIds(this.getIdsFromLevel(level.fullGiftDetailList)) : []} pagination={false}>
@@ -221,7 +222,7 @@ class GiftLevels extends React.Component<any, any> {
                     }}
                   />
 
-                  <Column  title={<FormattedMessage id="Marketing.Category" />} key="cateName" dataIndex="cateName" />
+                  <Column title={<FormattedMessage id="Marketing.Category" />} key="cateName" dataIndex="cateName" />
 
                   <Column
                     title={<FormattedMessage id="Marketing.Brand" />}
@@ -255,7 +256,7 @@ class GiftLevels extends React.Component<any, any> {
                         return (
                           <div className="has-error">
                             <p>{stock}</p>
-                            <div className="ant-form-explain"><FormattedMessage id="Marketing.InventoryTooLow"/></div>
+                            <div className="ant-form-explain"><FormattedMessage id="Marketing.InventoryTooLow" /></div>
                           </div>
                         );
                       } else {
@@ -274,7 +275,8 @@ class GiftLevels extends React.Component<any, any> {
                           {getFieldDecorator(`${row.goodsInfoId}level_detail${index}${detailIndex}`, {
                             initialValue: fullGiftLevelList[index]['fullGiftDetailList'][detailIndex] ? fullGiftLevelList[index]['fullGiftDetailList'][detailIndex]['productNum'] : 1,
                             rules: [
-                              { required: true, message:
+                              {
+                                required: true, message:
                                   (window as any).RCi18n({
                                     id: 'Marketing.greaterthan0andlessthan999'
                                   })
@@ -315,7 +317,7 @@ class GiftLevels extends React.Component<any, any> {
                     title={<FormattedMessage id="Marketing.Operation" />}
                     key="operate"
                     render={(row) => {
-                      return <a onClick={() => this.deleteRows(index, row.goodsInfoId)}><FormattedMessage id="Marketing.Delete"/></a>;
+                      return <a onClick={() => this.deleteRows(index, row.goodsInfoId)}><FormattedMessage id="Marketing.Delete" /></a>;
                     }}
                   />
                 </DataGrid>
@@ -325,10 +327,10 @@ class GiftLevels extends React.Component<any, any> {
           })}
         {
           !noMulti && (<>
-              <Button onClick={this.addLevels} disabled={fullGiftLevelList && fullGiftLevelList.length >= 5}>
-                <FormattedMessage id="Marketing.Addmulti-levelpromotions" />
-              </Button>
-              &nbsp;&nbsp; <FormattedMessage id="Marketing.upto5levels" />
+            <Button onClick={this.addLevels} disabled={fullGiftLevelList && fullGiftLevelList.length >= 5}>
+              <FormattedMessage id="Marketing.Addmulti-levelpromotions" />
+            </Button>
+            &nbsp;&nbsp; <FormattedMessage id="Marketing.upto5levels" />
           </>)
         }
 
@@ -341,6 +343,7 @@ class GiftLevels extends React.Component<any, any> {
             onOkBackFun={(selectedSkuIds, selectedRows) => this.skuSelectedBackFun(goodsModal._forIndex, selectedSkuIds, selectedRows)}
             onCancelBackFun={this.closeGoodsModal}
             goodsCate={goodsCate}
+            pageType={'addgift'}
           />
         )}
       </div>
@@ -473,13 +476,13 @@ class GiftLevels extends React.Component<any, any> {
       // selectedSkuIds.map((skuId) => {
       //   return { productId: skuId, productNum: 1 };
       // })
-      selectedRows.toJS().map(({goodsInfoId,goodsInfoName})=>(
-        { productId: goodsInfoId, productNum: 1,productName:goodsInfoName }
+      selectedRows.toJS().map(({ goodsInfoId, goodsInfoName }) => (
+        { productId: goodsInfoId, productNum: 1, productName: goodsInfoName }
       ))
     );
     let rows = (selectedRows.isEmpty() ? Set([]) : selectedRows.toSet()).concat(fromJS(this.props.selectedRows).toSet());
     this.props.GiftRowsOnChange(rows)
-    this.setState({ goodsModal: { _modalVisible: false }});
+    this.setState({ goodsModal: { _modalVisible: false } });
   };
 
   /**
@@ -529,8 +532,8 @@ class GiftLevels extends React.Component<any, any> {
   getIdsFromLevel = (detailList) => {
     return detailList
       ? detailList.map((detail) => {
-          return detail.productId;
-        })
+        return detail.productId;
+      })
       : [];
   };
 

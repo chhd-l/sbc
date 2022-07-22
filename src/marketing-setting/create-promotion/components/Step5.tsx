@@ -620,35 +620,38 @@ function Step5({ form }) {
                     </Form.Item>
                   </div>
                 </Form.Item>
-                <Form.Item label={<FormattedMessage id="Marketing.promotionAppliesType" />}>
-                  {getFieldDecorator('appliesType', {
-                    initialValue: appliesType,
-                    // rules: [
-                    //   {
-                    //     required: true,
-                    //     message: (window as any).RCi18n({
-                    //       id: 'Marketing.PleaseSelectOne'
-                    //     })
-                    //   }
-                    // ]
-                  })(
-                    <Radio.Group
-                      onChange={(e) => {
-                        setAppliesType(e.target.value);
-                      }}
-                    >
-                      <Radio value={0}>
-                        <FormattedMessage id="Marketing.All" />
-                      </Radio>
-                      <Radio value={1}>
-                        <FormattedMessage id="Marketing.MostExpensive" />
-                      </Radio>
-                      <Radio value={2}>
-                        <FormattedMessage id="Marketing.Cheapest" />
-                      </Radio>
-                    </Radio.Group>
-                  )}
-                </Form.Item>
+                {Const.SITE_NAME !== 'MYVETRECO' && (
+                  <Form.Item label={<FormattedMessage id="Marketing.promotionAppliesType" />}>
+                    {getFieldDecorator('appliesType', {
+                      initialValue: appliesType,
+                      rules: [
+                        {
+                          required: true,
+                          message: (window as any).RCi18n({
+                            id: 'Marketing.PleaseSelectOne'
+                          })
+                        }
+                      ]
+                    })(
+                      <Radio.Group
+                        onChange={(e) => {
+                          setAppliesType(e.target.value);
+                        }}
+                      >
+                        <Radio value={0}>
+                          <FormattedMessage id="Marketing.All" />
+                        </Radio>
+                        <Radio value={1}>
+                          <FormattedMessage id="Marketing.MostExpensive" />
+                        </Radio>
+                        <Radio value={2}>
+                          <FormattedMessage id="Marketing.Cheapest" />
+                        </Radio>
+                      </Radio.Group>
+                    )}
+                  </Form.Item>
+                )}
+
                 {formData.Conditions.promotionType === 2 && (
                   <Form.Item label={<FormattedMessage id="Marketing.LimitThePromotionTo" />}>
                     {getFieldDecorator('subscriptionRefillLimit', {
@@ -829,35 +832,38 @@ function Step5({ form }) {
                     </Form.Item>
                   </div>
                 </Form.Item>
-                <Form.Item label={<FormattedMessage id="Marketing.promotionAppliesType" />}>
-                  {getFieldDecorator('appliesType', {
-                    initialValue: appliesType,
-                    rules: [
-                      {
-                        required: true,
-                        message: (window as any).RCi18n({
-                          id: 'Marketing.PleaseSelectOne'
-                        })
-                      }
-                    ]
-                  })(
-                    <Radio.Group
-                      onChange={(e) => {
-                        setAppliesType(e.target.value);
-                      }}
-                    >
-                      <Radio value={0}>
-                        <FormattedMessage id="Marketing.All" />
-                      </Radio>
-                      <Radio value={1}>
-                        <FormattedMessage id="Marketing.MostExpensive" />
-                      </Radio>
-                      <Radio value={2}>
-                        <FormattedMessage id="Marketing.Cheapest" />
-                      </Radio>
-                    </Radio.Group>
-                  )}
-                </Form.Item>
+                {Const.SITE_NAME !== 'MYVETRECO' && (
+                  <Form.Item label={<FormattedMessage id="Marketing.promotionAppliesType" />}>
+                    {getFieldDecorator('appliesType', {
+                      initialValue: appliesType,
+                      rules: [
+                        {
+                          required: true,
+                          message: (window as any).RCi18n({
+                            id: 'Marketing.PleaseSelectOne'
+                          })
+                        }
+                      ]
+                    })(
+                      <Radio.Group
+                        onChange={(e) => {
+                          setAppliesType(e.target.value);
+                        }}
+                      >
+                        <Radio value={0}>
+                          <FormattedMessage id="Marketing.All" />
+                        </Radio>
+                        <Radio value={1}>
+                          <FormattedMessage id="Marketing.MostExpensive" />
+                        </Radio>
+                        <Radio value={2}>
+                          <FormattedMessage id="Marketing.Cheapest" />
+                        </Radio>
+                      </Radio.Group>
+                    )}
+                  </Form.Item>
+                )}
+
                 {/* {formData.Conditions.promotionType === 2 && (
                   <Form.Item label={<FormattedMessage id="Marketing.LimitThePromotionTo" />}>
                     {getFieldDecorator('subscriptionRefillLimit', {

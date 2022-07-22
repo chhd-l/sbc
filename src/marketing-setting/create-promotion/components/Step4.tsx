@@ -11,6 +11,7 @@ import { FormContext } from '@/marketing-setting/create-promotion';
 import SelectedGoodsGrid from '@/marketing-add/common-components/selected-goods-grid';
 import { GoodsModal } from 'biz';
 import { enumConst } from '@/marketing-setting/create-promotion/enum';
+import ByTypeSelect from './By-type-select';
 
 
 const TreeNode = Tree.TreeNode;
@@ -27,7 +28,7 @@ function Step4({ form }) {
   const [customerType, setCustomerType] = useState<number>(0)
   const [scopeType, setScopeType] = useState<number>(0)
   const [customProductsType, setCustomProductsType] = useState<number>(0)
-  const [customProductsIncludeType,setCustomProductsIncludeType] = useState<number>(0)
+  const [customProductsIncludeType, setCustomProductsIncludeType] = useState<number>(0)
   const [storeCateList, setStoreCateList] = useState<any>([])
   const [attributeList, setAttributeList] = useState<any>([])
   const [allGroups, setAllGroups] = useState<any>([])
@@ -286,9 +287,12 @@ function Step4({ form }) {
               <Radio value={0}><FormattedMessage id="Marketing.all" /></Radio>
               <Radio value={-3}><FormattedMessage id="Marketing.Group" /></Radio>
               <Radio value={-4}><FormattedMessage id="Marketing.Byemail" /></Radio>
+              <Radio value={-5}><FormattedMessage id="Marketing.Bytype" /></Radio>
             </Radio.Group>
           )}
         </Form.Item>
+
+
         <>
           {customerType === -3 && (
             <Form.Item wrapperCol={WrapperCol}>
@@ -348,6 +352,24 @@ function Step4({ form }) {
             </>
 
           )}
+          {customerType === -5 && (
+            <Form.Item wrapperCol={WrapperCol}>
+              {getFieldDecorator('Bytype', {
+                initialValue: formData.Conditions?.Bytype?.[0],
+                rules: [
+                  {
+                    required: true,
+                    message:
+                      (window as any).RCi18n({
+                        id: 'Marketing.PleaseSelectType'
+                      })
+                  },
+                ],
+              })(
+                <ByTypeSelect />
+              )}
+            </Form.Item>
+          )}
         </>
 
         {/*Products in the cart*/}
@@ -400,7 +422,7 @@ function Step4({ form }) {
                           <Radio value={0}>
                             <FormattedMessage id="Marketing.AllProducts" />
                           </Radio>
-                          <div style={{height: '10px'}}></div>
+                          <div style={{ height: '10px' }}></div>
                           <Radio value={1}>
                             <FormattedMessage id="Marketing.AtLeastOne" />
                           </Radio>

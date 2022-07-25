@@ -242,18 +242,21 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
           let hasHomeFunction = functionsRes.includes('f_home');
           if (hasHomeFunction) {
             //如果设置语言和默认语言不同，则需要刷新页面
-            if (shouldChangeLanguageSetting) {
-              window.location.href='/';
-            } else {
-              history.push('/');
-            }
+            // if (shouldChangeLanguageSetting) {
+            //   window.location.href='/';
+            // } else {
+            //   history.push('/');
+            // }
+            // in order to solve the okta login process redirect to login component and load mars footer plugin, we redirect to home page to cancel mars footer load.
+            window.location.href='/';
           } else {
             let url = _getUrl(allGradeMenus);
-            if (shouldChangeLanguageSetting) {
-              window.location.href = url;
-            } else {
-              history.push(url);
-            }
+            // if (shouldChangeLanguageSetting) {
+            //   window.location.href = url;
+            // } else {
+            //   history.push(url);
+            // }
+            window.location.href = url;
           }
           callback && callback(res.context)
           break;

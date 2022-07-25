@@ -272,11 +272,11 @@ const CouponDetails = (props: MarketingDetailsProps) => {
                   <FormattedMessage id="Marketing.Description" />:
                 </Col>
                 <Col className="step-summary-item-text">
-                  {data?.description && (
+                  {data?.couponDescription && (
                     <TextArea
                       rows={5}
                       // autoSize={{ minRows: 5, maxRows: 50 }}
-                      value={data?.description}
+                      value={data?.couponDescription}
                       // style={{ width: '100%' }}
                       readOnly
                     />

@@ -15,7 +15,7 @@ interface MenuType {
 const menuList: Array<MenuType> = [
   {
     label: '商品',
-    icon: 'http://kstoreimages.b0.upaiyun.com/1472717948349.jpg',
+    icon: 'https://kstoreimages.b0.upaiyun.com/1472717948349.jpg',
     path: '/goods-list',
     children: [
       {
@@ -30,7 +30,7 @@ const menuList: Array<MenuType> = [
   },
   {
     label: '订单',
-    icon: 'http://kstoreimages.b0.upaiyun.com/1472717305053.jpg',
+    icon: 'https://kstoreimages.b0.upaiyun.com/1472717305053.jpg',
     path: '/order-list',
     children: [
       {
@@ -44,7 +44,7 @@ const menuList: Array<MenuType> = [
   },
   {
     label: '客户',
-    icon: 'http://kstoreimages.b0.upaiyun.com/1472717980431.jpg',
+    icon: 'https://kstoreimages.b0.upaiyun.com/1472717980431.jpg',
     path: '/customer-list',
     children: [
       {
@@ -58,7 +58,7 @@ const menuList: Array<MenuType> = [
   },
   {
     label: '财务',
-    icon: 'http://kstoreimages.b0.upaiyun.com/sys/03.jpg',
+    icon: 'https://kstoreimages.b0.upaiyun.com/sys/03.jpg',
     path: '/finance-account-receivable',
     children: [
       // {
@@ -98,7 +98,7 @@ const menuList: Array<MenuType> = [
   },
   {
     label: '员工',
-    icon: 'http://kstoreimages.b0.upaiyun.com/1472717980431.jpg',
+    icon: 'https://kstoreimages.b0.upaiyun.com/1472717980431.jpg',
     path: '/employee-list',
     children: [
       {
@@ -112,7 +112,7 @@ const menuList: Array<MenuType> = [
   },
   {
     label: '统计',
-    icon: 'http://kstoreimages.b0.upaiyun.com/1472717980431.jpg',
+    icon: 'https://kstoreimages.b0.upaiyun.com/1472717980431.jpg',
     path: '/flow-statistics',
     children: [
       {
@@ -130,7 +130,7 @@ const menuList: Array<MenuType> = [
   },
   {
     label: '设置',
-    icon: 'http://kstoreimages.b0.upaiyun.com/1472717894116.jpg',
+    icon: 'https://kstoreimages.b0.upaiyun.com/1472717894116.jpg',
     path: '/no-page'
   }
 ];
@@ -151,7 +151,7 @@ export default class SlideMenu extends React.PureComponent<any, any> {
           <a style={styles.logo} href="/">
             <img
               style={styles.logoImg}
-              src="http://kstoreimages.b0.upaiyun.com/sys/02.jpg"
+              src="https://kstoreimages.b0.upaiyun.com/sys/02.jpg"
             />
           </a>
           <Menu style={styles.menu} onClick={this._selectFirstMenu as any}>

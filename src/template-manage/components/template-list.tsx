@@ -69,7 +69,7 @@ export default class TemplateList extends React.Component {
                     <img
                       src={
                         item.get('previewImage') ||
-                        'http://oss-hz.qianmi.com/x-site/public/images/72c8bf80-6e09-11e8-b6cf-5f8b75912ff8.png'
+                        'https://oss-hz.qianmi.com/x-site/public/images/72c8bf80-6e09-11e8-b6cf-5f8b75912ff8.png'
                       }
                     />
                   </div>

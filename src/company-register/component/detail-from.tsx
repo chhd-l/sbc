@@ -37,7 +37,7 @@ export default class DetailForm extends React.Component<any, any> {
     isShowPwd: 'isShowPwd',
     imageCode: 'imageCode',
     telCode: 'telCode',
-    password: 'password',
+    password: process.env.PASSWORDINPUTTYPE,
     showPass: noop,
     setTel: noop,
     setTelCode: noop,
@@ -113,13 +113,7 @@ export default class DetailForm extends React.Component<any, any> {
             onChange: (e) => {
               setTel(e.target.value);
             }
-          })(
-            <Input
-              placeholder="请输入常用手机号"
-              size="large"
-              style={{ width: 110 }}
-            />
-          )}
+          })(<Input placeholder="请输入常用手机号" size="large" style={{ width: 110 }} />)}
           <TimerButton
             style={{
               height: 30,
@@ -180,7 +174,10 @@ export default class DetailForm extends React.Component<any, any> {
           }}
           label="密码"
         >
-          {getFieldDecorator('passwordHidden', {})(
+          {getFieldDecorator(
+            'passwordHidden',
+            {}
+          )(
             <Input
               suffix={
                 <i
@@ -238,12 +235,7 @@ export default class DetailForm extends React.Component<any, any> {
           </Checkbox>
         </FormItem>
         <FormItem {...tailFormItemLayout}>
-          <Button
-            type="primary"
-            {...styleColor}
-            disabled={doingRegister}
-            onClick={this._register}
-          >
+          <Button type="primary" {...styleColor} disabled={doingRegister} onClick={this._register}>
             立即注册
           </Button>
         </FormItem>

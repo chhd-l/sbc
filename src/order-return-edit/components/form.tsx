@@ -86,7 +86,7 @@ class ReturnOrderForm extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      flushState: Math.random(),
+      flushState: (window.crypto.getRandomValues(new Uint8Array(1)) * 0.001),
       disableButton: false
     };
   }
@@ -205,7 +205,7 @@ class ReturnOrderForm extends React.Component<any, any> {
                     modify();
                   } else {
                     this.setState({
-                      flushState: Math.random()
+                      flushState: (window.crypto.getRandomValues(new Uint8Array(1)) * 0.001)
                     });
                   }
                 });

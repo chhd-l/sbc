@@ -165,7 +165,7 @@ export default class PriceActor extends Actor {
    */
   @Action('priceActor: addAreaPrice')
   addAreaPrice(state) {
-    const id = Math.random().toString().substring(2);
+    const id = (window.crypto.getRandomValues(new Uint8Array(1)) * 0.001).toString().substring(2);
     const map = fromJS({
       [id]: { intervalPriceId: id }
     });

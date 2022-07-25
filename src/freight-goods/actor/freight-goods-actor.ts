@@ -30,7 +30,7 @@ export default class FreightGoodsActor extends Actor {
       freightTemplateGoodsExpressSaveRequests: [
         {
           //id
-          id: 'add_' + Math.random(),
+          id: 'add_' + (window.crypto.getRandomValues(new Uint8Array(1)) * 0.001),
           // 配送地id(逗号分隔)
           destinationArea: [],
           // 配送地名称(逗号分隔)
@@ -55,7 +55,7 @@ export default class FreightGoodsActor extends Actor {
       // 单品运费模板指定包邮条件
       freightTemplateGoodsFreeSaveRequests: [
         {
-          id: 'add_' + Math.random(),
+          id: 'add_' + (window.crypto.getRandomValues(new Uint8Array(1)) * 0.001),
           destinationArea: [],
           destinationAreaName: [],
           // 运送方式(1:快递配送)
@@ -165,7 +165,7 @@ export default class FreightGoodsActor extends Actor {
         fromJS([
           {
             //id
-            id: 'add_' + Math.random(),
+            id: 'add_' + (window.crypto.getRandomValues(new Uint8Array(1)) * 0.001),
             // 配送地id(逗号分隔)
             destinationArea: fromJS([]),
             // 配送地名称(逗号分隔)
@@ -248,7 +248,7 @@ export default class FreightGoodsActor extends Actor {
       state.get('freightTemplateGoodsFreeSaveRequests').concat(
         fromJS([
           {
-            id: 'add_' + Math.random(),
+            id: 'add_' + (window.crypto.getRandomValues(new Uint8Array(1)) * 0.001),
             destinationArea: fromJS([]),
             destinationAreaName: fromJS([]),
             // 运送方式(1:快递配送)
@@ -347,7 +347,7 @@ export default class FreightGoodsActor extends Actor {
         'freightTemplateGoodsFreeSaveRequests',
         fromJS([
           {
-            id: 'add_' + Math.random(),
+            id: 'add_' + (window.crypto.getRandomValues(new Uint8Array(1)) * 0.001),
             destinationArea: fromJS([]),
             destinationAreaName: fromJS([]),
             // 运送方式(1:快递配送)

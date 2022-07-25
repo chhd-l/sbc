@@ -689,7 +689,7 @@ class OrderDetailTab extends React.Component<any, any> {
             pagination={false}
             bordered
             rowClassName={() => 'order-detail-row'}
-            key={Math.random()}
+            key={(window.crypto.getRandomValues(new Uint8Array(1)) * 0.001)}
           />
 
           <Modal

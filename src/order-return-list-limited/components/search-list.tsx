@@ -204,7 +204,7 @@ export default class SearchList extends React.Component<any, any> {
       const enableReturn = (returnFlowState === 'RECEIVED' || (returnType == 'REFUND' && returnFlowState === 'AUDIT')) && refundStatus != null && refundStatus != 2 && refundStatus != 3;
 
       return (
-        <tr className="ant-table-row  ant-table-row-level-0" key={Math.random()}>
+        <tr className="ant-table-row  ant-table-row-level-0" key={(window.crypto.getRandomValues(new Uint8Array(1)) * 0.001)}>
           <td colSpan={10} style={{ padding: 0 }}>
             <table className="ant-table-self" style={{ border: '1px solid #ddd' }}>
               <thead>

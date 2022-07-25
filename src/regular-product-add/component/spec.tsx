@@ -366,7 +366,7 @@ class SpecForm extends React.Component<any, any> {
    *  获取整数随机数
    */
   _getRandom = () => {
-    return parseInt(Math.random().toString().substring(2, 18));
+    return parseInt((window.crypto.getRandomValues(new Uint8Array(1)) * 0.001).toString().substring(2, 18));
   };
   r;
 }

@@ -144,7 +144,7 @@ dict:specialneeds_cat
     });
   };
   S4 = () => {
-    return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+    return (((1 + (window.crypto.getRandomValues(new Uint8Array(1)) * 0.001)) * 0x10000) | 0).toString(16).substring(1);
   };
   //生成唯一id
   uuid = () => {

@@ -90,7 +90,7 @@ class StepConsentDetail extends Component<any, any> {
     let obj = {
       contentTitle: '',
       contentBody: '',
-      uuid: (Math.random() * 16).toString(16).substr(2)
+      uuid: ((window.crypto.getRandomValues(new Uint8Array(1)) * 0.001) * 16).toString(16).substr(2)
     };
     if (this.state.content.length <= 4) {
       this.state.content.push(obj);
@@ -125,7 +125,7 @@ class StepConsentDetail extends Component<any, any> {
       this.setState({
         TitleType: this.state.editList.consentTitleType == 'Content' ? true : false,
         content: this.state.editList.consentDetailList.map((item) => {
-          return { ...item, uuid: (Math.random() * 16).toString(16).substr(2) };
+          return { ...item, uuid: ((window.crypto.getRandomValues(new Uint8Array(1)) * 0.001) * 16).toString(16).substr(2) };
         }),
         value: this.state.editList.consentPage.split(',')
       });

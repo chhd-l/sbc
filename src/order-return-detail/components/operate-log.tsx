@@ -92,7 +92,7 @@ export default class OperateLog extends React.Component<any, any> {
         >
           <Collapse>
             <Panel header={<FormattedMessage id="Order.Operationlog" />} key="1" style={customPanelStyle}>
-              <Table bordered rowKey={() => Math.random().toString()} columns={columns} dataSource={logs} pagination={false} />
+              <Table bordered rowKey={() => (window.crypto.getRandomValues(new Uint8Array(1)) * 0.001).toString()} columns={columns} dataSource={logs} pagination={false} />
             </Panel>
           </Collapse>
         </div>

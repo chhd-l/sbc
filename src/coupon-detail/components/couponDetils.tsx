@@ -164,7 +164,7 @@ const CouponDetails = (props: MarketingDetailsProps) => {
           </Row>
 
         </>)
-        break;
+
       case 1:
         return (<>
           <Row className="step-summary-item">
@@ -189,7 +189,7 @@ const CouponDetails = (props: MarketingDetailsProps) => {
           </Row>
 
         </>)
-        break;
+
       case 2:
         return <Row className="step-summary-item">
           <Col className="step-summary-sub-title">
@@ -199,7 +199,7 @@ const CouponDetails = (props: MarketingDetailsProps) => {
             {data?.fullGiftDetailList.map((item) => (item?.productName ? item?.productName + ' ' : null))}
           </Col>
         </Row>
-        break;
+
       case 3:
 
         break;
@@ -212,7 +212,7 @@ const CouponDetails = (props: MarketingDetailsProps) => {
             {data?.fullGiftDetailList.map((item) => (item?.productName ? item?.productName + ' ' : null))}
           </Col>
         </Row>
-        break;
+
       default:
         return (<>
           <Row className="step-summary-item">
@@ -225,7 +225,7 @@ const CouponDetails = (props: MarketingDetailsProps) => {
           </Row>
 
         </>)
-        break;
+
     }
 
 

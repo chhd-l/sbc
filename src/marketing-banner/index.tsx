@@ -116,12 +116,12 @@ const index = () => {
     }else {
       data.buttonStatus = 0
     }
-      data.content = bannerContent,
-      data.buttonContent = buttonContent,
-      data.buttonHyperlink = buttonLink,
-        console.log(bannerStatus+'bannerStatus')
-    console.log(bannerIconStatus+'bannerIconStatus')
-    console.log(data)
+      data.content = bannerContent;
+      data.buttonContent = buttonContent;
+      data.buttonHyperlink = buttonLink;
+        console.log(bannerStatus+'bannerStatus');
+    console.log(bannerIconStatus+'bannerIconStatus');
+    console.log(data);
 
     webapi
       .setBannerForm(data).then(({ res }) => {

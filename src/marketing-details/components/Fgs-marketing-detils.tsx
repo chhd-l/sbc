@@ -200,7 +200,6 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
               {level?.reduction}{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
             </Col>
           </Row>
-          break;
         //Percentage 显示value和discount两行
         case 1:
           return <>
@@ -237,7 +236,6 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
               <Col className="step-summary-item-text">{data?.subscriptionRefillLimit} <FormattedMessage id="Marketing.refills" /></Col>
             </Row>}
           </>
-          break;
         case 3:
           // return <Row className="step-summary-item">
           //   <Col className="step-summary-sub-title">
@@ -257,7 +255,6 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
               {level?.fullGiftDetailList.map((item) => (item?.productName ? item?.productName + ' ' : null))}
             </Col>
           </Row>
-          break;
         case 4:
           return <Row className="step-summary-item">
             <Col className="step-summary-sub-title">
@@ -267,7 +264,6 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
               {level?.fullLeafletDetailList.map((item) => (item?.productName ? item?.productName + ' ' : null))}
             </Col>
           </Row>
-          break;
         case 5:
           return <Row className="step-summary-item">
             <Col className="step-summary-sub-title">
@@ -277,8 +273,6 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
               {level?.fullLeafletDetailList.map((item) => (item?.productName ? item?.productName + ' ' : null))}
             </Col>
           </Row>
-          break;
-          break;
       }
     } else if ([1, 2].includes(TypeOfPurchase)) {
       // 0: <FormattedMessage id="Marketing.Amount" />,
@@ -316,7 +310,6 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
             </Row>}
 
           </>
-          break;
         case 1:
           return <>
             <Row className="step-summary-item">
@@ -373,7 +366,6 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
               <Col className="step-summary-item-text">{data?.subscriptionRefillLimit} <FormattedMessage id="Marketing.refills" /></Col>
             </Row>}
           </>
-          break;
         case 3:
           // return <Row className="step-summary-item">
           //   <Col className="step-summary-sub-title">
@@ -393,7 +385,6 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
               {level?.fullGiftDetailList.map((item) => (item?.productName ? item?.productName + ' ' : null))}
             </Col>
           </Row>
-          break;
         case 4:
           return <Row className="step-summary-item">
             <Col className="step-summary-sub-title">
@@ -403,7 +394,6 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
               {level?.fullLeafletDetailList.map((item) => (item?.productName ? item?.productName + ' ' : null))}
             </Col>
           </Row>
-          break;
         case 5:
           return <Row className="step-summary-item">
             <Col className="step-summary-sub-title">
@@ -413,7 +403,6 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
               {level?.fullLeafletDetailList.map((item) => (item?.productName ? item?.productName + ' ' : null))}
             </Col>
           </Row>
-          break;
       }
     }
 

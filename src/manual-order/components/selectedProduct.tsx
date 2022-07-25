@@ -34,7 +34,9 @@ export default class SelectedProduct extends React.Component<any, any> {
         visible: false
       },
       () => {
-    ((guest && guestKey) || !guest) ? this.getGoodsInfoCartsList(guestKey) :null;
+        if (((guest && guestKey) || !guest)) {
+          this.getGoodsInfoCartsList(guestKey)
+        }
       }
     );
   };

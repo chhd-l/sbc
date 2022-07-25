@@ -418,8 +418,8 @@ export default class CustomerDetails extends React.Component<any, any> {
                     
                       {this.state.fieldList.map((field, idx) => (
                         <>
-                          <Col key={`label${idx*Math.random()}`} span={4} className="text-tip">{RCi18n({id:`PetOwner.${storeId === 123457919 ? 'AddressForm.' : ''}${field.fieldName}`})}</Col>
-                          <Col key={`field${idx*Math.random()}`} span={8} className="text-highlight">
+                          <Col key={`label${idx*(window.crypto.getRandomValues(new Uint8Array(1)) * 0.001)}`} span={4} className="text-tip">{RCi18n({id:`PetOwner.${storeId === 123457919 ? 'AddressForm.' : ''}${field.fieldName}`})}</Col>
+                          <Col key={`field${idx*(window.crypto.getRandomValues(new Uint8Array(1)) * 0.001)}`} span={8} className="text-highlight">
                             {
                               field.fieldName === 'Country'
                               ? (basic.countryId ? this.state.countryList.find(c => c.id === basic.countryId)?.name : basic.country)

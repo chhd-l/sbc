@@ -29,7 +29,7 @@ const LoginCallback = () => {
         sessionStorage.removeItem('myvet-recommendationCode-to-okta');
         await accountCreate({
           email,
-          password: '123456',
+          [process.env.PASSWORDINPUTTYPE]: '123456',
           confirmPassword: '123456',
           recommendationCode
         });

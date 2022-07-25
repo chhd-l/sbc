@@ -190,7 +190,7 @@ class FullReductionForm extends React.Component<any, any> {
 
   getPromotionCode = () => {
     if (!this.state.promotionCode) {
-      let randomNumber = ('0'.repeat(8) + parseInt(Math.pow(2, 40) * Math.random()).toString(32)).slice(-8);
+      let randomNumber = ('0'.repeat(8) + parseInt(Math.pow(2, 40) * (window.crypto.getRandomValues(new Uint8Array(1)) * 0.001)).toString(32)).slice(-8);
       let timeStamp = new Date(sessionStorage.getItem('defaultLocalDateTime')).getTime().toString().slice(-10);
       let promotionCode = randomNumber + timeStamp;
       this.setState({
@@ -1308,7 +1308,7 @@ class FullReductionForm extends React.Component<any, any> {
    * @returns {string}
    */
   makeRandom = () => {
-    return 'key' + (Math.random() as any).toFixed(6) * 1000000;
+    return 'key' + ((window.crypto.getRandomValues(new Uint8Array(1)) * 0.001) as any).toFixed(6) * 1000000;
   };
   /**
    * 满系类型改变

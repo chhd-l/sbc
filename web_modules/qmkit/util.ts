@@ -525,3 +525,12 @@ export function optimizeImage(
     ? `${CDN_PREFIX}width=${width},h=${height ?? width}/${originImageUrl}`
     : originImageUrl;
 }
+
+/**
+ * 获取随机数
+ */
+export function getRandomValues() {
+  const crypto = window.crypto || window.msCrypto;
+  var array = new Uint8Array(1);
+  return crypto.getRandomValues(array) * 0.001;
+}

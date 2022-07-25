@@ -74,7 +74,7 @@ export default class LeafletList extends React.Component<any, any> {
     return (
       <div>
         {dataSource.toJS().map((level) => (
-          <div key={Math.random()}>
+          <div key={(window.crypto.getRandomValues(new Uint8Array(1)) * 0.001)}>
             <GreyBg>
               <Row>
                 <Col span={24}>

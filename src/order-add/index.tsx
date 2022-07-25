@@ -141,7 +141,7 @@ export default class OrderRepresentCustomer extends React.Component<any, any> {
         onCreateOrder(this.state.edit);
       } else {
         this.setState({
-          flushStatus: Math.random()
+          flushStatus: (window.crypto.getRandomValues(new Uint8Array(1)) * 0.001)
         });
       }
     });

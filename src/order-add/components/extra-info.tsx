@@ -297,7 +297,7 @@ export default class ExtraForm extends React.Component<any, any> {
                   });
                 }}
               >
-                <Option key={Math.random()} value="-1">
+                <Option key={(window.crypto.getRandomValues(new Uint8Array(1)) * 0.001)} value="-1">
                   <FormattedMessage id="Order.noInvoiceRequired" />
                 </Option>
                 {invoiceOptions.map((option) => (

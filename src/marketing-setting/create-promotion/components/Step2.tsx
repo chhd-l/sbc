@@ -5,6 +5,7 @@ import { Const, QMMethod } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { FormContext } from '../index';
 import { enumConst } from '@/marketing-setting/create-promotion/enum';
+import TextArea from 'antd/lib/input/TextArea';
 
 const { RangePicker } = DatePicker;
 
@@ -88,6 +89,32 @@ function Step2({ form }) {
             />,
           )}
         </Form.Item>
+        {/* 现暂时限制 MYVETRECO 不要 */}
+        {Const.SITE_NAME !== 'MYVETRECO' && (
+          <Form.Item label={<FormattedMessage id="Marketing.Description" />}>
+            {getFieldDecorator('description', {
+              initialValue: formData.BasicSetting.description,
+              rules: [
+                {
+                  min: 0, max: 500, message:
+                    (window as any).RCi18n({
+                      id: 'Marketing.500Words'
+                    })
+                }
+              ],
+            })(
+              <TextArea
+                placeholder={(window as any).RCi18n({ id: 'Marketing.PleaseWriteDescriton' })}
+                allowClear
+                autoSize={{ minRows: 5, maxRows: 50 }}
+                maxLength={500}
+                style={{ width: 350 }}
+              />
+
+            )}
+          </Form.Item>
+        )}
+
       </Form>
 
       <ButtonLayer step={1} toNext={toNext} />

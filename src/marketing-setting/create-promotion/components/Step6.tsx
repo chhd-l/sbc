@@ -6,6 +6,7 @@ import { enumConst } from '../enum';
 import { cache, Const } from 'qmkit';
 import * as webapi from '@/marketing-setting/webapi';
 import { message } from 'antd';
+import TextArea from 'antd/lib/input/TextArea';
 
 export default function Step6({ setLoading }) {
   const { formData, setStep, setDetail, match } = useContext<any>(FormContext);
@@ -539,6 +540,26 @@ export default function Step6({ setLoading }) {
                 {formData.BasicSetting.time?.[1]?.format('YYYY-MM-DD HH:mm')}
               </div>
             </div>
+            {/* 现暂时限制 MYVETRECO 不要 */}
+            {Const.SITE_NAME !== 'MYVETRECO' && (
+              <div className="step-summary-item">
+                <div className="step-summary-sub-title">
+                  {/*  Description */}
+                  <FormattedMessage id="Marketing.Description" />:
+                </div>
+                <div className="step-summary-item-text" style={{ wordBreak: 'break-word', width: 265 }}>
+                  <TextArea
+                    rows={5}
+                    // autoSize={{ minRows: 5, maxRows: 50 }}
+                    value={formData.BasicSetting.description}
+                    // style={{ width: '100%' }}
+                    readOnly
+                  />
+
+                </div>
+              </div>
+            )}
+
           </div>
 
           <div>

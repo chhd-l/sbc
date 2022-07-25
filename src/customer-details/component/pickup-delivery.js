@@ -16,10 +16,10 @@ export default class PickupDelivery extends React.Component {
     defaultCity: '',
     pickupAddress: [],
     pickupEditNumber: 0,
-    updateConfirmPickupDisabled: () => { },
-    updatePickupLoading: () => { },
-    updatePickupEditNumber: () => { },
-    updateData: () => { }
+    updateConfirmPickupDisabled: () => {},
+    updatePickupLoading: () => {},
+    updatePickupEditNumber: () => {},
+    updateData: () => {}
   };
   constructor(props) {
     super(props);
@@ -64,7 +64,8 @@ export default class PickupDelivery extends React.Component {
             require: true
           },
           {
-            regExp: /^(\+7|7|8)?[\s\-]?\(?[0-9][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/,
+            regExp:
+              /^(\+7|7|8)?[\s\-]?\(?[0-9][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/,
             errMsg: RCi18n({ id: 'PetOwner.ThisFieldIsRequired' }),
             key: 'phoneNumber',
             require: true
@@ -87,6 +88,7 @@ export default class PickupDelivery extends React.Component {
 
     // 监听iframe的传值
     window.addEventListener('message', (e) => {
+      if (e.origin !== location.origin) return;
       // 地图上选择快递公司后返回
       if (e?.data?.type == 'get_delivery_point') {
         const { pickupForm } = this.state;
@@ -151,9 +153,7 @@ export default class PickupDelivery extends React.Component {
 
     // 有默认city且无缓存 或者 有缓存
     let pickupEditNumber = this.props.pickupEditNumber;
-    let defaultCity = this.props.defaultCity
-      ? this.props.defaultCity
-      : sitem?.cityData?.city;
+    let defaultCity = this.props.defaultCity ? this.props.defaultCity : sitem?.cityData?.city;
     // defaultCity ? (defaultCity = defaultCity) : (defaultCity = sitem?.cityData?.city);
     // 有默认城市但没有缓存
     if ((defaultCity && !sitem) || (defaultCity && pickupEditNumber == 0) || pickupEditNumber > 0) {
@@ -217,7 +217,7 @@ export default class PickupDelivery extends React.Component {
         let ckg = await webapi.dimensionsByPackage({
           goodsInfoDetails: this.props.subscribeGoods
         });
-   
+
         if (ckg?.res?.context?.dimensions) {
           let ckgobj = ckg.res.context;
           data['dimensions'] = ckgobj?.dimensions;
@@ -231,7 +231,6 @@ export default class PickupDelivery extends React.Component {
       // 根据不同的城市信息查询
       res = await webapi.pickupQueryCityFee(data);
       if (res?.res?.context?.tariffs.length) {
-
         // 'COURIER'=> home delivery、'PVZ'=> pickup
         let obj = res.res.context.tariffs;
 
@@ -300,7 +299,6 @@ export default class PickupDelivery extends React.Component {
           searchNoResult: true
         });
       }
-
     } catch (err) {
       console.warn(err);
     } finally {
@@ -321,8 +319,8 @@ export default class PickupDelivery extends React.Component {
     sitem?.homeAndPickup.forEach((v, i) => {
       if (v.type == val) {
         // 选中 pickup
-        if (v.type == 'pickup'){
-          pickupItem = v
+        if (v.type == 'pickup') {
+          pickupItem = v;
         }
         // v.type == 'pickup' ? (pickupItem = v) : null;
       }
@@ -379,7 +377,7 @@ export default class PickupDelivery extends React.Component {
         break;
     }
 
-    childFrameObj.contentWindow.postMessage({ msg: msg }, '*');
+    childFrameObj.contentWindow.postMessage({ msg: msg }, location.origin);
   };
   // 编辑pickup
   editPickup = () => {
@@ -418,17 +416,12 @@ export default class PickupDelivery extends React.Component {
         if (targetRule.require && !val) {
           throw new Error(targetRule.errMsg);
         }
-        if (
-          targetRule.require &&
-          targetRule.regExp &&
-          val &&
-          !targetRule.regExp.test(val)
-        ) {
+        if (targetRule.require && targetRule.regExp && val && !targetRule.regExp.test(val)) {
           throw new Error(targetRule.errMsg);
         }
       }
     }
-  }
+  };
   // pickup表单验证
   pickupValidvalidat = async (tname, tvalue) => {
     const { pickupForm, pickupErrMsgs } = this.state;
@@ -458,8 +451,7 @@ export default class PickupDelivery extends React.Component {
       pickupForm.consigneeNumber = pickupForm.phoneNumber;
       this.props.updateConfirmPickupDisabled(false);
       this.props.updateData(pickupForm);
-    } catch {
-    }
+    } catch {}
   };
   // 文本框输入改变
   inputChange = (e) => {
@@ -578,8 +570,9 @@ export default class PickupDelivery extends React.Component {
               {/* 城市搜索 begin */}
               <div className="form-group rc-full-width rc-input--full-width">
                 <div
-                  className={`rc-input rc-input--inline rc-full-width rc-input--full-width pickup_search_box ${searchNoResult ? 'pickup_search_box_errmsg' : null
-                    }`}
+                  className={`rc-input rc-input--inline rc-full-width rc-input--full-width pickup_search_box ${
+                    searchNoResult ? 'pickup_search_box_errmsg' : null
+                  }`}
                 >
                   <SearchSelection
                     queryList={async ({ inputVal }) => {
@@ -601,10 +594,7 @@ export default class PickupDelivery extends React.Component {
                     isBottomPaging={true}
                   />
                   {searchNoResult && (
-                    <span
-                      className="close_search_errmsg"
-                      onClick={this.closeSearchErrMsg}
-                    ></span>
+                    <span className="close_search_errmsg" onClick={this.closeSearchErrMsg}></span>
                   )}
                 </div>
                 {searchNoResult && (
@@ -621,10 +611,7 @@ export default class PickupDelivery extends React.Component {
           {/* pickup相关 begin */}
           <div className={`pickup_box`}>
             {/* 地图 */}
-            <div
-              className={`pickup_map_box ${showPickup ? 'flex' : 'hidden'
-                }`}
-            >
+            <div className={`pickup_map_box ${showPickup ? 'flex' : 'hidden'}`}>
               <iframe
                 id="pickupIframe"
                 src="/pickup-map"
@@ -642,9 +629,7 @@ export default class PickupDelivery extends React.Component {
               <div className="pickup_infos">
                 <div className="info_tit">
                   <div className="tit_left">{pickupForm.pickupName}</div>
-                  <div className="tit_right">
-                    {currencySymbol + ' ' + pickupForm.pickupPrice}
-                  </div>
+                  <div className="tit_right">{currencySymbol + ' ' + pickupForm.pickupPrice}</div>
                 </div>
                 <div className="infos">
                   <div className="panel_address">{pickupForm.address1}</div>
@@ -657,10 +642,7 @@ export default class PickupDelivery extends React.Component {
                   >
                     <FormattedMessage id="Subscription.MoreDetails" />
                   </button>
-                  <button
-                    className="rc-btn rc-btn--sm rc-btn--one"
-                    onClick={this.editPickup}
-                  >
+                  <button className="rc-btn rc-btn--sm rc-btn--one" onClick={this.editPickup}>
                     <FormattedMessage id="Subscription.Edit" />
                   </button>
                 </div>
@@ -671,10 +653,7 @@ export default class PickupDelivery extends React.Component {
             {showPickupDetailDialog && courierInfo ? (
               <div className="pickup_detail_dialog">
                 <div className="pk_detail_box">
-                  <span
-                    className="pk_btn_close"
-                    onClick={this.hidePickupDetailDialog}
-                  ></span>
+                  <span className="pk_btn_close" onClick={this.hidePickupDetailDialog}></span>
                   <div className="pk_tit_box">
                     <div className="pk_detail_title">
                       {pickupForm.pickupName} ({pickupForm.pickupCode})
@@ -683,18 +662,10 @@ export default class PickupDelivery extends React.Component {
                       {currencySymbol + ' ' + pickupForm.pickupPrice}
                     </div>
                   </div>
-                  <div className="pk_detail_address pk_addandtime">
-                    {pickupForm.address1}
-                  </div>
-                  <div className="pk_detail_worktime pk_addandtime">
-                    {pickupForm.workTime}
-                  </div>
-                  <div className="pk_detail_dop_title">
-                    Дополнительная информация
-                  </div>
-                  <div className="pk_detail_description">
-                    {pickupForm.pickupDescription}
-                  </div>
+                  <div className="pk_detail_address pk_addandtime">{pickupForm.address1}</div>
+                  <div className="pk_detail_worktime pk_addandtime">{pickupForm.workTime}</div>
+                  <div className="pk_detail_dop_title">Дополнительная информация</div>
+                  <div className="pk_detail_description">{pickupForm.pickupDescription}</div>
                 </div>
               </div>
             ) : null}
@@ -703,10 +674,7 @@ export default class PickupDelivery extends React.Component {
             <div className={`row rc_form_box rc_pickup_form ${showPickupForm ? 'flex' : 'hidden'}`}>
               <div className="col-md-7 mb-2">
                 <div className="form-group required">
-                  <label
-                    className="form-control-label"
-                    htmlFor="firstNameShipping"
-                  >
+                  <label className="form-control-label" htmlFor="firstNameShipping">
                     <FormattedMessage id="Order.FirstName" />
                   </label>
                   {this.inputJSX('firstName')}
@@ -714,10 +682,7 @@ export default class PickupDelivery extends React.Component {
               </div>
               <div className="col-md-7 mb-2">
                 <div className="form-group required">
-                  <label
-                    className="form-control-label"
-                    htmlFor="lastNameShipping"
-                  >
+                  <label className="form-control-label" htmlFor="lastNameShipping">
                     <FormattedMessage id="Order.LastName" />
                   </label>
                   {this.inputJSX('lastName')}
@@ -725,10 +690,7 @@ export default class PickupDelivery extends React.Component {
               </div>
               <div className="col-md-7 mb-2">
                 <div className="form-group required">
-                  <label
-                    className="form-control-label"
-                    htmlFor="phoneNumberShipping"
-                  >
+                  <label className="form-control-label" htmlFor="phoneNumberShipping">
                     <FormattedMessage id="Order.Phonenumber" />
                   </label>
                   {this.inputJSX('phoneNumber')}
@@ -743,12 +705,10 @@ export default class PickupDelivery extends React.Component {
                 </div>
               </div>
             </div>
-
           </div>
           {/* pickup相关 end */}
-
         </Spin>
       </>
     );
   }
-};
+}

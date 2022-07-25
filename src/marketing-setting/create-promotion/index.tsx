@@ -260,7 +260,8 @@ export default function index({ ...props }) {
          */
         BasicSetting: {
           marketingName: detail.marketingName,
-          time: [moment(detail.beginTime), moment(detail.endTime)]
+          time: [moment(detail.beginTime), moment(detail.endTime)],
+          description: detail?.promotionDescription
         },
         /**
          * 第三步
@@ -368,7 +369,8 @@ export default function index({ ...props }) {
          */
         BasicSetting: {
           marketingName: detail.couponName,
-          time: [moment(detail.startTime), moment(detail.endTime)]
+          time: [moment(detail.startTime), moment(detail.endTime)],
+          description: detail?.couponDescription
         },
         /**
          * 第三步

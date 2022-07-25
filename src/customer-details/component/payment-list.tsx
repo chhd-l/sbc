@@ -240,7 +240,6 @@ export default class PaymentList extends React.Component<Iprop, any> {
                 default:
                   return text
               }
-              break;
             case 123457929:
               switch (record?.paymentItem) {
                 case 'ADYEN_IDEAL':
@@ -248,7 +247,6 @@ export default class PaymentList extends React.Component<Iprop, any> {
                 default:
                   return text
               }
-              break;
             case 123457908:
               switch (record?.paymentItem) {
                 case 'ADYEN_PAYPAL':
@@ -256,11 +254,9 @@ export default class PaymentList extends React.Component<Iprop, any> {
                 default:
                   return text
               }
-              break;
 
             default:
               return text
-              break;
           }
         }
       },

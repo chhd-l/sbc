@@ -7,6 +7,7 @@ import { cache, Const } from 'qmkit';
 import * as webapi from '@/marketing-setting/webapi';
 import { message } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
+import { isNumber } from 'lodash';
 
 export default function Step6({ setLoading }) {
   const { formData, setStep, setDetail, match } = useContext<any>(FormContext);
@@ -48,6 +49,7 @@ export default function Step6({ setLoading }) {
     return array;
   };
   /**
+   * typeOfPromotion 0:Promotion code 1:Coupon code
    * SubType 0：满金额减 1：满数量减 2：满金额折 3：满数量折 4：满金额赠 5：满数量赠 6：Subscription减
    *         7：Subscription折 8：学生折扣 9：首单折 10：满金额免邮 11：满数量免邮 12：CONSUMPTION GIFT[club gift]
    *         13：WELCOME_BOX_GIFT
@@ -70,6 +72,7 @@ export default function Step6({ setLoading }) {
         couponName: formData.BasicSetting.marketingName, //改版用到的字段
         startTime: formData.BasicSetting.time[0]?.format('YYYY-MM-DD HH:mm:ss'), //改版用到的字段
         endTime: formData.BasicSetting.time[1]?.format('YYYY-MM-DD HH:mm:ss'), //改版用到的字段
+        couponDescription: formData.BasicSetting?.description ? formData.BasicSetting?.description : '',
         /**
          * 第三步
          */
@@ -112,7 +115,7 @@ export default function Step6({ setLoading }) {
           formData.Advantage.couponPromotionType === 1
             ? 1 - parseInt(formData.Advantage.couponDiscount) / 100
             : 0,
-        appliesType: formData.Advantage.couponPromotionType === 1 ? formData.Advantage.appliesType : null,
+        appliesType: isNumber(formData.Advantage.couponPromotionType) ? formData.Advantage.appliesType : null,
         limitAmount:
           formData.Advantage.couponPromotionType === 1 ? formData.Advantage.limitAmount : null,
         fullGiftDetailList:
@@ -145,7 +148,8 @@ export default function Step6({ setLoading }) {
         BasicSetting: {
           marketingName: formData.BasicSetting.marketingName,
           beginTime: formData.BasicSetting.time[0]?.format('YYYY-MM-DD HH:mm:ss'),
-          endTime: formData.BasicSetting.time[1]?.format('YYYY-MM-DD HH:mm:ss')
+          endTime: formData.BasicSetting.time[1]?.format('YYYY-MM-DD HH:mm:ss'),
+          promotionDescription: formData.BasicSetting?.description ? formData.BasicSetting?.description : ''
         },
         PromotionType: {
           marketingUseLimit: {

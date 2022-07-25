@@ -2,6 +2,7 @@ import { useOktaAuth } from '@okta/okta-react';
 import React, { useEffect } from 'react';
 import { login, cache, getRoutType, Const, util } from 'qmkit';
 import { Row, Col, Spin } from 'antd';
+import MarsFooter from './use-mars-footer';
 const bg_selectRole = require('../img/bg-SelectRole.jpg');
 const role_RC = require('../img/role-RC.png');
 const role_Perscriber = require('../img/role-Perscriber.png');
@@ -60,7 +61,10 @@ let LoginHome = (props) => {
       </div>
     </div>
   ) : Const.SITE_NAME === 'MYVETRECO' ? (
-    <MyvetrecoLoginForm useOkta={true} onLogin={loginpPercriberOkta} />
+    <>
+      <MyvetrecoLoginForm useOkta={true} onLogin={loginpPercriberOkta} />
+      <MarsFooter />
+    </>
   ) : (
     <div>
       <div style={styles.container}>
@@ -100,6 +104,7 @@ let LoginHome = (props) => {
           Cookie Settings
         </button>
       </div>
+      <MarsFooter />
     </div>
   );
 };

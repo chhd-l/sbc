@@ -977,9 +977,13 @@ class OrderDetailTab extends React.Component<any, any> {
                     <p>
                       <FormattedMessage id="Order.Entrance" />: {consignee.entrance}
                     </p>
-                    <p>
-                      <FormattedMessage id="Order.timeSlot" />: {consignee.timeSlot}
-                    </p>
+                    {
+                      (storeId === 123457919 || storeId === 123457907)?(
+                        <p>
+                          <FormattedMessage id="Order.timeSlot" />: {consignee.timeSlot}
+                        </p>
+                      ):null
+                    }
                     <Tooltip
                       overlayStyle={{
                         overflowY: 'auto'
@@ -1020,18 +1024,23 @@ class OrderDetailTab extends React.Component<any, any> {
                     <p>
                       <FormattedMessage id="Order.Apartment" />: {consignee.apartment}
                     </p>
-                    <Tooltip
-                      overlayStyle={{
-                        overflowY: 'auto'
-                      }}
-                      placement="bottomLeft"
-                      title={<div>{getFormatDeliveryDateStr(consignee.deliveryDate)}</div>}
-                    >
-                      <p className="overFlowtext">
-                        <FormattedMessage id="Order.deliveryDate" />:{' '}
-                        {getFormatDeliveryDateStr(consignee.deliveryDate)}
-                      </p>
-                    </Tooltip>
+                    {
+                      (storeId === 123457907 || storeId == 123457919) ? (
+                        <Tooltip
+                          overlayStyle={{
+                            overflowY: 'auto'
+                          }}
+                          placement="bottomLeft"
+                          title={<div>{getFormatDeliveryDateStr(consignee.deliveryDate)}</div>}
+                        >
+                          <p className="overFlowtext">
+                            <FormattedMessage id="Order.deliveryDate" />:{' '}
+                            {getFormatDeliveryDateStr(consignee.deliveryDate)}
+                          </p>
+                        </Tooltip>
+                      ):null
+                    }
+                    
                     {storeId === 123457907 && (
                       <Tooltip
                         overlayStyle={{

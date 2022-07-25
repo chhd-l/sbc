@@ -19,9 +19,7 @@ importScripts(
 
 self.addEventListener('message', (event) => {
   if(event.data && event.data.type !== 'SKIP_WAITING') return
-  if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
-  }
 });
 
 workbox.core.clientsClaim();

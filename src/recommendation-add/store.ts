@@ -54,7 +54,7 @@ export default class AppStore extends Store {
             return item
           })
           if (petsList.length > 0) {
-            petsList.map(item => {
+            petsList.forEach(item => {
               item.birthOfPets = moment(item.birthOfPets).format('YYYY-MM-DD')
             })
           }

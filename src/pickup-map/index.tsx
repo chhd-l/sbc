@@ -23,7 +23,7 @@ class PickupMap extends Component<any, any> {
     document.addEventListener('kaktusEvent', (e: any) => {
       try {
         // 传递给父页面
-        window.parent.postMessage(e.detail, '*');
+        window.parent.postMessage(e.detail, location.origin);
       } catch (error) {
         console.log('666 >>> error: ', error);
       }
@@ -41,6 +41,7 @@ class PickupMap extends Component<any, any> {
     window.addEventListener(
       'message',
       (e) => {
+        if (e.origin !== location.origin) return;
         if (e?.data?.msg) {
           let msg = e.data.msg;
           if (msg == 'clearMap') {
@@ -91,7 +92,7 @@ class PickupMap extends Component<any, any> {
   // 页面加载完成后向父级发送数据
   sendMsgLoadComplete = () => {
     try {
-      window.parent.postMessage({ loading: 'succ' }, '*');
+      window.parent.postMessage({ loading: 'succ' }, location.origin);
     } catch (error) {
       console.log('666 >>> error: ', error);
     }

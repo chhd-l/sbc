@@ -1,10 +1,8 @@
+import { Button, Card, Checkbox, Col, Empty, Form, Input, Menu, message, Row, Select, Spin, Table, Tabs } from 'antd';
+import { Const } from 'qmkit';
 import React from 'react';
-import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, Menu, Card, Checkbox, Empty, Spin } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
-import { Tabs } from 'antd';
-import { FormattedMessage } from 'react-intl';
-import { Const } from 'qmkit';
 
 const { TextArea } = Input;
 

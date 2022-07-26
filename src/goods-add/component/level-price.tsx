@@ -1,13 +1,14 @@
-import * as React from 'react';
-import { Form, Input, Checkbox, Table, InputNumber, Tooltip, Icon } from 'antd';
-import { Relax } from 'plume2';
+import { Checkbox, Form, Icon, Input, InputNumber, Table, Tooltip } from 'antd';
 import { fromJS } from 'immutable';
+import { Relax } from 'plume2';
 import { noop, ValidConst } from 'qmkit';
-import { IList, IMap } from 'typings/globalType';
-
-import UserPrice from './user-price';
+import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import styled from 'styled-components';
+import { IList, IMap } from 'typings/globalType';
+import UserPrice from './user-price';
+
+const FormItem = Form.Item;
 
 const CustomerSPU = styled.div`
   .has-error .ant-form-explain,
@@ -17,7 +18,6 @@ const CustomerSPU = styled.div`
 `;
 
 const { Column } = Table;
-const FormItem = Form.Item;
 
 @Relax
 export default class LevelPrice extends React.Component<any, any> {
@@ -25,75 +25,95 @@ export default class LevelPrice extends React.Component<any, any> {
 
   props: {
     relaxProps?: {
-      marketPrice: number;
-      costPrice: number;
-      openUserPrice: boolean;
-      editPriceSetting: Function;
-      userLevelList: IList;
-      editUserLevelPriceItem: Function;
-      updateLevelPriceForm: Function;
-      userLevelPrice: IMap;
-      editGoods: Function;
       //起订量同步
       levelCountChecked: boolean;
       levelCountDisable: boolean;
+      editPriceSetting: Function;
+      userLevelList: IList;
       updateLevelCountChecked: Function;
       synchLevelCount: Function;
+      marketPrice: number;
+      updateLevelPriceForm: Function;
+      userLevelPrice: IMap;
+      costPrice: number;
+      openUserPrice: boolean;
+      editUserLevelPriceItem: Function;
+      editGoods: Function;
       //限订量同步
-      levelMaxCountChecked: boolean;
-      levelMaxCountDisable: boolean;
       updateLevelMaxCountChecked: Function;
+      levelMaxCountChecked: boolean;
       synchLevelMaxCount: Function;
+      levelMaxCountDisable: boolean;
     };
   };
 
   static relaxProps = {
+    userLevelPrice: 'userLevelPrice',
+    // 编辑商品字段(这边主要用于编辑spu统一市场价)
+    editGoods: noop,
+    //起订量同步
+    levelCountChecked: 'levelCountChecked',
     marketPrice: ['goods', 'marketPrice'],
     costPrice: 'costPrice',
     // 是否开启按客户单独定价
     openUserPrice: 'openUserPrice',
     // 修改价格设置
     editPriceSetting: noop,
+    //限订量同步
+    levelMaxCountChecked: 'levelMaxCountChecked',
+    levelMaxCountDisable: 'levelMaxCountDisable',
+    updateLevelMaxCountChecked: noop,
     // 级别列表
     userLevelList: 'userLevelList',
     // 修改价格表属性
     editUserLevelPriceItem: noop,
     updateLevelPriceForm: noop,
     // 级别价格数据
-    userLevelPrice: 'userLevelPrice',
-    // 编辑商品字段(这边主要用于编辑spu统一市场价)
-    editGoods: noop,
-    //起订量同步
-    levelCountChecked: 'levelCountChecked',
     levelCountDisable: 'levelCountDisable',
     updateLevelCountChecked: noop,
     synchLevelCount: noop,
-    //限订量同步
-    levelMaxCountChecked: 'levelMaxCountChecked',
-    levelMaxCountDisable: 'levelMaxCountDisable',
-    updateLevelMaxCountChecked: noop,
     synchLevelMaxCount: noop
   };
 
   constructor(props) {
     super(props);
+
     this.WrapperForm = Form.create({})(LevelPriceForm);
   }
 
   render() {
     const WrapperForm = this.WrapperForm;
-    const relaxProps = this.props.relaxProps;
+
+    let relaxProps = this.props.relaxProps;
+
     const { updateLevelPriceForm } = relaxProps;
-    return <WrapperForm ref={(form) => form && updateLevelPriceForm(form)} {...{ relaxProps: relaxProps }} />;
+
+    return (
+      <WrapperForm
+        ref={(form) => form && updateLevelPriceForm(form)}
+        {...{ relaxProps: relaxProps }}
+      />
+    );
   }
 }
 
 class LevelPriceForm extends React.Component<any, any> {
   render() {
-    const { getFieldDecorator } = this.props.form;
-    const { marketPrice, openUserPrice, userLevelList, userLevelPrice, levelCountChecked, levelCountDisable, levelMaxCountChecked, levelMaxCountDisable } = this.props.relaxProps;
+    let { getFieldDecorator } = this.props.form;
+
+    let {
+      marketPrice,
+      openUserPrice,
+      userLevelList,
+      userLevelPrice,
+      levelCountChecked,
+      levelCountDisable,
+      levelMaxCountChecked,
+      levelMaxCountDisable
+    } = this.props.relaxProps;
+
     return (
-      <div>
+      <div key='GoodsAddComponentsLevelPrice'>
         <div style={styles.bar}>
           <Form className="login-form" layout="inline">
             <CustomerSPU>
@@ -117,27 +137,51 @@ class LevelPriceForm extends React.Component<any, any> {
                       }
                     }
                   ],
-                  onChange: (e) => this.props.relaxProps.editGoods(fromJS({ ['marketPrice']: e.target.value })),
+                  onChange: (e) =>
+                    this.props.relaxProps.editGoods(fromJS({ ['marketPrice']: e.target.value })),
                   initialValue: marketPrice
                 })(<Input style={{ maxWidth: 120, marginRight: 5 }} />)}
-                <Tooltip placement="top" title={'按照客户设价时需要填写统一的市场价，保存后，原有的SKU市场价将会被覆盖'}>
+                <Tooltip
+                  placement="top"
+                  title={'按照客户设价时需要填写统一的市场价，保存后，原有的SKU市场价将会被覆盖'}
+                >
                   <a style={{ fontSize: 14 }}>
                     <Icon type="question-circle-o" />
                   </a>
                 </Tooltip>
               </FormItem>
-              <Checkbox onChange={this._editPriceSetting.bind(this, 'openUserPrice')} checked={openUserPrice} style={{ marginTop: 8 }}>
+              <Checkbox
+                onChange={this._editPriceSetting.bind(this, 'openUserPrice')}
+                checked={openUserPrice}
+                style={{ marginTop: 8 }}
+              >
                 Price separately by customer
               </Checkbox>
             </CustomerSPU>
             {/*级别价table*/}
-            <Table dataSource={userLevelList.toJS()} pagination={false} rowKey="customerLevelId" style={{ paddingTop: '10px' }} scroll={{ y: 240 }}>
-              <Column title="Level" key="customerLevelName" dataIndex="customerLevelName" width="15%" />
+            <Table
+              dataSource={userLevelList.toJS()}
+              pagination={false}
+              rowKey="customerLevelId"
+              style={{ paddingTop: '10px' }}
+              scroll={{ y: 240 }}
+            >
+              <Column
+                title="Level"
+                key="customerLevelName"
+                dataIndex="customerLevelName"
+                width="15%"
+              />
               <Column
                 title={
                   <div>
                     Default discount price&nbsp;
-                    <Tooltip placement="top" title={'如不填写自定义订货价，该级别售价默认使用折扣价，折扣价=市场价×等级折扣率'}>
+                    <Tooltip
+                      placement="top"
+                      title={
+                        '如不填写自定义订货价，该级别售价默认使用折扣价，折扣价=市场价×等级折扣率'
+                      }
+                    >
                       <a style={{ fontSize: 14 }}>
                         <Icon type="question-circle-o" />
                       </a>
@@ -148,7 +192,10 @@ class LevelPriceForm extends React.Component<any, any> {
                 width="10%"
                 render={(rowInfo) => (
                   <div>
-                    <div>¥{((marketPrice ? marketPrice : 0) * rowInfo.customerLevelDiscount).toFixed(2)}</div>
+                    <div>
+                      ¥
+                      {((marketPrice ? marketPrice : 0) * rowInfo.customerLevelDiscount).toFixed(2)}
+                    </div>
                     <div>{(rowInfo.customerLevelDiscount * 100).toFixed(0) + '%'}</div>
                   </div>
                 )}
@@ -157,7 +204,10 @@ class LevelPriceForm extends React.Component<any, any> {
                 title={
                   <div>
                     Custom order price&nbsp;
-                    <Tooltip placement="top" title={'填写后该级别销售价不会跟随市场价以及等级折扣率变化'}>
+                    <Tooltip
+                      placement="top"
+                      title={'填写后该级别销售价不会跟随市场价以及等级折扣率变化'}
+                    >
                       <a style={{ fontSize: 14 }}>
                         <Icon type="question-circle-o" />
                       </a>
@@ -186,7 +236,8 @@ class LevelPriceForm extends React.Component<any, any> {
                           }
                         ],
                         onChange: this._editPriceItem.bind(this, levelId, 'price'),
-                        initialValue: userLevelPrice.get(levelId) && userLevelPrice.get(levelId).get('price')
+                        initialValue:
+                          userLevelPrice.get(levelId) && userLevelPrice.get(levelId).get('price')
                       })(<Input />)}
                     </FormItem>
                   );
@@ -217,7 +268,9 @@ class LevelPriceForm extends React.Component<any, any> {
                           {
                             level: levelId,
                             validator: (rule, value, callback) => {
-                              let count = userLevelPrice.get(rule.level) ? userLevelPrice.get(rule.level).get('maxCount') : '';
+                              let count = userLevelPrice.get(rule.level)
+                                ? userLevelPrice.get(rule.level).get('maxCount')
+                                : '';
 
                               // form表单initialValue方式赋值不成功，这里通过setFieldsValue方法赋值
                               const fieldsValue = this.props.form.getFieldsValue();
@@ -231,7 +284,13 @@ class LevelPriceForm extends React.Component<any, any> {
                               });
                               // update
                               this.props.form.setFieldsValue(levelPriceFields);
-                              if (count != null && count != '' && value != '' && value != null && value > count) {
+                              if (
+                                count != null &&
+                                count != '' &&
+                                value != '' &&
+                                value != null &&
+                                value > count
+                              ) {
                                 callback('不可大于限订量');
                                 return;
                               }
@@ -240,7 +299,9 @@ class LevelPriceForm extends React.Component<any, any> {
                           }
                         ],
                         onChange: this._editPriceItem.bind(this, levelId, 'count'),
-                        initialValue: userLevelPrice.get(levelId) ? userLevelPrice.get(levelId).get('count') : ''
+                        initialValue: userLevelPrice.get(levelId)
+                          ? userLevelPrice.get(levelId).get('count')
+                          : ''
                       })(<InputNumber disabled={index > 0 && levelCountDisable} />)}
                     </FormItem>
                   );
@@ -271,7 +332,9 @@ class LevelPriceForm extends React.Component<any, any> {
                           {
                             level: levelId,
                             validator: (rule, value, callback) => {
-                              let count = userLevelPrice.get(rule.level) ? userLevelPrice.get(rule.level).get('count') : '';
+                              let count = userLevelPrice.get(rule.level)
+                                ? userLevelPrice.get(rule.level).get('count')
+                                : '';
 
                               // form表单initialValue方式赋值不成功，这里通过setFieldsValue方法赋值
                               const fieldsValue = this.props.form.getFieldsValue();
@@ -286,7 +349,13 @@ class LevelPriceForm extends React.Component<any, any> {
                               // update
                               this.props.form.setFieldsValue(levelPriceFields);
 
-                              if (count != null && count != '' && value != '' && value != null && value < count) {
+                              if (
+                                count != null &&
+                                count != '' &&
+                                value != '' &&
+                                value != null &&
+                                value < count
+                              ) {
                                 callback('不可小于起订量');
                                 return;
                               }
@@ -295,7 +364,9 @@ class LevelPriceForm extends React.Component<any, any> {
                           }
                         ],
                         onChange: this._editPriceItem.bind(this, levelId, 'maxCount'),
-                        initialValue: userLevelPrice.get(levelId) ? userLevelPrice.get(levelId).get('maxCount') : ''
+                        initialValue: userLevelPrice.get(levelId)
+                          ? userLevelPrice.get(levelId).get('maxCount')
+                          : ''
                       })(<InputNumber min={1} disabled={index > 0 && levelMaxCountDisable} />)}
                     </FormItem>
                   );
@@ -311,29 +382,16 @@ class LevelPriceForm extends React.Component<any, any> {
   }
 
   /**
-   * 修改价格设置
-   */
-  _editPriceSetting = (key: string, e) => {
-    const { editPriceSetting } = this.props.relaxProps;
-    let checked;
-    let value = e;
-    if (e && e.target) {
-      checked = e.target.checked;
-      value = e.target.value;
-    }
-
-    if (value) {
-      editPriceSetting(key, value);
-    } else {
-      editPriceSetting(key, checked);
-    }
-  };
-
-  /**
    * 修改价格表属性
    */
   _editPriceItem = (userLevelId: string, key: string, e) => {
-    const { editUserLevelPriceItem, synchLevelCount, levelCountChecked, synchLevelMaxCount, levelMaxCountChecked } = this.props.relaxProps;
+    const {
+      editUserLevelPriceItem,
+      synchLevelCount,
+      levelCountChecked,
+      synchLevelMaxCount,
+      levelMaxCountChecked
+    } = this.props.relaxProps;
     if (e && e.target) {
       e = e.target.value;
     }
@@ -379,6 +437,26 @@ class LevelPriceForm extends React.Component<any, any> {
     }
   };
 
+
+  /**
+   * 修改价格设置
+   */
+   _editPriceSetting = (key: string, e) => {
+    let { editPriceSetting } = this.props.relaxProps;
+    let checked;
+    let value = e;
+    if (e && e.target) {
+      checked = e.target.checked;
+      value = e.target.value;
+    }
+
+    if (value) {
+      editPriceSetting(key, value);
+    } else {
+      editPriceSetting(key, checked);
+    }
+  };
+
   /**
    * 同步起订量库存
    */
@@ -408,29 +486,37 @@ class LevelPriceForm extends React.Component<any, any> {
    * 同步起订量库存
    */
   _synchLevelMaxCount = (e) => {
-    const { updateLevelMaxCountChecked, userLevelPrice, synchLevelMaxCount } = this.props.relaxProps;
+    let { userLevelPrice, synchLevelMaxCount, updateLevelMaxCountChecked } =
+      this.props.relaxProps;
+
     updateLevelMaxCountChecked(e.target.checked);
+    
     synchLevelMaxCount();
+
     // 是否同步值
     if (e.target.checked) {
       let count = userLevelPrice.get('0') ? userLevelPrice.get('0').get('maxCount') : '';
+
       // form表单initialValue方式赋值不成功，这里通过setFieldsValue方法赋值
-      const fieldsValue = this.props.form.getFieldsValue();
+      let fieldsValue = this.props.form.getFieldsValue();
+
       // 同步值
       let levelPriceFields = {};
+
       Object.getOwnPropertyNames(fieldsValue).forEach((field) => {
         // 级别价的表单字段以levelmaxcount_开头
         if (field.indexOf('levelmaxcount_') === 0) {
           levelPriceFields[field] = count;
         }
       });
+
       // update
       this.props.form.setFieldsValue(levelPriceFields);
     }
   };
 }
 
-const styles = {
+let styles = {
   bar: {
     padding: 10
   }

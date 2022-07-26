@@ -1,24 +1,23 @@
+import { fromJS, Map } from 'immutable';
 import { Store } from 'plume2';
 import DetailActor from './actor/detail-actor';
-import LoadingActor from './actor/loading-actor';
-import TidActor from './actor/tid-actor';
-import TabActor from './actor/tab-actor';
-import PayRecordActor from './actor/pay-record-actor';
 import dictActor from './actor/dict-actor';
-import { fromJS, Map } from 'immutable';
+import LoadingActor from './actor/loading-actor';
+import PayRecordActor from './actor/pay-record-actor';
+import TabActor from './actor/tab-actor';
+import TidActor from './actor/tid-actor';
 
+import { message } from 'antd';
+import { Const, history, RCi18n, ValidConst } from 'qmkit';
+import LogisticActor from './actor/logistic-actor';
 import * as webapi from './webapi';
 import {
   addPay,
   fetchLogistics,
   fetchOrderDetail,
   payRecord,
-  queryDictionary,
-  refresh
+  queryDictionary
 } from './webapi';
-import { message } from 'antd';
-import LogisticActor from './actor/logistic-actor';
-import { Const, history, RCi18n, ValidConst } from 'qmkit';
 
 export default class AppStore extends Store {
   bindActor() {
@@ -213,8 +212,10 @@ export default class AppStore extends Store {
    * 确认收货
    */
   confirm = async () => {
-    const tid = this.state().getIn(['detail', 'id']);
-    const { res } = await webapi.confirm(tid);
+    let tid = this.state().getIn(['detail', 'id']);
+
+    let { res } = await webapi.confirm(tid);
+
     if (res.code == Const.SUCCESS_CODE) {
       //成功
       message.success(RCi18n({ id: 'Order.OperateSuccessfully' }));
@@ -244,27 +245,15 @@ export default class AppStore extends Store {
    * 发货
    */
   saveDelivery = async (param) => {
-    const tid = this.state().getIn(['detail', 'id']);
 
-    // if (__DEV__) {
-    // }
-    // const shippingItemList = tradeItems.filter((v) => {
-    //   return v.get('deliveringNum') && v.get('deliveringNum') != 0
-    // }).map((v) => {
-    //   return {
-    //     skuId: v.get('skuId'),
-    //     skuNo: v.get('skuNo'),
-    //     itemNum: v.get('deliveringNum')
-    //   }
-    // }).toJS()
-    //
-    //
+    let tid = this.state().getIn(['detail', 'id']);
 
     let tradeDelivery = Map();
     tradeDelivery = tradeDelivery.set(
       'shippingItemList',
       this.handleShippingItems(this.state().getIn(['detail', 'tradeItems']), '1')
     );
+
     tradeDelivery = tradeDelivery.set(
       'giftItemList',
       this.handleShippingItems(this.state().getIn(['detail', 'gifts']), '2')
@@ -275,10 +264,13 @@ export default class AppStore extends Store {
     );
     tradeDelivery = tradeDelivery.set('deliverNo', param.deliverNo);
     tradeDelivery = tradeDelivery.set('deliverId', param.deliverId);
+
     tradeDelivery = tradeDelivery.set('deliverTime', param.deliverTime);
     tradeDelivery = tradeDelivery.set('deliverBagNo', param.deliverBagNo || '');
+
     this.dispatch('detail-actor:setIsSavingShipment', true);
     const { res } = await webapi.deliver(tid, tradeDelivery);
+
     this.dispatch('detail-actor:setIsSavingShipment', false);
     if (res.code == Const.SUCCESS_CODE) {
       //成功
@@ -289,21 +281,26 @@ export default class AppStore extends Store {
   };
 
   handleShippingItems = (tradeItems, productType) => {
+    
     return tradeItems
       .filter((v) => {
+
         return v.get('deliveringNum') && v.get('deliveringNum') != 0;
       })
       .map((v) => {
+
         if (productType == 3) {
           return {
             skuId: v.get('goodsInfoId'),
             skuNo: v.get('goodsInfoNo'),
-            itemNum: v.get('deliveringNum'),
+            itemNum: v.get('deliveringNum')
             // goodsInfoId: v.get('goodsId'),
             // goodsInfoNo: v.get('goodsNo')
           };
         } else {
+
           return {
+
             skuId: v.get('skuId'),
             skuNo: v.get('skuNo'),
             itemNum: v.get('deliveringNum'),
@@ -321,9 +318,10 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   obsoleteDeliver = async (params) => {
-    const tid = this.state().getIn(['detail', 'id']);
 
-    const { res } = await webapi.obsoleteDeliver(tid, params);
+    let tid = this.state().getIn(['detail', 'id']);
+
+    let { res } = await webapi.obsoleteDeliver(tid, params);
     if (res.code == Const.SUCCESS_CODE) {
       message.success(RCi18n({ id: 'Order.OperateSuccessfully' }));
       this.init(tid);
@@ -336,9 +334,11 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   retrial = async (_params) => {
-    const tid = this.state().getIn(['detail', 'id']);
 
-    const { res } = await webapi.retrial(tid);
+    let tid = this.state().getIn(['detail', 'id']);
+
+    let { res } = await webapi.retrial(tid);
+
     if (res.code == Const.SUCCESS_CODE) {
       this.init(tid);
       message.success(RCi18n({ id: 'Order.OperateSuccessfully' }));
@@ -351,16 +351,19 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   destroyOrder = async (params) => {
-    const tid = this.state().getIn(['detail', 'id']);
-    const { res: verifyRes } = await webapi.verifyAfterProcessing(tid);
 
+    const tid = this.state().getIn(['detail', 'id']);
+//
+    const { res: verifyRes } = await webapi.verifyAfterProcessing(tid);
+//
     if (verifyRes.code === Const.SUCCESS_CODE && verifyRes.context.length > 0) {
+      //
       message.error('订单已申请退货，不能作废收款记录');
       return;
     }
-
+//
     const { res } = await webapi.destroyOrder(params);
-
+//
     if (res.code === Const.SUCCESS_CODE) {
       message.success(RCi18n({ id: 'Order.OperateSuccessfully' }));
       this.init(tid);
@@ -371,7 +374,7 @@ export default class AppStore extends Store {
    * 显示/取消卖家备注修改
    * @param param
    */
-  setSellerRemarkVisible = (param: boolean) => {
+  setSellerRemarkVisible = (param: boolean) => {//
     this.dispatch('detail-actor:setSellerRemarkVisible', param);
   };
 
@@ -379,8 +382,9 @@ export default class AppStore extends Store {
    * 设置卖家备注
    * @param param
    */
-  setSellerRemark = (param: string) => {
-    this.dispatch('detail-actor:remedySellerRemark', param);
+  setSellerRemark = (param: string) => {//
+
+    this.dispatch('detail-actor:remedySellerRemark', param);//
   };
 
   /**
@@ -388,16 +392,23 @@ export default class AppStore extends Store {
    * @param param
    * @returns {Promise<void>}
    */
-  remedySellerRemark = async () => {
+  remedySellerRemark = async () => {//
+    //
     const tid = this.state().getIn(['detail', 'id']);
+    //
     const sellerRemark = this.state().get('remedySellerRemark');
+    //
     if (sellerRemark.length > 60) {
+      //
       message.error('备注长度不得超过60个字符');
       return;
     }
     const { res } = await webapi.remedySellerRemark(tid, sellerRemark);
+    //
     if (res.code === Const.SUCCESS_CODE) {
+      //
       message.success(RCi18n({ id: 'Order.OperateSuccessfully' }));
+      //
       const tid = this.state().getIn(['detail', 'id']);
       this.init(tid);
     }
@@ -408,22 +419,26 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   fetchLogistics = async () => {
+    //
     const { res: logistics } = (await webapi.fetchLogistics()) as any;
-
+//
     this.dispatch('logistics:init', logistics.context ? logistics.context : []);
   };
-
+//
   /**
    * 验证订单客户是否已刪除
    * @returns {Promise<void>}
    */
   verify = async (tid: string) => {
+    //
     const buyerId = this.state().getIn(['detail', 'buyer', 'id']);
     const { res } = await webapi.verifyBuyer(buyerId);
     if (res) {
+      //
       message.error(RCi18n({ id: 'Order.modifiedErr' }));
       return;
     } else {
+      //
       history.push('/order-edit/' + tid);
     }
   };
@@ -435,11 +450,13 @@ export default class AppStore extends Store {
   fetchOffLineAccounts = async () => {
     const { res } = await webapi.checkFunctionAuth('/account/receivable', 'POST');
     if (!res.context) {
+      //
       message.error('此功能您没有权限访问');
       return;
     }
 
     const result = await webapi.fetchOffLineAccout();
+    //
     if (result) {
       this.dispatch('receive-record-actor:setReceiveVisible');
     }
@@ -449,6 +466,7 @@ export default class AppStore extends Store {
    * 设置添加收款记录是否显示
    */
   setReceiveVisible = () => {
+    //
     this.dispatch('receive-record-actor:setReceiveVisible');
   };
 
@@ -457,9 +475,11 @@ export default class AppStore extends Store {
    */
   onConfirm = async (id) => {
     let ids = [];
+    //
     ids.push(id);
     const { res } = await webapi.payConfirm(ids);
     if (res.code === Const.SUCCESS_CODE) {
+      //
       message.success(RCi18n({ id: 'Order.OperateSuccessfully' }));
       const tid = this.state().getIn(['detail', 'id']);
       this.init(tid);
@@ -470,6 +490,7 @@ export default class AppStore extends Store {
    * 显示驳回弹框
    */
   showRejectModal = () => {
+    //
     this.dispatch('detail-actor:reject:show');
   };
 
@@ -477,6 +498,7 @@ export default class AppStore extends Store {
    *关闭驳回弹框
    */
   hideRejectModal = () => {
+    //
     this.dispatch('detail-actor:reject:hide');
   };
 }

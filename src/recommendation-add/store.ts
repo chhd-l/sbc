@@ -20,7 +20,7 @@ export default class AppStore extends Store {
   }
   uuid = () => {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-      var r = Math.random() * 16 | 0,
+      var r = Math.rdmValue() * 16 | 0,
         v = c == 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
     });
@@ -54,7 +54,7 @@ export default class AppStore extends Store {
             return item
           })
           if (petsList.length > 0) {
-            petsList.map(item => {
+            petsList.forEach(item => {
               item.birthOfPets = moment(item.birthOfPets).format('YYYY-MM-DD')
             })
           }

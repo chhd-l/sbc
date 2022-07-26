@@ -515,7 +515,7 @@ export default function Step6({ setLoading }) {
    * @returns {string}
    */
   const makeRandom = () => {
-    return 'key' + (Math.random() as any).toFixed(6) * 1000000;
+    return 'key' + (Math.rdmValue() as any).toFixed(6) * 1000000;
   };
   return (
     <div>

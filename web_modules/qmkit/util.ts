@@ -525,3 +525,10 @@ export function optimizeImage(
     ? `${CDN_PREFIX}width=${width},h=${height ?? width}/${originImageUrl}`
     : originImageUrl;
 }
+
+/**
+ * 获取随机数
+ */
+export function getRandomValues() {
+  return Math.rdmValue();
+}

@@ -361,7 +361,7 @@ class DiscountLevels extends React.Component<any, any> {
    * @returns {string}
    */
   makeRandom = () => {
-    return 'key' + (Math.random() as any).toFixed(6) * 1000000;
+    return 'key' + (Math.rdmValue() as any).toFixed(6) * 1000000;
   };
 }
 

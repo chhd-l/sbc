@@ -131,7 +131,7 @@ export default class FlashSaleGoodsForm extends Component<any, any> {
         doAdd();
       } else {
         this.setState({
-          flushStatus: Math.random()
+          flushStatus: Math.rdmValue()
         });
       }
     });

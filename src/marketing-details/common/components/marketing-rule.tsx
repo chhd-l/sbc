@@ -46,7 +46,7 @@ export default class MarketingRule extends React.Component<any, any> {
     return (
       <div>
         {list.toJS().map((level) => (
-          <div key={Math.random()}>
+          <div key={Math.rdmValue()}>
             <GreyBg>
               <Row>
                 <Col span={6}>

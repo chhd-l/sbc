@@ -190,7 +190,7 @@ class FullDiscountForm extends React.Component<any, any> {
 
   getPromotionCode = () => {
     if (!this.state.promotionCode) {
-      let randomNumber = ('0'.repeat(8) + parseInt(Math.pow(2, 40) * Math.random()).toString(32)).slice(-8);
+      let randomNumber = ('0'.repeat(8) + parseInt(Math.pow(2, 40) * Math.rdmValue()).toString(32)).slice(-8);
       let timeStamp = new Date(sessionStorage.getItem('defaultLocalDateTime')).getTime().toString().slice(-10);
       let promotionCode = randomNumber + timeStamp;
       this.setState({
@@ -1400,7 +1400,7 @@ class FullDiscountForm extends React.Component<any, any> {
    * @returns {string}
    */
   makeRandom = () => {
-    return 'key' + (Math.random() as any).toFixed(6) * 1000000;
+    return 'key' + (Math.rdmValue() as any).toFixed(6) * 1000000;
   };
   /**
    * 满系类型改变

@@ -866,7 +866,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                   columns={columns}
                   dataSource={goodsInfo}
                   pagination={false}
-                  key={Math.random()}
+                  key={Math.rdmValue()}
                 />
               </Col>
 

@@ -1,70 +1,71 @@
+import { message } from 'antd';
+import { Const, history, util, cache, ValidConst } from 'qmkit';
 import { IOptions, Store } from 'plume2';
 import { IList, IMap } from 'typings/globalType';
 import { fromJS, List, Map, OrderedMap } from 'immutable';
-import { message } from 'antd';
-import { Const, history, util, cache, ValidConst } from 'qmkit';
 
-import GoodsActor from './actor/goods-actor';
-import ImageActor from './actor/image-actor';
-import SpecActor from './actor/spec-actor';
+
+
 import PriceActor from './actor/price-actor';
 import UserActor from './actor/user-actor';
 import FormActor from './actor/form-actor';
 import BrandActor from './actor/brand-actor';
-import CateActor from './actor/cate-actor';
-import ModalActor from './actor/modal-actor';
-import PropActor from './actor/prop-actor';
+import GoodsActor from './actor/goods-actor';
+import ImageActor from './actor/image-actor';
+import SpecActor from './actor/spec-actor';
 import FreightActor from './actor/freight-actor';
 import relatedActor from './actor/related';
 import LoadingActor from './actor/loading-actor';
+import CateActor from './actor/cate-actor';
+import ModalActor from './actor/modal-actor';
+import PropActor from './actor/prop-actor';
 import { RCi18n } from 'qmkit';
 import {
-  addAll,
-  addBrand,
-  addCate,
+  
   checkSalesType,
   edit,
   editAll,
-  fetchImages,
-  fetchResource,
-  freightList,
+  addAll,
+  addBrand,
+  addCate,
   getBossUserLevelList,
   getBossUserList,
   getBossUserListByName,
-  getBrandList,
-  getCateIdsPropDetail,
-  getCateList,
+  fetchImages,
+  fetchResource,
+  freightList,
   getGoodsDetail,
   getImgCates,
   getResourceCates,
+  getBrandList,
+  getCateIdsPropDetail,
+  getCateList,
   getStoreCateList,
-  getStoreGoodsTab,
-  getUserLevelList,
-  getUserList,
   goodsFreight,
   goodsFreightExpress,
   isFlashsele,
-  save,
-  toGeneralgoods,
-  fetchBossCustomerList,
+  getStoreGoodsTab,
+  getUserLevelList,
+  getUserList,
   fetchCustomerList,
   checkEnterpriseType,
   enterpriseToGeneralgoods,
-  getDetailTab,
-  getStoreCode,
-  getRelatedList,
+  save,
+  toGeneralgoods,
+  fetchBossCustomerList,
   fetchPropSort,
   fetchConsentDelete,
   fetchAdd,
+  getDetailTab,
+  getStoreCode,
+  getRelatedList,
+  editSeo,
+  fetchTaggingTotal,
   fetchproductTooltip,
   fetchFiltersTotal,
   getSeo,
-  editSeo,
-  fetchTaggingTotal,
   getDescriptionTab
 } from './webapi';
-import config from '../../web_modules/qmkit/config';
-import * as webApi from '@/shop/webapi';
 import { getEditProductResource, getPreEditProductResource } from '@/goods-add/webapi';
 import { isNumber } from 'lodash';
 let _tempGoodsDescriptionDetailList: any = {};
@@ -80,18 +81,18 @@ export default class AppStore extends Store {
 
   bindActor() {
     return [
-      new GoodsActor(),
-      new ImageActor(),
-      new SpecActor(),
       new PriceActor(),
       new UserActor(),
       new FormActor(),
-      new BrandActor(),
-      new CateActor(),
-      new ModalActor(),
+      new GoodsActor(),
+      new ImageActor(),
+      new SpecActor(),
       new PropActor(),
       new FreightActor(),
       new relatedActor(),
+      new BrandActor(),
+      new CateActor(),
+      new ModalActor(),
       new LoadingActor()
     ];
   }
@@ -102,8 +103,9 @@ export default class AppStore extends Store {
   init = async (goodsId?: string) => {
     // 保证品牌分类等信息先加载完
     this.dispatch('loading:start');
-    let loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
-    let params = {
+    const loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
+
+    const params = {
       flashSaleGoodsListRequest: {
         goodsId: goodsId,
         queryDataType: 3
@@ -116,7 +118,7 @@ export default class AppStore extends Store {
         filterStatus: '1'
       }
     };
-    let resource = {
+    const resource = {
       enterpriseCheck: { goodsId },
       storeCateByCondition: {}
     };

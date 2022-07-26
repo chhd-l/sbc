@@ -1,4 +1,5 @@
 import { Fetch } from 'qmkit';
+import {TResult} from 'qmkit/type';
 
 
 /**
@@ -55,11 +56,6 @@ export function deleteCustomerLevel(customerLevelId) {
 }
 
 
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
 
 
 

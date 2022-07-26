@@ -1,10 +1,5 @@
-import {Fetch} from 'qmkit'
-
-type TResult = {
-  code:string,
-  message:string,
-  context:any
-}
+import {Fetch} from 'qmkit';
+import {TResult} from 'qmkit/type';
 
 // 获取log详情
 export function getLogDetail(requestId) {

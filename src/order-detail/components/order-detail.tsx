@@ -53,8 +53,8 @@ class RejectForm extends React.Component<any, any> {
             ]
           })(
             <Input.TextArea
-              placeholder={(window as any).RCi18n({ id: 'Order.RejectionReasonTip' })}
               autosize={{ minRows: 4, maxRows: 4 }}
+              placeholder={(window as any).RCi18n({ id: 'Order.RejectionReasonTip' })}
             />
           )}
         </FormItem>
@@ -88,43 +88,43 @@ class OrderDetailTab extends React.Component<any, any> {
   props: {
     intl?: any;
     relaxProps?: {
+      hideRejectModal: Function;
+      refreshGoodsRealtimeStock: Function;
       detail: IMap;
       countryDict: List<any>;
       onAudit: Function;
       confirm: Function;
       retrial: Function;
-      remedySellerRemark: Function;
-      setSellerRemark: Function;
       verify: Function;
       onDelivery: Function;
       orderRejectModalVisible: boolean;
       showRejectModal: Function;
-      hideRejectModal: Function;
-      refreshGoodsRealtimeStock: Function;
+      remedySellerRemark: Function;
+      setSellerRemark: Function;
     };
   };
 
   static relaxProps = {
-    detail: 'detail',
     countryDict: 'countryDict',
-    onAudit: noop,
-    confirm: noop,
-    retrial: noop,
     orderRejectModalVisible: 'orderRejectModalVisible',
+    detail: 'detail',
+    retrial: noop,
     remedySellerRemark: noop,
     setSellerRemark: noop,
     verify: noop,
     onDelivery: noop,
     showRejectModal: noop,
     hideRejectModal: noop,
-    refreshGoodsRealtimeStock: noop
+    refreshGoodsRealtimeStock: noop,
+    onAudit: noop,
+    confirm: noop,
   };
   state = {
     visiblePetDetails: false,
     moreData: [],
+    tableLoading: false,
     visibleMoreFields: false,
     currentPet: {},
-    tableLoading: false,
     switchSerficeFee: false,
     switchSerficeFeeCalculation: false
   };
@@ -381,9 +381,9 @@ class OrderDetailTab extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="Order.purchaseType" />,
+        width: '7%',
         dataIndex: 'goodsInfoFlag',
         key: 'goodsInfoFlag',
-        width: '7%',
         render: (text) => {
           switch (text) {
             case 0:
@@ -402,8 +402,8 @@ class OrderDetailTab extends React.Component<any, any> {
       {
         title: <FormattedMessage id="Order.Subscriptionumber" />,
         dataIndex: 'subscriptionSourceList',
-        key: 'subscriptionSourceList',
         width: '9%',
+        key: 'subscriptionSourceList',
         render: (text, record) =>
           record.subscriptionSourceList && record.subscriptionSourceList.length > 0
             ? record.subscriptionSourceList.map((x) => x.subscribeId).join(',')
@@ -411,9 +411,9 @@ class OrderDetailTab extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="Order.petName" />,
+        width: '6%',
         dataIndex: 'petsName',
         key: 'petsName',
-        width: '6%',
         render: (text, record) => (
           <a onClick={() => this._openPetDetails(record.petsInfo)}>
             {record.petsInfo ? record.petsInfo.petsName : ''}

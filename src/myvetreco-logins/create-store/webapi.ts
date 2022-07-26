@@ -1,11 +1,7 @@
 
 import { Fetch, Const } from 'qmkit';
 
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
+import {TResult} from 'qmkit/type';
 export function onContactAgreement(params) {
   return Fetch<TResult>('/store/create/contactAgreement',{
     method: 'post',

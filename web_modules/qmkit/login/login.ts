@@ -4,11 +4,7 @@ import {InitLanguage} from '../lang/webapi'
 import { fromJS } from 'immutable';
 import { message,notification } from 'antd';
 
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
+import {TResult} from 'qmkit/type';
 let shouldChangeLanguageSetting = false;
 
 export function getRoutType(callbackUrl: string) {

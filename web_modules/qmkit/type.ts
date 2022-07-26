@@ -3,3 +3,8 @@ export type TResult = {
     message: string;
     context: any;
   };
+
+export type TResult2 = {
+    code: string;
+    message: string;
+  };

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-import { Table, Input, Row, Col, Checkbox, InputNumber, Form, Button, message, Tooltip, Icon, Select } from 'antd';
+import { Table, Input, Row, Col, Checkbox, InputNumber, Form, message, Tooltip, Icon, Select } from 'antd';
 import { IList, IMap } from 'typings/globalType';
 import { fromJS, List } from 'immutable';
 import { noop, ValidConst } from 'qmkit';
@@ -19,7 +19,6 @@ export default class SkuTable extends React.Component<any, any> {
 
   props: {
     relaxProps?: {
-      goodsSpecs: IList;
       goodsList: IList;
       stockChecked: boolean;
       marketPriceChecked: boolean;
@@ -30,6 +29,7 @@ export default class SkuTable extends React.Component<any, any> {
       deleteGoodsInfo: Function;
       updateSkuForm: Function;
       updateChecked: Function;
+      goodsSpecs: IList;
       synchValue: Function;
       clickImg: Function;
       removeImg: Function;
@@ -46,10 +46,10 @@ export default class SkuTable extends React.Component<any, any> {
     goodsList: 'goodsList',
     stockChecked: 'stockChecked',
     marketPriceChecked: 'marketPriceChecked',
-    specSingleFlag: 'specSingleFlag',
     spuMarketPrice: ['goods', 'marketPrice'],
     priceOpt: 'priceOpt',
     baseSpecId: 'baseSpecId',
+    specSingleFlag: 'specSingleFlag',
     editGoodsItem: noop,
     deleteGoodsInfo: noop,
     updateSkuForm: noop,
@@ -73,7 +73,6 @@ export default class SkuTable extends React.Component<any, any> {
         // ref={(form) => updateSkuForm(form)}
         {...{ relaxProps: this.props.relaxProps }}
       />
-      // <SkuForm />
     );
   }
 }
@@ -88,7 +87,6 @@ class SkuForm extends React.Component<any, any> {
 
   render() {
     const { goodsList, goods, goodsSpecs, baseSpecId } = this.props.relaxProps;
-    // const {  } = this.state
     const columns = this._getColumns();
     // if(this.state.count < 100) {
     //   let count = this.state.count + 1
@@ -117,8 +115,8 @@ class SkuForm extends React.Component<any, any> {
         .map((item) => {
           return {
             title: item.get('specName'),
+            key: item.get('specId'),
             dataIndex: 'specId-' + item.get('specId'),
-            key: item.get('specId')
           };
         })
         .toList();
@@ -126,16 +124,6 @@ class SkuForm extends React.Component<any, any> {
     columns = columns.unshift({
       title: (
         <div>
-          {/* <span
-            style={{
-              color: 'red',
-              fontFamily: 'SimSun',
-              marginRight: '4px',
-              fontSize: '12px'
-            }}
-          >
-            *
-          </span> */}
           <FormattedMessage id="product.image" />
         </div>
       ),
@@ -212,12 +200,6 @@ class SkuForm extends React.Component<any, any> {
           <Col span={12}>
             <FormItem style={styles.tableFormItem}>
               {getFieldDecorator('linePrice_' + rowInfo.id, {
-                // rules: [
-                //   {
-                //     pattern: ValidConst.number,
-                //     message: 'Please enter the correct value'
-                //   }
-                // ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'linePrice'),
                 initialValue: rowInfo.linePrice || 0
               })(<InputNumber disabled style={{ width: '60px' }} min={0} max={9999999} precision={2} />)}
@@ -269,8 +251,8 @@ class SkuForm extends React.Component<any, any> {
                   },
                   {
                     type: 'number',
-                    max: 9999999.99,
                     message: RCi18n({id:'Product.maximumvalue'}),
+                    max: 9999999.99,
                     transform: function (value) {
                       return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
                     }
@@ -379,18 +361,6 @@ class SkuForm extends React.Component<any, any> {
                   <div>
                     <p>{isNaN(parseFloat(rowInfo.marketPrice) / parseFloat(rowInfo['specId-' + baseSpecId])) ? '0' : (parseFloat(rowInfo.marketPrice) / parseFloat(rowInfo['specId-' + baseSpecId])).toFixed(2)}</p>
                     <p>{isNaN(parseFloat(rowInfo.subscriptionPrice) / parseFloat(rowInfo['specId-' + baseSpecId])) ? '0' : (parseFloat(rowInfo.subscriptionPrice) / parseFloat(rowInfo['specId-' + baseSpecId])).toFixed(2)}</p>
-                    {/* <InputNumber
-                    style={{ width: '60px' }}
-                    min={0}
-                    max={9999999}
-                    disabled
-                  />
-                  <InputNumber
-                    style={{ width: '60px' }}
-                    min={0}
-                    max={9999999}
-                    disabled={rowInfo.subscriptionStatus === 0}
-                  /> */}
                   </div>
                 )}
               </FormItem>
@@ -411,12 +381,6 @@ class SkuForm extends React.Component<any, any> {
           <Col span={12}>
             <FormItem style={styles.tableFormItem}>
               {getFieldDecorator('description_' + rowInfo.id, {
-                rules: [
-                  // {
-                  //   pattern: ValidConst.number,
-                  //   message: 'Please enter the correct value'
-                  // }
-                ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'description'),
                 initialValue: rowInfo.description
               })(<Input style={{ width: '100px' }} min={0} max={9999999} disabled={rowInfo.description === 0} />)}
@@ -431,8 +395,8 @@ class SkuForm extends React.Component<any, any> {
           <span
             style={{
               color: 'red',
-              fontFamily: 'SimSun',
               marginRight: '4px',
+              fontFamily: 'SimSun',
               fontSize: '12px'
             }}
           >
@@ -471,32 +435,6 @@ class SkuForm extends React.Component<any, any> {
         </Row>
       )
     });
-    // columns = columns.push({
-    //   title: '条形码',
-    //   key: 'goodsInfoBarcode',
-    //   render: (rowInfo) => (
-    //     <Row>
-    //       <Col span={12}>
-    //         <FormItem style={styles.tableFormItem}>
-    //           {getFieldDecorator('goodsInfoBarcode_' + rowInfo.id, {
-    //             rules: [
-    //               {
-    //                 max: 20,
-    //                 message: '0-20字符'
-    //               }
-    //             ],
-    //             onChange: this._editGoodsItem.bind(
-    //               this,
-    //               rowInfo.id,
-    //               'goodsInfoBarcode'
-    //             ),
-    //             initialValue: rowInfo.goodsInfoBarcode
-    //           })(<Input />)}
-    //         </FormItem>
-    //       </Col>
-    //     </Row>
-    //   )
-    // });
 
     columns = columns.push({
       // title: <FormattedMessage id="operation" />,
@@ -631,50 +569,3 @@ const styles = {
     padding: '2px'
   }
 };
-
-// import { Table } from 'antd';
-
-// const columns = [
-//   {
-//     title: 'Name',
-//     dataIndex: 'name',
-//   },
-//   {
-//     title: 'Age',
-//     dataIndex: 'age',
-//   },
-//   {
-//     title: 'Address',
-//     dataIndex: 'address',
-//   },
-// ];
-// const data = [
-//   {
-//     key: '1',
-//     name: 'John Brown',
-//     age: 32,
-//     address: 'New York No. 1 Lake Park',
-//   },
-//   {
-//     key: '2',
-//     name: 'Jim Green',
-//     age: 42,
-//     address: 'London No. 1 Lake Park',
-//   },
-//   {
-//     key: '3',
-//     name: 'Joe Black',
-//     age: 32,
-//     address: 'Sidney No. 1 Lake Park',
-//   },
-// ];
-
-// ReactDOM.render(
-//   <div>
-//     <h4>Middle size table</h4>
-//     <Table columns={columns} dataSource={data} size="middle" />
-//     <h4>Small size table</h4>
-//     <Table columns={columns} dataSource={data} size="small" />
-//   </div>,
-//   mountNode,
-// );

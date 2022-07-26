@@ -1,10 +1,6 @@
-import {Fetch} from 'qmkit'
+import {Fetch} from 'qmkit';
+import {TResult} from 'qmkit/type';
 
-type TResult = {
-  code:string,
-  message:string,
-  context:any
-}
 
 // 获取system列表
 export function fetchSystemList() {

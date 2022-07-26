@@ -1,4 +1,5 @@
 import { Fetch } from 'qmkit';
+import {TResult} from 'qmkit/type';
 
 export function fetchEmployList(params = {}) {
   return Fetch<TResult>('/customer/employees', {
@@ -23,11 +24,7 @@ export function fetchAllRoles() {
  * @param customerIds
  * @returns {Promise<IAsyncResult<T>>}
  */
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
+
 
 /**
  * 删除

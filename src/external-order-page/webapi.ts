@@ -1,4 +1,5 @@
 import { Fetch } from 'qmkit';
+import {TResult} from 'qmkit/type';
 
 export const fetchOrderList = (filter = {}) => {
   return Fetch<TResult>('/trade', {
@@ -7,11 +8,7 @@ export const fetchOrderList = (filter = {}) => {
   });
 };
 
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
+
 
 /**
  * 列表

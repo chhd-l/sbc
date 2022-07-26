@@ -1,9 +1,5 @@
 import { Fetch } from 'qmkit';
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
+import {TResult} from 'qmkit/type';
 
 export function getStatisticsData(startDate, endDate) {
   return Fetch<TResult>('/search/details/statistics' + '?startDate=' + startDate + '&endDate=' + endDate, {

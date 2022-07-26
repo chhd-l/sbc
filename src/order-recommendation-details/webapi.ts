@@ -2,11 +2,7 @@ import { Fetch } from 'qmkit';
 import { Button } from 'antd';
 import React from 'react';
 
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
+import {TResult} from 'qmkit/type';
 
 /**
  * 详情列表

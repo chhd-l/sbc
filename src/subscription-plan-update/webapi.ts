@@ -1,10 +1,6 @@
 import { Fetch } from 'qmkit';
 
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
+import {TResult} from 'qmkit/type';
 
 export function getSubscriptionPlanById(id) {
   return Fetch<TResult>('/sub/plan/detail/' + id, {

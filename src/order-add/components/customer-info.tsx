@@ -14,11 +14,7 @@ const AreaSelectBox = styled.div`
 `;
 const Option = AutoComplete.Option;
 
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
+import {TResult} from 'qmkit/type';
 
 type TList = List<any>;
 const formItemLayout = {

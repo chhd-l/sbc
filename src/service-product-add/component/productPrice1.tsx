@@ -52,11 +52,11 @@ export default class SkuTable extends React.Component<any, any> {
     baseSpecId: 'baseSpecId',
     editGoodsItem: noop,
     deleteGoodsInfo: noop,
-    updateSkuForm: noop,
     updateChecked: noop,
     synchValue: noop,
     clickImg: noop,
     removeImg: noop,
+    updateSkuForm: noop,
     modalVisible: noop
   };
 
@@ -70,7 +70,6 @@ export default class SkuTable extends React.Component<any, any> {
     const { updateSkuForm } = this.props.relaxProps;
     return (
       <WrapperForm
-        // ref={(form) => updateSkuForm(form)}
         {...{ relaxProps: this.props.relaxProps }}
       />
       // <SkuForm />
@@ -99,7 +98,7 @@ class SkuForm extends React.Component<any, any> {
     return (
       <div style={{ marginBottom: 20 }}>
         <Form>
-          <Table size="small" rowKey="id" dataSource={goodsList.toJS()} columns={columns} pagination={false} />
+          <Table rowKey="id" dataSource={goodsList.toJS()} columns={columns} pagination={false} size="small" />
         </Form>
       </div>
     );
@@ -139,8 +138,8 @@ class SkuForm extends React.Component<any, any> {
           <FormattedMessage id="product.image" />
         </div>
       ),
-      key: 'img',
       className: 'goodsImg',
+      key: 'img',
       render: (rowInfo) => {
         const images = fromJS(rowInfo.images ? rowInfo.images : []);
         return <ImageLibraryUpload images={images} modalVisible={modalVisible} clickImg={clickImg} removeImg={removeImg} imgCount={1} imgType={1} skuId={rowInfo.id} />;
@@ -185,8 +184,8 @@ class SkuForm extends React.Component<any, any> {
                       message: RCi18n({id:'Product.PleaseInputSKU'}),
                     },
                     {
-                      min: 1,
                       max: 20,
+                      min: 1,
                       message: '1-20 characters'
                     }
                   ],
@@ -212,15 +211,9 @@ class SkuForm extends React.Component<any, any> {
           <Col span={12}>
             <FormItem style={styles.tableFormItem}>
               {getFieldDecorator('linePrice_' + rowInfo.id, {
-                // rules: [
-                //   {
-                //     pattern: ValidConst.number,
-                //     message: 'Please enter the correct value'
-                //   }
-                // ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'linePrice'),
                 initialValue: rowInfo.linePrice || 0
-              })(<InputNumber disabled style={{ width: '60px' }} min={0} max={9999999} precision={2} />)}
+              })(<InputNumber min={0} disabled style={{ width: '60px' }}  max={9999999} precision={2} />)}
             </FormItem>
           </Col>
         </Row>
@@ -499,7 +492,6 @@ class SkuForm extends React.Component<any, any> {
     // });
 
     columns = columns.push({
-      // title: <FormattedMessage id="operation" />,
       key: 'opt',
       render: (rowInfo) =>
         specSingleFlag ? null : (
@@ -508,10 +500,10 @@ class SkuForm extends React.Component<any, any> {
           // </Button>
           <a
             href="#!"
+            title="Delete"
             onClick={() => {
               this._deleteGoodsInfo(rowInfo.id);
             }}
-            title="Delete"
             style={{ marginRight: 5 }}
           >
             <span className="icon iconfont iconDelete" style={{ fontSize: 20 }}></span>
@@ -618,8 +610,8 @@ class SkuForm extends React.Component<any, any> {
 
 const styles = {
   box: {
-    display: 'flex',
     justifyContent: 'center',
+    display: 'flex',
     alignItems: 'center'
   } as any,
   plus: {

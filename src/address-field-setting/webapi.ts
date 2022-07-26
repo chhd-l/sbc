@@ -1,11 +1,6 @@
 import { Fetch, Const } from 'qmkit';
 import {TResult} from 'qmkit/type';
 
-// type TResult = {
-//   code: string;
-//   message: string;
-//   context: any;
-// };
 
 export const getFieldList = async (type: string = 'MANUALLY') => {
   return await Fetch<TResult>('/addressDisplaySetting/queryByStoreId/' + type, {

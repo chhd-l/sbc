@@ -1,11 +1,6 @@
 import { Fetch } from 'qmkit';
 import {TResult} from 'qmkit/type';
 
-// type TResult = {
-//   code: string;
-//   message: string;
-//   context: any;
-// };
 /**
  * 添加卡
  * @param store_id  店铺id

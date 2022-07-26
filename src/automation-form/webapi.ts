@@ -1,11 +1,6 @@
 import { Fetch } from 'qmkit';
 import {TResult} from 'qmkit/type';
 
-// type TResult = {
-//   code: string;
-//   message: string;
-//   context: any;
-// };
 
 export function createAutomation(filterParams = {}) {
   return Fetch<TResult>('/automation/campaign/createCampaign', {

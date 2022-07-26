@@ -1,42 +1,42 @@
 import * as React from 'react';
 import { fromJS, List } from 'immutable';
 import { FormattedMessage, injectIntl} from 'react-intl';
-
 import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row, Select, Spin } from 'antd';
-import { Const, history, QMMethod, util, cache, ValidConst, noop } from 'qmkit';
 import moment from 'moment';
 import * as webapi from '../webapi'
 import { Relax } from 'plume2';
+import { Const, history, QMMethod, util, cache, ValidConst, noop } from 'qmkit';
+import UUID from 'uuid-js';
 
-const FormItem = Form.Item;
-const RadioGroup = Radio.Group;
-const RangePicker = DatePicker.RangePicker;
-const CheckboxGroup = Checkbox.Group;
-const Confirm = Modal.confirm;
+let FormItem = Form.Item;
+let RangePicker = DatePicker.RangePicker;
+let RadioGroup = Radio.Group;
+let CheckboxGroup = Checkbox.Group;
+let Confirm = Modal.confirm;
 
-const formItemLayout = {
-  labelCol: {
-    span: 3
-  },
+let formItemLayout = {
   wrapperCol: {
     span: 21
-  }
-};
-const smallformItemLayout = {
+  },
   labelCol: {
     span: 3
   },
+};
+let smallformItemLayout = {
   wrapperCol: {
     span: 10
-  }
+  },
+  labelCol: {
+  span: 3
+}
 };
 
-const largeformItemLayout = {
-  labelCol: {
-    span: 5
-  },
+let largeformItemLayout = {
   wrapperCol: {
     span: 10
+  },
+  labelCol: {
+    span: 5
   }
 };
 
@@ -46,25 +46,23 @@ class FreeShippingAddForm extends React.Component<any, any> {
     super(props);
     // const relaxProps = props.store.state();
     this.state = {
-      // shippingBean: relaxProps.get('shippingBean'),
       timeZone: moment
-      // allGroups: relaxProps.get('allGroups'),
-      // submitFreeShipping: relaxProps.get('allGroups'),
-      // loading: relaxProps.get('loading')
+      // shippingBean: relaxProps.get('shippingBean'),
+      // allGroups: relaxProps.get('allGroups'), submitFreeShipping: relaxProps.get('allGroups'), loading: relaxProps.get('loading')
     };
   }
   props: {
     form: any;
-    intl: any;
     relaxProps?: {
-      allGroups: any;
       shippingBean: any;
       loading: boolean;
       marketingType: any;
       submitFreeShipping: Function;
       shippingBeanOnChange: Function;
       setMarketingType: Function;
+      allGroups: any;
     };
+    intl: any;
   };
 
   static relaxProps = {
@@ -76,30 +74,20 @@ class FreeShippingAddForm extends React.Component<any, any> {
     shippingBeanOnChange: noop,
     setMarketingType: noop
   };
-  componentDidMount() {}
   /**
    * 页面初始化
    * @returns {Promise<void>}
    */
   init = async () => {};
-
-  /**
-   * 内部方法，修改shippingBean对象的属性
-   * @param params
-   */
-  onBeanChange = (params) => {
-    const { shippingBean, shippingBeanOnChange } = this.props.relaxProps;
-    shippingBeanOnChange(shippingBean.merge(params));
-  };
-
+  componentDidMount() {}
   /**
    * 提交方法
    * @param e
    */
-  handleSubmit = (e) => {
+   handleSubmit = (e) => {
     e.preventDefault();
     let errorObject = {};
-    const { shippingBean, submitFreeShipping } = this.props.relaxProps;
+    let { shippingBean, submitFreeShipping } = this.props.relaxProps;
     this.setState({
       count: 1
     });
@@ -109,10 +97,22 @@ class FreeShippingAddForm extends React.Component<any, any> {
       }
     });
   };
+  /**
+   * 内部方法，修改shippingBean对象的属性
+   * @param params
+   */
+  onBeanChange = (params) => {
+    let { shippingBean, shippingBeanOnChange } = this.props.relaxProps;
+    shippingBeanOnChange(shippingBean.merge(params));
+  };
+
+  productTypeOnChange = (value) => {
+    this.onBeanChange({ productType: value });
+  };
 
   handleEndOpenChange = async (date) => {
     if (date == true) {
-      const { res } = await webapi.timeZone();
+      let { res } = await webapi.timeZone();
       if (res.code == Const.SUCCESS_CODE) {
         this.setState({
           timeZone: res.defaultLocalDateTime
@@ -121,9 +121,12 @@ class FreeShippingAddForm extends React.Component<any, any> {
     }
   };
 
-  productTypeOnChange = (value) => {
-    this.onBeanChange({ productType: value });
+  selectGroupOnChange = (value) => {
+    let segmentIds = [];
+    segmentIds.push(value);
+    this.onBeanChange({ segmentIds });
   };
+
   targetCustomerRadioChange = (value) => {
     this.onBeanChange({
       joinLevel: value,
@@ -131,23 +134,18 @@ class FreeShippingAddForm extends React.Component<any, any> {
     });
   };
 
-  selectGroupOnChange = (value) => {
-    let segmentIds = [];
-    segmentIds.push(value);
-    this.onBeanChange({ segmentIds });
-  };
 
   shippingRadioOnChange = (e, key) => {
     switch (key) {
       case 'subType':
         this.props.form.setFieldsValue({
+          shippingValue: null,
           shippingItemValue: null,
-          shippingValue: null
         });
         this.onBeanChange({
           shippingValue: null,
+          subType: e.target.value,
           shippingItemValue: null,
-          subType: e.target.value
         });
         break;
       case 'shippingValue':
@@ -158,8 +156,8 @@ class FreeShippingAddForm extends React.Component<any, any> {
         break;
       case 'shippingItemValue':
         this.onBeanChange({
-          shippingItemValue: e.target.value,
-          shippingValue: null
+          shippingValue: null,
+          shippingItemValue: e.target.value
         });
         break;
       default:
@@ -169,12 +167,12 @@ class FreeShippingAddForm extends React.Component<any, any> {
 
   getPromotionCode = () => {
     if (!this.state.promotionCode) {
-      let randomNumber = ('0'.repeat(8) + parseInt(Math.pow(2, 40) * Math.random()).toString(32)).slice(-8);
       let timeStamp = new Date(sessionStorage.getItem('defaultLocalDateTime')).getTime().toString().slice(-10);
+      let randomNumber = ('0'.repeat(8) + parseInt(Math.pow(2, 40) * Math.random()).toString(32)).slice(-8);
       let promotionCode = randomNumber + timeStamp;
       this.setState({
+        promotionCode2: promotionCode,
         promotionCode: promotionCode,
-        promotionCode2: promotionCode
       });
       return promotionCode;
     } else {
@@ -182,12 +180,12 @@ class FreeShippingAddForm extends React.Component<any, any> {
     }
   };
   render() {
-    const { form } = this.props; //marketingType, marketingId,
-    const { getFieldDecorator } = this.props.form;
-    const { allGroups, shippingBean, loading, marketingType, setMarketingType } = this.props.relaxProps;
+    let { form } = this.props; //marketingType, marketingId,
+    let { getFieldDecorator } = this.props.form;
+    let { allGroups, shippingBean, loading, marketingType, setMarketingType } = this.props.relaxProps;
     console.log(marketingType, 'marketingType-----------');
     return (
-      <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
+      <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }} key={UUID.create().toString()}>
         <div className="bold-title"><FormattedMessage id="Marketing.ReductionType" />:</div>
         <FormItem {...formItemLayout} labelAlign="left">
         <div className="ant-form-inline">
@@ -197,7 +195,7 @@ class FreeShippingAddForm extends React.Component<any, any> {
               marketingType: e.target.value
             })
           }}>
-            <Radio value={0}><FormattedMessage id="Marketing.Normal" /></Radio>
+            <Radio  id="Marketing.Normal"  value={0}><FormattedMessage/></Radio>
             <Radio value={3}><FormattedMessage id="Marketing.Freeshipping" /></Radio>
           </Radio.Group>
         </div>
@@ -288,16 +286,17 @@ class FreeShippingAddForm extends React.Component<any, any> {
             <FormattedMessage id="Marketing.Public" />
           </Checkbox>
         </FormItem>
-        <FormItem {...smallformItemLayout} label={<FormattedMessage id="Marketing.Freeshippingname" />} labelAlign="left"  className="gift-item">
+        <FormItem {...smallformItemLayout} label={<FormattedMessage id="Marketing.Freeshippingname" />}  className="gift-item" labelAlign="left" >
           {getFieldDecorator('marketingName', {
+            onChange: (e) => this.onBeanChange({ marketingName: e.target.value }),
             rules: [
               {
-                required: true,
                 whitespace: true,
                 message:
                   (window as any).RCi18n({
                     id: 'Marketing.Pleaseenterfreeshippingname',
-                  })
+                  }),
+                required: true,
               },
               { min: 1, max: 40, message:
                   (window as any).RCi18n({
@@ -314,7 +313,6 @@ class FreeShippingAddForm extends React.Component<any, any> {
                 }
               }
             ],
-            onChange: (e) => this.onBeanChange({ marketingName: e.target.value }),
             initialValue: shippingBean.get('marketingName')
           })(<Input placeholder={
             (window as any).RCi18n({
@@ -323,12 +321,20 @@ class FreeShippingAddForm extends React.Component<any, any> {
         </FormItem>
         <FormItem {...smallformItemLayout} label={<FormattedMessage id="Marketing.StartAndEndTime" />} labelAlign="left" className="gift-item">
           {getFieldDecorator('time', {
+            onChange: (date, dateString) => {
+              if (date) {
+                this.onBeanChange({
+                  beginTime: dateString[0] + ':00',
+                  endTime: dateString[1] + ':00'
+                });
+              }
+            },
             rules: [
               {
-                required: true,
                 message: (window as any).RCi18n({
                   id: 'Marketing.PleaseSelectStartingAndEndTime'
-                })
+                }),
+                required: true,
               },
               {
                 validator: (_rule, value, callback) => {
@@ -344,17 +350,8 @@ class FreeShippingAddForm extends React.Component<any, any> {
                 }
               }
             ],
-            onChange: (date, dateString) => {
-              if (date) {
-                this.onBeanChange({
-                  beginTime: dateString[0] + ':00',
-                  endTime: dateString[1] + ':00'
-                });
-              }
-            },
-
             initialValue: shippingBean.get('beginTime') === undefined ? [undefined, undefined] : [moment(shippingBean.get('beginTime')), moment(shippingBean.get('endTime'))]
-          })(<RangePicker getCalendarContainer={() => document.getElementById('page-content')} allowClear={false} format={Const.DATE_FORMAT} placeholder={['Start time', 'End time']} showTime={{ format: 'HH:mm' }} onOpenChange={this.handleEndOpenChange} />)}
+          })(<RangePicker allowClear={false} getCalendarContainer={() => document.getElementById('page-content')} format={Const.DATE_FORMAT} placeholder={['Start time', 'End time']}  onOpenChange={this.handleEndOpenChange} showTime={{ format: 'HH:mm' }} />)}
         </FormItem>
         <div className="bold-title"><FormattedMessage id="Marketing.Freeshippingtype" />:</div>
         <FormItem {...smallformItemLayout} labelAlign="left">
@@ -363,7 +360,7 @@ class FreeShippingAddForm extends React.Component<any, any> {
             {}
           )(
             <>
-              <RadioGroup value={shippingBean.get('subType')} onChange={(e) => this.shippingRadioOnChange(e, 'subType')}>
+              <RadioGroup onChange={(e) => this.shippingRadioOnChange(e, 'subType')}  value={shippingBean.get('subType')} >
                 {/*<FormItem>*/}
                 {/*  <Radio value={1}>All order</Radio>*/}
                 {/*</FormItem>*/}
@@ -372,6 +369,7 @@ class FreeShippingAddForm extends React.Component<any, any> {
                     <span>
                       <FormattedMessage id="Marketing.Orderreach" /> &nbsp;
                       {getFieldDecorator('shippingValue', {
+                        initialValue: shippingBean.get('shippingValue'),
                         rules: [
                           {
                             validator: (_rule, value, callback) => {
@@ -395,24 +393,23 @@ class FreeShippingAddForm extends React.Component<any, any> {
                             }
                           }
                         ],
-                        initialValue: shippingBean.get('shippingValue')
                       })(
                         <Input
-                          style={{ width: 200 }}
                           title={
                             (window as any).RCi18n({
                             id: 'Marketing.0-9999',
                           })
                           }
+                          style={{ width: 200 }}
                           placeholder={
                             (window as any).RCi18n({
                               id: 'Marketing.0-9999',
                             })
                           }
+                          value={shippingBean.get('shippingValue')}
                           onChange={(e) => {
                             this.shippingRadioOnChange(e, 'shippingValue');
                           }}
-                          value={shippingBean.get('shippingValue')}
                           disabled={shippingBean.get('subType') !== 10}
                         />
                       )}
@@ -425,6 +422,7 @@ class FreeShippingAddForm extends React.Component<any, any> {
                     <span>
                       <FormattedMessage id="Marketing.Orderreach" />&nbsp;
                       {getFieldDecorator('shippingItemValue', {
+                        initialValue: shippingBean.get('shippingItemValue'),
                         rules: [
                           {
                             validator: (_rule, value, callback) => {
@@ -447,9 +445,8 @@ class FreeShippingAddForm extends React.Component<any, any> {
                             }
                           }
                         ],
-                        initialValue: shippingBean.get('shippingItemValue')
                       })(
-                        <Input style={{ width: 200 }} value={shippingBean.get('shippingItemValue')} title={'1-9999'} placeholder={'1-9999'} onChange={(e) => this.shippingRadioOnChange(e, 'shippingItemValue')} disabled={shippingBean.get('subType') !== 11} />)}
+                        <Input style={{ width: 200 }} value={shippingBean.get('shippingItemValue')}  placeholder={'1-9999'} onChange={(e) => this.shippingRadioOnChange(e, 'shippingItemValue')} disabled={shippingBean.get('subType') !== 11} title={'1-9999'}/>)}
                       <span>&nbsp;<FormattedMessage id="Marketing.items" /></span>
                     </span>
                   </Radio>
@@ -459,7 +456,7 @@ class FreeShippingAddForm extends React.Component<any, any> {
           )}
         </FormItem>
         <div className="bold-title"><FormattedMessage id="Marketing.TargetConsumer" />:</div>
-        <FormItem {...formItemLayout} required={true} labelAlign="left">
+        <FormItem {...formItemLayout} labelAlign="left" required={true}>
           {getFieldDecorator('joinLevel', {
             // rules: [{required: true, message: 'Please select target consumer'}],
           })(
@@ -469,10 +466,10 @@ class FreeShippingAddForm extends React.Component<any, any> {
                 //   this.levelRadioChange(e.target.value);
                 // }}
                 // value={level._allCustomer ? -1 : 0}
+                value={shippingBean.get('joinLevel') ? Number(shippingBean.get('joinLevel')) : -1}
                 onChange={(e) => {
                   this.targetCustomerRadioChange(e.target.value);
                 }}
-                value={shippingBean.get('joinLevel') ? Number(shippingBean.get('joinLevel')) : -1}
               >
                 {/*<Radio value={-1}>Full platform consumer</Radio>*/}
                 {/*{util.isThirdStore() && <Radio value={0}>In-store customer</Radio>}*/}
@@ -511,8 +508,8 @@ class FreeShippingAddForm extends React.Component<any, any> {
               ]
             })(
               <Select
-                style={{ width: 520 }}
                 onChange={this.selectGroupOnChange}
+                style={{ width: 520 }}
                 // defaultValue={232}
                 // value={shippingBean.get('segmentIds') && shippingBean.get('segmentIds').size > 0 ? shippingBean.get('segmentIds').toJS()[0] : null}
               >
@@ -529,7 +526,7 @@ class FreeShippingAddForm extends React.Component<any, any> {
         <Row type="flex" justify="start">
           {/*<Col span={3} />*/}
           <Col span={10}>
-            <Button type="primary" htmlType="submit">
+            <Button htmlType="submit" type="primary" >
               <FormattedMessage id="Marketing.Save" />
             </Button>
             &nbsp;&nbsp;
@@ -541,12 +538,17 @@ class FreeShippingAddForm extends React.Component<any, any> {
       </Form>
     );
   }
-
+  /**
+   * 关闭货品选择modal
+   */
+   closeGoodsModal = () => {
+    this.setState({ goodsModal: { _modalVisible: false } });
+  };
   /**
    * 打开货品选择modal
    */
   openGoodsModal = () => {
-    const { selectedRows, selectedSkuIds } = this.state;
+    let { selectedRows, selectedSkuIds } = this.state;
     this.setState({
       goodsModal: {
         _modalVisible: true,
@@ -557,37 +559,15 @@ class FreeShippingAddForm extends React.Component<any, any> {
   };
 
   /**
-   * 关闭货品选择modal
-   */
-  closeGoodsModal = () => {
-    this.setState({ goodsModal: { _modalVisible: false } });
-  };
-
-  /**
-   * 渲染等级的checkBox
-   * @param levels
-   * @returns {any}
-   */
-  renderCheckboxOptions = (levels) => {
-    return levels.map((level) => {
-      return {
-        label: level.customerLevelName,
-        value: level.customerLevelId + '',
-        key: level.customerLevelId
-      };
-    });
-  };
-
-  /**
    * 将skuIds转换成gridSource
    * @param scopeIds
    * @returns {any}
    */
   makeSelectedRows = (scopeIds) => {
-    const { shippingBean } = this.state;
-    const goodsList = shippingBean.get('goodsList');
+    let { shippingBean } = this.state;
+    let goodsList = shippingBean.get('goodsList');
     if (goodsList) {
-      const goodsList = shippingBean.get('goodsList');
+      let goodsList = shippingBean.get('goodsList');
       let selectedRows;
       if (scopeIds) {
         selectedRows = goodsList
@@ -599,16 +579,16 @@ class FreeShippingAddForm extends React.Component<any, any> {
       }
       return fromJS(
         selectedRows.toJS().map((goodInfo) => {
-          const cId = fromJS(goodsList.get('goodses'))
+          let cId = fromJS(goodsList.get('goodses'))
             .find((s) => s.get('goodsId') === goodInfo.goodsId)
             .get('cateId');
-          const cate = fromJS(goodsList.get('cates') || []).find((s) => s.get('cateId') === cId);
+          let cate = fromJS(goodsList.get('cates') || []).find((s) => s.get('cateId') === cId);
           goodInfo.cateName = cate ? cate.get('cateName') : '';
 
-          const bId = fromJS(goodsList.get('goodses'))
+          let bId = fromJS(goodsList.get('goodses'))
             .find((s) => s.get('goodsId') === goodInfo.goodsId)
             .get('brandId');
-          const brand = fromJS(goodsList.get('brands') || []).find((s) => s.get('brandId') === bId);
+          let brand = fromJS(goodsList.get('brands') || []).find((s) => s.get('brandId') === bId);
           goodInfo.brandName = brand ? brand.get('brandName') : '';
           return goodInfo;
         })
@@ -618,6 +598,33 @@ class FreeShippingAddForm extends React.Component<any, any> {
     }
   };
 
+  /**
+   * 渲染等级的checkBox
+   * @param levels
+   * @returns {any}
+   */
+   renderCheckboxOptions = (levels) => {
+    return levels.map((level) => {
+      return {
+        label: level.customerLevelName,
+        value: level.customerLevelId + '',
+        key: level.customerLevelId
+      };
+    });
+  };
+  
+  /**
+   * 处理返回结果
+   * @param response
+   * @private
+   */
+  _responseThen = (response) => {
+    if (response.res.code == Const.SUCCESS_CODE) {
+      message.success('Operate successfully');
+      history.push('/marketing-list');
+    }
+    // this.setState({ saveLoading: false });
+  };
   /**
    * 已选商品的删除方法
    * @param skuId
@@ -634,18 +641,6 @@ class FreeShippingAddForm extends React.Component<any, any> {
     });
   };
 
-  /**
-   * 处理返回结果
-   * @param response
-   * @private
-   */
-  _responseThen = (response) => {
-    if (response.res.code == Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
-      history.push('/marketing-list');
-    }
-    // this.setState({ saveLoading: false });
-  };
 }
 
 export default injectIntl(FreeShippingAddForm)

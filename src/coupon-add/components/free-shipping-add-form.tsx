@@ -1,27 +1,19 @@
 import * as React from 'react';
 import { fromJS, List } from 'immutable';
-import { FormattedMessage, injectIntl} from 'react-intl';
-
 import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row, Select, Spin } from 'antd';
 import { Const, history, QMMethod, util, cache, ValidConst, noop } from 'qmkit';
 import moment from 'moment';
 import * as webapi from '../webapi'
+import { FormattedMessage, injectIntl} from 'react-intl';
 import { Relax } from 'plume2';
+import UUID from 'uuid-js';
 
-const FormItem = Form.Item;
-const RadioGroup = Radio.Group;
-const RangePicker = DatePicker.RangePicker;
-const CheckboxGroup = Checkbox.Group;
-const Confirm = Modal.confirm;
-const formItemLayout = {
-  labelCol: {
-    span: 4
-  },
-  wrapperCol: {
-    span: 20
-  }
-};
-const formItemSmall = {
+let FormItem = Form.Item;
+let RangePicker = DatePicker.RangePicker;
+let CheckboxGroup = Checkbox.Group;
+let RadioGroup = Radio.Group;
+let Confirm = Modal.confirm;
+let formItemLayout = {
   labelCol: {
     span: 4
   },
@@ -31,7 +23,7 @@ const formItemSmall = {
 };
 //
 //
-// const formItemLayout = {
+// let formItemLayout = {
 //   labelCol: {
 //     span: 3
 //   },
@@ -39,7 +31,7 @@ const formItemSmall = {
 //     span: 21
 //   }
 // };
-const smallformItemLayout = {
+let smallformItemLayout = {
   labelCol: {
     span: 8
   },
@@ -48,7 +40,15 @@ const smallformItemLayout = {
   }
 };
 
-const largeformItemLayout = {
+let formItemSmall = {
+  labelCol: {
+    span: 4
+  },
+  wrapperCol: {
+    span: 20
+  }
+};
+let largeformItemLayout = {
   labelCol: {
     span: 5
   },
@@ -75,11 +75,11 @@ class FreeShippingAddForm extends React.Component<any, any> {
     intl: any;
     relaxProps?: {
       allGroups: any;
-      shippingBean: any;
-      loading: boolean;
       marketingType: any;
       couponPromotionType: number | string;
       submitFreeShipping: Function;
+      shippingBean: any;
+      loading: boolean;
       shippingBeanOnChange: Function;
       setMarketingType: Function;
     };
@@ -87,47 +87,15 @@ class FreeShippingAddForm extends React.Component<any, any> {
 
   static relaxProps = {
     allGroups: 'allGroups',
-    shippingBean: 'shippingBean',
-    marketingType: 'marketingType',
     loading: 'loading',
     couponPromotionType: 'couponPromotionType',
     submitFreeShipping: noop,
     shippingBeanOnChange: noop,
+    shippingBean: 'shippingBean',
+    marketingType: 'marketingType',
     setMarketingType: noop,
   };
   componentDidMount() {}
-  /**
-   * 页面初始化
-   * @returns {Promise<void>}
-   */
-  init = async () => {};
-
-  /**
-   * 内部方法，修改shippingBean对象的属性
-   * @param params
-   */
-  onBeanChange = (params) => {
-    const { shippingBean, shippingBeanOnChange } = this.props.relaxProps;
-    shippingBeanOnChange(shippingBean.merge(params));
-  };
-
-  /**
-   * 提交方法
-   * @param e
-   */
-  handleSubmit = (e) => {
-    e.preventDefault();
-    let errorObject = {};
-    const { shippingBean, submitFreeShipping } = this.props.relaxProps;
-    this.setState({
-      count: 1
-    });
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        submitFreeShipping(shippingBean.toJS());
-      }
-    });
-  };
 
   handleEndOpenChange = async (date) => {
     if (date == true) {
@@ -139,6 +107,13 @@ class FreeShippingAddForm extends React.Component<any, any> {
       }
     }
   };
+  /**
+   * 页面初始化
+   * @returns {Promise<void>}
+   */
+  init = async () => {};
+
+
 
   productTypeOnChange = (value) => {
     this.onBeanChange({ productType: value });
@@ -150,6 +125,32 @@ class FreeShippingAddForm extends React.Component<any, any> {
     });
   };
 
+  /**
+   * 内部方法，修改shippingBean对象的属性
+   * @param params
+   */
+   onBeanChange = (params) => {
+    const { shippingBean, shippingBeanOnChange } = this.props.relaxProps;
+    shippingBeanOnChange(shippingBean.merge(params));
+  };
+  /**
+   * 提交方法
+   * @param e
+   */
+   handleSubmit = (e) => {
+    e.preventDefault();
+    let errorObject = {};
+    let { shippingBean, submitFreeShipping } = this.props.relaxProps;
+    this.setState({
+      count: 1
+    });
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        submitFreeShipping(shippingBean.toJS());
+      }
+    });
+  };
+
   selectGroupOnChange = (value) => {
     let segmentIds = [];
     segmentIds.push(value);
@@ -158,17 +159,7 @@ class FreeShippingAddForm extends React.Component<any, any> {
 
   shippingRadioOnChange = (e, key) => {
     switch (key) {
-      case 'subType':
-        this.props.form.setFieldsValue({
-          shippingItemValue: null,
-          shippingValue: null
-        });
-        this.onBeanChange({
-          shippingValue: null,
-          shippingItemValue: null,
-          subType: e.target.value
-        });
-        break;
+      
       case 'shippingValue':
         this.onBeanChange({
           shippingValue: e.target.value,
@@ -181,18 +172,28 @@ class FreeShippingAddForm extends React.Component<any, any> {
           shippingValue: null
         });
         break;
+      case 'subType':
+        this.props.form.setFieldsValue({
+          shippingItemValue: null,
+          shippingValue: null
+        });
+        this.onBeanChange({
+          shippingItemValue: null,
+          shippingValue: null,
+          subType: e.target.value
+        });
+        break;
       default:
         break;
     }
   };
 
   render() {
-    const { form } = this.props; //marketingType, marketingId,
-    const { getFieldDecorator } = this.props.form;
-    const { allGroups, shippingBean, loading, marketingType, setMarketingType,couponPromotionType } = this.props.relaxProps;
-    console.log(marketingType, 'marketingType-----------');
+    let { form } = this.props; //marketingType, marketingId,
+    let { getFieldDecorator } = this.props.form;
+    let { allGroups, marketingType, setMarketingType,couponPromotionType,shippingBean, loading } = this.props.relaxProps;
     return (
-      <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
+      <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}  key={UUID.create().toString()}>
       {/*  <div className="bold-title"><FormattedMessage id="Marketing.CodeType" />:</div>*/}
       {/*  <FormItem {...formItemLayout} labelAlign="left">*/}
       {/*  <div className="ant-form-inline">*/}
@@ -212,7 +213,7 @@ class FreeShippingAddForm extends React.Component<any, any> {
             initialValue: couponPromotionType
           })(
             <>
-              <RadioGroup value={couponPromotionType} onChange={(e) => this.couponPromotionTypeOnChange((e as any).target.value)}>
+              <RadioGroup onChange={(e) => this.couponPromotionTypeOnChange((e as any).target.value)}  value={couponPromotionType}>
                 <Radio value={0}>
                   <span style={styles.darkColor}><FormattedMessage id="Marketing.Amount" /></span>
                 </Radio>
@@ -244,10 +245,11 @@ class FreeShippingAddForm extends React.Component<any, any> {
         <div className="bold-title">Basic Setting</div>
         <FormItem {...smallformItemLayout} label={<FormattedMessage id="Marketing.Freeshippingname" />} labelAlign="left"  className="gift-item">
           {getFieldDecorator('marketingName', {
+            initialValue: shippingBean.get('marketingName'),
             rules: [
               {
-                required: true,
                 whitespace: true,
+                required: true,
                 message:
                   (window as any).RCi18n({
                     id: 'Marketing.Pleaseenterfreeshippingname',
@@ -269,7 +271,6 @@ class FreeShippingAddForm extends React.Component<any, any> {
               }
             ],
             onChange: (e) => this.onBeanChange({ marketingName: e.target.value }),
-            initialValue: shippingBean.get('marketingName')
           })(<Input placeholder={
             (window as any).RCi18n({
             id: 'Marketing.nomorethan40words',
@@ -306,7 +307,6 @@ class FreeShippingAddForm extends React.Component<any, any> {
                 });
               }
             },
-
             initialValue: shippingBean.get('beginTime') === undefined ? [undefined, undefined] : [moment(shippingBean.get('beginTime')), moment(shippingBean.get('endTime'))]
           })(<RangePicker getCalendarContainer={() => document.getElementById('page-content')} allowClear={false} format={Const.DATE_FORMAT} placeholder={['Start time', 'End time']} showTime={{ format: 'HH:mm' }} onOpenChange={this.handleEndOpenChange} />)}
         </FormItem>
@@ -352,6 +352,9 @@ class FreeShippingAddForm extends React.Component<any, any> {
                         initialValue: shippingBean.get('shippingValue')
                       })(
                         <Input
+                        onChange={(e) => {
+                          this.shippingRadioOnChange(e, 'shippingValue');
+                        }}
                           style={{ width: 200 }}
                           title={
                             (window as any).RCi18n({
@@ -363,9 +366,6 @@ class FreeShippingAddForm extends React.Component<any, any> {
                               id: 'Marketing.0-9999',
                             })
                           }
-                          onChange={(e) => {
-                            this.shippingRadioOnChange(e, 'shippingValue');
-                          }}
                           value={shippingBean.get('shippingValue')}
                           disabled={shippingBean.get('subType') !== 10}
                         />
@@ -500,12 +500,12 @@ class FreeShippingAddForm extends React.Component<any, any> {
    * 打开货品选择modal
    */
   openGoodsModal = () => {
-    const { selectedRows, selectedSkuIds } = this.state;
+    let { selectedRows, selectedSkuIds } = this.state;
     this.setState({
       goodsModal: {
         _modalVisible: true,
+        _selectedRows: selectedRows,
         _selectedSkuIds: selectedSkuIds,
-        _selectedRows: selectedRows
       }
     });
   };
@@ -525,8 +525,8 @@ class FreeShippingAddForm extends React.Component<any, any> {
   renderCheckboxOptions = (levels) => {
     return levels.map((level) => {
       return {
-        label: level.customerLevelName,
         value: level.customerLevelId + '',
+        label: level.customerLevelName,
         key: level.customerLevelId
       };
     });
@@ -538,10 +538,10 @@ class FreeShippingAddForm extends React.Component<any, any> {
    * @returns {any}
    */
   makeSelectedRows = (scopeIds) => {
-    const { shippingBean } = this.state;
-    const goodsList = shippingBean.get('goodsList');
+    let { shippingBean } = this.state;
+    let goodsList = shippingBean.get('goodsList');
     if (goodsList) {
-      const goodsList = shippingBean.get('goodsList');
+      let goodsList = shippingBean.get('goodsList');
       let selectedRows;
       if (scopeIds) {
         selectedRows = goodsList
@@ -553,16 +553,16 @@ class FreeShippingAddForm extends React.Component<any, any> {
       }
       return fromJS(
         selectedRows.toJS().map((goodInfo) => {
-          const cId = fromJS(goodsList.get('goodses'))
+          let cId = fromJS(goodsList.get('goodses'))
             .find((s) => s.get('goodsId') === goodInfo.goodsId)
             .get('cateId');
-          const cate = fromJS(goodsList.get('cates') || []).find((s) => s.get('cateId') === cId);
+          let cate = fromJS(goodsList.get('cates') || []).find((s) => s.get('cateId') === cId);
           goodInfo.cateName = cate ? cate.get('cateName') : '';
 
-          const bId = fromJS(goodsList.get('goodses'))
+          let bId = fromJS(goodsList.get('goodses'))
             .find((s) => s.get('goodsId') === goodInfo.goodsId)
             .get('brandId');
-          const brand = fromJS(goodsList.get('brands') || []).find((s) => s.get('brandId') === bId);
+          let brand = fromJS(goodsList.get('brands') || []).find((s) => s.get('brandId') === bId);
           goodInfo.brandName = brand ? brand.get('brandName') : '';
           return goodInfo;
         })
@@ -577,14 +577,14 @@ class FreeShippingAddForm extends React.Component<any, any> {
    * @param skuId
    */
   deleteSelectedSku = (skuId) => {
-    const { selectedRows, selectedSkuIds } = this.state;
+    let { selectedRows, selectedSkuIds } = this.state;
     selectedSkuIds.splice(
       selectedSkuIds.findIndex((item) => item == skuId),
       1
     );
     this.setState({
+      selectedRows: selectedRows.delete(selectedRows.findIndex((row) => row.get('goodsInfoId') == skuId)),
       selectedSkuIds: selectedSkuIds,
-      selectedRows: selectedRows.delete(selectedRows.findIndex((row) => row.get('goodsInfoId') == skuId))
     });
   };
 
@@ -603,15 +603,11 @@ class FreeShippingAddForm extends React.Component<any, any> {
 }
 
 export default injectIntl(FreeShippingAddForm)
-const styles = {
+let styles = {
   greyColor: {
     fontSize: 12,
     color: '#999',
     wordBreak: 'keep-all'
-  },
-  darkColor: {
-    fontSize: 12,
-    color: '#333'
   },
   radioStyle: {
     display: 'block'
@@ -619,5 +615,9 @@ const styles = {
   lastRadioStyle: {
     display: 'block',
     marginTop: 10
-  }
+  },
+  darkColor: {
+    fontSize: 12,
+    color: '#333'
+  },
 } as any;

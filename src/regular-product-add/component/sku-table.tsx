@@ -1,24 +1,29 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
+import ProductTooltip from './productTooltip';
+import { RCi18n } from 'qmkit';
+import {AntIcon} from 'biz';
 import {Table, Input, Row, Col, Checkbox, InputNumber, Form, Button, message, Tooltip, Icon, Select, Popconfirm} from 'antd';
 import { IList, IMap } from 'typings/globalType';
 import {fromJS, List, Map} from 'immutable';
 import {AuthWrapper, cache, noop, ValidConst, Const} from 'qmkit';
 import ImageLibraryUpload from './image-library-upload';
 import { FormattedMessage } from 'react-intl';
-import ProductTooltip from './productTooltip';
-import { RCi18n } from 'qmkit';
-import {AntIcon} from 'biz';
 import SkuMappingModal from '../../product-sku-mapping/components/SkuMappingModal';
+import UUID from 'uuid-js';
 
-const FormItem = Form.Item;
-const { Option } = Select;
-const FILE_MAX_SIZE = 2 * 1024 * 1024;
-const { TextArea } = Input;
-const limitDecimals = (value: string | number): string => {
+let FormItem = Form.Item;
+let { Option } = Select;
+let FILE_MAX_SIZE = 2 * 1024 * 1024;
+let { TextArea } = Input;
+let limitDecimals = (value: string | number): string => {
 
-  const reg = /^(\-)*(\d+)\.(\d\d\d\d).*$/;
-  if(typeof value === 'string') {
+  let reg = /^(\-)*(\d+)\.(\d\d\d\d).*$/;
+ if (typeof value === 'number') {
+    let a = !isNaN(value) ? String(value).replace(reg, '$1$2.$3') : ''
+    return !isNaN(value) ? String(value).replace(reg, '$1$2.$3') : ''
+
+  } else  if(typeof value === 'string') {
     if (!isNaN(Number(value))) {
       //value = Number(value).toFixed(2)
       return value.replace(reg, '$1$2.$3')
@@ -26,10 +31,6 @@ const limitDecimals = (value: string | number): string => {
       return ""
     }
     
-  } else if (typeof value === 'number') {
-    let a = !isNaN(value) ? String(value).replace(reg, '$1$2.$3') : ''
-    return !isNaN(value) ? String(value).replace(reg, '$1$2.$3') : ''
-
   } else {
     return ''
   }
@@ -40,16 +41,19 @@ export default class SkuTable extends React.Component<any, any> {
 
   props: {
     relaxProps?: {
-      goodsSpecs: IList;
-      goodsList: IList;
-      stockChecked: boolean;
       marketPriceChecked: boolean;
       specSingleFlag: boolean;
       spuMarketPrice: number;
       priceOpt: number;
+      goodsSpecs: IList;
+      goodsList: IList;
+      stockChecked: boolean;
       editGoodsItem: Function;
       deleteGoodsInfo: Function;
       updateSkuForm: Function;
+      editGoods: Function;
+      init: Function;
+      uomList: IList;
       updateChecked: Function;
       synchValue: Function;
       clickImg: Function;
@@ -57,9 +61,6 @@ export default class SkuTable extends React.Component<any, any> {
       modalVisible: Function;
       goods: IMap;
       baseSpecId: Number;
-      editGoods: Function;
-      init: Function;
-      uomList: IList;
     };
     gid: any,
   };
@@ -69,22 +70,22 @@ export default class SkuTable extends React.Component<any, any> {
     goods: 'goods',
     goodsSpecs: 'goodsSpecs',
     goodsList: 'goodsList',
-    stockChecked: 'stockChecked',
-    marketPriceChecked: 'marketPriceChecked',
     specSingleFlag: 'specSingleFlag',
     spuMarketPrice: ['goods', 'marketPrice'],
     priceOpt: 'priceOpt',
     baseSpecId: 'baseSpecId',
+    stockChecked: 'stockChecked',
+    marketPriceChecked: 'marketPriceChecked',
     editGoods: noop,
     editGoodsItem: noop,
     deleteGoodsInfo: noop,
+    modalVisible: noop,
+    init: noop,
     updateSkuForm: noop,
     updateChecked: noop,
     synchValue: noop,
     clickImg: noop,
     removeImg: noop,
-    modalVisible: noop,
-    init: noop,
     uomList: 'uomList'
   };
 
@@ -97,8 +98,8 @@ export default class SkuTable extends React.Component<any, any> {
   }
 
   render() {
-    const WrapperForm = this.WrapperForm;
-    const { updateSkuForm } = this.props.relaxProps;
+    let WrapperForm = this.WrapperForm;
+    let { updateSkuForm } = this.props.relaxProps;
     let {gid} = this.props;
     return (
       <WrapperForm
@@ -122,14 +123,6 @@ class SkuForm extends React.Component<any, any> {
     };
   }
 
-  handleExternalSku = (record) => {
-    this.setState({
-      currentRecord: record
-    }, () => {
-      this.showModal();
-    })
-  }
-
   handleOk = (values) => {
     console.log('values', values)
     let { res } = values;
@@ -148,6 +141,22 @@ class SkuForm extends React.Component<any, any> {
       this.handleCancel();
     }
   };
+  
+  handleExternalSku = (record) => {
+    this.setState({
+      currentRecord: record
+    }, () => {
+      this.showModal();
+    })
+  }
+
+  
+  handleCancel = e => {
+    console.log(e);
+    this.setState({
+      skuMappingModalVisible: false,
+    });
+  };
 
   showModal = () => {
     this.setState({
@@ -156,23 +165,16 @@ class SkuForm extends React.Component<any, any> {
     });
   };
 
-  handleCancel = e => {
-    console.log(e);
-    this.setState({
-      skuMappingModalVisible: false,
-    });
-  };
-
   render() {
     let  {
       currentRecord,
       skuMappingModalVisible
     } = this.state;
-    const { goodsList, goods, goodsSpecs, baseSpecId } = this.props.relaxProps;
-    // const {  } = this.state
-    const columns = this._getColumns();
+    let { goodsList, goods, goodsSpecs, baseSpecId } = this.props.relaxProps;
+    // let {  } = this.state
+    let columns = this._getColumns();
     return (
-      <div style={{ marginBottom: 20 }}>
+      <div style={{ marginBottom: 20 }} key="regular-product-add-sku-table-template">
         {this.state.visible == true ? <ProductTooltip visible={this.state.visible} showModal={this.showProduct} /> : <React.Fragment />}
         <Form className="table-overflow">
           <Table size="small" rowKey="id" dataSource={goodsList.toJS()} columns={columns} pagination={false} />
@@ -194,19 +196,13 @@ class SkuForm extends React.Component<any, any> {
     );
   }
 
-  showProduct = (res) => {
-    this.setState({
-      visible: res
-    });
-  };
   _getColumns = () => {
-    const { getFieldDecorator } = this.props.form;
-    const { goodsSpecs, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId, goodsList, uomList } = this.props.relaxProps;
+    let { getFieldDecorator } = this.props.form;
+    let { goodsSpecs, stockChecked, marketPriceChecked,  removeImg, specSingleFlag, modalVisible, clickImg,spuMarketPrice, priceOpt, goods, baseSpecId, goodsList, uomList } = this.props.relaxProps;
     let columns: any = List();
-    const disableFields = Const.SITE_NAME === 'MYVETRECO';
+    let disableFields = Const.SITE_NAME === 'MYVETRECO';
     // 未开启规格时，不需要展示默认规格
     if (!specSingleFlag) {
-
       columns = goodsSpecs
         .map((item, i) => {
           return {
@@ -222,6 +218,7 @@ class SkuForm extends React.Component<any, any> {
     }
 
     columns = columns.unshift({
+      className: 'goodsImg',
       title: (
         <div>
           {/* <span
@@ -238,7 +235,6 @@ class SkuForm extends React.Component<any, any> {
         </div>
       ),
       key: 'img',
-      className: 'goodsImg',
       render: (rowInfo) => {
         const images = fromJS(rowInfo.images ? rowInfo.images : []);
         return <ImageLibraryUpload disabled={disableFields} images={images} modalVisible={modalVisible} clickImg={clickImg} removeImg={removeImg} imgCount={1} imgType={1} skuId={rowInfo.id} />;
@@ -246,14 +242,15 @@ class SkuForm extends React.Component<any, any> {
     });
 
     columns = columns.unshift({
-      title: '',
       key: 'index',
+      title: '',
       render: (_text, _rowInfo, index) => {
         return index + 1;
       }
     });
 
     columns = columns.push({
+      key: 'goodsInfoNo',
       title: (
         <div>
           <span
@@ -269,18 +266,17 @@ class SkuForm extends React.Component<any, any> {
           <FormattedMessage id="product.SKU" />
         </div>
       ),
-      key: 'goodsInfoNo',
       render: (rowInfo) => {
         return (
-          <Row>
+          <Row key={UUID.create().toString()}>
             <Col span={8}>
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('goodsInfoNo_' + rowInfo.id, {
                   rules: [
                     {
                       required: true,
+                      message: RCi18n({id:'Product.PleaseInputSKU'}),
                       whitespace: true,
-                      message: RCi18n({id:'Product.PleaseInputSKU'})
                     },
                     {
                       min: 1,
@@ -309,9 +305,9 @@ class SkuForm extends React.Component<any, any> {
           <Row>
             <Col span={8}>
               <Checkbox
-                checked={rowInfo.defaultSku === 1}
                 onChange={(e) => this._editGoodsItem(rowInfo.id, 'defaultSku', e.target.checked ? 1 : 0)}
                 disabled={disableFields}
+                checked={rowInfo.defaultSku === 1}
               />
             </Col>
           </Row>
@@ -326,7 +322,7 @@ class SkuForm extends React.Component<any, any> {
       width: 150,
       render: (rowInfo) => {
         return (
-          <Row className='row-externalSku-wrap'>
+          <Row className='row-externalSku-wrap' key={UUID.create().toString()}>
             <Col span={8}>
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('externalSku' + rowInfo.id, {
@@ -340,8 +336,8 @@ class SkuForm extends React.Component<any, any> {
                       message: 'Please enter the correct value'
                     }*/
                   ],
+                  initialValue: rowInfo.externalSku,
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'externalSku'),
-                  initialValue: rowInfo.externalSku
                 })(<Input disabled style={{ width: '116px' }} />)}
               </FormItem>
             </Col>
@@ -349,7 +345,9 @@ class SkuForm extends React.Component<any, any> {
               !!rowInfo.goodsInfoId && !disableFields
                   ? (
                         <a className='skuMappingList-btn' onClick={() => this.handleExternalSku(rowInfo)}>
-                          <AntIcon className='SkuMappingList-action-icon' type='iconEdit'/>
+                          <AntIcon 
+                          type='iconEdit'
+                          className='SkuMappingList-action-icon' />
                         </a>
                   )
                   : null
@@ -404,9 +402,9 @@ class SkuForm extends React.Component<any, any> {
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'priceUomId'),
                   initialValue: rowInfo.priceUomId || null
                 })(
-                  <Select disabled={disableFields} getPopupContainer={() => document.getElementById('page-content')} style={{ width: 100 }} >
+                  <Select  getPopupContainer={() => document.getElementById('page-content')} style={{ width: 100 }} disabled={disableFields}>
                     {uomList.map(item => (
-                      <Option value={item.get('id')} key={item.get('id')} title={item.get('uomName')}>{item.get('uomName')}</Option>
+                      <Option value={item.get('id')}  title={item.get('uomName')} key={item.get('id')}>{item.get('uomName')}</Option>
                     ))}
                   </Select>
                 )}
@@ -673,6 +671,12 @@ class SkuForm extends React.Component<any, any> {
     let b = a.splice(a.length - 4, 1);
     a.splice(3, 0, b[0]);*/
     return columns.toJS();
+  };
+  
+  showProduct = (res) => {
+    this.setState({
+      visible: res
+    });
   };
   _handleChange = (value) => {
     sessionStorage.setItem('baseSpecId', value);

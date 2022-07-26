@@ -1,10 +1,11 @@
 /*获取Group*/
 import { Fetch } from 'qmkit';
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
+import {TResult} from 'qmkit/type';
+// type TResult = {
+//   code: string;
+//   message: string;
+//   context: any;
+// };
 
 export const getAllGroups = (params) => {
   return Fetch('/customer/segment/segment/query', {

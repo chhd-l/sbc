@@ -1,10 +1,6 @@
 import { Fetch } from 'qmkit';
 
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
+import {TResult} from 'qmkit/type';
 
 //查询地址api配置，1 - suggestion  0 - validation
 export function getAddressSetting(addressApiType : number = 0) {

@@ -1,10 +1,6 @@
 import { Fetch, Const } from 'qmkit';
 import { getDictionaryByType, fetchStoreInfo } from './../shop/webapi';
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
+import {TResult} from 'qmkit/type';
 
 //获取店铺设置的语言
 export async function getStoreLanguageList() {

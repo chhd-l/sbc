@@ -1,10 +1,6 @@
 import { Fetch } from 'qmkit';
 
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
+import {TResult} from 'qmkit/type';
 
 export function createStoreAccount(filterParams) {
   return Fetch<TResult>('/store/create/account', {

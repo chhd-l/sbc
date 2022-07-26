@@ -1,10 +1,6 @@
 import { Fetch } from 'qmkit';
 
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
+import {TResult} from 'qmkit/type';
 
 export function getTaskById(id) {
   return Fetch<TResult>('/task/getTaskById' + '?id=' + id, {

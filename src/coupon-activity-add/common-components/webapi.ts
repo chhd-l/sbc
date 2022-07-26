@@ -1,10 +1,11 @@
 import { Fetch } from 'qmkit';
+import {TResult} from 'qmkit/type';
 
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
+// type TResult = {
+//   code: string;
+//   message: string;
+//   context: any;
+// };
 
 /**
  * 分页查询优惠券信息

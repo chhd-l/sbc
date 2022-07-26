@@ -107,5 +107,5 @@ export {
   RCi18n,
   getFormatDeliveryDateStr,
   LoadingForRC,
-  LoadingForMyvetreco
+  LoadingForMyvetreco,
 };

@@ -1,10 +1,11 @@
 import { Fetch } from 'qmkit';
+import {TResult} from 'qmkit/type';
 
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
+// type TResult = {
+//   code: string;
+//   message: string;
+//   context: any;
+// };
 export const getListSystemAccountConfigUsing = () => {
   return Fetch<TResult>('/order/config/getListSystemAccountConfig', {
     method: 'GET'

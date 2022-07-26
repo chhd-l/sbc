@@ -1,10 +1,6 @@
 import { Fetch } from 'qmkit';
 
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
+import {TResult} from 'qmkit/type';
 
 export function getPetOwner(id) {
   return Fetch<TResult>('/customer/detail2/' + id, {

@@ -1,10 +1,11 @@
 import { Fetch, cache, Const, util } from 'qmkit';
 import { message } from 'antd';
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
+import {TResult} from 'qmkit/type';
+// type TResult = {
+//   code: string;
+//   message: string;
+//   context: any;
+// };
 
 // 获取customer list
 export function getCustomerList(filterParams = {}) {

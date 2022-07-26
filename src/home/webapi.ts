@@ -114,11 +114,7 @@ export const getPrescriberRecommentCodeUseView = (params) => {
 
 /* ================================================================================================================ */
 
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
+import {TResult} from 'qmkit/type';
 export function getDeliveryOptions() {
   return Fetch<TResult>('/system/config/listByStoreIdAndKey', {
     method: 'POST',

@@ -1,10 +1,6 @@
 import { Fetch, Const, cache } from 'qmkit';
 
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
+import {TResult} from 'qmkit/type';
 
 export function getStoreInfo() {
   return Fetch<TResult>('/store/storeInfo', {

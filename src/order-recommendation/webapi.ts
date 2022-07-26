@@ -9,11 +9,7 @@ export const fetchOrderList = (filter = {}) => {
   });
 };
 
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
+import {TResult} from 'qmkit/type';
 
 /**
  * 详情

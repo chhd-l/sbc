@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { fromJS, List } from 'immutable';
 import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row, Select } from 'antd';
-import { doc } from 'prettier';
 import { Const, history, QMMethod, util, cache, ValidConst } from 'qmkit';
 import moment from 'moment';
 import { GoodsModal } from 'biz';
@@ -9,14 +8,16 @@ import SelectedFixedPriceProducts from './selected-fixed-price-products';
 import * as webapi from '../webapi';
 import * as Enum from './marketing-enum';
 
+import { doc } from 'prettier';
 // import debug = doc.debug;
-let RangePicker = DatePicker.RangePicker;
-let FormItem = Form.Item;
-let RadioGroup = Radio.Group;
-let CheckboxGroup = Checkbox.Group;
-let Confirm = Modal.confirm;
 
-let formItemLayout = {
+const FormItem = Form.Item;
+const RadioGroup = Radio.Group;
+const RangePicker = DatePicker.RangePicker;
+const CheckboxGroup = Checkbox.Group;
+const Confirm = Modal.confirm;
+
+const formItemLayout = {
   labelCol: {
     span: 3
   },
@@ -24,16 +25,7 @@ let formItemLayout = {
     span: 21
   }
 };
-
-let largeformItemLayout = {
-  labelCol: {
-    span: 5
-  },
-  wrapperCol: {
-    span: 10
-  }
-};
-let smallformItemLayout = {
+const smallformItemLayout = {
   labelCol: {
     span: 3
   },
@@ -42,7 +34,15 @@ let smallformItemLayout = {
   }
 };
 
-let radioStyle = {
+const largeformItemLayout = {
+  labelCol: {
+    span: 5
+  },
+  wrapperCol: {
+    span: 10
+  }
+};
+const radioStyle = {
   display: 'block',
   height: '40px',
   lineHeight: '40px'
@@ -54,16 +54,15 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
     super(props);
     const relaxProps = props.store.state();
     this.state = {
-       //营销活动已选的商品信息
-       selectedSkuIds: [],
-       selectedRows: fromJS([]),
       //公用的商品弹出框
       goodsModal: {
         _modalVisible: false,
         _selectedSkuIds: [],
         _selectedRows: []
       },
-     
+      //营销活动已选的商品信息
+      selectedSkuIds: [],
+      selectedRows: fromJS([]),
       //全部等级
       customerLevel: [],
       //选择的等级
@@ -72,25 +71,29 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
       marketingBean: relaxProps.get('marketingBean'),
       //等级选择组件相关
       level: {
+        _indeterminate: false,
         _checkAll: false,
         _checkedLevelList: [],
         _allCustomer: true,
-        _indeterminate: false,
         _levelPropsShow: false
       },
       //满金额还是满数量
       isFullCount: null,
+      //已经存在于其他同类型的营销活动的skuId
+      skuExists: [],
+      saveLoading: false,
       promotionCode: '',
       promotionCode2: '', //记录初始自动生成的promotionCode
       PromotionTypeValue: 0,
       PromotionTypeChecked: true,
       timeZone: moment,
-       //已经存在于其他同类型的营销活动的skuId
-       skuExists: [],
-       saveLoading: false,
       isClubChecked: false,
       allGroups: relaxProps.get('allGroups')
     };
+  }
+
+  componentDidMount() {
+    this.init();
   }
 
   getPromotionCode = () => {
@@ -99,19 +102,14 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
       let timeStamp = new Date(sessionStorage.getItem('defaultLocalDateTime')).getTime().toString().slice(-10);
       let promotionCode = randomNumber + timeStamp;
       this.setState({
-        promotionCode2: promotionCode,
         promotionCode: promotionCode,
+        promotionCode2: promotionCode
       });
       return promotionCode;
     } else {
       return this.state.promotionCode;
     }
   };
-  
-  componentDidMount() {
-    this.init();
-  }
-
   handleEndOpenChange = async (date) => {
     if (date == true) {
       const { res } = await webapi.timeZone();
@@ -123,17 +121,17 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
     }
   };
 
+  clubChecked = (isClubChecked) => {
+    this.setState({
+      isClubChecked
+    });
+  };
+
   productTypeOnChange = (value) => {
     this.onBeanChange({ productType: value });
   };
   targetCustomerRadioChange = (value) => {
     this.onBeanChange({ joinLevel: value });
-  };
-
-  clubChecked = (isClubChecked) => {
-    this.setState({
-      isClubChecked
-    });
   };
 
   selectGroupOnChange = (value) => {
@@ -158,9 +156,9 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
   };
   // @ts-ignore
   render() {
-    let { marketingType, marketingId, form } = this.props;
-    let { getFieldDecorator } = form;
-    let { customerLevel, selectedRows,isClubChecked, allGroups, marketingBean, level, isFullCount, skuExists, saveLoading, PromotionTypeValue } = this.state;
+    const { marketingType, marketingId, form } = this.props;
+    const { getFieldDecorator } = form;
+    const { customerLevel, selectedRows, marketingBean, level, isFullCount, skuExists, saveLoading, PromotionTypeValue, isClubChecked, allGroups } = this.state;
 
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
@@ -171,10 +169,10 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
             rules: [
               {
                 required: true,
-                message: 'Please input promotion code',
                 whitespace: true,
+                message: 'Please input promotion code'
               },
-              { min: 4, message: '4-20 words', max: 20, },
+              { min: 4, max: 20, message: '4-20 words' },
               {
                 validator: (rule, value, callback) => {
                   QMMethod.validatorEmoji(rule, value, callback, 'Promotion code');
@@ -194,13 +192,13 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
           )}
 
           <Checkbox
+            style={{ marginLeft: 20 }}
             checked={!marketingBean.get('publicStatus') || (marketingBean.get('publicStatus') && marketingBean.get('publicStatus') == 1)}
             onChange={(e) => {
               this.onBeanChange({
                 publicStatus: e.target.checked ? '1' : '0'
               });
             }}
-            style={{ marginLeft: 20 }}
           >
             Public
           </Checkbox>
@@ -209,9 +207,9 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
           {getFieldDecorator('marketingName', {
             rules: [
               {
-                message: 'Please input Promotion Name',
-                whitespace: true,
                 required: true,
+                whitespace: true,
+                message: 'Please input Promotion Name'
               },
               { min: 1, max: 40, message: '1-40 words' },
               {
@@ -228,8 +226,8 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
           {getFieldDecorator('time', {
             rules: [
               {
-                message: 'Please select Starting and end time',
                 required: true,
+                message: 'Please select Starting and end time'
               },
               {
                 validator: (_rule, value, callback) => {
@@ -255,13 +253,13 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
             <RangePicker
               getCalendarContainer={() => document.getElementById('page-content')}
               allowClear={false}
+              format={Const.DATE_FORMAT}
               //defaultValue = {moment[undefined,undefined]}
               //format={'YYYY-MM-DD' + ' ' + moment(sessionStorage.getItem('zoneDate')).format('hh:mm:ss ')}
               // format={'YYYY-MM-DD' + ' ' + this.state.timeZone}
               placeholder={['Start time', 'End time']}
               showTime={{ format: 'HH:mm' }}
               onOpenChange={this.handleEndOpenChange}
-              format={Const.DATE_FORMAT}
             />
           )}
         </FormItem>
@@ -469,16 +467,16 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
    */
   levelInit = (joinLevel) => {
     if (joinLevel == undefined || joinLevel == null) {
-      let { customerLevel } = this.state;
-      let levelIds = customerLevel.map((level) => {
+      const { customerLevel } = this.state;
+      const levelIds = customerLevel.map((level) => {
         return level.customerLevelId + '';
       });
       this.setState({
         level: {
-          _allCustomer: true,
           _indeterminate: false,
           _checkAll: true,
           _checkedLevelList: levelIds,
+          _allCustomer: true,
           _levelPropsShow: false
         }
       });
@@ -561,13 +559,13 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
             }
           }
         });
-      } else if (this.state.PromotionTypeValue === 0&&marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT) {
+      } else if (marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT && this.state.PromotionTypeValue === 0) {
         levelList.toJS().forEach((level, index) => {
           //为下面的多级条件校验加入因子
           ruleArray = ruleArray.push(
             fromJS({
-              value: isFullCount ? level.fullCount : level.fullAmount,
               index: index,
+              value: isFullCount ? level.fullCount : level.fullAmount
             })
           );
         });
@@ -577,8 +575,8 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
           //为下面的多级条件校验加入因子
           ruleArray = ruleArray.push(
             fromJS({
-              value: isFullCount ? level.fullCount : level.fullAmount,
               index: index,
+              value: isFullCount ? level.fullCount : level.fullAmount
             })
           );
           //校验赠品是否为空
@@ -603,7 +601,7 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
         });
     }
 
-    // //判断目标等级
+    //判断目标等级
     // if (level._allCustomer) {
     //   marketingBean = marketingBean.set('joinLevel', -1);
     // } else {
@@ -611,14 +609,14 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
     //     marketingBean = marketingBean.set('joinLevel', 0);
     //   } else {
     //     if (level._checkedLevelList.length != 0) {
-    // //      marketingBean = marketingBean.set('joinLevel', level._checkedLevelList.join(','));
+    //       marketingBean = marketingBean.set('joinLevel', level._checkedLevelList.join(','));
     //     } else {
     //       errorObject['targetCustomer'] = {
     //         errors: [new Error('Please select target customers')]
     //       };
     //     }
     //   }
-    // //}
+    // }
 
     //判断选择商品
     if (selectedSkuIds.length > 0) {
@@ -629,12 +627,11 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
         errors: [new Error('Please select the product to be marketed')]
       };
     }
-    
-    if (!marketingBean.get('publicStatus')) {
-      marketingBean = marketingBean.set('publicStatus', '1');
-    }
     if (this.state.promotionCode) {
       marketingBean = marketingBean.set('promotionCode', this.state.promotionCode);
+    }
+    if (!marketingBean.get('publicStatus')) {
+      marketingBean = marketingBean.set('publicStatus', '1');
     }
 
     form.validateFieldsAndScroll((err) => {
@@ -645,8 +642,8 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
         if (!err) {
           this.setState({ saveLoading: true });
           //组装营销类型
-          marketingBean = marketingBean.set('marketingType', marketingType); 
-          //.set('scopeType', 1);
+          marketingBean = marketingBean.set('marketingType', marketingType); //.set('scopeType', 1);
+
           //商品已经选择 + 时间已经选择 => 判断  同类型的营销活动下，商品是否重复
           if (marketingBean.get('beginTime') && marketingBean.get('endTime')) {
             // webapi
@@ -729,46 +726,45 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
   };
 
   /**
-   * 全部客户 ～ 全部等级  选择
-   * @param value
-   */
-   levelRadioChange = (value) => {
-    this.props.form.resetFields('targetCustomer');
-    let { level, customerLevel } = this.state;
-    let levelIds = customerLevel.map((level) => {
-      return level.customerLevelId + '';
-    });
-    level._levelPropsShow = value === 0;
-    level._allCustomer = value === -1;
-    if (value == 0 && level._checkedLevelList.length == 0) {
-      level._indeterminate = false;
-      level._checkedLevelList = levelIds;
-      level._checkAll = true;
-    }
-    this.setState(level);
-  };
-
-  /**
    * 勾选全部等级
    * @param checked
    */
   allLevelChecked = (checked) => {
     this.props.form.resetFields('targetCustomer');
-    let { customerLevel } = this.state;
-    let levelIds = customerLevel.map((level) => {
+    const { customerLevel } = this.state;
+    const levelIds = customerLevel.map((level) => {
       return level.customerLevelId + '';
     });
     this.setState({
       level: {
         _indeterminate: false,
+        _checkAll: checked,
         _checkedLevelList: checked ? levelIds : [],
         _allCustomer: false,
-        _checkAll: checked,
         _levelPropsShow: true
       }
     });
   };
 
+  /**
+   * 全部客户 ～ 全部等级  选择
+   * @param value
+   */
+  levelRadioChange = (value) => {
+    this.props.form.resetFields('targetCustomer');
+    let { level, customerLevel } = this.state;
+    const levelIds = customerLevel.map((level) => {
+      return level.customerLevelId + '';
+    });
+    level._allCustomer = value === -1;
+    level._levelPropsShow = value === 0;
+    if (value == 0 && level._checkedLevelList.length == 0) {
+      level._indeterminate = false;
+      level._checkAll = true;
+      level._checkedLevelList = levelIds;
+    }
+    this.setState(level);
+  };
 
   /**
    * 勾选部分等级方法
@@ -776,27 +772,43 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
    */
   levelGroupChange = (checkedList) => {
     this.props.form.resetFields('targetCustomer');
-    let { customerLevel } = this.state;
+    const { customerLevel } = this.state;
     this.setState({
       level: {
         _indeterminate: !!checkedList.length && checkedList.length < customerLevel.length,
         _checkAll: checkedList.length === customerLevel.length,
-        _allCustomer: false,
-        _levelPropsShow: true,
         _checkedLevelList: checkedList,
+        _allCustomer: false,
+        _levelPropsShow: true
       }
     });
   };
 
+  /**
+   * 规则变化方法
+   * @param rules
+   */
+  onRulesChange = (rules) => {
+    const { marketingType } = this.props;
+    this.props.form.resetFields('rules');
+    if (marketingType == Enum.MARKETING_TYPE.FULL_GIFT) {
+      this.onBeanChange({ fullGiftLevelList: rules });
+    } else if (marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT) {
+      this.onBeanChange({ fullDiscountLevelList: rules });
+    } else {
+      this.onBeanChange({ fullReductionLevelList: rules });
+    }
+  };
+
   onSubscriptionChange = (props, value) => {
-    let { marketingBean } = this.state;
-    let { marketingType } = this.props;
+    const { marketingType } = this.props;
+    const { marketingBean } = this.state;
     // this.props.form.resetFields('rules');
-     if (marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT) {
+    if (marketingType == Enum.MARKETING_TYPE.FULL_GIFT) {
       let obj = marketingBean.get('marketingSubscriptionDiscount');
       obj[props] = value;
       this.onBeanChange({ marketingSubscriptionDiscount: obj });
-    }else if (marketingType == Enum.MARKETING_TYPE.FULL_GIFT) {
+    } else if (marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT) {
       let obj = marketingBean.get('marketingSubscriptionDiscount');
       obj[props] = value;
       this.onBeanChange({ marketingSubscriptionDiscount: obj });
@@ -806,23 +818,6 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
       this.onBeanChange({ marketingSubscriptionReduction: obj });
     }
   };
-  
-  /**
-   * 规则变化方法
-   * @param rules
-   */
-  onRulesChange = (rules) => {
-    let { marketingType } = this.props;
-    this.props.form.resetFields('rules');
-    if (marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT) {
-      this.onBeanChange({ fullDiscountLevelList: rules });
-    } else if (marketingType == Enum.MARKETING_TYPE.FULL_GIFT) {
-      this.onBeanChange({ fullGiftLevelList: rules });
-    } else {
-      this.onBeanChange({ fullReductionLevelList: rules });
-    }
-  };
-
 
   /**
    * 货品选择方法的回调事件
@@ -838,15 +833,6 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
     });
   };
 
-  
-  /**
-   * 关闭货品选择modal
-   */
-   closeGoodsModal = () => {
-    this.setState({ goodsModal: { _modalVisible: false } });
-  };
-
-  
   /**
    * 打开货品选择modal
    */
@@ -854,11 +840,18 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
     const { selectedRows, selectedSkuIds } = this.state;
     this.setState({
       goodsModal: {
-        _selectedSkuIds: selectedSkuIds,
         _modalVisible: true,
+        _selectedSkuIds: selectedSkuIds,
         _selectedRows: selectedRows
       }
     });
+  };
+
+  /**
+   * 关闭货品选择modal
+   */
+  closeGoodsModal = () => {
+    this.setState({ goodsModal: { _modalVisible: false } });
   };
 
   /**
@@ -876,47 +869,16 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
     });
   };
 
-  
-  /**
-   * 已选商品的删除方法
-   * @param skuId
-   */
-   deleteSelectedSku = (skuId) => {
-    let { selectedSkuIds,selectedRows } = this.state;
-    selectedSkuIds.splice(
-      selectedSkuIds.findIndex((item) => item == skuId),
-      1
-    );
-    this.setState({
-      selectedRows: selectedRows.delete(selectedRows.findIndex((row) => row.get('goodsInfoId') == skuId)),
-      selectedSkuIds: selectedSkuIds,
-    });
-  };
-  
-  /**
-   * 处理返回结果
-   * @param response
-   * @private
-   */
-   _responseThen = (response) => {
-    if (response.res.code == Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
-      history.push('/marketing-list');
-    }
-    this.setState({ saveLoading: false });
-  };
-}
-
   /**
    * 将skuIds转换成gridSource
    * @param scopeIds
    * @returns {any}
    */
   makeSelectedRows = (scopeIds) => {
-    let { marketingBean } = this.state;
-    let goodsList = marketingBean.get('goodsList');
+    const { marketingBean } = this.state;
+    const goodsList = marketingBean.get('goodsList');
     if (goodsList) {
-      let goodsList = marketingBean.get('goodsList');
+      const goodsList = marketingBean.get('goodsList');
       let selectedRows;
       if (scopeIds) {
         selectedRows = goodsList
@@ -928,16 +890,16 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
       }
       return fromJS(
         selectedRows.toJS().map((goodInfo) => {
-          let cId = fromJS(goodsList.get('goodses'))
+          const cId = fromJS(goodsList.get('goodses'))
             .find((s) => s.get('goodsId') === goodInfo.goodsId)
             .get('cateId');
-          let cate = fromJS(goodsList.get('cates') || []).find((s) => s.get('cateId') === cId);
+          const cate = fromJS(goodsList.get('cates') || []).find((s) => s.get('cateId') === cId);
           goodInfo.cateName = cate ? cate.get('cateName') : '';
 
-          let bId = fromJS(goodsList.get('goodses'))
+          const bId = fromJS(goodsList.get('goodses'))
             .find((s) => s.get('goodsId') === goodInfo.goodsId)
             .get('brandId');
-          let brand = fromJS(goodsList.get('brands') || []).find((s) => s.get('brandId') === bId);
+          const brand = fromJS(goodsList.get('brands') || []).find((s) => s.get('brandId') === bId);
           goodInfo.brandName = brand ? brand.get('brandName') : '';
           return goodInfo;
         })
@@ -947,4 +909,32 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
     }
   };
 
+  /**
+   * 已选商品的删除方法
+   * @param skuId
+   */
+  deleteSelectedSku = (skuId) => {
+    const { selectedRows, selectedSkuIds } = this.state;
+    selectedSkuIds.splice(
+      selectedSkuIds.findIndex((item) => item == skuId),
+      1
+    );
+    this.setState({
+      selectedSkuIds: selectedSkuIds,
+      selectedRows: selectedRows.delete(selectedRows.findIndex((row) => row.get('goodsInfoId') == skuId))
+    });
+  };
 
+  /**
+   * 处理返回结果
+   * @param response
+   * @private
+   */
+  _responseThen = (response) => {
+    if (response.res.code == Const.SUCCESS_CODE) {
+      message.success('Operate successfully');
+      history.push('/marketing-list');
+    }
+    this.setState({ saveLoading: false });
+  };
+}

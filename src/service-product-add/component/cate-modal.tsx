@@ -1,15 +1,15 @@
-import { Form, Input, message, Modal, Tree, TreeSelect } from 'antd';
-import { WrappedFormUtils } from 'antd/lib/form/Form';
-import { fromJS, Map } from 'immutable';
-import { Relax } from 'plume2';
-import PropTypes from 'prop-types';
-import { noop, QMMethod, Tips, ValidConst } from 'qmkit';
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
-import styled from 'styled-components';
+import PropTypes from 'prop-types';
+import { Form, Input, Modal, Tree, TreeSelect, message } from 'antd';
+import { Relax } from 'plume2';
+import { noop, QMMethod, Tips, ValidConst } from 'qmkit';
 import { IList, IMap } from 'typings/globalType';
+import { WrappedFormUtils } from 'antd/lib/form/Form';
+import styled from 'styled-components';
+import { FormattedMessage } from 'react-intl';
 import ImageLibraryUpload from './image-library-upload';
-
+import { fromJS, Map } from 'immutable';
+const TreeNode = Tree.TreeNode;
 const { TextArea } = Input;
 
 const FormItem = Form.Item;
@@ -26,10 +26,7 @@ const formItemLayout = {
   }
 };
 
-const TreeNode = Tree.TreeNode;
-
-let Errorbox = 
-styled.div`
+const Errorbox = styled.div`
   .has-error.has-feedback .ant-form-item-children:after,
   .has-success.has-feedback .ant-form-item-children:after,
   .has-warning.has-feedback .ant-form-item-children:after,
@@ -45,96 +42,79 @@ export default class CateModal extends React.Component<any, any> {
   WrapperForm: any;
 
   constructor(props) {
-
     super(props);
-
     this.WrapperForm = Form.create({})(CateModalForm);
-
   }
 
   props: {
-
     relaxProps?: {
-
       modalCateVisible: boolean;
       doCateAdd: Function;
-      showGoodsPropDetail: Function;
-      clickImg: Function;
-      modalVisibleFun: Function;
-      changeStoreCategory: Function;
-      images: IList;
-      removeImg: Function;
+      storeCateList: IList;
       closeCateModal: Function;
       cateList: IList;
-      checkFlag: boolean;
-      updateGoodsForm: Function;
-      showCateModal: Function;
-      goods: IMap;
-      editGoods: Function;
-      enterpriseFlag: boolean;
-      flashsaleGoods: IList;
-      storeCateList: IList;
       formData: IMap;
       closeModal: Function;
       editFormData: Function;
       sourceCateList: IList;
-
+      goods: IMap;
+      editGoods: Function;
+      showBrandModal: Function;
+      showCateModal: Function;
+      checkFlag: boolean;
+      enterpriseFlag: boolean;
+      flashsaleGoods: IList;
+      updateGoodsForm: Function;
+      showGoodsPropDetail: Function;
+      changeStoreCategory: Function;
+      images: IList;
+      clickImg: Function;
+      removeImg: Function;
+      modalVisibleFun: Function;
     };
-
   };
 
   static relaxProps = {
     // 弹框是否显示
-    modalVisible: 'modalVisible',
-    // 弹框是否显示
     modalCateVisible: 'modalCateVisible',
+    // 添加店铺分类
+    doCateAdd: noop,
     // 店铺分类信息
     storeCateList: 'storeCateList',
-    updateGoodsForm: noop,
-    editGoods: noop,
-    images: 'images',
     // 关闭弹窗
     closeCateModal: noop,
-    goods: 'goods',
-    cateList: 'cateList',
-    sourceCateList: 'sourceCateList',
-    modalVisibleFun: noop,
-    clickImg: noop,
-    checkFlag: 'checkFlag',
-    showGoodsPropDetail: noop,
-    changeStoreCategory: noop,
+    // 弹框是否显示
+    modalVisible: 'modalVisible',
     // 添加类目
     doAdd: noop,
     // 修改类目
     editFormData: noop,
-    // 添加店铺分类
-    doCateAdd: noop,
     // 类目信息
     formData: 'formData',
     // 关闭弹窗
     closeModal: noop,
+    sourceCateList: 'sourceCateList',
+    goods: 'goods',
+    cateList: 'cateList',
+    checkFlag: 'checkFlag',
+    showGoodsPropDetail: noop,
+    changeStoreCategory: noop,
+    updateGoodsForm: noop,
+    editGoods: noop,
+    images: 'images',
+    modalVisibleFun: noop,
+    clickImg: noop,
     removeImg: noop
   };
 
   render() {
-     
+    const { modalCateVisible } = this.props.relaxProps;
     const WrapperForm = this.WrapperForm;
-    let { 
-      modalCateVisible
-     } = this.props.relaxProps;
-
     if (!modalCateVisible) {
       return null;
     }
     return (
-      <Modal
-        key='ServiceProductAddModalComponents'
-        maskClosable={false}
-        title={<FormattedMessage id="add" />}
-        visible={modalCateVisible}
-        onCancel={this._handleModelCancel}
-        onOk={this._handleSubmit}
-      >
+      <Modal maskClosable={false} title={<FormattedMessage id="add" />} visible={modalCateVisible} onCancel={this._handleModelCancel} onOk={this._handleSubmit}>
         <WrapperForm ref={(form) => (this._form = form)} relaxProps={this.props.relaxProps} />
       </Modal>
     );
@@ -144,21 +124,16 @@ export default class CateModal extends React.Component<any, any> {
    * 提交
    */
   _handleSubmit = () => {
-    let form = this._form as WrappedFormUtils;
+    const form = this._form as WrappedFormUtils;
 
     form.validateFields(null, (errs) => {
-
       if (!errs) {
         //提交
-        let { doCateAdd } = this.props.relaxProps;
-
+        const { doCateAdd } = this.props.relaxProps;
         if (form.getFieldValue('cateName')) {
-
           const cateName = form.getFieldValue('cateName');
-
-          let cateParentId = form.getFieldValue('cateParentId') || 0;
-          let sort = form.getFieldValue('sort') || 0;
-
+          const cateParentId = form.getFieldValue('cateParentId') || 0;
+          const sort = form.getFieldValue('sort') || 0;
           doCateAdd(cateName, cateParentId, sort);
         }
       }
@@ -169,7 +144,7 @@ export default class CateModal extends React.Component<any, any> {
    * 关闭弹框
    */
   _handleModelCancel = () => {
-    let { closeCateModal } = this.props.relaxProps;
+    const { closeCateModal } = this.props.relaxProps;
     closeCateModal();
   };
 }
@@ -177,25 +152,25 @@ export default class CateModal extends React.Component<any, any> {
 class CateModalForm extends React.Component<any, any> {
   props: {
     relaxProps?: {
-      editFormData: Function;
-      closeModal: Function;
       closeCateModal: Function;
-      editGoods: Function;
-      showBrandModal: Function;
-      checkFlag: boolean;
-      showCateModal: Function;
-      sourceCateList: IList;
-      updateGoodsForm: Function;
-      formData: IMap;
-      clickImg: Function;
-      showGoodsPropDetail: Function;
-      goods: IMap;
-      enterpriseFlag: boolean;
-      flashsaleGoods: IList;
-      images: IList;
-      changeStoreCategory: Function;
       storeCateList: IList;
       cateList: IList;
+      formData: IMap;
+      closeModal: Function;
+      editFormData: Function;
+      sourceCateList: IList;
+      goods: IMap;
+      editGoods: Function;
+      showBrandModal: Function;
+      showCateModal: Function;
+      checkFlag: boolean;
+      enterpriseFlag: boolean;
+      flashsaleGoods: IList;
+      updateGoodsForm: Function;
+      showGoodsPropDetail: Function;
+      changeStoreCategory: Function;
+      images: IList;
+      clickImg: Function;
       removeImg: Function;
       modalVisibleFun: Function;
     };
@@ -204,98 +179,64 @@ class CateModalForm extends React.Component<any, any> {
 
   //声明上下文依赖
   static contextTypes = {
-
     _plume$Store: PropTypes.object
-
   };
 
   constructor(props) {
-
     super(props);
-
   }
-
-
   static relaxProps = {
-    // 修改类目
-    editFormData: noop,
-    changeStoreCategory: noop,
-    updateGoodsForm: noop,
     // 弹框是否显示
     modalVisible: 'modalVisible',
-    checkFlag: 'checkFlag',
-    showGoodsPropDetail: noop,
     // 添加类目
     doAdd: noop,
+    // 修改类目
+    editFormData: noop,
     // 类目信息
-    goods: 'goods',
-    cateList: 'cateList',
     formData: 'formData',
-    modalVisibleFun: noop,
-    clickImg: noop,
     // 关闭弹窗
     closeModal: noop,
     sourceCateList: 'sourceCateList',
+    goods: 'goods',
+    cateList: 'cateList',
+    checkFlag: 'checkFlag',
+    showGoodsPropDetail: noop,
+    changeStoreCategory: noop,
+    updateGoodsForm: noop,
     editGoods: noop,
     images: 'images',
+    modalVisibleFun: noop,
+    clickImg: noop,
     removeImg: noop
   };
 
   render() {
-
+    const { getFieldDecorator } = this.props.form;
     let storeCateList = this.props.relaxProps.storeCateList;
-
-    const { sourceCateList, goods, cateList, images, modalVisibleFun, clickImg, removeImg } =
-      this.props.relaxProps;
-      
-    let { getFieldDecorator } = this.props.form;
-
+    const { sourceCateList, goods, cateList, images, modalVisibleFun, clickImg, removeImg } = this.props.relaxProps;
     // 返回一级分类列表
-    let loop = (cateList) =>
+    const loop = (cateList) =>
       cateList
         .filter((item) => item.get('isDefault') != 1 && item.get('cateParentId') == 0)
         .map((item) => {
-          return (
-            <TreeNode
-              key={item.get('storeCateId')}
-              value={item.get('storeCateId')}
-              title={item.get('cateName')}
-            />
-          );
+          return <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} />;
         });
-
     //处理分类的树形图结构数据
-
-    let loopCate = (cateList) =>
-
+    const loopCate = (cateList) =>
       cateList.map((item) => {
-        
         if (item.get('children') && item.get('children').count()) {
           // 一二级类目不允许选择
           return (
-            <TreeNode
-              key={item.get('cateId')}
-              disabled={true}
-              value={item.get('cateId')}
-              title={item.get('cateName')}
-            >
+            <TreeNode key={item.get('cateId')} disabled={true} value={item.get('cateId')} title={item.get('cateName')}>
               {loop(item.get('children'))}
             </TreeNode>
           );
         }
-
-        return (
-          <TreeNode
-            key={item.get('cateId')}
-            value={item.get('cateId')}
-            title={item.get('cateName')}
-          />
-        );
-
+        return <TreeNode key={item.get('cateId')} value={item.get('cateId')} title={item.get('cateName')} />;
       });
 
     return (
-      <Form key='ServiceProductAddFromComponents' className="login-form">
+      <Form className="login-form">
         <FormItem {...formItemLayout} label="Classification name" hasFeedback>
           {getFieldDecorator('cateName', {
             rules: [
@@ -318,13 +259,7 @@ class CateModalForm extends React.Component<any, any> {
               }
             ]
           })(
-            <TreeSelect
-              getPopupContainer={() => document.getElementById('root')}
-              placeholder="please select superior classification"
-              notFoundContent="暂无分类"
-              dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-              treeDefaultExpandAll
-            >
+            <TreeSelect getPopupContainer={() => document.getElementById('root')} placeholder="please select superior classification" notFoundContent="暂无分类" dropdownStyle={{ maxHeight: 400, overflow: 'auto' }} treeDefaultExpandAll>
               <TreeNode key="0" value="0" title="Top level classification">
                 {loop(storeCateList)}
               </TreeNode>
@@ -361,8 +296,7 @@ class CateModalForm extends React.Component<any, any> {
               }
             ],
             onChange: this._editGoods.bind(this, 'cateId'),
-            initialValue:
-              goods.get('cateId') && goods.get('cateId') != '' ? goods.get('cateId') : undefined
+            initialValue: goods.get('cateId') && goods.get('cateId') != '' ? goods.get('cateId') : undefined
           })(
             <TreeSelect
               getPopupContainer={() => document.getElementById('page-content')}
@@ -378,15 +312,7 @@ class CateModalForm extends React.Component<any, any> {
         </FormItem>
         <FormItem {...formItemLayout} label={<FormattedMessage id="cateImage" />}>
           <div style={{ width: 550 }}>
-            <ImageLibraryUpload
-              images={images}
-              modalVisible={modalVisibleFun}
-              clickImg={clickImg}
-              removeImg={removeImg}
-              imgType={0}
-              imgCount={10}
-              skuId=""
-            />
+            <ImageLibraryUpload images={images} modalVisible={modalVisibleFun} clickImg={clickImg} removeImg={removeImg} imgType={0} imgCount={10} skuId="" />
           </div>
           <Tips title={<FormattedMessage id="product.recommendedSizeImg" />} />
         </FormItem>
@@ -401,9 +327,7 @@ class CateModalForm extends React.Component<any, any> {
             ],
             onChange: this._editGoods.bind(this, 'goodsDescription'),
             initialValue: goods.get('goodsDescription')
-          })(
-            <TextArea rows={4} placeholder="Please iwwwwwwwwwwwnput the sssssproduct description" />
-          )}
+          })(<TextArea rows={4} placeholder="Please iwwwwwwwwwwwnput the sssssproduct description" />)}
         </FormItem>
         <Errorbox>
           <FormItem {...formItemLayout} label="Sort" hasFeedback>
@@ -428,19 +352,8 @@ class CateModalForm extends React.Component<any, any> {
    * 修改商品项
    */
   _editGoods = (key: string, e) => {
-
+    const { editGoods, showBrandModal, showCateModal, checkFlag, enterpriseFlag, flashsaleGoods, updateGoodsForm } = this.props.relaxProps;
     const { setFieldsValue } = this.props.form;
-
-    let {
-      checkFlag,
-      showBrandModal,
-      enterpriseFlag,
-      flashsaleGoods,
-      editGoods,
-      showCateModal,
-      updateGoodsForm
-    } = this.props.relaxProps;
-
     if (e && e.target) {
       e = e.target.value;
     }
@@ -468,8 +381,7 @@ class CateModalForm extends React.Component<any, any> {
         if (checkFlag == 'true') {
           if (enterpriseFlag) {
             //分销商品和企业购商品
-            message =
-              '该商品正在参加企业购和分销活动，切换为批发模式，将会退出企业购和分销活动，确定要切换？';
+            message = '该商品正在参加企业购和分销活动，切换为批发模式，将会退出企业购和分销活动，确定要切换？';
           } else {
             //分销商品
             message = '该商品正在参加分销活动，切换为批发模式，将会退出分销活动，确定要切换？';
@@ -492,4 +404,13 @@ class CateModalForm extends React.Component<any, any> {
       editGoods(goods);
     }
   };
+  // /**
+  //  * 选中平台类目时，实时显示对应类目下的所有属性信息
+  //  */
+  // _onChange = (value) => {
+  //   const { showGoodsPropDetail } = this.props.relaxProps;
+  //   showGoodsPropDetail(value);
+  //   console.log(value, 'value')
+  //   // changeStoreCategory
+  // };
 }

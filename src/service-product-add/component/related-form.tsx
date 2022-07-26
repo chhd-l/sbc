@@ -1,28 +1,26 @@
 import React from 'react';
+import { Relax } from 'plume2';
 import { Form, Input, Button, Select, Tree, Row, Col, TreeSelect, message } from 'antd';
 import { noop, SelectGroup, TreeSelectGroup, RCi18n } from 'qmkit';
 import { IList } from 'typings/globalType';
 import styled from 'styled-components';
-import { Relax } from 'plume2';
 import { FormattedMessage } from 'react-intl';
 import { fromJS, Map } from 'immutable';
 import '../index.less';
 import value from '*.json';
-import UUID from 'uuid-js';
 
-
-let SelectBox = styled.div`
+const SelectBox = styled.div`
   .ant-select-dropdown-menu-item,
   .ant-select-selection-selected-value {
-    overflow: hidden;
     max-width: 142px;
+    overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 `;
-let FormItem = Form.Item;
-let { Option } = Select;
-let TreeNode = Tree.TreeNode;
+const FormItem = Form.Item;
+const { Option } = Select;
+const TreeNode = Tree.TreeNode;
 
 // @Relax
 // class SearchForm extends React.Component<any, any> {
@@ -304,18 +302,18 @@ export default class RelateForm extends React.Component<any, any>{
     relaxProps?: {
       brandList: IList;
       cateList: IList;
-      sourceGoodCateList: IList;
       getGoodsCate: IList;
+      sourceGoodCateList: IList;
     };
   };
 
   static relaxProps = {
     //品牌列表
     brandList: 'brandList',
-    sourceGoodCateList: 'sourceGoodCateList',
     //分类列表
     cateList: 'cateList',
     getGoodsCate: 'getGoodsCate',
+    sourceGoodCateList: 'sourceGoodCateList',
   };
 
   constructor(props) {
@@ -330,7 +328,6 @@ export default class RelateForm extends React.Component<any, any>{
     const WrapperForm = Form.create({})(RelatedSearchForm);
     return (
       <WrapperForm
-        key={UUID.create().toString()}
         ref={(form) => (this['_form'] = form)}
         {...this.props.relaxProps}
         searchBackFun={(res) => this.props.searchBackFun(res)}
@@ -350,9 +347,9 @@ class RelatedSearchForm extends React.Component<any, any>{
       if (!err) {
         let storeCateIds = values.salesCategory ? this.onSalesCategoryChange(values.salesCategory) : undefined
         let from = {
+          goodsName: values.likeGoodsName,
           goodsNo: values.likeGoodsNo,
           storeCateIds: storeCateIds,
-          goodsName: values.likeGoodsName,
           goodsCateId: values.goodsCateId
         };
         this.props.searchBackFun(from)
@@ -384,18 +381,18 @@ class RelatedSearchForm extends React.Component<any, any>{
     return childCategoryIds;
   };
   render() {
-    let { brandList, cateList, getGoodsCate } = this.props;
-    let { getFieldDecorator } = this.props.form;
+    const { brandList, cateList, getGoodsCate } = this.props;
+    const { getFieldDecorator } = this.props.form;
 
     //处理分类的树形图结构数据
-    let loop = (cateList) => {
+    const loop = (cateList) => {
       return (
         cateList &&
         cateList.count() > 0 &&
         cateList.map((item) => {
           if (item.get('children') && item.get('children').count()) {
             return (
-              <TreeNode value={item.get('cateId')} title={item.get('cateName')} disabled={true} key={item.get('cateId')}>
+              <TreeNode key={item.get('cateId')} value={item.get('cateId')} title={item.get('cateName')} disabled={true}>
                 {loop(item.get('children'))}
               </TreeNode>
             );
@@ -423,7 +420,7 @@ class RelatedSearchForm extends React.Component<any, any>{
     };
 
     return (
-      <Form className="filter-content" key={UUID.create().toString()} layout="inline" onSubmit={this.onSubmit}>
+      <Form className="filter-content" layout="inline" onSubmit={this.onSubmit}>
         <Row>
           <Col span={8}>
             <FormItem>
@@ -458,11 +455,11 @@ class RelatedSearchForm extends React.Component<any, any>{
               {getFieldDecorator('goodsCateId')(
                 <TreeSelectGroup
                   allowClear
+                  getPopupContainer={() => document.getElementById('page-content')}
                   label={<p style={styles.label} title={RCi18n({id:'Product.Productcategory'})}><FormattedMessage id="Product.Productcategory" /></p>}
                   /* defaultValue="全部"*/
                   // style={styles.wrapper}
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                  getPopupContainer={() => document.getElementById('page-content')}
                   treeDefaultExpandAll
                 >
                   {loop(cateList)}
@@ -474,12 +471,12 @@ class RelatedSearchForm extends React.Component<any, any>{
             <FormItem>
               {getFieldDecorator('salesCategory')(
                 <TreeSelectGroup
+                  className="tree-group"
                   allowClear
                   getPopupContainer={() => document.getElementById('page-content')}
                   label={<p style={styles.label} title={RCi18n({id:'Product.Salescategory'})}><FormattedMessage id="Product.Salescategory" /></p>}
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   treeDefaultExpandAll
-                  className="tree-group"
                 >
                   {generateStoreCateTree(getGoodsCate)}
                 </TreeSelectGroup>
@@ -491,9 +488,9 @@ class RelatedSearchForm extends React.Component<any, any>{
             <FormItem>
               {getFieldDecorator('brandId')(
                 <SelectGroup
-                  style={styles.wrapper}
                   allowClear
                   getPopupContainer={() => document.getElementById('page-content')}
+                  style={styles.wrapper}
                   label={
                     <p style={styles.label} title={RCi18n({id:'product.brand'})}>
                       <FormattedMessage id="product.brand" />
@@ -518,10 +515,10 @@ class RelatedSearchForm extends React.Component<any, any>{
           <Col span={24} style={{ textAlign: 'center' }}>
             <FormItem>
               <Button
-                shape="round"
                 type="primary"
                 htmlType="submit"
                 icon="search"
+                shape="round"
               >
                 <span>
                   <FormattedMessage id="product.search" />
@@ -535,7 +532,7 @@ class RelatedSearchForm extends React.Component<any, any>{
   }
 }
 
-let styles = {
+const styles = {
   label: {
     width: 100,
     textAlign: 'center'

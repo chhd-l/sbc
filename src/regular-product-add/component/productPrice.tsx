@@ -31,10 +31,10 @@ export default class ProductPrice extends React.Component<any, any> {
     relaxProps?: {
       goodsSpecs: IList;
       goodsList: IList;
+      stockChecked: boolean;
       marketPriceChecked: boolean;
       specSingleFlag: boolean;
       spuMarketPrice: number;
-      stockChecked: boolean;
       priceOpt: number;
       getGoodsId: any;
       selectedBasePrice: any;
@@ -50,9 +50,9 @@ export default class ProductPrice extends React.Component<any, any> {
       modalVisible: Function;
       goods: IMap;
       baseSpecId: Number;
+      subscriptionStatus: any;
       updateBasePrice: Function;
       updateAllBasePrice: Function;
-      subscriptionStatus: any;
       setDefaultBaseSpecId: Function;
       updatePriceForm: Function;
     };
@@ -66,9 +66,9 @@ export default class ProductPrice extends React.Component<any, any> {
     stockChecked: 'stockChecked',
     marketPriceChecked: 'marketPriceChecked',
     specSingleFlag: 'specSingleFlag',
-    baseSpecId: 'baseSpecId',
     spuMarketPrice: ['goods', 'marketPrice'],
     priceOpt: 'priceOpt',
+    baseSpecId: 'baseSpecId',
     subscriptionStatus: 'subscriptionStatus',
     getGoodsId: 'getGoodsId',
     selectedBasePrice: 'selectedBasePrice',
@@ -247,12 +247,12 @@ class SkuForm extends React.Component<any, any> {
     });
 
     columns = columns.push({
-      key: 'linePrice',
       title: (
         <div>
           <FormattedMessage id="product.purchasePrice" />
         </div>
       ),
+      key: 'linePrice',
       render: (rowInfo) => (
         <Row>
           <Col span={12}>
@@ -284,8 +284,8 @@ class SkuForm extends React.Component<any, any> {
         <div>
           <span
             style={{
-              fontFamily: 'SimSun',
               color: 'red',
+              fontFamily: 'SimSun',
               marginRight: '4px',
               fontSize: '12px'
             }}
@@ -311,6 +311,22 @@ class SkuForm extends React.Component<any, any> {
         let marketPrice =  rowInfo.marketPrice ? rowInfo.marketPrice : 0
         let subscriptionPrice =  rowInfo.subscriptionPrice ? rowInfo.subscriptionPrice : 0
 
+
+        //let marketPrice = rowInfo.marketPrice
+        //var len = ("" + marketPrice).replace(/^\d+\./, '').length;
+        //marketPrice = Number(this.formatNum(marketPrice))
+       /* if(String(marketPrice).indexOf(".") == -1){
+            marketPrice = (marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum).toFixed(2)
+        }*/
+        /*if ( rowInfo.marketPrice.toString().split(".")[1].length <= 4) {
+          marketPrice = marketPrice.toFixed(rowInfo.marketPrice.toString().split(".")[1].length)
+        }else {
+          marketPrice = marketPrice.toFixed(4)
+        }*/
+
+        //marketPrice = Number(marketPrice.toString().match(/^\d+(?:\.\d{0,2})?/))
+       // console.log(marketPrice,11111);
+
         return (
           <Row>
             <Col span={12}>
@@ -331,10 +347,10 @@ class SkuForm extends React.Component<any, any> {
                         initialValue: marketPrice
                       })(
                         <InputNumber
-                          disabled={Const.SITE_NAME === 'MYVETRECO'}
                           min={0}
                           max={9999999.99}
                           //disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
+                          disabled={Const.SITE_NAME === 'MYVETRECO'}
                           formatter={limitDecimals}
                           parser={limitDecimals}
                           // step={0.01}
@@ -351,7 +367,17 @@ class SkuForm extends React.Component<any, any> {
                             {
                               required: true,
                               message: RCi18n({id:'Product.subscriptionPrice'})
-                            }
+                            },
+                            /*{
+                              validator: (_rule, value, callback) => {
+                                if (rowInfo.subscriptionStatus === 1) {
+                                  if (value === 0) {
+                                    callback('Subscription price cannot be zero');
+                                  }
+                                }
+
+                              }
+                            }*/
                           ],
                           onChange: this._editGoodsItem.bind(this, rowInfo.id, 'subscriptionPrice'),
                           initialValue: subscriptionPrice
@@ -359,9 +385,9 @@ class SkuForm extends React.Component<any, any> {
                           <InputNumber
                             min={0}
                             max={9999999.99}
-                            formatter={limitDecimals}
                             //precision={2}
                             disabled={rowInfo.subscriptionStatus === 0 || Const.SITE_NAME === 'MYVETRECO'}
+                            formatter={limitDecimals}
                             parser={limitDecimals}
                             // step={0.01}
                             //formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`}
@@ -408,6 +434,17 @@ class SkuForm extends React.Component<any, any> {
       title: (
         <div>
          <FormattedMessage id="Product.Baseprice" />
+          {/*<Select value={selectedBasePrice} onChange={this._handleBasePriceChange} allowClear>
+            {goodsSpecs.map((item, i) =>
+              item.get('specName') === sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT) && item.get('specValues').size > 0 ? (
+                <Option key={i} value={item.get('mockSpecId')}>
+                  {sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT)}
+                </Option>
+              ) : null
+            )}
+            <Option value={'weightValue'}>Weight value</Option>
+            <Option value={'None'}>None</Option>
+          </Select>*/}
         </div>
       ),
       key: 'basePrice',
@@ -614,8 +651,8 @@ const styles = {
     alignItems: 'center'
   } as any,
   plus: {
-    fontSize: '28px',
-    color: '#999'
+    color: '#999',
+    fontSize: '28px'
   },
   tableFormItem: {
     marginBottom: '0px',

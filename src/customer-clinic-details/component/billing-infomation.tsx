@@ -1,43 +1,26 @@
-import {
-  Button,
-  Card,
-  Checkbox,
-  Col,
-  Empty,
-  Form,
-  Input,
-  Menu,
-  message,
-  Row,
-  Select,
-  Spin,
-  Table,
-  Tabs
-} from 'antd';
-import { Const } from 'qmkit';
 import React from 'react';
+import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, Menu, Card, Checkbox, Empty, Spin } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
+import { Tabs } from 'antd';
+import { FormattedMessage } from 'react-intl';
+import { Const } from 'qmkit';
 
 const { TextArea } = Input;
 
-const Option = Select.Option;
-
-const { TabPane } = Tabs;
-
 const { SubMenu } = Menu;
+const FormItem = Form.Item;
+const Option = Select.Option;
+const { TabPane } = Tabs;
 
 const { Column } = Table;
 
-const FormItem = Form.Item;
-
 const layout = {
-  wrapperCol: { span: 16 },
   labelCol: { span: 8 },
+  wrapperCol: { span: 16 }
 };
 
 class BillingInfomation extends React.Component<any, any> {
-
   constructor(props: any) {
     super(props);
     this.state = {
@@ -91,29 +74,26 @@ class BillingInfomation extends React.Component<any, any> {
   };
 
   saveDeliveryAddress = () => {
-    //
     const { billingForm } = this.state;
-
     let params = {
       address1: billingForm.address1,
-      cityId: billingForm.cityId,
-      rfc: billingForm.rfc,
-      postCode: billingForm.postCode,
-      provinceId: billingForm.provinceId,
-      consigneeName: billingForm.firstName + billingForm.lastName,
       address2: billingForm.address2,
-      deliveryAddress: billingForm.address1 + billingForm.address2,
-      deliveryAddressId: billingForm.deliveryAddressId,
+      cityId: billingForm.cityId,
+      consigneeName: billingForm.firstName + billingForm.lastName,
       consigneeNumber: billingForm.consigneeNumber,
       countryId: billingForm.countryId,
-      employeeId: billingForm.employeeId,
-      isDefaltAddress: this.state.isDefault ? 1 : 0,
       customerId: billingForm.customerId,
+      deliveryAddress: billingForm.address1 + billingForm.address2,
+      deliveryAddressId: billingForm.deliveryAddressId,
+      employeeId: billingForm.employeeId,
       firstName: billingForm.firstName,
+      isDefaltAddress: this.state.isDefault ? 1 : 0,
       lastName: billingForm.lastName,
+      postCode: billingForm.postCode,
+      provinceId: billingForm.provinceId,
+      rfc: billingForm.rfc,
       type: billingForm.type
     };
-
     webapi
       .updateAddress(params)
       .then((data) => {
@@ -127,13 +107,10 @@ class BillingInfomation extends React.Component<any, any> {
       .catch((err) => {});
   };
 
-  //
   getSelectedClinic = (array) => {
     let clinics = [];
     if (array && array.length > 0) {
-
       for (let index = 0; index < array.length; index++) {
-        //
         clinics.push(array[index].prescriberId);
       }
     }
@@ -141,7 +118,6 @@ class BillingInfomation extends React.Component<any, any> {
   };
 
   getAddressList = () => {
-    //
     webapi
       .getAddressListByType(this.props.customerId, 'BILLING')
       .then((data) => {
@@ -151,36 +127,33 @@ class BillingInfomation extends React.Component<any, any> {
           if (addressList.length > 0) {
             let billingForm = this.state.billingForm;
             if (this.state.currentId) {
-
               billingForm = addressList.find((item) => {
                 return item.deliveryAddressId === this.state.currentId;
               });
             } else {
-
               billingForm = addressList[0];
             }
 
-            //
             let clinicsVOS = this.getSelectedClinic(res.context.clinicsVOS);
             this.props.form.setFieldsValue({
-              lastName: billingForm.lastName,
               customerAccount: res.context.customerAccount,
-              postCode: billingForm.postCode,
-              address2: billingForm.address2,
-              cityId: billingForm.cityId,
               clinicsVOS: clinicsVOS,
               firstName: billingForm.firstName,
+              lastName: billingForm.lastName,
+              consigneeNumber: billingForm.consigneeNumber,
+              postCode: billingForm.postCode,
+              cityId: billingForm.cityId,
               countryId: billingForm.countryId,
               address1: billingForm.address1,
-              consigneeNumber: billingForm.consigneeNumber,
+              address2: billingForm.address2,
               rfc: billingForm.rfc
             });
             this.setState({
               currentId: billingForm.deliveryAddressId,
-              title: billingForm.consigneeName,
-              billingForm: billingForm,
               clinicsVOS: res.context.clinicsVOS ? res.context.clinicsVOS : [],
               addressList: addressList,
+              billingForm: billingForm,
+              title: billingForm.consigneeName,
               isDefault: billingForm.isDefaltAddress === 1 ? true : false
             });
           }
@@ -190,16 +163,13 @@ class BillingInfomation extends React.Component<any, any> {
   };
 
   onFormChange = ({ field, value }) => {
-
     let data = this.state.billingForm;
-
     data[field] = value;
     this.setState({
       basicForm: data
     });
   };
 
-  //
   delAddress = () => {
     webapi
       .delAddress(this.state.billingForm.deliveryAddressId)
@@ -212,16 +182,12 @@ class BillingInfomation extends React.Component<any, any> {
       })
       .catch((err) => {});
   };
-  
-
   clickDefault = () => {
     let isDefault = !this.state.isDefault;
     this.setState({
       isDefault: isDefault
     });
   };
-
-
   getClinicList = () => {
     webapi
       .fetchClinicList({
@@ -229,9 +195,7 @@ class BillingInfomation extends React.Component<any, any> {
         pageSize: 1000
       })
       .then((data) => {
-        //
         const res = data.res;
-
         if (res.code === Const.SUCCESS_CODE) {
           this.setState({
             loading: false,
@@ -250,15 +214,12 @@ class BillingInfomation extends React.Component<any, any> {
       });
   };
 
-
   onClinicChange = (clinics) => {
-
     this.setState({
       clinicsVOS: clinics
     });
   };
 
-  //
   switchAddress = (id) => {
     const { addressList } = this.state;
     let billingForm = addressList.find((item) => {
@@ -266,27 +227,27 @@ class BillingInfomation extends React.Component<any, any> {
     });
 
     this.props.form.setFieldsValue({
-      lastName: billingForm.lastName,
-      countryId: billingForm.countryId,
-      address2: billingForm.address2,
-      address1: billingForm.address1,
-      consigneeNumber: billingForm.consigneeNumber,
-      cityId: billingForm.cityId,
-      postCode: billingForm.postCode,
       firstName: billingForm.firstName,
+      lastName: billingForm.lastName,
+      consigneeNumber: billingForm.consigneeNumber,
+      postCode: billingForm.postCode,
+      cityId: billingForm.cityId,
+      countryId: billingForm.countryId,
+      address1: billingForm.address1,
+      address2: billingForm.address2,
       rfc: billingForm.rfc
     });
     this.setState({
       currentId: id,
-      isDefault: billingForm.isDefaltAddress === 1 ? true : false,
       billingForm: billingForm,
       title: billingForm.consigneeName,
+      isDefault: billingForm.isDefaltAddress === 1 ? true : false
     });
   };
 
   render() {
-
-    let formItemLayout = {
+    const { countryArr, cityArr, clinicList } = this.state;
+    const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
         sm: { span: 8 }
@@ -296,17 +257,10 @@ class BillingInfomation extends React.Component<any, any> {
         sm: { span: 12 }
       }
     };
-
-    const { countryArr, cityArr, clinicList } = this.state;
-
     const { getFieldDecorator } = this.props.form;
-
     return (
-
-      <Row key='customsirsxzbixlanxuas'>
-
+      <Row>
         <Spin spinning={this.state.loading}>
-          //
           <Col span={3}>
             <h3>All Address( {this.state.addressList.length} )</h3>
             <ul>
@@ -324,11 +278,8 @@ class BillingInfomation extends React.Component<any, any> {
               ))}
             </ul>
           </Col>
-
           <Col span={20}>
-            {this.state.addressList.length === 0 ? (
-              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-            ) : null}
+            {this.state.addressList.length === 0 ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> : null}
             <Card
               title={this.state.title}
               style={{
@@ -336,11 +287,7 @@ class BillingInfomation extends React.Component<any, any> {
               }}
               extra={
                 <div>
-                  <Checkbox
-                    disabled
-                    checked={this.state.isDefault}
-                    onChange={() => this.clickDefault()}
-                  >
+                  <Checkbox disabled checked={this.state.isDefault} onChange={() => this.clickDefault()}>
                     Set default billing address
                   </Checkbox>
                   {/* <Button
@@ -353,9 +300,7 @@ class BillingInfomation extends React.Component<any, any> {
                 </div>
               }
             >
-              //
               <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-
                 <Row gutter={16}>
                   <Col
                     span={12}
@@ -373,7 +318,6 @@ class BillingInfomation extends React.Component<any, any> {
                         ]
                       })(<Input disabled={true} />)}
                     </FormItem>
-
                   </Col>
                   <Col
                     span={12}
@@ -381,7 +325,6 @@ class BillingInfomation extends React.Component<any, any> {
                       display: this.props.customerType !== 'Guest' ? 'none' : 'block'
                     }}
                   >
-
                     <FormItem label="Selected Prescriber">
                       {getFieldDecorator('clinicsVOS', {
                         rules: [
@@ -409,18 +352,19 @@ class BillingInfomation extends React.Component<any, any> {
                             this.onClinicChange(clinics);
                           }}
                         >
-
+                          {/* {
+                          clinicList.map((item) => (
+                            <Option value={item.clinicsId} key={item.clinicsId}>{item.clinicsName}</Option>
+                          ))} */}
                           {clinicList.map((item) => (
                             <Option value={item.prescriberId.toString()} key={item.prescriberId}>
                               {item.prescriberId + ',' + item.prescriberName}
                             </Option>
                           ))}
-
                         </Select>
                       )}
                     </FormItem>
                   </Col>
-
                   <Col span={12}>
                     <FormItem label="First Name">
                       {getFieldDecorator('firstName', {
@@ -444,7 +388,6 @@ class BillingInfomation extends React.Component<any, any> {
                       )}
                     </FormItem>
                   </Col>
-
                   <Col span={12}>
                     <FormItem label="Last Name">
                       {getFieldDecorator('lastName', {
@@ -463,7 +406,6 @@ class BillingInfomation extends React.Component<any, any> {
                       )}
                     </FormItem>
                   </Col>
-
                   <Col span={12}>
                     <FormItem label="Phone Number">
                       {getFieldDecorator('consigneeNumber', {
@@ -487,7 +429,6 @@ class BillingInfomation extends React.Component<any, any> {
                       )}
                     </FormItem>
                   </Col>
-
                   <Col span={12}>
                     <FormItem label="Post Code">
                       {getFieldDecorator('postCode', {
@@ -506,7 +447,6 @@ class BillingInfomation extends React.Component<any, any> {
                       )}
                     </FormItem>
                   </Col>
-
                   <Col span={12}>
                     <FormItem label="Country">
                       {getFieldDecorator('countryId', {
@@ -531,7 +471,6 @@ class BillingInfomation extends React.Component<any, any> {
                       )}
                     </FormItem>
                   </Col>
-
                   <Col span={12}>
                     <FormItem label="City">
                       {getFieldDecorator('cityId', {
@@ -556,7 +495,6 @@ class BillingInfomation extends React.Component<any, any> {
                       )}
                     </FormItem>
                   </Col>
-
                   <Col span={12}>
                     <FormItem label="Address 1">
                       {getFieldDecorator('address1', {
@@ -576,7 +514,6 @@ class BillingInfomation extends React.Component<any, any> {
                       )}
                     </FormItem>
                   </Col>
-
                   <Col span={12}>
                     <FormItem label="Address 2">
                       {getFieldDecorator(
@@ -597,7 +534,6 @@ class BillingInfomation extends React.Component<any, any> {
                       )}
                     </FormItem>
                   </Col>
-
                   <Col span={12}>
                     <FormItem label="Reference">
                       {getFieldDecorator(
@@ -618,7 +554,6 @@ class BillingInfomation extends React.Component<any, any> {
                     </FormItem>
                   </Col>
 
-//
                   <Col span={24}>
                     <FormItem>
                       {/* <Button type="primary" htmlType="submit">
@@ -639,5 +574,4 @@ class BillingInfomation extends React.Component<any, any> {
     );
   }
 }
-
 export default Form.create()(BillingInfomation);

@@ -10,12 +10,12 @@ import {
   getFormatDeliveryDateStr,
   RCi18n
 } from 'qmkit';
-import OrderMoreFields from './order_more_field';
 import { fromJS, List } from 'immutable';
 import FormItem from 'antd/lib/form/FormItem';
 import moment from 'moment';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import PetItem from '@/customer-details/component/pet-item';
+import OrderMoreFields from './order_more_field';
 import './style.less';
 import { Consignee, Invoice } from '@/order-detail/components/type';
 
@@ -48,8 +48,8 @@ class RejectForm extends React.Component<any, any> {
             ]
           })(
             <Input.TextArea
-              autosize={{ minRows: 4, maxRows: 4 }}
               placeholder={(window as any).RCi18n({ id: 'Order.RejectionReasonTip' })}
+              autosize={{ minRows: 4, maxRows: 4 }}
             />
           )}
         </FormItem>
@@ -86,11 +86,11 @@ class OrderDetailTab extends React.Component<any, any> {
       detail: IMap;
       countryDict: List<any>;
       onAudit: Function;
+      confirm: Function;
       retrial: Function;
       remedySellerRemark: Function;
       setSellerRemark: Function;
       verify: Function;
-      confirm: Function;
       onDelivery: Function;
       orderRejectModalVisible: boolean;
       showRejectModal: Function;
@@ -108,17 +108,17 @@ class OrderDetailTab extends React.Component<any, any> {
     orderRejectModalVisible: 'orderRejectModalVisible',
     remedySellerRemark: noop,
     setSellerRemark: noop,
-    showRejectModal: noop,
     verify: noop,
     onDelivery: noop,
+    showRejectModal: noop,
     hideRejectModal: noop,
     refreshGoodsRealtimeStock: noop
   };
   state = {
     visiblePetDetails: false,
     moreData: [],
-    currentPet: {},
     visibleMoreFields: false,
+    currentPet: {},
     tableLoading: false
   };
 
@@ -232,8 +232,8 @@ class OrderDetailTab extends React.Component<any, any> {
           )
       },
       {
-        width: '8%',
         title: <FormattedMessage id="Order.Subtotal" />,
+        width: '8%',
         render: (row) => (
           <span>
             {this._handlePriceFormat(storeId === 123457907 ? row.adaptedSubtotalPrice : row.price)}
@@ -242,9 +242,9 @@ class OrderDetailTab extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="Order.purchaseType" />,
-        width: '7%',
         dataIndex: 'goodsInfoFlag',
         key: 'goodsInfoFlag',
+        width: '7%',
         render: (text) => {
           switch (text) {
             case 0:
@@ -466,8 +466,8 @@ class OrderDetailTab extends React.Component<any, any> {
 
           <Modal
             title={<FormattedMessage id="Order.moreFields" />}
-            visible={this.state.visibleMoreFields}
             width={600}
+            visible={this.state.visibleMoreFields}
             onOk={() => {
               this.setState({
                 visibleMoreFields: false
@@ -485,9 +485,9 @@ class OrderDetailTab extends React.Component<any, any> {
           </Modal>
 
           <Modal
-            visible={this.state.visiblePetDetails}
             title={<FormattedMessage id="PetOwner.PetInformation" />}
             width={1100}
+            visible={this.state.visiblePetDetails}
             onOk={() => {
               this.setState({
                 visiblePetDetails: false
@@ -513,7 +513,7 @@ class OrderDetailTab extends React.Component<any, any> {
                 <strong>{this._handlePriceFormat(tradePrice.goodsPrice)}</strong>
               </label>
 
-              {tradePrice.promotionVOList && tradePrice.promotionVOList.length
+              {tradePrice.promotionVOList && tradePrice.promotionVOList.length > 0
                 ? tradePrice.promotionVOList.map((promotion) => (
                     <label style={styles.priceItem as any}>
                       <span style={styles.name}>{promotion.marketingName}</span>
@@ -588,8 +588,8 @@ class OrderDetailTab extends React.Component<any, any> {
                       overlayStyle={{
                         overflowY: 'auto'
                       }}
-                      title={<div>{consignee.lastName}</div>}
                       placement="bottomLeft"
+                      title={<div>{consignee.lastName}</div>}
                     >
                       <p className="overFlowtext">
                         <FormattedMessage id="Order.LastName" />: {consignee.lastName}
@@ -607,10 +607,10 @@ class OrderDetailTab extends React.Component<any, any> {
                       </p>
                     </Tooltip>
                     <Tooltip
-                      placement="bottomLeft"
                       overlayStyle={{
                         overflowY: 'auto'
                       }}
+                      placement="bottomLeft"
                       title={<div>{consignee.detailAddress2}</div>}
                     >
                       <p className="overFlowtext">
@@ -643,10 +643,10 @@ class OrderDetailTab extends React.Component<any, any> {
                       <FormattedMessage id="Order.timeSlot" />: {consignee.timeSlot}
                     </p>
                     <Tooltip
-                      placement="bottomLeft"
                       overlayStyle={{
                         overflowY: 'auto'
                       }}
+                      placement="bottomLeft"
                       title={<div>{consignee.comment}</div>}
                     >
                       <p className="overFlowtext">
@@ -683,10 +683,10 @@ class OrderDetailTab extends React.Component<any, any> {
                       <FormattedMessage id="Order.Apartment" />: {consignee.apartment}
                     </p>
                     <Tooltip
-                      placement="bottomLeft"
                       overlayStyle={{
                         overflowY: 'auto'
                       }}
+                      placement="bottomLeft"
                       title={<div>{getFormatDeliveryDateStr(consignee.deliveryDate)}</div>}
                     >
                       <p className="overFlowtext">
@@ -699,8 +699,8 @@ class OrderDetailTab extends React.Component<any, any> {
                         overlayStyle={{
                           overflowY: 'auto'
                         }}
-                        title={<div>{deliveryMethod}</div>}
                         placement="bottomLeft"
+                        title={<div>{deliveryMethod}</div>}
                       >
                         <p className="overFlowtext">
                           <FormattedMessage id="Order.chosenDeliveryMethods" />: {deliveryMethod}
@@ -723,8 +723,8 @@ class OrderDetailTab extends React.Component<any, any> {
                             />
                           ) : (
                             <FormattedMessage
-                              values={{ day: detail.get('minDeliveryTime') }}
                               id="Order.estimatedDeliveryDateDescEqual"
+                              values={{ day: detail.get('minDeliveryTime') }}
                             />
                           )
                         ) : null}
@@ -760,19 +760,19 @@ class OrderDetailTab extends React.Component<any, any> {
                       overlayStyle={{
                         overflowY: 'auto'
                       }}
-                      title={<div>{invoice.lastName}</div>}
                       placement="bottomLeft"
+                      title={<div>{invoice.lastName}</div>}
                     >
                       <p className="overFlowtext">
                         <FormattedMessage id="Order.LastName" />: {invoice.lastName}
                       </p>
                     </Tooltip>
                     <Tooltip
-                      placement="bottomLeft"
-                      title={<div>{invoice.address1}</div>}
                       overlayStyle={{
                         overflowY: 'auto'
                       }}
+                      placement="bottomLeft"
+                      title={<div>{invoice.address1}</div>}
                     >
                       <p className="overFlowtext">
                         <FormattedMessage id="Order.address1" />: {invoice.address1}
@@ -911,8 +911,8 @@ class OrderDetailTab extends React.Component<any, any> {
                 onClick={() => {
                   this._showConfirm(tid);
                 }}
-                className="pr-20"
                 href="javascript:void(0)"
+                className="pr-20"
               >
                 <FormattedMessage id="Order.confirmReceipt" />
               </a>
@@ -1034,8 +1034,8 @@ const styles = {
     paddingTop: 10
   },
   inputBox: {
-    flexDirection: 'column',
     display: 'flex',
+    flexDirection: 'column',
     height: 70,
     justifyContent: 'space-between'
   }

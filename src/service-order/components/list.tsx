@@ -20,7 +20,7 @@ class RejectForm extends React.Component<any, any> {
     const { getFieldDecorator } = this.props?.form;
 
     return (
-      <Form  key="service-order-form-template">
+      <Form>
         <FormItem>
           {getFieldDecorator('comment', {
             rules: [
@@ -55,8 +55,8 @@ class ListView extends React.Component<any, any> {
     super(props);
     this.state = {
       selectedOrderId: null,
-      curOrderAuditType: null, //当前选中的订单的审核类型 ManualReview:人工审核  DownstreamAudit:下游审核库存
       orderAduit: null,
+      curOrderAuditType: null, //当前选中的订单的审核类型 ManualReview:人工审核  DownstreamAudit:下游审核库存
       orderAuditModalVisible: false //是否显示订单审核弹框
     };
   }
@@ -67,22 +67,23 @@ class ListView extends React.Component<any, any> {
       loading: boolean;
       btnLoading: boolean;
       orderRejectModalVisible: boolean;
+      total: number;
+      pageSize: number;
       currentPage: number;
       dataList: TList;
+
       onChecked: Function;
       onCheckedAll: Function;
       allChecked: boolean;
       onAudit: Function;
-      total: number;
-      pageSize: number;
       onValidateAudit: Function;
       init: Function;
-      hideRejectModal: Function;
-      showRejectModal: Function;
       onRetrial: Function;
       onConfirm: Function;
       onCheckReturn: Function;
       verify: Function;
+      hideRejectModal: Function;
+      showRejectModal: Function;
     };
   };
 
@@ -91,43 +92,45 @@ class ListView extends React.Component<any, any> {
     btnLoading: 'btnLoading',
     //当前的数据总数
     total: 'total',
+    //当前的分页条数
+    pageSize: 'pageSize',
+
+    currentPage: 'currentPage',
+    //当前的客户列表
+    dataList: 'dataList',
+
     onChecked: noop,
     onCheckedAll: noop,
     allChecked: allCheckedQL,
     onAudit: noop,
-    //当前的分页条数
-    pageSize: 'pageSize',
-    currentPage: 'currentPage',
-    //当前的客户列表
-    dataList: 'dataList',
     onValidateAudit: noop,
     init: noop,
-    orderRejectModalVisible: 'orderRejectModalVisible',
-    hideRejectModal: noop,
-    showRejectModal: noop,
     onRetrial: noop,
     onConfirm: noop,
     onCheckReturn: noop,
     verify: noop,
+    orderRejectModalVisible: 'orderRejectModalVisible',
+    hideRejectModal: noop,
+    showRejectModal: noop
   };
 
   render() {
-    let {
+    const {
       loading,
-      onCheckedAll,
-      allChecked,
-      init,
-      currentPage,
-      orderRejectModalVisible,
       btnLoading,
       total,
       pageSize,
       dataList,
+      onCheckedAll,
+      allChecked,
+      init,
+      currentPage,
+      orderRejectModalVisible
     } = this.props.relaxProps;
-    let { orderAuditModalVisible, curOrderAuditType } = this.state;
+    const { orderAuditModalVisible, curOrderAuditType } = this.state;
 
     return (
-      <div key="service-order-template">
+      <div>
         <div className="ant-table-wrapper">
           <div className="ant-table ant-table-large ant-table-scroll-position-left">
             <div className="ant-table-content">
@@ -264,21 +267,21 @@ class ListView extends React.Component<any, any> {
   }
 
   _renderContent(dataList) {
-    let { onChecked, onAudit } = this.props.relaxProps;
+    const { onChecked, onAudit } = this.props.relaxProps;
 
     return (
       dataList &&
       dataList.map((v, index) => {
-        let id = v.get('id');
-        let tradePrice = v.getIn(['tradePrice', 'totalPrice']) || 0;
-        let tradePriceObject = v.get('tradePrice') ? (v.get('tradePrice').toJS() as any) : {};
-        let installmentPrice = tradePriceObject.installmentPrice;
-        let gifts = v.get('gifts') ? v.get('gifts') : fromJS([]);
-        let flowState = v.getIn(['tradeState', 'flowState']); //订单状态
-        let isAutoAudit = v.get('isAuditOpen'); //订单审核方式 true:手动审核  false:自动审核
-        let auditState = v.getIn(['tradeState', 'auditState']); //订单审核状态
+        const id = v.get('id');
+        const tradePrice = v.getIn(['tradePrice', 'totalPrice']) || 0;
+        const tradePriceObject = v.get('tradePrice') ? (v.get('tradePrice').toJS() as any) : {};
+        const installmentPrice = tradePriceObject.installmentPrice;
+        const gifts = v.get('gifts') ? v.get('gifts') : fromJS([]);
+        const flowState = v.getIn(['tradeState', 'flowState']); //订单状态
+        const isAutoAudit = v.get('isAuditOpen'); //订单审核方式 true:手动审核  false:自动审核
+        const auditState = v.getIn(['tradeState', 'auditState']); //订单审核状态
         return (
-          <tr className="ant-table-row  ant-table-row-level-0" key={`service-order-template-${id}`}>
+          <tr className="ant-table-row  ant-table-row-level-0" key={id}>
             <td colSpan={9} style={{ padding: 0 }}>
               <table className="ant-table-self" style={{ border: '1px solid #ddd' }}>
                 <thead>

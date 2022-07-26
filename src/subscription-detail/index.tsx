@@ -866,7 +866,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                   columns={columns}
                   dataSource={goodsInfo}
                   pagination={false}
-                  key={(window.crypto.getRandomValues(new Uint8Array(1)) * 0.001)}
+                  key={Math.rdmValue()}
                 />
               </Col>
 

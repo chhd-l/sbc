@@ -77,7 +77,7 @@ export default class BenefitSettingAdd extends Component<any, any> {
   getPromotionCode = () => {
     if (!this.state.promotionCode) {
       let randomNumber = (
-        '0'.repeat(8) + parseInt(String(Math.pow(2, 40) * (window.crypto.getRandomValues(new Uint8Array(1)) * 0.001))).toString(32)
+        '0'.repeat(8) + parseInt(String(Math.pow(2, 40) * Math.rdmValue())).toString(32)
       ).slice(-8);
       let timeStamp = new Date(sessionStorage.getItem('defaultLocalDateTime'))
         .getTime()

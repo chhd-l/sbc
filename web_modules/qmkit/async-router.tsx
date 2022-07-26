@@ -135,7 +135,7 @@ class AsyncLoader extends React.Component<any, any> {
     //   );
 
     return Component ? (
-      <Component {...this.props} key={Math.random()} />
+      <Component {...this.props} key={Math.rdmValue()} />
     ) : Const.SITE_NAME === 'MYVETRECO' ? (
       <div style={{
         position: 'absolute',

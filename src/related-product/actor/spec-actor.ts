@@ -39,7 +39,7 @@ export default class GoodsSpecActor extends Actor {
    * @private
    */
   _randomGoodsInfoNo() {
-    const skuNo = '8' + new Date(sessionStorage.getItem('defaultLocalDateTime')).getTime().toString().slice(4, 10) + Math.random().toString().slice(2, 5);
+    const skuNo = '8' + new Date(sessionStorage.getItem('defaultLocalDateTime')).getTime().toString().slice(4, 10) + Math.rdmValue().toString().slice(2, 5);
 
     // 如果已经生成过，重新生成
     if (this.generatedNo.get(skuNo)) {
@@ -72,7 +72,7 @@ export default class GoodsSpecActor extends Actor {
         'goodsList',
         fromJS([
           {
-            id: Math.random().toString().substring(2),
+            id: Math.rdmValue().toString().substring(2),
             index: 1,
             goodsInfoNo: this._randomGoodsInfoNo()
           }
@@ -326,6 +326,6 @@ export default class GoodsSpecActor extends Actor {
    *  获取整数随机数
    */
   _getRandom = () => {
-    return parseInt(Math.random().toString().substring(2, 18));
+    return parseInt(Math.rdmValue().toString().substring(2, 18));
   };
 }

@@ -11,7 +11,7 @@ var Common = require('./common');
 
 module.exports = {
   /* dev */
-  HOST: 'http://124.71.151.9:8390',
+  HOST: 'https://124.71.151.9:8390',
 
   /* stg */
   //HOST: 'https://storestg.royalcanin.com/api',

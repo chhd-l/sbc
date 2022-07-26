@@ -441,7 +441,7 @@ export default function index({ ...props }) {
    * @returns {string}
    */
   const makeRandom = () => {
-    return 'key' + (Math.random() as any).toFixed(6) * 1000000;
+    return 'key' + (Math.rdmValue() as any).toFixed(6) * 1000000;
   };
   /**
    * 回显StoreCateIds

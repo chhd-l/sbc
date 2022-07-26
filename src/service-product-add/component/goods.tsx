@@ -18,21 +18,23 @@ import { IList, IMap } from 'typings/globalType';
 import { noop, QMMethod, Tips, ValidConst, SelectGroup } from 'qmkit';
 import { fromJS, Map } from 'immutable';
 
-import ImageLibraryUpload from './image-library-upload';
-import VideoLibraryUpload from './video-library-upload';
+
 //import { makeCreateNormalizedMessageFromEsLintFailure } from 'fork-ts-checker-webpack-plugin/lib/NormalizedMessageFactories';
 //import { consoleTestResultHandler } from 'tslint/lib/test';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { RCi18n } from 'qmkit';
 
-const { TextArea } = Input;
-const { Option } = Select;
-// const Option = Select.Option;
-const RadioGroup = Radio.Group;
-const TreeNode = Tree.TreeNode;
+import ImageLibraryUpload from './image-library-upload';
+import VideoLibraryUpload from './video-library-upload';
 
-const FormItem = Form.Item;
-const formItemLayout = {
+let { TextArea } = Input;
+let { Option } = Select;
+// const Option = Select.Option;
+let RadioGroup = Radio.Group;
+let TreeNode = Tree.TreeNode;
+
+let FormItem = Form.Item;
+let formItemLayout = {
   labelCol: {
     span: 2,
     xs: { span: 24 },
@@ -44,13 +46,13 @@ const formItemLayout = {
     sm: { span: 12 }
   }
 };
-const tProps = {
+let tProps = {
   treeCheckable: 'true'
 };
 
-const FILE_MAX_SIZE = 2 * 1024 * 1024;
-const confirm = Modal.confirm;
-const { SHOW_PARENT } = TreeSelect;
+let FILE_MAX_SIZE = 2 * 1024 * 1024;
+let confirm = Modal.confirm;
+let { SHOW_PARENT } = TreeSelect;
 
 @Relax
 export default class Info extends React.Component<any, any> {
@@ -58,63 +60,65 @@ export default class Info extends React.Component<any, any> {
 
   props: {
     relaxProps?: {
-      isEditGoods: boolean;
-      goods: IMap;
-      editGoods: Function;
+      
       editGoodsItem: Function;
       onGoodsTaggingRelList: Function;
       onProductFilter: Function;
+      isEditGoods: boolean;
+      goods: IMap;
+      editGoods: Function;
       statusHelpMap: IMap;
       cateList: IList;
       sourceCateList: IList;
       storeCateList: IList;
       sourceStoreCateList: IList;
-      brandList: IList;
-      images: IList;
-      video: IMap;
       maxCount: number;
       goodsList: any;
       goodsSpecs: any;
       editImages: Function;
+      brandList: IList;
+      images: IList;
+      video: IMap;
       showGoodsPropDetail: Function;
       changeStoreCategory: Function;
       updateGoodsForm: Function;
       showBrandModal: Function;
       showCateModal: Function;
       modalVisible: Function;
+      cateDisabled: boolean;
+      checkFlag: boolean;
       clickImg: Function;
       removeImg: Function;
       removeVideo: Function;
-      cateDisabled: boolean;
-      checkFlag: boolean;
       enterpriseFlag: boolean;
       flashsaleGoods: IList;
       getGoodsCate: IList;
       filtersTotal: IList;
       taggingTotal: IList;
-      goodsTaggingRelList: IList;
-      productFilter: IList;
-      sourceGoodCateList: IList;
       purchaseTypeList: IList;
       frequencyList: any;
       changeDescriptionTab: Function;
       serviceTypeList: IList;
+      goodsTaggingRelList: IList;
+      productFilter: IList;
+      sourceGoodCateList: IList;
     };
   };
 
   static relaxProps = {
-    isEditGoods: 'isEditGoods',
-    // 商品基本信息
-    goods: 'goods',
-    // 修改商品基本信息
-    editGoods: noop,
-    editGoodsItem: noop,
+    
     // 签约平台类目信息
     cateList: 'cateList',
     sourceCateList: 'sourceCateList',
     // 店铺分类信息
     storeCateList: 'storeCateList',
     sourceStoreCateList: 'sourceStoreCateList',
+    isEditGoods: 'isEditGoods',
+    // 商品基本信息
+    goods: 'goods',
+    // 修改商品基本信息
+    editGoods: noop,
+    editGoodsItem: noop,
     // 品牌信息
     brandList: 'brandList',
     // 商品图片
@@ -123,37 +127,38 @@ export default class Info extends React.Component<any, any> {
     video: 'video',
     maxCount: 'maxCount',
     goodsList: 'goodsList',
-    // 修改图片
-    editImages: noop,
-    showGoodsPropDetail: noop,
-    changeStoreCategory: noop,
-    changeDescriptionTab: noop, //动态改变tab编辑器
-    updateGoodsForm: noop,
+    
     // 显示品牌窗口
-    showBrandModal: noop,
-    showCateModal: noop,
-    modalVisible: noop,
     imgVisible: 'imgVisible',
     clickImg: noop,
     removeImg: noop,
     removeVideo: noop,
+    showBrandModal: noop,
+    showCateModal: noop,
+    modalVisible: noop,
     cateDisabled: 'cateDisabled',
     checkFlag: 'checkFlag',
     enterpriseFlag: 'enterpriseFlag',
     flashsaleGoods: 'flashsaleGoods',
     getGoodsCate: 'getGoodsCate',
     filtersTotal: 'filtersTotal',
-    taggingTotal: 'taggingTotal',
-    onGoodsTaggingRelList: noop,
-    onProductFilter: noop,
     goodsTaggingRelList: 'goodsTaggingRelList',
     productFilter: 'productFilter',
     sourceGoodCateList: 'sourceGoodCateList',
+    taggingTotal: 'taggingTotal',
+    onGoodsTaggingRelList: noop,
+    onProductFilter: noop,
     purchaseTypeList: 'purchaseTypeList',
     frequencyList: 'frequencyList',
     goodsSpecs: 'goodsSpecs',
     updateSpecValues: noop,
-    serviceTypeList: 'serviceTypeList'
+    serviceTypeList: 'serviceTypeList',
+    // 修改图片
+    editImages: noop,
+    showGoodsPropDetail: noop,
+    changeStoreCategory: noop,
+    changeDescriptionTab: noop, //动态改变tab编辑器
+    updateGoodsForm: noop,
   };
 
   constructor(props) {
@@ -162,12 +167,13 @@ export default class Info extends React.Component<any, any> {
   }
 
   render() {
-    const WrapperForm = this.WrapperForm;
-    const relaxProps = this.props.relaxProps;
+    let WrapperForm = this.WrapperForm;
+    let relaxProps = this.props.relaxProps;
     return (
-      <div>
+      <div key="1">
         {/* Basic information */}
         <div
+          key="1"
           style={{
             fontSize: 16,
             marginBottom: 10,
@@ -178,8 +184,9 @@ export default class Info extends React.Component<any, any> {
           <FormattedMessage id="product.basicInformation" />
         </div>
         {/* BInfo Form */}
-        <div>
+        <div key="1">
           <WrapperForm
+            key="1"
             ref={(form) => (this['_form'] = form)}
             //ref={(form) => updateGoodsForm(form)}
             {...{ relaxProps: relaxProps }}
@@ -192,7 +199,7 @@ export default class Info extends React.Component<any, any> {
 
 class GoodsForm extends React.Component<any, any> {
   componentDidMount() {
-    const { updateGoodsForm } = this.props.relaxProps;
+    let { updateGoodsForm } = this.props.relaxProps;
     updateGoodsForm(this.props.form);
   }
 
@@ -216,12 +223,12 @@ class GoodsForm extends React.Component<any, any> {
         saleableType: false
       });
     }
-    const storeCateIds = nextProps.relaxProps.goods.get('storeCateIds');
-    const filtersTotal = nextProps.relaxProps.filtersTotal;
+    let storeCateIds = nextProps.relaxProps.goods.get('storeCateIds');
+    let filtersTotal = nextProps.relaxProps.filtersTotal;
     if (this.state.storeCateIds != storeCateIds) {
       this.setState({ storeCateIds: storeCateIds });
     }
-    const goods = Map({
+    let goods = Map({
       ['storeCateIds']: storeCateIds
     });
 
@@ -261,8 +268,8 @@ class GoodsForm extends React.Component<any, any> {
   }
 
   render() {
-    const { getFieldDecorator } = this.props.form;
-    const {
+    let { getFieldDecorator } = this.props.form;
+    let {
       goods,
       images,
       sourceGoodCateList,
@@ -281,9 +288,9 @@ class GoodsForm extends React.Component<any, any> {
       frequencyList,
       serviceTypeList
     } = this.props.relaxProps;
-    const storeCateIds = this.state.storeCateIds;
+    let storeCateIds = this.state.storeCateIds;
     let parentIds = sourceGoodCateList ? sourceGoodCateList.toJS().map((x) => x.cateParentId) : [];
-    const storeCateValues = [];
+    let storeCateValues = [];
     if (storeCateIds) {
       storeCateIds.toJS().map((id) => {
         if (!parentIds.includes(id)) {
@@ -291,19 +298,19 @@ class GoodsForm extends React.Component<any, any> {
         }
       });
     }
-    const taggingRelListValues =
+    let taggingRelListValues =
       (goodsTaggingRelList &&
         goodsTaggingRelList.map((x) => {
           return { value: x.taggingId };
         })) ||
       null;
-    const filterValues =
+      let filterValues =
       (productFilter &&
         productFilter.map((x) => {
           return { value: x.filterValueId };
         })) ||
       null;
-    const loop = (cateList) =>
+      let loop = (cateList) =>
       cateList &&
       cateList.map((item) => {
         if (item.get('children') && item.get('children').count()) {
@@ -363,7 +370,7 @@ class GoodsForm extends React.Component<any, any> {
         {/* The first line */}
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="Product.Servicetype" />}>
+            <FormItem key="1" {...formItemLayout} label={<FormattedMessage id="Product.Servicetype" />}>
               {getFieldDecorator('serviceTypeId', {
                 rules: [
                   { required: true, message: RCi18n({ id: 'Product.Pleaseselectservicetype' }) }
@@ -372,6 +379,7 @@ class GoodsForm extends React.Component<any, any> {
                 initialValue: goods.get('serviceTypeId')
               })(
                 <Select
+                  key="1"
                   getPopupContainer={() => document.getElementById('page-content')}
                   placeholder={RCi18n({ id: 'Product.Pleaseselectservicetype' })}
                 >
@@ -384,7 +392,7 @@ class GoodsForm extends React.Component<any, any> {
               )}
             </FormItem>
           </Col>
-          <Col span={8}>
+          <Col span={8} key="1">
             {/* productName */}
             <FormItem {...formItemLayout} label={<FormattedMessage id="product.productName" />}>
               {getFieldDecorator('goodsName', {
@@ -411,10 +419,10 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
         </Row>
-        <Row type="flex" justify="start">
-          <Col span={8}>
+        <Row type="flex" justify="start" key="1">
+          <Col span={8} key="1">
             {/* SPU */}
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.SPU" />}>
+            <FormItem key="1" {...formItemLayout} label={<FormattedMessage id="product.SPU" />}>
               {getFieldDecorator('goodsNo', {
                 rules: [
                   {
@@ -438,7 +446,7 @@ class GoodsForm extends React.Component<any, any> {
               })(<Input />)}
             </FormItem>
           </Col>
-          <Col span={8}>
+          <Col span={8} key="1">
             {/* InternalSPU */}
             <FormItem {...formItemLayout} label={<FormattedMessage id="product.InternalSPU" />}>
               {getFieldDecorator('internalGoodsNo', {
@@ -493,8 +501,8 @@ class GoodsForm extends React.Component<any, any> {
           </Col>
         </Row> */}
         {/* The third line */}
-        <Row type="flex" justify="start">
-          <Col span={8}>
+        <Row type="flex" justify="start" key="1">
+          <Col span={8} key="1">
             {/* subscriptionStatus */}
             <FormItem
               {...formItemLayout}
@@ -523,7 +531,7 @@ class GoodsForm extends React.Component<any, any> {
               )}
             </FormItem>
           </Col>
-          <Col span={8}>
+          <Col span={8} key="1">
             {/* subscriptionType */}
             <FormItem {...formItemLayout} label={RCi18n({ id: 'Product.subscriptionType' })}>
               {getFieldDecorator('promotions', {
@@ -554,8 +562,8 @@ class GoodsForm extends React.Component<any, any> {
 
         {/*修改*/}
         {/* The fourth row */}
-        <Row type="flex" justify="start">
-          <Col span={8}>
+        <Row type="flex" justify="start" key="1">
+          <Col span={8} key="1">
             {/* defaultPurchaseType */}
             <FormItem
               {...formItemLayout}
@@ -583,7 +591,7 @@ class GoodsForm extends React.Component<any, any> {
               )}
             </FormItem>
           </Col>
-          <Col span={8}>
+          <Col span={8} key="1">
             {/* defaultFrequency */}
             <FormItem
               {...formItemLayout}
@@ -617,8 +625,8 @@ class GoodsForm extends React.Component<any, any> {
           </Col>
         </Row>
         {/* 5 */}
-        <Row type="flex" justify="start">
-          <Col span={8}>
+        <Row type="flex" justify="start" key="1">
+          <Col span={8} key="1">
             {/* Productcategory */}
             <FormItem {...formItemLayout} label={RCi18n({ id: 'Product.Productcategory' })}>
               {getFieldDecorator('cateId', {
@@ -668,7 +676,7 @@ class GoodsForm extends React.Component<any, any> {
               )}
             </FormItem>
           </Col>
-          <Col span={8}>
+          <Col span={8} key="1">
             {/* SalesCategory */}
             <FormItem {...formItemLayout} label={RCi18n({ id: 'Product.SalesCategory' })}>
               {getFieldDecorator('storeCateIds', {
@@ -711,8 +719,8 @@ class GoodsForm extends React.Component<any, any> {
           </Col> */}
         </Row>
         {/* 6 */}
-        <Row type="flex" justify="start">
-          <Col span={8}>
+        <Row type="flex" justify="start" key="1">
+          <Col span={8} key="1">
             {/* brand */}
             <FormItem {...formItemLayout} label={<FormattedMessage id="product.brand" />}>
               {getFieldDecorator(
@@ -730,7 +738,7 @@ class GoodsForm extends React.Component<any, any> {
               )(this._getBrandSelect())}
             </FormItem>
           </Col>
-          <Col span={8}>
+          <Col span={8} key="1">
             {/* Producttagging */}
             <FormItem {...formItemLayout} label={RCi18n({ id: 'Product.Producttagging' })}>
               {getFieldDecorator('tagging', {
@@ -776,8 +784,8 @@ class GoodsForm extends React.Component<any, any> {
           </Col>*/}
         </Row>
         {/* 7 */}
-        <Row>
-          <Col span={16}>
+        <Row key="1">
+          <Col span={16} key="1">
             {/* Productcardintro */}
             <FormItem
               // {...formItemLayout}
@@ -813,8 +821,8 @@ class GoodsForm extends React.Component<any, any> {
           </Col>
         </Row>
         {/* 8 */}
-        <Row>
-          <Col span={16}>
+        <Row key="1">
+          <Col span={16} key="1">
             {/* productSubtitle */}
             <FormItem
               // {...formItemLayout}
@@ -880,8 +888,8 @@ class GoodsForm extends React.Component<any, any> {
           </Col>
         </Row>*/}
         {/* 9 */}
-        <Row type="flex" justify="start">
-          <Col span={8}>
+        <Row type="flex" justify="start" key="1">
+          <Col span={8} key="1">
             {/* Salesstatus */}
             <FormItem {...formItemLayout} label={RCi18n({ id: 'Product.Salesstatus' })}>
               {getFieldDecorator('saleableFlag', {
@@ -909,7 +917,7 @@ class GoodsForm extends React.Component<any, any> {
               )}
             </FormItem>
           </Col>
-          <Col span={12}>
+          <Col span={12} key="1">
             {/* Displayonshop */}
             <FormItem {...formItemLayout} label={RCi18n({ id: 'Product.Displayonshop' })}>
               {getFieldDecorator('displayFlag', {
@@ -934,8 +942,8 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
         </Row>
-        <Row>
-          <Col span={16}>
+        <Row key="1">
+          <Col span={16} key="1">
             {/* productSubtitle */}
             <FormItem
               // {...formItemLayout}
@@ -991,8 +999,8 @@ class GoodsForm extends React.Component<any, any> {
           </Col>
         </Row> */}
         {/* 10 */}
-        <Row type="flex" justify="start">
-          <Col span={8}>
+        <Row type="flex" justify="start" key="1">
+          <Col span={8} key="1">
             {/* productImage */}
             <FormItem
               {...formItemLayout}
@@ -1018,8 +1026,8 @@ class GoodsForm extends React.Component<any, any> {
           </Col>
         </Row>
         {/* 11 */}
-        <Row type="flex" justify="start">
-          <Col span={8}>
+        <Row type="flex" justify="start" key="1">
+          <Col span={8} key="1">
             {/* productVideo */}
             <FormItem {...formItemLayout} label={<FormattedMessage id="product.productVideo" />}>
               <div style={{ width: 550 }}>
@@ -1043,7 +1051,7 @@ class GoodsForm extends React.Component<any, any> {
    * 选中平台类目时，实时显示对应类目下的所有属性信息
    */
   _onChange = (value) => {
-    const { showGoodsPropDetail, changeStoreCategory, changeDescriptionTab } =
+    let { showGoodsPropDetail, changeStoreCategory, changeDescriptionTab } =
       this.props.relaxProps;
     showGoodsPropDetail(value);
     changeStoreCategory(value);
@@ -1053,7 +1061,7 @@ class GoodsForm extends React.Component<any, any> {
    * 修改商品项
    */
   _editGoods = (key: string, e) => {
-    const {
+    let {
       editGoods,
       editGoodsItem,
       showBrandModal,
@@ -1066,7 +1074,7 @@ class GoodsForm extends React.Component<any, any> {
       goodsSpecs,
       updateSpecValues
     } = this.props.relaxProps;
-    const { setFieldsValue } = this.props.form;
+    let { setFieldsValue } = this.props.form;
 
     if (e && e.target) {
       e = e.target.value;
@@ -1249,7 +1257,7 @@ class GoodsForm extends React.Component<any, any> {
    * 修改店铺分类
    */
   storeCateChange = (value, _label, extra) => {
-    const { editGoods, sourceGoodCateList } = this.props.relaxProps;
+    let { editGoods, sourceGoodCateList } = this.props.relaxProps;
     // 店铺分类，结构如 [{value: 1, label: xx},{value: 2, label: yy}]
     // 店铺分类列表
 
@@ -1297,8 +1305,8 @@ class GoodsForm extends React.Component<any, any> {
         }
       });
     });
-    const storeCateIds = originValues;
-    const goods = Map({
+    let storeCateIds = originValues;
+    let goods = Map({
       ['storeCateIds']: storeCateIds
     });
 
@@ -1306,9 +1314,9 @@ class GoodsForm extends React.Component<any, any> {
   };
 
   taggingChange = (taggingValues, _label, extra) => {
-    const { onGoodsTaggingRelList } = this.props.relaxProps;
+    let { onGoodsTaggingRelList } = this.props.relaxProps;
     let originValues = taggingValues.map((v) => v.value);
-    const goodsTaggingRelList = [];
+    let goodsTaggingRelList = [];
     originValues.map((x) => {
       goodsTaggingRelList.push({ taggingId: x });
     });
@@ -1320,7 +1328,7 @@ class GoodsForm extends React.Component<any, any> {
   };
 
   filterChange = (values) => {
-    const { onProductFilter } = this.props.relaxProps;
+    let { onProductFilter } = this.props.relaxProps;
     let allChildrenList = [];
     this.state.filterList.map((x) => {
       x.children.map((c) => allChildrenList.push(c));
@@ -1348,7 +1356,7 @@ class GoodsForm extends React.Component<any, any> {
    * 获取品牌下拉框
    */
   _getBrandSelect = () => {
-    const { brandList } = this.props.relaxProps;
+    let { brandList } = this.props.relaxProps;
     return (
       <Select
         showSearch
@@ -1403,7 +1411,7 @@ class GoodsForm extends React.Component<any, any> {
    * @param storeCateList
    */
   generateStoreCateTree = (storeCateList) => {
-    const { sourceStoreCateList } = this.props.relaxProps;
+    let { sourceStoreCateList } = this.props.relaxProps;
     return (
       storeCateList &&
       storeCateList.map((item) => {

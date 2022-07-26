@@ -2,11 +2,7 @@
  * Created by feitingting on 2017/6/20.
  */
 import { Fetch } from 'qmkit';
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
+import {TResult} from 'qmkit/type';
 
 /**
  * 获取所有的物流接口

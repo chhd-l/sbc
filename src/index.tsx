@@ -34,6 +34,13 @@ import configOkta from '../web_modules/qmkit/config-okta';
 let localeLang = localStorage.getItem(cache.LANGUAGE) || 'en-US';
 (window as any).RCi18n = RCi18n;
 
+// 新增随机数方法
+Math.rdmValue = function () {
+  const crypto = window.crypto || window.msCrypto;
+  var array = new Uint32Array(1);
+  return crypto.getRandomValues(array)[0] / 4294967296;
+};
+
 const lastLang = JSON.parse(window.localStorage.getItem('PHRASE_LANGUAGE')) || enUSLang;
 // 如果需要weebpicker展示设置和美国标准一致，则需要调用下面api设置
 // moment.updateLocale(antLanguage.locale, {

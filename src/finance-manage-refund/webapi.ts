@@ -3,11 +3,7 @@
  */
 import { Fetch } from 'qmkit';
 
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
+import {TResult} from 'qmkit/type';
 
 /**
  * 动态获取支付方式

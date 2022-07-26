@@ -20,6 +20,12 @@ declare interface Window {
   companyType: any;
 }
 
+declare global {
+  interface Math {
+    rdmValue(): number;
+  }
+}
+
 /** redux beg **/
 
 export interface Action<T = any> {

@@ -96,7 +96,7 @@ class ReturnOrderForm extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      flushState: Math.random()
+      flushState: Math.rdmValue()
     };
   }
 
@@ -225,7 +225,7 @@ class ReturnOrderForm extends React.Component<any, any> {
                     add();
                   } else {
                     this.setState({
-                      flushState: Math.random()
+                      flushState: Math.rdmValue()
                     });
                   }
                 });

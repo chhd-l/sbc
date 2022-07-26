@@ -104,7 +104,7 @@ export default class AppStore extends Store {
   };
 
   randomPromotionCode = () => {
-    const randomNumber = ('0'.repeat(8) + parseInt(Math.pow(2, 40) * Math.random()).toString(32)).slice(-8);
+    const randomNumber = ('0'.repeat(8) + parseInt(Math.pow(2, 40) * Math.rdmValue()).toString(32)).slice(-8);
     const timeStamp = new Date(sessionStorage.getItem('defaultLocalDateTime')).getTime().toString().slice(-10);
     const promotionCode = randomNumber + timeStamp;
     return promotionCode;

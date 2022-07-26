@@ -6,17 +6,17 @@ import { Const, history, util, cache, ValidConst } from 'qmkit';
 
 import GoodsActor from './actor/goods-actor';
 import ImageActor from './actor/image-actor';
-import SpecActor from './actor/spec-actor';
-import PriceActor from './actor/price-actor';
 import UserActor from './actor/user-actor';
 import FormActor from './actor/form-actor';
+import SpecActor from './actor/spec-actor';
+import PriceActor from './actor/price-actor';
 import BrandActor from './actor/brand-actor';
 import CateActor from './actor/cate-actor';
 import ModalActor from './actor/modal-actor';
 import PropActor from './actor/prop-actor';
 import FreightActor from './actor/freight-actor';
-import relatedActor from './actor/related';
 import LoadingActor from './actor/loading-actor';
+import relatedActor from './actor/related';
 import { RCi18n } from 'qmkit';
 import {
   addAll,
@@ -25,19 +25,20 @@ import {
   checkSalesType,
   edit,
   editAll,
+
+  getBossUserLevelList,
   fetchImages,
   fetchResource,
   freightList,
-  getBossUserLevelList,
   getBossUserList,
   getBossUserListByName,
   getBrandList,
   getCateIdsPropDetail,
+  getResourceCates,
+  getStoreCateList,
   getCateList,
   getGoodsDetail,
   getImgCates,
-  getResourceCates,
-  getStoreCateList,
   getStoreGoodsTab,
   getUserLevelList,
   getUserList,
@@ -45,19 +46,19 @@ import {
   goodsFreightExpress,
   isFlashsele,
   save,
-  toGeneralgoods,
-  fetchBossCustomerList,
   fetchCustomerList,
   checkEnterpriseType,
   enterpriseToGeneralgoods,
   getDetailTab,
+  toGeneralgoods,
+  fetchBossCustomerList,
   getStoreCode,
   getRelatedList,
   fetchPropSort,
   fetchConsentDelete,
   fetchAdd,
-  fetchproductTooltip,
   fetchFiltersTotal,
+  fetchproductTooltip,
   getSeo,
   editSeo,
   fetchTaggingTotal,
@@ -80,18 +81,18 @@ export default class AppStore extends Store {
 
   bindActor() {
     return [
-      new GoodsActor(),
-      new ImageActor(),
-      new SpecActor(),
       new PriceActor(),
       new UserActor(),
       new FormActor(),
-      new BrandActor(),
-      new CateActor(),
-      new ModalActor(),
+      new GoodsActor(),
+      new ImageActor(),
+      new SpecActor(),
       new PropActor(),
       new FreightActor(),
       new relatedActor(),
+      new BrandActor(),
+      new CateActor(),
+      new ModalActor(),
       new LoadingActor()
     ];
   }
@@ -103,6 +104,7 @@ export default class AppStore extends Store {
     // 保证品牌分类等信息先加载完
     this.dispatch('loading:start');
     let loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
+
     let params = {
       flashSaleGoodsListRequest: {
         goodsId: goodsId,
@@ -245,13 +247,13 @@ export default class AppStore extends Store {
       userList = editResource.allBossCustomers || [];
     }
 
-    const sourceUserList = fromJS(userList);
+    let sourceUserList = fromJS(userList);
     this.dispatch('userActor: setUserList', sourceUserList);
     this.dispatch('userActor: setSourceUserList', sourceUserList);
 
     let newLevelList = [];
     if (util.isThirdStore()) {
-      const userLevelList: any = await getUserLevelList();
+      let userLevelList: any = await getUserLevelList();
       userLevelList.res.context.storeLevelVOList.map((v) => {
         newLevelList.push({
           customerLevelId: v.storeLevelId,
@@ -263,7 +265,7 @@ export default class AppStore extends Store {
       newLevelList = editResource.listBoss.customerLevelVOList;
     }
 
-    const userLevel = {
+    let userLevel = {
       customerLevelId: 0,
       customerLevelName: 'Platform wide customers',
       customerLevelDiscount: 1
@@ -280,8 +282,8 @@ export default class AppStore extends Store {
       this.dispatch('goodsActor: disableCate', false);
       this.dispatch('goodsActor:randomGoodsNo', editResource.getStoreCode);
       this.dispatch('loading:end');
-      const storeGoodsTab = editResource.storeGoodsTab;
-      const tabs = [];
+      let storeGoodsTab = editResource.storeGoodsTab;
+      let tabs = [];
       storeGoodsTab.forEach((info) => {
         if (info.isDefault !== 1) {
           tabs.push({
@@ -294,7 +296,7 @@ export default class AppStore extends Store {
       this.dispatch('goodsActor: goodsTabs', tabs);
 
       //新增产品，初始化价格为0
-      const goodsList = this.state().get('goodsList');
+      let goodsList = this.state().get('goodsList');
       if (goodsList) {
         goodsList.forEach((item) => {
           this.editGoodsItem(item.id, 'marketPrice', '0');
@@ -325,8 +327,8 @@ export default class AppStore extends Store {
       successCount: 0
     }
   ) => {
-    const cateList: any = this.state().get('resourceCates');
-    const cateListIm = this.state().get('resCateAllList');
+    let cateList: any = this.state().get('resourceCates');
+    let cateListIm = this.state().get('resCateAllList');
     if (cateId == -1 && cateList.length > 0) {
       cateId = fromJS(cateList)
         .find((item) => item.get('isDefault') == 1)
@@ -335,7 +337,7 @@ export default class AppStore extends Store {
     cateId = cateId ? cateId : this.state().get('videoCateId').toJS();
 
     //查询视频分页信息
-    const videoList: any = await fetchResource({
+    let videoList: any = await fetchResource({
       pageNum,
       pageSize: 10,
       resourceName: this.state().get('videoSearchName'),
@@ -374,8 +376,8 @@ export default class AppStore extends Store {
       successCount: 0
     }
   ) => {
-    const cateList: any = this.state().get('resourceCates');
-    const cateListIm = this.state().get('resCateAllList');
+    let cateList: any = this.state().get('resourceCates');
+    let cateListIm = this.state().get('resCateAllList');
     if (cateId == -1 && cateList.length > 0) {
       const cateIdList = fromJS(cateList).filter((item) => item.get('isDefault') == 1);
       if (cateIdList.size > 0) {
@@ -383,7 +385,7 @@ export default class AppStore extends Store {
       }
     }
     cateId = cateId ? cateId : this.state().get('cateId');
-    const imageList: any = await fetchImages({
+    let imageList: any = await fetchImages({
       pageNum,
       pageSize: 10,
       resourceName: this.state().get('searchName'),
@@ -500,7 +502,7 @@ export default class AppStore extends Store {
       // 商品基本信息
       let goods = goodsDetail.get('goods');
       //设置编辑器是否为空数组，是空数组，根据cateId去查找，不为空，直接展示
-      const cateId = goods.get('cateId');
+      let cateId = goods.get('cateId');
       _tempGoodsDescriptionDetailList = {
         _cateId: goods.get('cateId'),
         _list: tmpContext?.goodsDescriptionDetailList ?? []
@@ -582,7 +584,7 @@ export default class AppStore extends Store {
         let goodsSpecs = goodsDetail.get('goodsSpecs').sort((o1, o2) => {
           return o1.get('specId') - o2.get('specId');
         });
-        const goodsSpecDetails = goodsDetail.get('goodsSpecDetails');
+        let goodsSpecDetails = goodsDetail.get('goodsSpecDetails');
         goodsSpecs = goodsSpecs.map((item) => {
           // 规格值列表，按照id升序排列
           const specValues = goodsSpecDetails
@@ -603,7 +605,7 @@ export default class AppStore extends Store {
 
         let goodsList = goodsDetail.get('goodsInfos').map((item, index) => {
           // 获取规格值并排序
-          const mockSpecDetailIds = item.get('mockSpecDetailIds').sort();
+          let mockSpecDetailIds = item.get('mockSpecDetailIds').sort();
           basePriceType = item.get('basePriceType') ? Number(item.get('basePriceType')) : 0;
           item.get('mockSpecIds').forEach((specId) => {
             // 规格值保存的顺序可能不是按照规格id的顺序，多个sku的规格值列表顺序是乱序，因此此处不能按照顺序获取规格值。只能从规格规格值对应关系里面去捞一遍。
@@ -688,13 +690,13 @@ export default class AppStore extends Store {
    */
   _getPriceInfo = async (goodsDetail) => {
     // 价格
-    const priceOpt =
+    let priceOpt =
       goodsDetail.getIn(['goods', 'saleType']) === 1 &&
       goodsDetail.getIn(['goods', 'priceType']) === 1
         ? 2
         : goodsDetail.getIn(['goods', 'priceType']);
-    const openUserPrice = goodsDetail.getIn(['goods', 'customFlag']) == 1;
-    const levelDiscountFlag = goodsDetail.getIn(['goods', 'levelDiscountFlag']) == 1;
+    let openUserPrice = goodsDetail.getIn(['goods', 'customFlag']) == 1;
+    let levelDiscountFlag = goodsDetail.getIn(['goods', 'levelDiscountFlag']) == 1;
     this.dispatch('priceActor: editPriceSetting', {
       key: 'priceOpt',
       value: priceOpt
@@ -732,14 +734,14 @@ export default class AppStore extends Store {
       // 密价
       if (openUserPrice) {
         let customerList: any;
-        const customerIds = goodsDetail.get('goodsCustomerPrices').map((item) => {
+        let customerIds = goodsDetail.get('goodsCustomerPrices').map((item) => {
           return item.get('customerId');
         });
         if (util.isThirdStore()) {
-          const list: any = await fetchCustomerList(customerIds);
+          let list: any = await fetchCustomerList(customerIds);
           customerList = fromJS(list.res.context.detailResponseList);
         } else {
-          const list: any = await fetchBossCustomerList(customerIds);
+          let list: any = await fetchBossCustomerList(customerIds);
           customerList = fromJS(list.res.context.detailResponseList);
         }
 
@@ -802,14 +804,14 @@ export default class AppStore extends Store {
     if (!mockSpecId) {
       return;
     }
-    const goodsSpecs = this.state().get('goodsSpecs').toJS();
+    let goodsSpecs = this.state().get('goodsSpecs').toJS();
     let specId;
     goodsSpecs.forEach((item) => {
       if (item.mockSpecId === mockSpecId) {
         specId = item.specId;
       }
     });
-    const goodsInfos = this.state().get('goodsList').toJS();
+    let goodsInfos = this.state().get('goodsList').toJS();
     let specValue;
     goodsInfos.forEach((item) => {
       specValue = item['specId-' + specId];
@@ -836,7 +838,7 @@ export default class AppStore extends Store {
     if (key !== 'marketPrice' && key !== 'subscriptionPrice') {
       return;
     }
-    const value = e;
+    let value = e;
     if (key === 'marketPrice') {
       this.editGoodsItem(id, 'basePrice', value);
     } else if (key === 'subscriptionPrice') {
@@ -846,11 +848,11 @@ export default class AppStore extends Store {
   };
   updateBasePrice2 = (id, key, e) => {
     // type === 'basePrice' || subscriptionBasePrice
-    const mockSpecId = this.state().get('baseSpecId');
+    let mockSpecId = this.state().get('baseSpecId');
     if (!mockSpecId || (key !== 'marketPrice' && key !== 'subscriptionPrice')) {
       return;
     }
-    const goodsSpecs = this.state().get('goodsSpecs').toJS();
+    let goodsSpecs = this.state().get('goodsSpecs').toJS();
     let specId;
     goodsSpecs.forEach((item) => {
       if (item.mockSpecId === mockSpecId) {
@@ -864,7 +866,7 @@ export default class AppStore extends Store {
         specValue = item['specId-' + specId];
       }
     });
-    const value = specValue ? (parseFloat(e) / parseFloat(specValue)).toFixed(2) : null;
+    let value = specValue ? (parseFloat(e) / parseFloat(specValue)).toFixed(2) : null;
     if (key === 'marketPrice') {
       this.editGoodsItem(id, 'basePrice', value);
     } else if (key === 'subscriptionPrice') {
@@ -884,7 +886,7 @@ export default class AppStore extends Store {
   };
 
   computedBasePrice = () => {
-    const goodsInfo = this.state().get('goodsList').toJS();
+    let goodsInfo = this.state().get('goodsList').toJS();
     goodsInfo.forEach((item) => {
       const specValue = item.goodsInfoWeight;
       if (specValue) {
@@ -915,7 +917,7 @@ export default class AppStore extends Store {
    * 设置是否为单规格
    */
   editSpecSingleFlag = (specSingleFlag: boolean) => {
-    const goods = this.state().get('goods');
+    let goods = this.state().get('goods');
     this.dispatch('goodsSpecActor: editSpecSingleFlag', {
       specSingleFlag,
       promotions: goods.get('promotions'),
@@ -935,7 +937,7 @@ export default class AppStore extends Store {
    */
   editSpecValues = (specItem) => {
     const priceOpt = this.state().get('priceOpt');
-    const mtkPrice = this.state().get('mtkPrice') || 0;
+    let mtkPrice = this.state().get('mtkPrice') || 0;
     this.dispatch('goodsSpecActor: editSpecValues', {
       priceOpt,
       mtkPrice,
@@ -1249,7 +1251,7 @@ export default class AppStore extends Store {
    * 确定选择以上视频
    */
   beSureVideos = () => {
-    const chooseVideo = this.state().get('chooseVideos');
+    let chooseVideo = this.state().get('chooseVideos');
     this.dispatch(
       'imageActor: editVideo',
       List.isList(chooseVideo) ? chooseVideo.get(0) : chooseVideo
@@ -1307,7 +1309,7 @@ export default class AppStore extends Store {
     let valid = true;
     let tip = 0;
     let goodsList = this.state().get('goodsList');
-    const saleableFlag = this.state().get('goods').get('saleableFlag') != 0;
+    let saleableFlag = this.state().get('goods').get('saleableFlag') != 0;
     if (goodsList) {
       // goodsList.forEach((item) => {
       //   if (this.state().get('goods').get('saleableFlag') != 0) {
@@ -1469,7 +1471,7 @@ export default class AppStore extends Store {
     if (!this._validMainForms() || !this._validPriceFormsNew() || !this._validInventoryFormsNew()) {
       return false;
     }
-    const data = this.state();
+    let data = this.state();
     let param = Map();
 
     // -----商品信息-------
@@ -1493,11 +1495,11 @@ export default class AppStore extends Store {
     // 是否多规格标记
     goods = goods.set('moreSpecFlag', data.get('specSingleFlag') ? 0 : 1);
     // 详情
-    const detailEditor = data.get('detailEditor') || {};
+    let detailEditor = data.get('detailEditor') || {};
 
     // goods = goods.set('goodsDescription', detailEditor.getContent ? detailEditor.getContent() : '');
     goods = goods.set('goodsDetail', data.get('goods').get('goodsDetail'));
-    const tabs = [];
+    let tabs = [];
     /* if (data.get('detailEditor_0') && data.get('detailEditor_0').val && data.get('detailEditor_0').val.getContent) {
       tabs.push({
         goodsId: goods.get('goodsId'),
@@ -1556,7 +1558,7 @@ export default class AppStore extends Store {
     param = param.set('goods', goods);
 
     // -----商品相关图片-------
-    const images = data.get('images').map((item) => {
+    let images = data.get('images').map((item) => {
       return Map({
         artworkUrl: item.get('artworkUrl'),
         imageId: item.get('imageId'),
@@ -1763,7 +1765,7 @@ export default class AppStore extends Store {
       return false;
     }
 
-    const goodsLevelPrices = data.get('userLevelPrice').valueSeq().toList();
+    let goodsLevelPrices = data.get('userLevelPrice').valueSeq().toList();
     param = param.set('goodsLevelPrices', goodsLevelPrices);
 
     // -----商品客户价格列表-------
@@ -1780,7 +1782,7 @@ export default class AppStore extends Store {
       message.error('起订量不允许超过限订量');
       return false;
     }
-    const userPrice = data.get('userPrice').valueSeq().toList();
+    let userPrice = data.get('userPrice').valueSeq().toList();
     param = param.set('goodsCustomerPrices', userPrice);
 
     // -----商品订货区间价格列表-------
@@ -1818,8 +1820,8 @@ export default class AppStore extends Store {
     let result: any;
     let result2: any;
     let result3: any;
-    const i = this.state().get('checkFlag');
-    const enterpriseFlag = this.state().get('enterpriseFlag');
+    let i = this.state().get('checkFlag');
+    let enterpriseFlag = this.state().get('enterpriseFlag');
     if (this.state().get('getGoodsId')) {
       if (goods.get('saleType') == 0) {
         const goodsId = goods.get('goodsId');
@@ -1872,7 +1874,7 @@ export default class AppStore extends Store {
   searchUserList = async (customerName?: string) => {
     //判断是否是自营店铺 自营店铺根据用户名查询 非自营店铺前台过滤查询
     if (util.isThirdStore()) {
-      const userList = this.state()
+      let userList = this.state()
         .get('sourceUserList')
         .filter((user) => user.get('customerName').indexOf(customerName) > -1);
       this.dispatch('userActor: setUserList', userList);
@@ -1938,7 +1940,7 @@ export default class AppStore extends Store {
    * 添加品牌
    */
   doBrandAdd = async () => {
-    const formData = this.state().get('brandData');
+    let formData = this.state().get('brandData');
     let result: any = await addBrand(formData);
 
     if (result.res.code === Const.SUCCESS_CODE) {
@@ -2153,7 +2155,7 @@ export default class AppStore extends Store {
    */
   beSureImages = () => {
     const chooseImgs = this.state().get('chooseImgs');
-    const imgType = this.state().get('imgType');
+    let imgType = this.state().get('imgType');
     if (imgType === 0) {
       let images = this.state().get('images');
       images = images.concat(chooseImgs);
@@ -2313,8 +2315,8 @@ export default class AppStore extends Store {
         //将商品中的属性与属性值信息映射到类目属性里
         if (goodsPropList && catePropDetail.size > 0 && goodsPropList.size > 0) {
           goodsPropList.forEach((item) => {
-            const { detailIds, propId } = item.toJS();
-            const index = catePropDetail.findIndex((p) => p.get('propId') === propId);
+            let { detailIds, propId } = item.toJS();
+            let index = catePropDetail.findIndex((p) => p.get('propId') === propId);
             if (index > -1) {
               let detailList = catePropDetail.getIn([index, 'goodsPropDetails']).map((d) => {
                 let detailId = detailIds.find((tmpId) => tmpId === d.get('detailId'));
@@ -2339,7 +2341,7 @@ export default class AppStore extends Store {
    * 对应类目、商品下的所有属性信息
    */
   changeStoreCategory = async (goodsCateId) => {
-    const result: any = await getStoreCateList();
+    let result: any = await getStoreCateList();
     if (result.res.code === Const.SUCCESS_CODE) {
       this.dispatch(
         'goodsActor: initStoreCateList',
@@ -2351,13 +2353,13 @@ export default class AppStore extends Store {
    * 对应类目、商品下的所有属性信息
    */
   changeDescriptionTab = async (cateId) => {
-    const { _list } = _tempGoodsDescriptionDetailList;
+    let { _list } = _tempGoodsDescriptionDetailList;
     if (!cateId) return;
-    const result: any = await getDescriptionTab(cateId);
+    let result: any = await getDescriptionTab(cateId);
     if (result.res.code === Const.SUCCESS_CODE) {
       let content = result.res.context;
       let res = content.map((item) => {
-        const _obj =
+        let _obj =
           (_list && _list.length > 0 && _list.find((it) => it.descriptionId === item.id)) ||
           undefined;
 
@@ -2386,7 +2388,7 @@ export default class AppStore extends Store {
    * @private
    */
   _changeList(propDetail) {
-    const newGoodsProps = new Array();
+    let newGoodsProps = new Array();
     let propArr = new Array();
     for (let i = 0; i < propDetail.size; i++) {
       if (i % 2 == 0) {
@@ -2405,7 +2407,7 @@ export default class AppStore extends Store {
    * 所有运费模板
    */
   setFreightList = async () => {
-    const { res, err } = await freightList();
+    let { res, err } = await freightList();
     if (!err && res.code === Const.SUCCESS_CODE) {
       this.dispatch('freight:freightList', fromJS(res.context));
     }
@@ -2451,7 +2453,7 @@ export default class AppStore extends Store {
         cateIdList.push(cateId);
       }
 
-      const secondCateList = cateListIm.filter((item) => item.get('cateParentId') == cateId); //找第二层子节点
+      let secondCateList = cateListIm.filter((item) => item.get('cateParentId') == cateId); //找第二层子节点
       if (secondCateList && secondCateList.size > 0) {
         cateIdList = cateIdList.concat(secondCateList.map((item) => item.get('cateId')).toJS());
         const thirdCateList = cateListIm.filter(
@@ -2467,7 +2469,7 @@ export default class AppStore extends Store {
   };
 
   onRelatedList = async (param?: any) => {
-    const { res } = await getRelatedList(param);
+    let { res } = await getRelatedList(param);
     if (res.code == Const.SUCCESS_CODE) {
       this.transaction(() => {
         this.dispatch(
@@ -2479,7 +2481,7 @@ export default class AppStore extends Store {
   };
 
   propSort = async (param?: any) => {
-    const { res } = await fetchPropSort(param);
+    let { res } = await fetchPropSort(param);
     if (res.code == Const.SUCCESS_CODE) {
       this.transaction(() => {
         this.onRelatedList(this.state().get('goodsId'));
@@ -2489,7 +2491,7 @@ export default class AppStore extends Store {
 
   //删除
   getConsentDelete = async (param?: any) => {
-    const { res } = await fetchConsentDelete(param);
+    let { res } = await fetchConsentDelete(param);
     if (res.code == Const.SUCCESS_CODE) {
       this.transaction(() => {
         this.onRelatedList(this.state().get('getGoodsId'));
@@ -2499,7 +2501,7 @@ export default class AppStore extends Store {
 
   //productselect
   onProductselect = async (addProduct) => {
-    const { res } = await fetchAdd(addProduct);
+    let { res } = await fetchAdd(addProduct);
     if (res.code == Const.SUCCESS_CODE) {
       this.transaction(() => {
         this.dispatch(
@@ -2534,7 +2536,7 @@ export default class AppStore extends Store {
       goodsCateName: this.state().get('storeCateId'),
       brandName: this.state().get('brandId')
     };
-    const { res } = await fetchproductTooltip(request);
+    let { res } = await fetchproductTooltip(request);
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('related:productTooltip', res.context.goods);
       this.dispatch('related:searchType', true);
@@ -2549,7 +2551,7 @@ export default class AppStore extends Store {
       brandName: this.state().get('brandId')
     };
 
-    const { res } = await fetchproductTooltip(request);
+    let { res } = await fetchproductTooltip(request);
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('related:productTooltip', res.context.goods);
       this.dispatch('related:searchType', true);
@@ -2566,7 +2568,7 @@ export default class AppStore extends Store {
 
   getSeo = async (goodsId, type = 1) => {
     this.dispatch('loading:start');
-    const { res } = (await getSeo(goodsId, type)) as any;
+    let { res } = (await getSeo(goodsId, type)) as any;
     this.dispatch('loading:end');
     if (res.code === Const.SUCCESS_CODE && res.context && res.context.seoSettingVO) {
       let title = null;
@@ -2633,11 +2635,11 @@ export default class AppStore extends Store {
     }
   };
   saveSeoSetting = async (goodsId) => {
-    const seoObj = this.state().get('seoForm').toJS();
+    let seoObj = this.state().get('seoForm').toJS();
     this.dispatch('loading:start');
     let params = {};
     const updateNumbers = this.state().get('updateNumbers') + 1;
-    const loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login')); //{storeId: 123457910}
+    let loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login')); //{storeId: 123457910}
     if (loginInfo) {
       switch (loginInfo.storeId) {
         case 123457910: //"美国"

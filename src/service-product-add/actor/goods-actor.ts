@@ -193,7 +193,7 @@ export default class GoodsActor extends Actor {
   randomGoodsNo(state, prefix) {
     let number =
       new Date(sessionStorage.getItem('defaultLocalDateTime')).getTime().toString().slice(4, 10) +
-      Math.random().toString().slice(2, 5);
+      Math.rdmValue().toString().slice(2, 5);
     return state.update('goods', (goods) =>
       goods.set('goodsNo', 'P' + number).set('internalGoodsNo', prefix + '_P' + number)
     );

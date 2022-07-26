@@ -1,9 +1,10 @@
 import { Fetch } from 'qmkit';
+import {TResult2 as TResult } from 'qmkit/type';
 
-type TResult = {
-  code: string;
-  message: string;
-};
+// type TResult = {
+//   code: string;
+//   message: string;
+// };
 
 /**
  * 查询线下付款账户

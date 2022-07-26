@@ -1,10 +1,11 @@
 import { Fetch } from 'qmkit';
+import {TResult } from 'qmkit/type';
 
-type TResult = {
-  code: string;
-  message: string;
-  context: string;
-};
+// type TResult = {
+//   code: string;
+//   message: string;
+//   context: string;
+// };
 
 /**
  * 获取流量概况和折线图数据

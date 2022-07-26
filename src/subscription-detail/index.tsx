@@ -1,34 +1,35 @@
-import React from 'react';
-import { Breadcrumb, Tabs, Row, Col, Button } from 'antd';
-import { Select, message, Table, Collapse, Spin, Tooltip } from 'antd';
-import { Link } from 'react-router-dom';
-import FeedBack from './component/feedback';
-import { Headline, Const, cache, AuthWrapper, getOrderStatusValue, history, util } from 'qmkit';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { Breadcrumb, Button, Col, Collapse, Row, Select, Spin, Table, Tabs, Tooltip } from 'antd';
 import { PostalCodeMsg } from 'biz';
+import moment from 'moment';
+import { AuthWrapper, cache, Const, getOrderStatusValue, Headline, history, util } from 'qmkit';
+import React from 'react';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { Link } from 'react-router-dom';
+import { GetDelivery } from '../delivery-date/webapi';
+import {
+  getAutoSubFrequency,
+  getClubSubFrequency, getCountrySubFrequency, getIndividualSubFrequency
+} from '../task-manage-all-subscription/module/querySysDictionary';
+import FeedBack from './component/feedback';
 import './index.less';
 import * as webapi from './webapi';
-import { GetDelivery } from '../delivery-date/webapi';
-import moment from 'moment';
-import {
-  getCountrySubFrequency,
-  getAutoSubFrequency,
-  getClubSubFrequency,
-  getIndividualSubFrequency
-} from '../task-manage-all-subscription/module/querySysDictionary';
 
-const { Option } = Select;
 const { TabPane } = Tabs;
+//
+const { Option } = Select;
+//
 const Panel = Collapse.Panel;
 
 /**
  * 订阅详情
  */
-class SubscriptionDetail extends React.Component<any, any> {
+class SubscriptionDetail extends React.Component<any, any> {//
+
   props: {
     intl;
     match: any;
   };
+  //
   constructor(props) {
     super(props);
     this.state = {
@@ -66,41 +67,51 @@ class SubscriptionDetail extends React.Component<any, any> {
       deliverDateStatus: 0
     };
   }
-
+//
   componentDidMount() {
     this.setState(
       {
         subscriptionId: this.props.match?.params?.subId || null,
         loading: true,
+        //
         currencySymbol: sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) || ''
       },
       () => {
         this.getSubscriptionDetail();
+        //
         this.getDeliveryDateStatus();
+        //
         this.getOperationLogBySubscribeId();
       }
     );
   }
-
+//
   componentWillUnmount() {
+    //
     sessionStorage.removeItem('fromTaskToSubDetail');
   }
-
+//
   // 获取 deliveryState 状态
-  getDeliveryDateStatus = () => {
-    GetDelivery().then((data) => {
+  getDeliveryDateStatus = () => {//
+    //
+    GetDelivery().then((data) => {//
+      //
       this.setState({
+        //
         deliverDateStatus: data.res?.context?.systemConfigVO?.scon.status || 0
       });
     });
   };
 
   getSubscriptionDetail = () => {
+    //
     this.setState({
       loading: true
     });
+    //
     webapi
       .getSubscriptionDetail(this.state.subscriptionId)
+      //
       .then(async (data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
@@ -111,6 +122,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                 <FormattedMessage id="Subscription.Active" />
               ) : subscriptionDetail.subscribeStatus === '1' ? (
                 <FormattedMessage id="Subscription.Pause" />
+                
               ) : (
                 <FormattedMessage id="Subscription.Inactive" />
               ),
@@ -120,36 +132,40 @@ class SubscriptionDetail extends React.Component<any, any> {
             frequency: subscriptionDetail.cycleTypeId
           });
           const countryArr = await getCountrySubFrequency();
+          //
           const frequencyList =
             subscriptionDetail.subscriptionType == 'Individual'
               ? await getIndividualSubFrequency()
               : subscriptionDetail.subscriptionType == 'Club'
-                ? await getClubSubFrequency()
-                : await getAutoSubFrequency();
+              ? await getClubSubFrequency()
+              : await getAutoSubFrequency();
           this.setState({
             countryArr: countryArr,
             frequencyList: frequencyList
           });
+          //
 
           let goodsInfo = subscriptionDetail.goodsInfo;
+          //
           let paymentInfo = subscriptionDetail.payPaymentInfo;
+          //
           let paymentMethod = subscriptionDetail.paymentMethod;
-
+//
           this.setState(
             {
               subscriptionInfo: subscriptionInfo,
-              goodsInfo: goodsInfo,
-              paymentInfo: paymentInfo,
               petsId: subscriptionDetail.petsId,
               deliveryAddressId: subscriptionDetail.deliveryAddressId,
-              deliveryAddressInfo: subscriptionDetail.consignee,
+              goodsInfo: goodsInfo,
+              completedOrder: subscriptionDetail.completedTradeList,
               billingAddressId: subscriptionDetail.billingAddressId,
               billingAddressInfo: subscriptionDetail.invoice,
+              paymentMethod: paymentMethod,
+              isActive: subscriptionDetail.subscribeStatus === '0',
+              paymentInfo: paymentInfo,
               promotionCode: subscriptionDetail.promotionCode,
               noStartOrder: subscriptionDetail.noStartTradeList,
-              completedOrder: subscriptionDetail.completedTradeList,
-              isActive: subscriptionDetail.subscribeStatus === '0',
-              paymentMethod: paymentMethod,
+              deliveryAddressInfo: subscriptionDetail.consignee,
               serviceFeePrice: subscriptionInfo.serviceFeePrice ?? 0
             },
             () => {
@@ -158,8 +174,9 @@ class SubscriptionDetail extends React.Component<any, any> {
           );
         }
       })
-      .catch((err) => { })
+      .catch((err) => {})
       .finally(() => {
+        //
         this.setState({
           loading: false
         });
@@ -167,9 +184,13 @@ class SubscriptionDetail extends React.Component<any, any> {
   };
 
   addressById = (id: String, type: String) => {
+    //
     webapi.addressById(id).then((data) => {
+      //
       const { res } = data;
+      //
       if (res.code === Const.SUCCESS_CODE) {
+        //
         if (type === 'delivery') {
           let info = res.context;
           let deliveryAddressInfo = {
@@ -178,6 +199,7 @@ class SubscriptionDetail extends React.Component<any, any> {
             address1: info.address1,
             address2: info.address2
           };
+          //
           setTimeout(() => {
             this.setState(
               {
@@ -196,6 +218,7 @@ class SubscriptionDetail extends React.Component<any, any> {
           }, 100);
         }
         if (type === 'billing') {
+          //
           let info = res.context;
           let billingAddressInfo = {
             countryId: info.countryId,
@@ -203,6 +226,7 @@ class SubscriptionDetail extends React.Component<any, any> {
             address1: info.address1,
             address2: info.address2
           };
+          //
           setTimeout(() => {
             this.setState({
               billingAddressInfo: billingAddressInfo
@@ -214,7 +238,9 @@ class SubscriptionDetail extends React.Component<any, any> {
   };
 
   getDictValue = (list, id) => {
+    //
     let tempId = id;
+
     if (list && list.length > 0) {
       let item = list.find((item) => {
         return item.id === id;
@@ -227,6 +253,7 @@ class SubscriptionDetail extends React.Component<any, any> {
   };
 
   getOperationLogBySubscribeId = () => {
+    //
     webapi.getBySubscribeId({ subscribeId: this.state.subscriptionId }).then((data) => {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
@@ -239,8 +266,11 @@ class SubscriptionDetail extends React.Component<any, any> {
   };
 
   subTotal = () => {
-    const { goodsInfo } = this.state;
+    
     let sum = 0;
+
+    const { goodsInfo } = this.state;
+
     for (let i = 0; i < (goodsInfo ? goodsInfo.length : 0); i++) {
       if (goodsInfo[i].subscribeNum && goodsInfo[i].originalPrice) {
         sum += +goodsInfo[i].subscribeNum * +goodsInfo[i].originalPrice;
@@ -250,8 +280,11 @@ class SubscriptionDetail extends React.Component<any, any> {
   };
 
   applyPromotionCode = (promotionCode?: String) => {
-    const { goodsInfo, subscriptionInfo } = this.state;
+
     let goodsInfoList = [];
+
+    const { goodsInfo, subscriptionInfo } = this.state;
+
     for (let i = 0; i < (goodsInfo ? goodsInfo.length : 0); i++) {
       let goods = {
         goodsInfoId: goodsInfo[i].skuId,
@@ -260,55 +293,63 @@ class SubscriptionDetail extends React.Component<any, any> {
       };
       goodsInfoList.push(goods);
     }
+
     let params = {
-      goodsInfoList: goodsInfoList,
-      promotionCode: promotionCode,
-      isAutoSub: true,
       deliveryAddressId: this.state.deliveryAddressId,
       customerAccount: subscriptionInfo.consumerAccount,
+      isAutoSub: true,
       paymentCode: subscriptionInfo.paymentMethod,
+      goodsInfoList: goodsInfoList,
+      promotionCode: promotionCode,
       totalPrice: this.getSubscriptionPrice(
         this.subTotal() -
-        +this.state.discountsPrice +
-        +this.state.deliveryPrice +
-        +this.state.taxFeePrice -
-        +this.state.freeShippingDiscountPrice,
+          +this.state.discountsPrice +
+          +this.state.deliveryPrice +
+          +this.state.taxFeePrice -
+          +this.state.freeShippingDiscountPrice,
         'total'
       )
     };
+
     console.log(
       'this.subTotal()this.subTotal()',
       this.subTotal(),
       this.state.discountsPrice,
       +this.state.discountsPrice +
-      +this.state.deliveryPrice +
-      +this.state.taxFeePrice -
-      +this.state.freeShippingDiscountPrice
+        +this.state.deliveryPrice +
+        +this.state.taxFeePrice -
+        +this.state.freeShippingDiscountPrice
     );
+
     webapi.getPromotionPrice(params).then((data) => {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
         this.setState({
           deliveryPrice: res.context.deliveryPrice,
           discountsPrice: res.context.discountsPrice,
-          promotionCodeShow: res.context.promotionCode,
-          promotionDesc: res.context.promotionDesc,
           taxFeePrice: res.context.taxFeePrice ? res.context.taxFeePrice : 0,
           freeShippingFlag: res.context.freeShippingFlag ?? false,
-          freeShippingDiscountPrice: res.context.freeShippingDiscountPrice ?? 0,
           subscriptionDiscountPrice: res.context.subscriptionDiscountPrice ?? 0,
+          promotionCodeShow: res.context.promotionCode,
+          promotionDesc: res.context.promotionDesc,
+          freeShippingDiscountPrice: res.context.freeShippingDiscountPrice ?? 0,
           promotionVOList: res.context.promotionVOList ?? []
         });
       }
     });
   };
 
-  tabChange = (key) => { };
+  //
+  tabChange = (key) => {};
 
   // 设置价格长度
+
   getSubscriptionPrice = (num: any, type?: any) => {
-    const { subscriptionInfo } = this.state;
+
+    let { subscriptionInfo } = this.state;
+
     if (num > 0) {
+
       let nlen = num.toString().split('.')[1]?.length;
       // subscriptionInfo.subscriptionType == 'Individualization' ? nlen = 4 : nlen = 2;
       // isNaN(nlen) ? 2 : nlen;
@@ -318,46 +359,55 @@ class SubscriptionDetail extends React.Component<any, any> {
       }
       return num.toFixed(nlen);
     } else {
+
       return num;
     }
   };
 
   render() {
+
     const {
       subscriptionId,
-      subscriptionInfo,
-      goodsInfo,
-      paymentInfo,
+      countryArr,
       deliveryAddressInfo,
       billingAddressInfo,
-      countryArr,
-      operationLog,
-      frequencyList,
-      noStartOrder,
+      subscriptionInfo,
+      goodsInfo,
       completedOrder,
+      noStartOrder,
       currencySymbol,
+      frequencyList,
       isActive,
+      paymentInfo,
+      operationLog,
       paymentMethod,
       deliverDateStatus
     } = this.state;
 
-    const columns = [
+    let columns = [
       {
+
         title: (
+
           <span className="subscription_product" style={{ color: '#8E8E8E', fontWeight: 500 }}>
             <FormattedMessage id="Subscription.Product" />
           </span>
+
         ),
         key: 'Product',
+
         width: '40%',
+
         render: (text, record) => (
-          <div style={{ display: 'flex' }}>
+          <div key='subscriptionDetailDiv' style={{ display: 'flex' }}>
+
             <img
               src={util.optimizeImage(record.goodsPic)}
               className="img-item"
               style={styles.imgItem}
               alt=""
             />
+
             <span style={{ margin: 'auto 10px' }}>
               {record.goodsName === 'individualization'
                 ? record.petsName + "'s personalized subscription"
@@ -379,7 +429,7 @@ class SubscriptionDetail extends React.Component<any, any> {
             {subscriptionInfo.subscriptionType == 'Individualization' ? null : (
               <>
                 {storeId === 123457919 &&
-                  this.getSubscriptionPrice(record.originalPrice) ===
+                this.getSubscriptionPrice(record.originalPrice) ===
                   this.getSubscriptionPrice(+record.subscribePrice) ? null : (
                   <p style={{ textDecoration: 'line-through' }}>
                     {currencySymbol + this.getSubscriptionPrice(record.originalPrice)}
@@ -409,16 +459,16 @@ class SubscriptionDetail extends React.Component<any, any> {
       },
       subscriptionInfo.subscribeStatus === '0' || subscriptionInfo.subscribeStatus === '1'
         ? {
-          title: (
-            <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
-              <FormattedMessage id="subscription.realtimeStock" />
-            </span>
-          ),
-          dataIndex: 'stock',
-          key: 'realtime',
-          width: '10%',
-          render: (text, record) => <span>{record?.goodsInfoVO?.stock}</span>
-        }
+            title: (
+              <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+                <FormattedMessage id="subscription.realtimeStock" />
+              </span>
+            ),
+            dataIndex: 'stock',
+            key: 'realtime',
+            width: '10%',
+            render: (text, record) => <span>{record?.goodsInfoVO?.stock}</span>
+          }
         : { title: '' },
       {
         title: (
@@ -464,23 +514,26 @@ class SubscriptionDetail extends React.Component<any, any> {
       }
     ];
 
-    const operatorColumns = [
+    let operatorColumns = [
       {
         title: (window as any).RCi18n({ id: 'Order.OperatorType' }),
         dataIndex: 'operatorType',
         key: 'operatorType'
       },
+      //
       {
         title: (window as any).RCi18n({ id: 'Order.Operator' }),
         dataIndex: 'operator',
         key: 'operator'
       },
+      //
       {
         title: (window as any).RCi18n({ id: 'Order.Time' }),
         dataIndex: 'time',
         key: 'time',
         render: (time: any) => time && moment(time).format(Const.TIME_FORMAT).toString()
       },
+      //
       {
         title: (window as any).RCi18n({
           id: 'Order.OperationCategory'
@@ -488,6 +541,7 @@ class SubscriptionDetail extends React.Component<any, any> {
         dataIndex: 'operationCategory',
         key: 'operationCategory'
       },
+      //
       {
         title: (window as any).RCi18n({
           id: 'Order.OperationLog'
@@ -501,20 +555,26 @@ class SubscriptionDetail extends React.Component<any, any> {
 
     // 翻译title
     operatorColumns.forEach((obj) => {
+
       (obj.title as any) = <FormattedMessage id={`Order.${obj.title}`} />;
+
     });
 
-    const columns_completed = [
+    let columns_completed = [
       {
         title: (
+
           <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
             <FormattedMessage id="Subscription.Product" />
           </span>
+
         ),
         key: 'Product',
+
         width: '30%',
+
         render: (text, record) => (
-          <div>
+          <div key='subdcs2'>
             {record.tradeItems &&
               record.tradeItems.map((item, index) => (
                 <div style={{ display: 'flex' }} key={index}>
@@ -539,51 +599,74 @@ class SubscriptionDetail extends React.Component<any, any> {
       },
       {
         title: (
+
           <span className="subscription_quantity2" style={{ color: '#8E8E8E', fontWeight: 500 }}>
             <FormattedMessage id="Subscription.Quantity" />
           </span>
+
         ),
         key: 'subscribeNum',
+
         width: '10%',
+
         render: (text, record) => (
+
           <div>
             {subscriptionInfo.subscriptionType == 'Individualization'
               ? 1
               : record.tradeItems &&
-              record.tradeItems.map((item, index) => (
-                <div style={{ height: 80 }} key={index}>
-                  <p style={{ paddingTop: 30 }}>X {item.num}</p>
-                </div>
-              ))}
+                record.tradeItems.map((item, index) => (
+                  <div style={{ height: 80 }} key={index}>
+                    <p style={{ paddingTop: 30 }}>X {item.num}</p>
+                  </div>
+                ))}
+
           </div>
         )
       },
+
       {
         title: (
           <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+
             <FormattedMessage id="Subscription.EnjoyDiscount" />
+
           </span>
         ),
         key: 'discount',
+
         width: '10%',
+
         render: (text, record) => (
           <div style={{ color: '#e2001a' }}>
+
             {record.tradePrice && record.tradePrice.discountsPrice
+
               ? currencySymbol + ' ' + '-' + record.tradePrice.discountsPrice
+
               : '-'}
           </div>
         )
       },
       {
         title: (
+
           <span style={{ fontWeight: 500 }}>
+
             <FormattedMessage id="Subscription.Amount" />
+
           </span>
+
         ),
+
         key: 'amount',
+
         width: '10%',
+
         render: (text, record) => (
+
           <div>
+
             {record.tradePrice && record.tradePrice.totalPrice
               ? currencySymbol + ' ' + record.tradePrice.totalPrice
               : '-'}
@@ -592,40 +675,58 @@ class SubscriptionDetail extends React.Component<any, any> {
       },
       {
         title: (
+
           <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+
             <FormattedMessage id="order.orderId" />
+
           </span>
         ),
+
         key: 'id',
+
         width: '10%',
+
         dataIndex: 'id'
+
       },
       {
+
+
         title: (
+
           <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
             <FormattedMessage id="Order.OrderTime" />
+
           </span>
+
         ),
         key: 'shipmentDate',
         dataIndex: 'shipmentDate',
+
         width: '10%',
         render: (text, record) => (
+
           <div>
             {record.tradeState && record.tradeState.createTime
               ? moment(record.tradeState.createTime).format('YYYY-MM-DD')
               : '-'}
           </div>
+
         )
       },
       {
         title: (
           <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
             <FormattedMessage id="Subscription.OrderStatus" />
+        
           </span>
         ),
         key: 'shipmentStatus',
         dataIndex: 'shipmentStatus',
+
         width: '10%',
+        
         render: (text, record) => (
           <div>
             {!record.id ? (
@@ -637,14 +738,18 @@ class SubscriptionDetail extends React.Component<any, any> {
             ) : (
               '-'
             )}
+
           </div>
         )
       },
       {
+        
         title: <FormattedMessage id="Subscription.Operation" />,
         dataIndex: '',
         key: 'x',
+
         width: '10%',
+
         render: (text, record) => (
           <>
             {record.id ? (
@@ -659,16 +764,17 @@ class SubscriptionDetail extends React.Component<any, any> {
       }
     ];
 
-    const columns_foodDispenser_no_start = [
+    let columns_foodDispenser_no_start = [
       {
         title: <FormattedMessage id="Subscription.noStar.DeliveryDate" />,
         key: 'shipmentDate',
+
         dataIndex: 'shipmentDate',
         render: (text, record) => (
           <div>
             {record.tradeItems &&
-              record.tradeItems.length > 0 &&
-              record.tradeItems[0]['nextDeliveryTime']
+            record.tradeItems.length > 0 &&
+            record.tradeItems[0]['nextDeliveryTime']
               ? moment(record.tradeItems[0]['nextDeliveryTime']).format('YYYY-MM-DD')
               : '-'}
           </div>
@@ -678,10 +784,13 @@ class SubscriptionDetail extends React.Component<any, any> {
         title: <FormattedMessage id="Subscription.noStar.Product" />,
         key: 'Product',
         render: (text, record) => (
+
           <div>
             {record.tradeItems &&
-              record.tradeItems.map((item, index) => (
+              record.tradeItems.map(
+                (item, index) => (
                 <div style={{ display: 'flex' }} key={index}>
+                  //
                   <img
                     src={util.optimizeImage(item.pic)}
                     style={{ width: 60, height: 80 }}
@@ -700,12 +809,13 @@ class SubscriptionDetail extends React.Component<any, any> {
           </div>
         )
       },
+
       {
         title: ' ' // cover last th text align right
       }
     ];
 
-    const styles = {
+    let styles = {
       backItem: {
         display: 'flex',
         flexDirection: 'row',
@@ -715,10 +825,11 @@ class SubscriptionDetail extends React.Component<any, any> {
       }
     } as any;
 
+
     const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || '';
 
     return (
-      <div>
+      <div key='subsrc3'>
         {/*从task跳到subscription detail显示不同的面包屑*/}
         {sessionStorage.getItem('fromTaskToSubDetail') ? (
           <Breadcrumb>
@@ -741,6 +852,7 @@ class SubscriptionDetail extends React.Component<any, any> {
           </Breadcrumb>
         ) : (
           <Breadcrumb>
+
             <Breadcrumb.Item>
               <a href="/subscription-list">
                 <FormattedMessage id="Subscription.Subscription" />
@@ -797,6 +909,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                 <span style={{ fontSize: '16px', color: '#3DB014' }}>
                   {subscriptionInfo?.subscriptionStatus}
                 </span>
+
               </Col>
               <Col span={11} className="basic-info">
                 <p>
@@ -817,6 +930,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                 <p>
                   <FormattedMessage id="Subscription.AuditorID" /> :{' '}
                   <span>{subscriptionInfo.prescriberId}</span>
+
                 </p>
                 <p>
                   <FormattedMessage id="Subscription.AuditorName" /> :{' '}
@@ -839,6 +953,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                 {storeId === 123457919 ? (
                   <p>
                     <FormattedMessage id="PetOwner.PetOwnerName katakana" /> :{' '}
+
                     <span>
                       {subscriptionInfo.firstNameKatakana} {subscriptionInfo.lastNameKatakana}
                     </span>
@@ -861,12 +976,13 @@ class SubscriptionDetail extends React.Component<any, any> {
             {/* subscription 和 total */}
             <Row style={{ marginTop: 20 }} gutter={16}>
               <Col span={24}>
+
                 <Table
                   rowKey={(record, index) => index.toString()}
                   columns={columns}
                   dataSource={goodsInfo}
                   pagination={false}
-                  key={Math.random()}
+                  key={Math.rdmValue()}
                 />
               </Col>
 
@@ -881,6 +997,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                 </div>
 
                 {goodsInfo[0]?.originalPrice !== goodsInfo[0]?.subscribePrice && (
+
                   <div className="flex-between">
                     {/* <span>{this.state.promotionDesc ? this.state.promotionDesc : 'Promotion'}</span> */}
                     <span>
@@ -902,6 +1019,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                   <div key={idx} className="flex-between">
                     <span>{pvo.marketingName}</span>
                     <span style={styles.priceStyle}>
+                      
                       {currencySymbol +
                         ' -' +
                         this.getSubscriptionPrice(pvo.discountPrice ? pvo.discountPrice : 0)}
@@ -926,6 +1044,7 @@ class SubscriptionDetail extends React.Component<any, any> {
 
                 <div className="flex-between">
                   <span>
+
                     <FormattedMessage id="Subscription.Shipping" />
                   </span>
                   <span style={styles.priceStyle}>
@@ -937,6 +1056,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                 </div>
                 {this.state.freeShippingFlag && (
                   <div className="flex-between">
+
                     <span>
                       <FormattedMessage id="Order.shippingFeesDiscount" />
                     </span>
@@ -966,6 +1086,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                 ) : null}
 
                 {this.state.serviceFeePrice > 0 && (
+
                   <div className="flex-between">
                     <span>
                       <FormattedMessage id="Order.serviceFeePrice" />
@@ -986,21 +1107,23 @@ class SubscriptionDetail extends React.Component<any, any> {
                     (<FormattedMessage id="Subscription.IVAInclude" />
                     ):
                   </span>
+
                   <span className="total-iva-include" style={styles.priceStyle}>
                     {currencySymbol +
                       this.getSubscriptionPrice(
                         this.subTotal() -
-                        +this.state.discountsPrice +
-                        +this.state.deliveryPrice +
-                        +this.state.taxFeePrice -
-                        +this.state.freeShippingDiscountPrice +
-                        +this.state.serviceFeePrice,
+                          +this.state.discountsPrice +
+                          +this.state.deliveryPrice +
+                          +this.state.taxFeePrice -
+                          +this.state.freeShippingDiscountPrice +
+                          +this.state.serviceFeePrice,
                         'total'
                       )}
                   </span>
                 </div>
               </Col>
             </Row>
+
             <Row className="consumer-info" style={{ marginTop: 20 }}>
               <Col span={8}>
                 <Row>
@@ -1017,6 +1140,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                   {storeId === 123457919 ? (
                     <>
                       <Col span={24}>
+
                         <p style={{ width: 210 }}>
                           <FormattedMessage id="Subscription.Name" />:{' '}
                         </p>
@@ -1033,35 +1157,40 @@ class SubscriptionDetail extends React.Component<any, any> {
                         <p>
                           {deliveryAddressInfo
                             ? deliveryAddressInfo.lastNameKatakana +
-                            ' ' +
-                            deliveryAddressInfo.firstNameKatakana
+                              ' ' +
+                              deliveryAddressInfo.firstNameKatakana
                             : ''}
                         </p>
                       </Col>
+
                       <Col span={24}>
                         <p style={{ width: 210 }}>
                           <FormattedMessage id="PetOwner.AddressForm.Postal code" />:{' '}
                         </p>
                         <p>{deliveryAddressInfo.postCode}</p>
                       </Col>
+
                       <Col span={24}>
                         <p style={{ width: 210 }}>
                           <FormattedMessage id="PetOwner.AddressForm.State" />:{' '}
                         </p>
                         <p>{deliveryAddressInfo.province}</p>
                       </Col>
+
                       <Col span={24}>
                         <p style={{ width: 210 }}>
                           <FormattedMessage id="PetOwner.AddressForm.City" />:{' '}
                         </p>
                         <p>{deliveryAddressInfo.city}</p>
                       </Col>
+                      
                       <Col span={24}>
                         <p style={{ width: 210 }}>
                           <FormattedMessage id="PetOwner.AddressForm.Region" />:{' '}
                         </p>
                         <p>{deliveryAddressInfo.area}</p>
                       </Col>
+                      //
                       <Col span={24}>
                         <p style={{ width: 210 }}>
                           <FormattedMessage id="PetOwner.AddressForm.Address1" />:{' '}
@@ -1101,7 +1230,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                           <p>{deliveryAddressInfo.province}</p>
                         </Col>
                       ) : null}
-
+//
                       <Col span={24}>
                         <p style={{ width: 140 }}>
                           <FormattedMessage id="Subscription.Country" />:{' '}
@@ -1112,6 +1241,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                             : deliveryAddressInfo.country}
                         </p>
                       </Col>
+                      //
                       <Col span={24}>
                         <p style={{ width: 140 }}>
                           <FormattedMessage id="Subscription.Address1" />:{' '}
@@ -1150,17 +1280,19 @@ class SubscriptionDetail extends React.Component<any, any> {
                       <Col span={24}>
                         {!deliveryAddressInfo.validFlag
                           ? deliveryAddressInfo.alert && (
-                            <PostalCodeMsg text={deliveryAddressInfo.alert} />
-                          )
+                              <PostalCodeMsg text={deliveryAddressInfo.alert} />
+                            )
                           : null}
                       </Col>
                     </>
                   )}
                 </Row>
               </Col>
+              //
               {/* 如果是俄罗斯or日本 如果是HOME_DELIVERY（并且timeslot存在） 显示 timeSlot 信息,如果是PICK_UP 显示pickup 状态
               如果是美国不显示内容 其他国家显示billingAddress */}
               {/* deliverDateStatus要从 data.res?.context?.systemConfigVO?.status */}
+
               <Col span={8}>
                 {storeId === 123457907 || storeId === 123457919 ? (
                   <Row>
@@ -1203,6 +1335,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                       </>
                     ) : null}
                   </Row>
+                  //
                 ) : storeId === 123457910 ? null : (
                   <Row>
                     <Col span={12}>
@@ -1246,7 +1379,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                           : billingAddressInfo.country}
                       </p>
                     </Col>
-
+//
                     <Col span={24}>
                       <p style={{ width: 140 }}>
                         <FormattedMessage id="Subscription.Address1" />:{' '}
@@ -1262,7 +1395,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                         {billingAddressInfo ? billingAddressInfo.address2 : ''}
                       </p>
                     </Col>
-
+//
                     {billingAddressInfo?.county ? (
                       <Col span={24}>
                         <p style={{ width: 140 }}>
@@ -1288,6 +1421,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                         <p style={{ width: 140 }}>
                           <FormattedMessage id="Subscription.PaymentMethod" />:{' '}
                         </p>
+                        //
                         <p>
                           {paymentInfo && paymentInfo.paymentVendor ? (
                             paymentInfo?.paymentItem?.toLowerCase() === 'adyen_moto' ? (
@@ -1305,7 +1439,8 @@ class SubscriptionDetail extends React.Component<any, any> {
                         </p>
                       </Col>
                       {paymentInfo?.paymentItem?.toLowerCase() !== 'adyen_paypal' &&
-                        paymentInfo?.paymentItem?.toLowerCase() !== 'adyen_moto' && paymentInfo?.paymentItem?.toLowerCase() !== 'adyen_ideal' ? (
+                      paymentInfo?.paymentItem?.toLowerCase() !== 'adyen_moto' &&
+                      paymentInfo?.paymentItem?.toLowerCase() !== 'adyen_ideal' ? (
                         <Col span={24}>
                           <p style={{ width: 140 }}>
                             <FormattedMessage id="Subscription.CardNumber" />:{' '}
@@ -1337,11 +1472,14 @@ class SubscriptionDetail extends React.Component<any, any> {
                       </p>
                     </Col>
                   ) : null}
+                  
                 </Row>
               </Col>
             </Row>
           </div>
+          //
           <div className="container-search">
+
             <Headline title={<FormattedMessage id="Subscription.AutoshipOrder" />} />
             <Tabs defaultActiveKey="1" onChange={this.tabChange}>
               <TabPane tab={<FormattedMessage id="Subscription.NoStart" />} key="noStart">
@@ -1351,7 +1489,9 @@ class SubscriptionDetail extends React.Component<any, any> {
                   dataSource={noStartOrder}
                   pagination={false}
                 />
+
               </TabPane>
+
               <TabPane tab={<FormattedMessage id="Subscription.Completed" />} key="completed">
                 <Table
                   rowKey={(record, index) => index.toString()}
@@ -1364,8 +1504,10 @@ class SubscriptionDetail extends React.Component<any, any> {
                   dataSource={completedOrder}
                   pagination={false}
                 />
+
               </TabPane>
             </Tabs>
+
             <Row style={styles.backItem}>
               <Collapse>
                 <Panel
@@ -1388,6 +1530,7 @@ class SubscriptionDetail extends React.Component<any, any> {
               </Collapse>
             </Row>
           </div>
+
           <AuthWrapper functionName="f_subscription_feedback">
             {this.state.subscriptionId ? (
               <FeedBack subscriptionId={this.state.subscriptionId} />
@@ -1402,7 +1545,7 @@ class SubscriptionDetail extends React.Component<any, any> {
               </Link>
             </Button>
           ) : null}
-
+//
           <Button onClick={() => (history as any).go(-1)}>
             {<FormattedMessage id="Subscription.back" />}
           </Button>
@@ -1411,6 +1554,7 @@ class SubscriptionDetail extends React.Component<any, any> {
     );
   }
 }
+//
 export default injectIntl(SubscriptionDetail);
 const styles = {
   priceStyle: {

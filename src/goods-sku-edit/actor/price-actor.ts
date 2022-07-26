@@ -172,7 +172,7 @@ export default class PriceActor extends Actor {
    */
   @Action('priceActor: addAreaPrice')
   addAreaPrice(state) {
-    const id = Math.random()
+    const id = Math.rdmValue()
       .toString()
       .substring(2);
     const map = fromJS({

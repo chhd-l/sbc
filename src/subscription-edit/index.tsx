@@ -544,7 +544,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
   getDictValue = (list, id) => {
     if (list && list.length > 0) {
-      let item = list.find((item) => {
+      const item = list.find((item) => {
         return item.id === id;
       });
       if (item) {
@@ -561,7 +561,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     if (address.city) {
       return address.city;
     }
-    const { deliveryCityArr, billingCityArr } = this.state;
+    let { deliveryCityArr, billingCityArr } = this.state;
     let list = [];
     list = list.concat(deliveryCityArr, billingCityArr);
     if (list && list.length > 0) {
@@ -576,7 +576,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   };
 
   getAddressList = (customerId, type, showModal = false) => {
-    const { deliveryAddressInfo, pickupIsOpen, pickupEditNumber } = this.state;
+    let { deliveryAddressInfo, pickupIsOpen, pickupEditNumber } = this.state;
     webapi.getAddressListByType(customerId, type).then((data) => {
       const res = data.res;
       if (res.code === Const.SUCCESS_CODE) {
@@ -653,7 +653,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   };
 
   selectedOnTop = (addressList, selectedId) => {
-    const selectedAddressIdx = addressList.findIndex((item) => {
+    let selectedAddressIdx = addressList.findIndex((item) => {
       return item.deliveryAddressId === selectedId;
     });
     if (selectedAddressIdx > -1) {
@@ -677,7 +677,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     const { customerId } = this.state;
     updateAddress(params)
       .then((data) => {
-        const res = data.res;
+        let res = data.res;
         if (res.code === 'K-000000') {
           this.getAddressList(customerId, 'DELIVERY', true);
           message.success(RCi18n({ id: 'PetOwner.OperateSuccessfully' }));
@@ -699,7 +699,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
   // 保存pickup地址
   pickupConfirm = async () => {
-    const { deliveryList, pickupAddress, pickupFormData, customerId, countryArr } = this.state;
+    let { deliveryList, pickupAddress, pickupFormData, customerId, countryArr } = this.state;
 
     let tempPickup = Object.keys(deliveryList.length > 0 ? deliveryList[0] : {}).reduce(
       (pre, cur) => {
@@ -727,7 +727,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       await this.updatePickupAddress(params);
     } else {
       // 添加地址
-      const { res } = await addAddress({
+      let { res } = await addAddress({
         ...params,
         customerId
       });
@@ -817,7 +817,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         !deliveryAddressInfo.house ||
         !deliveryAddressInfo.city
       ) {
-        const errMsg = !deliveryAddressInfo.street
+        let errMsg = !deliveryAddressInfo.street
           ? RCi18n({ id: 'PetOwner.AddressStreetTip' })
           : !deliveryAddressInfo.postCode
             ? RCi18n({ id: 'PetOwner.AddressPostCodeTip' })
@@ -876,7 +876,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   };
 
   billingOK = () => {
-    const { billingList, deliveryList, billingAddressId } = this.state;
+    let { billingList, deliveryList, billingAddressId } = this.state;
     let billingAddressInfo = billingList.find((item) => {
       return item.deliveryAddressId === billingAddressId;
     });
@@ -906,7 +906,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   };
 
   subTotal = () => {
-    const { goodsInfo } = this.state;
+    let { goodsInfo } = this.state;
     let sum = 0;
     for (let i = 0; i < goodsInfo.length; i++) {
       if (goodsInfo[i].subscribeNum && goodsInfo[i].originalPrice) {
@@ -1069,7 +1069,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     webapi
       .queryCityById({ id: ids })
       .then((data) => {
-        const { res } = data;
+        let { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           if (type === 'BILLING') {
             let billingCityArr = [];
@@ -1132,7 +1132,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
   // 设置价格长度
   getSubscriptionPrice = (num: any) => {
-    const { subscriptionType } = this.state;
+    let { subscriptionType } = this.state;
     if (num > 0) {
       let nlen = num.toString().split('.')[1]?.length;
       // subscriptionType == 'Individualization' ? nlen = 4 : nlen = 2;
@@ -1323,10 +1323,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             ...params,
             refillPromotionId: subscriptionNextRefillPromotion?.refillPromotionId,
           };
-          let { res } = await webapi.refillModifyProduct(params);
+          const { res } = await webapi.refillModifyProduct(params);
           resp = res
         } else {
-          let { res } = await webapi.refillAddProduct(params);
+          const { res } = await webapi.refillAddProduct(params);
           resp = res
         }
         if (resp.code === Const.SUCCESS_CODE) {
@@ -1376,7 +1376,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           ...params,
           refillPromotionId: subscriptionNextRefillPromotion?.refillPromotionId,
         };
-        let { res } = await webapi.refillModifyProduct(params);
+        const { res } = await webapi.refillModifyProduct(params);
         resp = res
       } else {
         let { res } = await webapi.refillAddProduct(params);

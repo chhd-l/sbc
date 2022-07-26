@@ -1,4 +1,5 @@
 import { Fetch } from 'qmkit';
+import {TResult} from 'qmkit/type';
 
 /**
  * 获取业务员自己的信息,用于判断是否业务员
@@ -50,11 +51,7 @@ export const fetchAllCustomerLevel = () => {
  * @param customerIds
  * @returns {Promise<IAsyncResult<T>>}
  */
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
+
 
 /**
  * 新增

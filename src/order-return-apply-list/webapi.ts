@@ -1,11 +1,7 @@
 import { Fetch } from 'qmkit';
 
 
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
+import {TResult} from 'qmkit/type';
 
 export const fetchOrderList = (filter = {}) => {
   // return Fetch<TResult>('/trade/list/return', {

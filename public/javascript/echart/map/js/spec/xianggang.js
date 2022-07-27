@@ -1,16 +1,19 @@
-(function (root, factory) {
+(function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
     define(['exports', 'echarts'], factory);
-  } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
+  } else if (
+    typeof exports === 'object' &&
+    typeof exports.nodeName !== 'string'
+  ) {
     // CommonJS
     factory(exports, require('echarts'));
   } else {
     // Browser globals
     factory({}, root.echarts);
   }
-})(this, function (exports, echarts) {
-  var log = function (msg) {
+})(this, function(exports, echarts) {
+  var log = function(msg) {
     if (typeof console !== 'undefined') {
       console && console.error && console.error(msg);
     }
@@ -49,7 +52,9 @@
             ['@@H[@EEGU@KCCDGEEABQi@AHCF@B^P@BABOFCFBFF@FDNADADHJDjB'],
             ['@@DEBEFC@CJKD@DCHDLDBMEG@CFCLICETSDQSJeMGVKHGJIR@HFJBFG^FDF@'],
             ['@@AC@IH_BAYCEDIAGDICGCCDC@IL@DEDAFCFNDVD@BADBBHCFDJA^D'],
-            ['@@F@HWF@DABD@IHBB@GOAENMBE@AEAGOBCFE@CqXCRSTDFKJED@DFHANFCJBFCZD'],
+            [
+              '@@F@HWF@DABD@IHBB@GOAENMBE@AEAGOBCFE@CqXCRSTDFKJED@DFHANFCJBFCZD'
+            ],
             [
               '@@AEDQ@WQACIKIGCQCABAHC@]I@ADC@ECICCKEGA@NuASIHyO@IEQW@CÙF~bNJFL@D@FLBBNPJJFIDAHEDBDHBDDBBTCB@AHDB^@@JHHF@DDLFJFDBHCD@PPD@L@RLLBDHVBNAHBBABGhB'
             ],
@@ -87,7 +92,9 @@
             ['@@@A@B'],
             ['@@BCAB@B'],
             ['@@@A@B'],
-            ['@@@FBCDBDABBBBBABCB@ABDBBDB@DH@JABBDNEBE@CD@FCKKG@AEC@EBA@ACIEA@EDBB@DB@ED'],
+            [
+              '@@@FBCDBDABBBBBABCB@ABDBBDB@DH@JABBDNEBE@CD@FCKKG@AEC@EBA@ACIEA@EDBB@DB@ED'
+            ],
             ['@@A@B@'],
             ['@@D@BCG@ADBBBA'],
             ['@@@@@@'],
@@ -137,7 +144,6 @@
             ['@@@A@B@@'],
             ['@@HE@C@ICAA@AHAHCEEFBF@BD@FA'],
             ['@@BACA@CC@@DFD'],
-
             ['@@@AA@BB'],
             ['@@BCFE@ACCDQCACB@FCBCLGHFFBHFDB@DE@AEBBE'],
             ['@@@ACAAFFA'],
@@ -170,7 +176,6 @@
             ['@@@A@B'],
             ['@@@A@B'],
             ['@@@AABB@'],
-
             ['@@BAEBBBBA'],
             ['@@@@@@'],
             ['@@A@B@'],
@@ -184,7 +189,6 @@
             ['@@@EAABAE@AAA@@JF@@FBBBA@C'],
             ['@@@CCB@BD@'],
             ['@@AA@GAAEAAE@@E@AJFLDDFADFF@@EEC'],
-
             ['@@AFDBJBAADCDEACFEGA@EEB@FEDAH'],
             ['@@JDB@ACDC@AA@ACB@@ADA@EC@@EAEC@E@AECAABBFIBED@F@DFHFDDAFF'],
             [
@@ -201,7 +205,6 @@
             ['@@BCAAIBA@BDBDJB@CAA'],
             ['@@BCCGGCGBABBHFDL@'],
             ['@@J@FC@AAKFGCIC@EDADAD@B@BCBAAEHI@AF@BB@@DT@'],
-
             [
               '@@CEMI@ABEHHFBHBHAFDFBF@BCLBDC@AGIK@OMDKJM@CAAC@YP@AHKAGAACBGHEGC@GBMDCD@HBDFDDDBXCFBNAHEBA@@IEAGCK@CNBDLHHD@BEBDFGD@DVJBBBBBCF@BECGACLGBEAADEDADFF@DE@E'
             ],
@@ -214,7 +217,6 @@
             ['@@B@BBBA@EACGAEFA@GDBHJJFA@CB@BCAA@C'],
             ['@@D@BCBEAECCGC@BIB@CAA@FA@@PTD'],
             ['@@DE@KG@CBAHBDDABFB@'],
-
             ['@@BB@CAB'],
             ['@@BHBB@CAEA@'],
             ['@@BADBDABAD@BAAABAAAABABAA@CA@ADAAAB@DABCACCC@BRHCBC'],
@@ -222,7 +224,6 @@
             ['@@DAAC@@CD@BB@'],
             ['@@ABBA'],
             ['@@BAC@BB'],
-
             ['@@AAA@BDBA'],
             ['@@A@B@'],
             ['@@BBBAAAABCAA@FB'],
@@ -238,7 +239,6 @@
             [[116860, 22817]],
             [[116927, 22822]],
             [[116967, 22827]],
-
             [[116946, 22787]],
             [[116886, 22776]],
             [[116934, 22767]],
@@ -254,7 +254,6 @@
             [[116810, 22924]],
             [[116618, 22917]],
             [[116612, 22891]],
-
             [[116626, 22888]],
             [[116629, 22880]],
             [[116725, 22874]],
@@ -271,7 +270,6 @@
             [[117014, 23081]],
             [[117057, 23081]],
             [[117015, 23077]],
-
             [[117062, 23071]],
             [[117020, 23075]],
             [[117024, 23072]],
@@ -284,7 +282,6 @@
             [[117043, 23049]],
             [[117033, 23064]],
             [[117035, 23059]],
-
             [[117043, 23052]],
             [[117049, 23053]],
             [[117040, 23048]],
@@ -300,7 +297,6 @@
             [[117084, 23018]],
             [[117081, 23013]],
             [[117180, 23003]],
-
             [[117039, 23001]],
             [[116966, 22997]],
             [[117006, 22983]],
@@ -320,7 +316,6 @@
             [[117029, 22917]],
             [[117054, 22915]],
             [[117038, 22915]],
-
             [[117048, 22915]],
             [[117075, 22911]],
             [[117036, 22912]],
@@ -337,7 +332,6 @@
             [[117120, 22880]],
             [[117102, 22876]],
             [[117073, 22876]],
-            
             [[117119, 22871]],
             [[117126, 22873]],
             [[117085, 22870]],
@@ -398,7 +392,6 @@
             [[116645, 22704]],
             [[116647, 22703]],
             [[116640, 22702]],
-            
             [[116646, 22692]],
             [[116656, 22693]],
             [[116663, 22685]],

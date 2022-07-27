@@ -1,26 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Store } from 'plume2';
-import moment from 'moment';
 import { DatePicker, Form, Input, Select, Radio } from 'antd';
 import { FindArea, QMMethod, ValidConst, Const } from 'qmkit';
-const RadioGroup = Radio.Group;
-const RadioButton = Radio.Button;
+import moment from 'moment';
 
 const Option = Select.Option;
 
 const FormItem = Form.Item;
-let formItemLayout = {
-  wrapperCol: {
-    span: 24,
-    xs: { span: 24 },
-    sm: { span: 14 }
-  },
+const RadioGroup = Radio.Group;
+const RadioButton = Radio.Button;
+const formItemLayout = {
   labelCol: {
     span: 2,
     xs: { span: 24 },
     sm: { span: 6 }
   },
+  wrapperCol: {
+    span: 24,
+    xs: { span: 24 },
+    sm: { span: 14 }
+  }
 };
 
 export default class AddOrderInvoiceForm extends React.Component<any, any> {
@@ -28,71 +28,67 @@ export default class AddOrderInvoiceForm extends React.Component<any, any> {
 
   //声明上下文依赖
   static contextTypes = {
-
-    
     _plume$Store: PropTypes.object
   };
 
   constructor(props, ctx) {
     super(props);
-
     this._store = ctx['_plume$Store'];
   }
 
   render() {
-    let { getFieldDecorator } = this.props.form;
+    const { getFieldDecorator } = this.props.form;
+    const store = this._store as any;
 
-    let store = this._store as any;
+    const orderInvoiceDetail = store.state().get('orderInvoiceDetail');
+    const orderInvoiceForm = store.state().get('orderInvoiceForm');
 
-    let orderInvoiceDetail = store.state().get('orderInvoiceDetail');
-    let orderInvoiceForm = store.state().get('orderInvoiceForm');
-
-    let visible = store.state().get('visible');
+    const visible = store.state().get('visible');
     if (!visible) {
       return null;
     }
 
     //开票项
-    let invoiceTime = orderInvoiceForm.get('invoiceTime') && {
+    const invoiceTime = orderInvoiceForm.get('invoiceTime') && {
       initialValue: moment(
         orderInvoiceForm.get('invoiceTime'),
         Const.TIME_FORMAT
       )
     };
 
-    let orderInvoiceType = {
+    const orderInvoiceType = {
       initialValue: orderInvoiceForm.get('orderInvoiceType')
     };
 
-    let orderInvoiceProject = {
+    const orderInvoiceProject = {
       initialValue:
         orderInvoiceForm.get('orderInvoiceType') != 1
           ? orderInvoiceForm.get('orderInvoiceProject')
           : this.getDefaultInvoiceId()
     };
 
-    let addressInfoId = {
+    const addressInfoId = {
       initialValue: orderInvoiceForm.get('addressInfoId')
     };
 
-    let orderNo = {
+    const orderNo = {
       initialValue: orderInvoiceForm.get('orderNo')
     };
 
-    let invoiceTitle = {
+    const invoiceTitle = {
       initialValue: orderInvoiceForm.get('invoiceTitle')
     };
 
-    let isCompany = {
+    const isCompany = {
       initialValue: orderInvoiceForm.get('isCompany') || '1'
     };
 
-    let taxpayerNumber = {
+    const taxpayerNumber = {
       initialValue: orderInvoiceForm.get('taxpayerNumber')
     };
 
     return (
-      <Form key={'financeRewardComponentsAddOrderInvoiceForm'}>
+      <Form>
         <FormItem {...formItemLayout} label="订单号">
           {getFieldDecorator('orderNo', {
             ...orderNo,
@@ -263,7 +259,6 @@ export default class AddOrderInvoiceForm extends React.Component<any, any> {
             </Select>
           )}
         </FormItem>
-
         <FormItem {...formItemLayout} label="开票时间">
           {getFieldDecorator('invoiceTime', {
             ...invoiceTime,
@@ -291,13 +286,11 @@ export default class AddOrderInvoiceForm extends React.Component<any, any> {
    * @private
    */
   _renderTicketType(customerInvoiceId: number) {
-    let store = this._store as any;
-
+    const store = this._store as any;
 
     if (customerInvoiceId != null) {
       return (
         <Select
-          key={'financeRewardComponentsAddOrderInvoiceForm'}
           onSelect={(v) =>
             store.onChangeOrderInvoiceForm({
               propertyName: 'orderInvoiceType',
@@ -310,7 +303,6 @@ export default class AddOrderInvoiceForm extends React.Component<any, any> {
         </Select>
       );
     } else {
-
       return (
         <Select
           onSelect={(v) =>
@@ -320,27 +312,22 @@ export default class AddOrderInvoiceForm extends React.Component<any, any> {
             })
           }
         >
-
           <Option value={'0'}>普通发票</Option>
-
         </Select>
       );
     }
   }
 
   _renderInvoiceOptions() {
-
-    let store = this._store as any;
-    let orderInvoiceType = store
+    const store = this._store as any;
+    const orderInvoiceType = store
       .state()
       .getIn(['orderInvoiceForm', 'orderInvoiceType']);
-
     let invoiceProjects = store.state().get('invoiceProjects');
 
     return invoiceProjects.map((project) => {
       if ('1' == orderInvoiceType && '明细' != project.get('projectName'))
         return;
-
       return (
         <Option value={project.get('projectId')} key={project.get('projectId')}>
           {project.get('projectName')}
@@ -350,11 +337,9 @@ export default class AddOrderInvoiceForm extends React.Component<any, any> {
   }
 
   _renderAddessInfos() {
-    //
-    let store = this._store as any;
+    const store = this._store as any;
+    const addresses = store.state().get('addressInfos');
 
-    let addresses = store.state().get('addressInfos');
-//
     return addresses.map((address) => {
       return (
         <Option
@@ -368,9 +353,7 @@ export default class AddOrderInvoiceForm extends React.Component<any, any> {
   }
 
   _renderText(address: any) {
-
     return (
-
       `${address.get('consigneeName')} ` +
       `${address.get('consigneeNumber')} ` +
       `${FindArea.addressInfo(
@@ -379,17 +362,13 @@ export default class AddOrderInvoiceForm extends React.Component<any, any> {
         address.get('areaId') && address.get('areaId').toString()
       )} ` +
       `${address.get('deliveryAddress')}`
-
     );
   }
 
   fetchDefault() {
-
-    let store = this._store as any;
-
-    let invoiceProjects = store.state().get('invoiceProjects');
-
-    let invoiceProject = invoiceProjects.find(
+    const store = this._store as any;
+    const invoiceProjects = store.state().get('invoiceProjects');
+    const invoiceProject = invoiceProjects.find(
       (project) => project.get('projectName') == '明细'
     );
 
@@ -397,24 +376,18 @@ export default class AddOrderInvoiceForm extends React.Component<any, any> {
   }
 
   disabledDate(current) {
-
     // Can not select days before today and today
     return current && current.valueOf() > Date.now();
-
   }
 
   getDefaultInvoiceId() {
-    //
-    let store = this._store as any;
-
-    let orderInvoiceForm = store.state().get('orderInvoiceForm');
-
+    const store = this._store as any;
+    const orderInvoiceForm = store.state().get('orderInvoiceForm');
     if (orderInvoiceForm.get('orderInvoiceType') == 1) {
       let invoiceProjects = store.state().get('invoiceProjects');
       let invoiceProject = invoiceProjects.find(
         (project) => project.get('projectName') == '明细'
       );
-
       return invoiceProject.get('projectId');
     }
   }

@@ -455,7 +455,7 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
                     <FormattedMessage id="Marketing.Description" />:
                   </Col>
                   <Col className="step-summary-item-text">
-                    {data?.promotionDescription && (
+                    {data?.promotionDescription ? (
                       <TextArea
                         rows={5}
                         // autoSize={{ minRows: 5, maxRows: 50 }}
@@ -463,8 +463,7 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
                         // style={{ width: '100%' }}
                         readOnly
                       />
-                    )}
-
+                    ): 'None'}
                   </Col>
                 </Row>
               </div>

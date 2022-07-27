@@ -552,14 +552,15 @@ export default function Step6({ setLoading }) {
                   <FormattedMessage id="Marketing.Description" />:
                 </div>
                 <div className="step-summary-item-text" style={{ wordBreak: 'break-word', width: 265 }}>
-                  <TextArea
-                    rows={5}
-                    // autoSize={{ minRows: 5, maxRows: 50 }}
-                    value={formData.BasicSetting.description}
-                    // style={{ width: '100%' }}
-                    readOnly
-                  />
-
+                    {formData.BasicSetting?.description ? (
+                      <TextArea
+                        rows={5}
+                        // autoSize={{ minRows: 5, maxRows: 50 }}
+                        value={formData.BasicSetting.description}
+                        // style={{ width: '100%' }}
+                        readOnly
+                      />
+                    ): 'None'}
                 </div>
               </div>
             )}

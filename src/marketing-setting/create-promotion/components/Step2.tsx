@@ -106,7 +106,7 @@ function Step2({ form }) {
               <TextArea
                 placeholder={(window as any).RCi18n({ id: 'Marketing.PleaseWriteDescriton' })}
                 allowClear
-                autoSize={{ minRows: 5, maxRows: 50 }}
+                autoSize={{ minRows: 5, maxRows: 5 }}
                 maxLength={500}
                 style={{ width: 350 }}
               />

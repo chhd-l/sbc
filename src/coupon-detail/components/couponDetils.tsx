@@ -275,12 +275,13 @@ const CouponDetails = (props: MarketingDetailsProps) => {
                   {data?.couponDescription ? (
                     <TextArea
                       rows={5}
-                      // autoSize={{ minRows: 5, maxRows: 50 }}
+                      autoSize={{ minRows: 5, maxRows: 5 }}
                       value={data?.couponDescription}
-                      // style={{ width: '100%' }}
+                      style={{ width: 350 }}
+                      className={`RemoveRedLine`}
                       readOnly
                     />
-                  ): 'None'}
+                  ) : <FormattedMessage id="Order.none" />}
                 </Col>
               </Row>
             </div>

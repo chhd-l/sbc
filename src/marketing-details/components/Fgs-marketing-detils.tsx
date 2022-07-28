@@ -460,10 +460,11 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
                         rows={5}
                         // autoSize={{ minRows: 5, maxRows: 50 }}
                         value={data?.promotionDescription}
-                        // style={{ width: '100%' }}
+                        style={{ width: 350 }}
+                        className={`RemoveRedLine`}
                         readOnly
                       />
-                    ): 'None'}
+                    ) : <FormattedMessage id="Order.none" />}
                   </Col>
                 </Row>
               </div>

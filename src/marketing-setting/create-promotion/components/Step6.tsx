@@ -89,6 +89,7 @@ export default function Step6({ setLoading }) {
         segmentIds: formData.Conditions.joinLevel === -3 ? [formData.Conditions.segmentIds] : [], //改版用到的字段
         emailSuffixList:
           formData.Conditions.joinLevel === -4 ? [formData.Conditions.emailSuffixList] : [],
+        customerLevelIds: formData.Conditions?.customerLevelIds ? formData.Conditions?.customerLevelIds : [],
 
         scopeType: switchFile(formData.Conditions.scopeType), //改版用到的字段
         storeCateIds:
@@ -175,6 +176,7 @@ export default function Step6({ setLoading }) {
               : [],
           emailSuffixList:
             formData.Conditions.joinLevel === -4 ? [formData.Conditions.emailSuffixList] : [],
+          customerLevelIds: formData.Conditions?.customerLevelIds ? formData.Conditions?.customerLevelIds : [],
           customProductsType: formData.Conditions.customProductsType,
           customProductsIncludeType: formData.Conditions.customProductsIncludeType,
           skuIds: formData.Conditions.scopeType === 1 ? formData.Conditions.scopeIds : [],
@@ -552,15 +554,16 @@ export default function Step6({ setLoading }) {
                   <FormattedMessage id="Marketing.Description" />:
                 </div>
                 <div className="step-summary-item-text" style={{ wordBreak: 'break-word', width: 265 }}>
-                    {formData.BasicSetting?.description ? (
-                      <TextArea
-                        rows={5}
-                        // autoSize={{ minRows: 5, maxRows: 50 }}
-                        value={formData.BasicSetting.description}
-                        // style={{ width: '100%' }}
-                        readOnly
-                      />
-                    ): 'None'}
+                  {formData.BasicSetting?.description ? (
+                    <TextArea
+                      rows={5}
+                      autoSize={{ minRows: 5, maxRows: 5 }}
+                      value={formData.BasicSetting.description}
+                      // style={{ width: '100%' }}
+                      className={`RemoveRedLine`}
+                      readOnly
+                    />
+                  ) : <FormattedMessage id="Order.none" />}
                 </div>
               </div>
             )}

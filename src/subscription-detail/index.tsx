@@ -16,6 +16,7 @@ import {
   getClubSubFrequency,
   getIndividualSubFrequency
 } from '../task-manage-all-subscription/module/querySysDictionary';
+import MorePromotionModal from './component/MorePromotionModal';
 
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -63,7 +64,9 @@ class SubscriptionDetail extends React.Component<any, any> {
       currencySymbol: '',
       isActive: false,
       paymentMethod: '',
-      deliverDateStatus: 0
+      deliverDateStatus: 0,
+      MorePromotionModalVisible: false,
+      promotionsArr: []
     };
   }
 
@@ -321,7 +324,12 @@ class SubscriptionDetail extends React.Component<any, any> {
       return num;
     }
   };
+  // MorePromotionModalhandleOk = ()=> {
+  //   con
+  // }
+  // MorePromotionModalhandleCancel = ( )=> {
 
+  // }
   render() {
     const {
       subscriptionId,
@@ -338,7 +346,9 @@ class SubscriptionDetail extends React.Component<any, any> {
       currencySymbol,
       isActive,
       paymentMethod,
-      deliverDateStatus
+      deliverDateStatus,
+      MorePromotionModalVisible,
+      promotionsArr
     } = this.state;
 
     const columns = [
@@ -1002,7 +1012,7 @@ class SubscriptionDetail extends React.Component<any, any> {
               </Col>
             </Row>
             <Row className="consumer-info" style={{ marginTop: 20 }}>
-              <Col span={8}>
+              <Col span={6}>
                 <Row>
                   <Col span={12}>
                     <label className="info-title info_title_detail_delivery_address">
@@ -1161,7 +1171,7 @@ class SubscriptionDetail extends React.Component<any, any> {
               {/* 如果是俄罗斯or日本 如果是HOME_DELIVERY（并且timeslot存在） 显示 timeSlot 信息,如果是PICK_UP 显示pickup 状态
               如果是美国不显示内容 其他国家显示billingAddress */}
               {/* deliverDateStatus要从 data.res?.context?.systemConfigVO?.status */}
-              <Col span={8}>
+              <Col span={6}>
                 {storeId === 123457907 || storeId === 123457919 ? (
                   <Row>
                     {deliveryAddressInfo.receiveType === 'HOME_DELIVERY' ? (
@@ -1274,7 +1284,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                   </Row>
                 )}
               </Col>
-              <Col span={8}>
+              <Col span={6}>
                 <Row>
                   <Col span={24}>
                     <label className="info-title">
@@ -1339,6 +1349,38 @@ class SubscriptionDetail extends React.Component<any, any> {
                   ) : null}
                 </Row>
               </Col>
+              {promotionsArr?.length > 0 && (<Col span={6}>
+                <Row>
+                  <Col span={12}>
+                    <label className="info-title">
+                      <FormattedMessage id="Subscription.Promotions" />
+                    </label>
+                  </Col>
+                  <Col span={12}>
+                    <a className='info-underline' onClick={() => this.setState({ MorePromotionModalVisible: true })}>
+                      <FormattedMessage id="Subscription.more" />
+                    </a>
+                  </Col>
+                  <Col span={24}>
+                    <FormattedMessage
+                      id="Subscription.SaveTitle"
+                      values={{
+                        val: `22${currencySymbol}`
+                      }}
+                    />
+                  </Col>
+                  <Col span={24}>
+                    <FormattedMessage
+                      id="Subscription.SavePrice"
+                      values={{
+                        val1: `11${currencySymbol}`,
+                        val2: '222'
+                      }}
+                    />
+                  </Col>
+                </Row>
+                {/* Subscription.SaveItem */}
+              </Col>)}
             </Row>
           </div>
           <div className="container-search">
@@ -1407,6 +1449,18 @@ class SubscriptionDetail extends React.Component<any, any> {
             {<FormattedMessage id="Subscription.back" />}
           </Button>
         </div>
+
+        {/* MorePromotionModal */}
+        <MorePromotionModal
+          promotionsArr={promotionsArr || []}
+          visible={MorePromotionModalVisible}
+          handleOk={() => this.setState({
+            MorePromotionModalVisible: false
+          })}
+          handleCancel={() => this.setState({
+            MorePromotionModalVisible: false
+          })}
+        />
       </div>
     );
   }

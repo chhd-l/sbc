@@ -26,6 +26,7 @@ import { debug } from 'console';
 import { RadioChangeEvent } from 'antd/lib/radio';
 import addDiscount from '../../web_modules/qmkit/images/icon/addDiscount.svg';
 import ChangeDisacount from './component/ChangeDisacount';
+import RetryModal from './component/RetryModal';
 import { parseInt } from 'lodash';
 import { re } from 'mathjs';
 
@@ -139,6 +140,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       selectedRows: [],
       errvisible: false,
       addDiscountVisible: false,
+      retryModalVisible: false,
       addProductVisible: false,
       subscriptionNextRefillPromotion: null,
       refillcode: [],
@@ -1397,6 +1399,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       });
     }
   }
+  retryOk = () => {
+    this.setState({
+      retryModalVisible: false
+    });
+  }
+
   skuSelectedBackFun = async (selectedSkuIds, selectedRows: any) => {
     const { subscriptionId, goodsInfo, subscriptionType, subscriptionStatus, deliveryAddressId, curChangeProductItem, subscriptionNextRefillPromotion } = this.state;
     if (!Array.isArray(selectedSkuIds) || !Array.isArray(selectedRows?.toJS())) return;
@@ -1586,6 +1594,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       selectedRows,
       errvisible,
       addDiscountVisible,
+      retryModalVisible,
       addProductVisible,
       refillcode,
       subscriptionNextRefillPromotion
@@ -1955,7 +1964,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           </span>
         ),
         key: 'ProductName',
-        width: '10%',
+        width: '8%',
         render: (text, record) => (
           <div>
             {record?.ProductName ? record?.ProductName : 'None'}
@@ -1965,10 +1974,22 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       {
         title: <FormattedMessage id="Subscription.Operation" />,
         dataIndex: '',
-        width: '10%',
+        width: '12%',
         key: 'x',
         render: (text, record) => (
           <div>
+            {Const.SITE_NAME !== 'MYVETRECO' && (<AuthWrapper functionName="f_subscription_add_discount">
+              <a
+                className="iconfont icontianjia"
+                style={styles.edit}
+                onClick={() => {
+                  this.setState({
+                    retryModalVisible: true
+                  })
+                }}
+              />
+            </AuthWrapper>)}
+
             {Const.SITE_NAME !== 'MYVETRECO' && (<AuthWrapper functionName="f_subscription_add_gift">
               <a
                 style={styles.edit}
@@ -3402,6 +3423,15 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           }}
           onOK={this.DisacountChangeOk}
           onChange={this.DisacountChange}
+        />
+        <RetryModal
+          retryModalVisible={retryModalVisible}
+          onCancel={() => {
+            this.setState({
+              retryModalVisible: false
+            });
+          }}
+          onOK={this.retryOk}
         />
 
       </div>

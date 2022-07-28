@@ -85,7 +85,8 @@ export default function Step6({ setLoading }) {
         isSuperimposeSubscription: formData.Conditions.isSuperimposeSubscription, //改版用到的字段
         fullBuyPrice: formData.Conditions.CartLimit === 1 ? formData.Conditions.fullMoney : null,
         fullbuyCount: formData.Conditions.CartLimit === 2 ? formData.Conditions.fullItem : null,
-        couponJoinLevel: formData.Conditions.joinLevel,
+        couponJoinLevel: formData.Conditions?.customerLevelIds.length ? 1 : formData.Conditions.joinLevel,
+        customerLevelIds: formData.Conditions?.customerLevelIds || [],
         segmentIds: formData.Conditions.joinLevel === -3 ? [formData.Conditions.segmentIds] : [], //改版用到的字段
         emailSuffixList:
           formData.Conditions.joinLevel === -4 ? [formData.Conditions.emailSuffixList] : [],
@@ -162,7 +163,8 @@ export default function Step6({ setLoading }) {
         Conditions: {
           promotionType: formData.Conditions.promotionType,
           isSuperimposeSubscription: formData.Conditions.isSuperimposeSubscription,
-          joinLevel: formData.Conditions.joinLevel === 0 ? -1 : formData.Conditions.joinLevel, //coupon Promotion兼容处理
+          joinLevel: formData.Conditions?.customerLevelIds.length ? -5 : formData.Conditions.joinLevel === 0 ? -1 : formData.Conditions.joinLevel, //coupon Promotion兼容处理
+          customerLevelIds: formData.Conditions?.customerLevelIds || [],
           scopeType: formData.Conditions.scopeType,
           segmentIds: formData.Conditions.joinLevel === -3 ? [formData.Conditions.segmentIds] : [],
           storeCateIds:

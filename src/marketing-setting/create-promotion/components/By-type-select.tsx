@@ -34,7 +34,6 @@ const ByTypeSelect = ({ onChange, value }: ByTypeSelectPropsType) => {
 
   useEffect(() => {
     setChecked(value || [])
-    console.log(11111111111111);
   }, []);
 
   useEffect(() => {

@@ -36,6 +36,7 @@ class ProductSearchSetting extends Component<any, any> {
     defaultQuantitySelected: '',
     discountDisplayTypeInfo: '',
     dailyPortion: '',
+    notify_me_block:'',
     maximum_number_of_orders_per_sku: '20',
     maximum_number_of_items_per_cart: '',
     maximum_number_of_orders_sku_total: '',
@@ -152,6 +153,7 @@ class ProductSearchSetting extends Component<any, any> {
       defaultQuantitySelected,
       discountDisplayTypeInfo,
       dailyPortion,
+      notify_me_block,
       maximum_number_of_orders_per_sku,
       maximum_number_of_items_per_cart,
       maximum_number_of_orders_sku_total
@@ -192,6 +194,7 @@ class ProductSearchSetting extends Component<any, any> {
       defaultQuantitySelected,
       discountDisplayTypeInfo,
       dailyPortion,
+      notify_me_block,
       language,
       purchaseType,
       basePricePDPShowedFlag,
@@ -233,6 +236,7 @@ class ProductSearchSetting extends Component<any, any> {
         this.setState({ loading: true });
         values.basePricePDPShowedFlag = values.basePricePDPShowedFlag ? 1 : 0;
         values.dailyPortion = values.dailyPortion ? '1' : '0';
+        values.notify_me_block = values.notify_me_block ? '1' : '0';
         const res: any = await defaultProductSetting({
           ...values,
           systemConfigs: [{
@@ -244,6 +248,9 @@ class ProductSearchSetting extends Component<any, any> {
           },{
             configName: "dailyPortion",
             context: values.dailyPortion
+          }, {
+            configName: "notify_me_block",
+            context: values.notify_me_block
           }, {
             configName: "maximum_number_of_orders_per_sku",
             context: `${values.maximum_number_of_orders_per_sku}`
@@ -261,6 +268,7 @@ class ProductSearchSetting extends Component<any, any> {
             defaultQuantitySelected: values.defaultQuantitySelected,
             discountDisplayTypeInfo: values.discountDisplayTypeInfo,
             dailyPortion: values.dailyPortion,
+            notify_me_block:values.notify_me_block,
             maximum_number_of_orders_per_sku: `${values.maximum_number_of_orders_per_sku}`,
             maximum_number_of_orders_sku_total: `${values.maximum_number_of_orders_sku_total}`
           }));
@@ -293,7 +301,8 @@ class ProductSearchSetting extends Component<any, any> {
       priceDisplayMethod,
       maximum_number_of_orders_per_sku,
       maximum_number_of_items_per_cart,
-      maximum_number_of_orders_sku_total
+      maximum_number_of_orders_sku_total,
+      notify_me_block
     } = this.state;
 
     return (
@@ -640,6 +649,18 @@ class ProductSearchSetting extends Component<any, any> {
                 initialValue: dailyPortion === '1'
               })(<Switch />)}
             </Form.Item>
+
+            <Form.Item
+              label={<span style={{ color: '#666' }}><FormattedMessage id='Product.notifyMeBlock' /></span>}
+              style={{display:Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block'}}
+              required
+            >
+              {getFieldDecorator('notify_me_block', {
+                valuePropName: 'checked',
+                initialValue: notify_me_block === '1'
+              })(<Switch />)}
+            </Form.Item>
+            
 
             <div className='bar-button' style={{ marginLeft: -40 }}>
               <Button loading={loading} type='primary' htmlType='submit'>

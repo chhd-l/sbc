@@ -1,12 +1,8 @@
 import { Fetch, cache } from 'qmkit';
 import { querySysDictionary } from '../webapi';
 import { Const } from 'qmkit';
+import {TResult} from 'qmkit/type';
 
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
 
 /**
  *

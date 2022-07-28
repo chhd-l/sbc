@@ -43,7 +43,7 @@ export default class IndexActor extends Actor {
     let onlineServerList = context.qqOnlineServerItemRopList;
     if (onlineServerList) {
       onlineServerList = onlineServerList.map((v) => {
-        v.key = (window.crypto.getRandomValues(new Uint8Array(1)) * 0.001)
+        v.key = Math.rdmValue()
           .toString()
           .substring(2);
         return v;
@@ -102,7 +102,7 @@ export default class IndexActor extends Actor {
     let onlineServerList = state.get('onlineServerList');
 
     let newServer = fromJS({
-      key: (window.crypto.getRandomValues(new Uint8Array(1)) * 0.001)
+      key: Math.rdmValue()
         .toString()
         .substring(2),
       serviceItemId: null,

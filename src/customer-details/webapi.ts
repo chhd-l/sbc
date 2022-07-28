@@ -1,10 +1,6 @@
 import { Fetch, cache } from 'qmkit';
+import {TResult} from 'qmkit/type';
 
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
 
 export function queryClinicsDictionary(filterParams = {}) {
   return Fetch<TResult>('/prescriberDictionary/listAll', {

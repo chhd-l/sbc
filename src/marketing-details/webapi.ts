@@ -49,11 +49,7 @@ export const fetchGiftList = (filterParams = {}) => {
  * @param customerIds
  * @returns {Promise<IAsyncResult<T>>}
  */
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
+import {TResult} from 'qmkit/type';
 
 /*获取Group*/
 export const getAllGroups = (params) => {

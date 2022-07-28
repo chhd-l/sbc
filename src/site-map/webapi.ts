@@ -1,10 +1,6 @@
 import { Fetch } from 'qmkit';
 
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
+import {TResult} from 'qmkit/type';
 const api = {
   getContent: '/seo/site_map',
   saveContent: '/seo/site_map'

@@ -769,7 +769,7 @@ export default class AppStore extends Store {
           bankBranch: value.bankBranch,
           isReceived: value.isReceived,
           isDefaultAccount: value.isDefaultAccount,
-          key: (window.crypto.getRandomValues(new Uint8Array(1)) * 0.001).toString().substring(2)
+          key: Math.rdmValue().toString().substring(2)
         });
       });
     } else {
@@ -781,7 +781,7 @@ export default class AppStore extends Store {
         accountName: '',
         bankNo: '',
         bankBranch: '',
-        key: (window.crypto.getRandomValues(new Uint8Array(1)) * 0.001).toString().substring(2)
+        key: Math.rdmValue().toString().substring(2)
       });
     }
     this.transaction(() => {
@@ -807,7 +807,7 @@ export default class AppStore extends Store {
       accountName: '',
       bankNo: '',
       bankBranch: '',
-      key: (window.crypto.getRandomValues(new Uint8Array(1)) * 0.001).toString().substring(2)
+      key: Math.rdmValue().toString().substring(2)
     });
 
     this.dispatch('company:account', newAccounts);

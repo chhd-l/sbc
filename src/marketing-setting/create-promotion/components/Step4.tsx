@@ -354,8 +354,8 @@ function Step4({ form }) {
           )}
           {customerType === -5 && (
             <Form.Item wrapperCol={WrapperCol}>
-              {getFieldDecorator('Bytype', {
-                initialValue: formData.Conditions?.Bytype?.[0],
+              {getFieldDecorator('customerLevelIds', {
+                initialValue: formData.Conditions?.customerLevelIds,
                 rules: [
                   {
                     required: true,

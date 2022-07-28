@@ -1,10 +1,6 @@
 import { Fetch, cache } from 'qmkit';
 
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
+import {TResult} from 'qmkit/type';
 
 /**
  * 获取线下售卖产品列表

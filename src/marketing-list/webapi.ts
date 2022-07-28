@@ -71,8 +71,4 @@ export const getUserLevelList = () => {
  * @param customerIds
  * @returns {Promise<IAsyncResult<T>>}
  */
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
+import {TResult} from 'qmkit/type';

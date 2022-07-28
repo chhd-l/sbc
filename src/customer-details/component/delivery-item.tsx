@@ -581,7 +581,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
   compareZip = async (rule, value, callback) => {
     // for netherland, postal code validation rule should be special
     if (
-        (this.state.storeId === 123457929 && !/^\d{4}[a-zA-Z]{2}$/.test(value))
+        (this.state.storeId === 123457929 && !/^\d{4}\s?[a-zA-Z]{2}$/.test(value))
           || !/^[0-9A-Za-z-\s]{3,10}$/.test(value)
       ) {
       callback(RCi18n({ id: "PetOwner.theCorrectPostCode" }));

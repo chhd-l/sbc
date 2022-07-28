@@ -62,7 +62,7 @@ export default async function Fetch<T>(
     if (typeof input === 'string') {
       input += `${
         input.indexOf('?') == -1 ? '?reqId=' : '&reqId='
-      }${Math.random()}`;
+      }${Math.rdmValue()}`;
     }
     const request = {
       method: 'GET',

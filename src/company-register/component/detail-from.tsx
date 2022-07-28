@@ -5,7 +5,7 @@ import { noop, TimerButton, ValidConst } from 'qmkit';
 import { Relax } from 'plume2';
 
 const FormItem = Form.Item;
-
+const pass_word = 'password';
 // const TimingButton = TimerButton.Timer;
 @Relax
 export default class DetailForm extends React.Component<any, any> {
@@ -37,7 +37,7 @@ export default class DetailForm extends React.Component<any, any> {
     isShowPwd: 'isShowPwd',
     imageCode: 'imageCode',
     telCode: 'telCode',
-    password: process.env.PASSWORDINPUTTYPE,
+    password: pass_word,
     showPass: noop,
     setTel: noop,
     setTelCode: noop,

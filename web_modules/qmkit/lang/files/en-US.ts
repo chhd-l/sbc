@@ -2,6 +2,8 @@
  * 多语言英文
  * 新增 key 请到 phrase app中添加
  */
+const pass_word = 'password';
+const pass_word_titlecase = 'Password';
 export default {
   account: 'Account',
   accountName: 'Account name',
@@ -782,9 +784,9 @@ export default {
     'You have received an email from us. Please follow the instructions in the email to reset your password and log in again.',
   'Login.check_tip1': "Didn't receive the email?",
   'Login.check_your_mail': 'Check your mail box',
-  'Login.confirm_password': `Confirm ${process.env.PASSWORDINPUTTYPE}`,
-  'Login.confirm_password_vld': `Please reinput the new ${process.env.PASSWORDINPUTTYPE}`,
-  'Login.confirm_password_vld1': `The two ${process.env.PASSWORDINPUTTYPE}s that you entered do not match`,
+  'Login.confirm_password': `Confirm ${pass_word}`,
+  'Login.confirm_password_vld': `Please reinput the new ${pass_word}`,
+  'Login.confirm_password_vld1': `The two ${pass_word}s that you entered do not match`,
   'Login.create_an_account': 'Create an account',
   'Login.create_store_error': 'Store creation failed. Please try again',
   'Login.create_store_ing': 'Sit tight,We’re creating your store!',
@@ -799,7 +801,7 @@ export default {
   'Login.email_address': 'Email address',
   'Login.email_address_vld': 'Please input your email',
   'Login.email_address_vld1': 'Email address format error',
-  'Login.forgot_your_password': `Forgot your ${process.env.PASSWORDINPUTTYPE}`,
+  'Login.forgot_your_password': `Forgot your ${pass_word}`,
   'Login.full_name': 'Full name',
   'Login.full_name_vld': 'Please input your full name',
   'Login.getstarted': 'Get started here!',
@@ -808,19 +810,19 @@ export default {
   'Login.loginagain': 'You should enter your account and passwords again for logging in',
   'Login.loging': 'Logging...',
   'Login.logintips': 'Return to login page',
-  'Login.new_password': `New ${process.env.PASSWORDINPUTTYPE}`,
-  'Login.new_password_vld': `Please input your new ${process.env.PASSWORDINPUTTYPE}`,
-  'Login.password': process.env.PASSWORDTITLECASEINPUTTYPE,
-  'Login.password_length': `${process.env.PASSWORDTITLECASEINPUTTYPE} length should between 6-32 characters`,
-  'Login.password_vld': `Please input your ${process.env.PASSWORDINPUTTYPE}`,
-  'Login.passwordcomplex': `${process.env.PASSWORDTITLECASEINPUTTYPE} should contain upper and lower case letters, at least 8 characters`,
+  'Login.new_password': `New ${pass_word}`,
+  'Login.new_password_vld': `Please input your new ${pass_word}`,
+  'Login.password': pass_word_titlecase,
+  'Login.password_length': `${pass_word_titlecase} length should between 6-32 characters`,
+  'Login.password_vld': `Please input your ${pass_word}`,
+  'Login.passwordcomplex': `${pass_word_titlecase} should contain upper and lower case letters, at least 8 characters`,
   'Login.recommendation_code_opt': 'Recommendation code (Optional)',
   'Login.remember_me': 'Remember me',
   'Login.resend': 'Resend',
-  'Login.reset_password_tip': `Please enter your reset ${process.env.PASSWORDINPUTTYPE}`,
+  'Login.reset_password_tip': `Please enter your reset ${pass_word}`,
   'Login.reset_tip':
     'Please enter the email address you’d like your password reset information sent to.',
-  'Login.reset_your_password': `Reset your ${process.env.PASSWORDINPUTTYPE}`,
+  'Login.reset_your_password': `Reset your ${pass_word}`,
   'Login.sign_up': 'Sign up',
   logisticRating: 'Logistic rating',
   mainAccount: 'Main account',

@@ -1,10 +1,7 @@
 /*获取Group*/
 import { Fetch } from 'qmkit';
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
+import {TResult} from 'qmkit/type';
+
 
 export const getAllGroups = (params) => {
   return Fetch('/customer/segment/segment/query', {
@@ -40,7 +37,7 @@ export const updateFullGift = (giftBean) => {
  * @returns {string}
  */
 export const makeRandom = () => {
-  return 'key' + ((window.crypto.getRandomValues(new Uint8Array(1)) * 0.001) as any).toFixed(6) * 1000000;
+  return 'key' + (Math.rdmValue() as any).toFixed(6) * 1000000;
 };
 
 /**

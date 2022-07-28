@@ -45,6 +45,7 @@ export default function index({ ...props }) {
       CartLimit: 0,
       fullItem: '',
       fullMoney: '',
+      customerLevelIds: [],
       isSuperimposeSubscription: 1,
       joinLevel: 0,
       segmentIds: [],
@@ -286,6 +287,7 @@ export default function index({ ...props }) {
           segmentIds: detail.segmentIds || [],
           emailSuffixList: detail.emailSuffixList || [],
           scopeType: detail.scopeType,
+          customerLevelIds: detail.customerLevelIds || [],
           customProductsType: detail.customProductsType || 0,
           customProductsIncludeType: detail.customProductsIncludeType || 0,
           storeCateIds: ReStoreCateIds(detail.storeCateIds || []),
@@ -441,7 +443,7 @@ export default function index({ ...props }) {
    * @returns {string}
    */
   const makeRandom = () => {
-    return 'key' + ((window.crypto.getRandomValues(new Uint8Array(1)) * 0.001) as any).toFixed(6) * 1000000;
+    return 'key' + (Math.rdmValue() as any).toFixed(6) * 1000000;
   };
   /**
    * 回显StoreCateIds

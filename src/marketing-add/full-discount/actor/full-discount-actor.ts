@@ -133,6 +133,6 @@ export default class FullDiscountActor extends Actor {
    * @returns {string}
    */
   makeRandom = () => {
-    return 'key' + ((window.crypto.getRandomValues(new Uint8Array(1)) * 0.001) as any).toFixed(6) * 1000000;
+    return 'key' + (Math.rdmValue() as any).toFixed(6) * 1000000;
   };
 }

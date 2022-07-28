@@ -75,11 +75,7 @@ export function fetchOffLineAccout() {
  * @param audit
  * @returns {Promise<IAsyncResult<TResult>>}
  */
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
+import {TResult} from 'qmkit/type';
 
 export const audit = (tid: string, audit: string, reason: string) => {
   return Fetch<TResult>(`/trade/audit/${tid}`, {

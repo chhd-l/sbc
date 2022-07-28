@@ -5,7 +5,7 @@ import { util, history, Const, login } from 'qmkit';
 
 import React from 'react';
 import { accountCreate } from '../myvetreco-logins/create-account/webapi';
-
+const pass_word = 'password';
 // 基于oktaLoginCallback组件修改登录逻辑
 //https://github.com/okta/okta-react/blob/master/src/LoginCallback.tsx
 const LoginCallback = () => {
@@ -29,7 +29,7 @@ const LoginCallback = () => {
         sessionStorage.removeItem('myvet-recommendationCode-to-okta');
         await accountCreate({
           email,
-          [process.env.PASSWORDINPUTTYPE]: '123456',
+          [pass_word]: '123456',
           confirmPassword: '123456',
           recommendationCode
         });

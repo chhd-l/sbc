@@ -66,7 +66,17 @@ class SubscriptionDetail extends React.Component<any, any> {
       paymentMethod: '',
       deliverDateStatus: 0,
       MorePromotionModalVisible: false,
-      promotionsArr: []
+      promotionsArr: [],
+      // promotionsArr: [{
+      //   code: 23131313,
+      //   useTime: 12,
+      //   discount: 0.3,
+      //   type: 1,
+      //   value: 1,
+      //   name: 'ssss'
+
+      // }],
+      totalSubscriptionPrice: 20,
     };
   }
 
@@ -348,7 +358,8 @@ class SubscriptionDetail extends React.Component<any, any> {
       paymentMethod,
       deliverDateStatus,
       MorePromotionModalVisible,
-      promotionsArr
+      promotionsArr,
+      totalSubscriptionPrice
     } = this.state;
 
     const columns = [
@@ -1365,7 +1376,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                     <FormattedMessage
                       id="Subscription.SaveTitle"
                       values={{
-                        val: `22${currencySymbol}`
+                        val: `${totalSubscriptionPrice + currencySymbol}`
                       }}
                     />
                   </Col>
@@ -1373,13 +1384,12 @@ class SubscriptionDetail extends React.Component<any, any> {
                     <FormattedMessage
                       id="Subscription.SavePrice"
                       values={{
-                        val1: `11${currencySymbol}`,
-                        val2: '222'
+                        money: `${promotionsArr[0]?.value + currencySymbol}`,
+                        code: `${promotionsArr[0]?.name}`
                       }}
                     />
                   </Col>
                 </Row>
-                {/* Subscription.SaveItem */}
               </Col>)}
             </Row>
           </div>

@@ -164,7 +164,7 @@ export default function Step6({ setLoading }) {
         Conditions: {
           promotionType: formData.Conditions.promotionType,
           isSuperimposeSubscription: formData.Conditions.isSuperimposeSubscription,
-          joinLevel: formData.Conditions?.customerLevelIds.length ? -5 : formData.Conditions.joinLevel === 0 ? -1 : formData.Conditions.joinLevel, //coupon Promotion兼容处理
+          joinLevel: formData.Conditions.joinLevel, //coupon Promotion兼容处理
           customerLevelIds: formData.Conditions?.customerLevelIds || [],
           scopeType: formData.Conditions.scopeType,
           segmentIds: formData.Conditions.joinLevel === -3 ? [formData.Conditions.segmentIds] : [],
@@ -178,7 +178,6 @@ export default function Step6({ setLoading }) {
               : [],
           emailSuffixList:
             formData.Conditions.joinLevel === -4 ? [formData.Conditions.emailSuffixList] : [],
-          customerLevelIds: formData.Conditions?.customerLevelIds ? formData.Conditions?.customerLevelIds : [],
           customProductsType: formData.Conditions.customProductsType,
           customProductsIncludeType: formData.Conditions.customProductsIncludeType,
           skuIds: formData.Conditions.scopeType === 1 ? formData.Conditions.scopeIds : [],
@@ -555,13 +554,13 @@ export default function Step6({ setLoading }) {
                   {/*  Description */}
                   <FormattedMessage id="Marketing.Description" />:
                 </div>
-                <div className="step-summary-item-text" style={{ wordBreak: 'break-word', width: 265 }}>
+                <div className="step-summary-item-text">
                   {formData.BasicSetting?.description ? (
                     <TextArea
                       rows={5}
                       autoSize={{ minRows: 5, maxRows: 5 }}
                       value={formData.BasicSetting.description}
-                      // style={{ width: '100%' }}
+                      style={{ width: 350 }}
                       className={`RemoveRedLine`}
                       readOnly
                     />

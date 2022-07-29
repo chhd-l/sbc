@@ -343,7 +343,7 @@ class GiftLevels extends React.Component<any, any> {
             onOkBackFun={(selectedSkuIds, selectedRows) => this.skuSelectedBackFun(goodsModal._forIndex, selectedSkuIds, selectedRows)}
             onCancelBackFun={this.closeGoodsModal}
             goodsCate={goodsCate}
-            pageType={'addgift'}
+            pageType={!['commercial leaflet'].includes(goodsCate) ? 'addgift' : ''}
           />
         )}
       </div>

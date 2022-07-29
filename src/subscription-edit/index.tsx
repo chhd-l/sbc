@@ -233,7 +233,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             nextDeliveryTime: subscriptionDetail.nextDeliveryTime,
             customerId: subscriptionDetail.customerId,
             firstNameKatakana: subscriptionDetail.firstNameKatakana,
-            lastNameKatakana: subscriptionDetail.lastNameKatakana
+            lastNameKatakana: subscriptionDetail.lastNameKatakana,
+            canRetry: subscriptionDetail.canRetry
           };
           const countryArr = await getCountrySubFrequency();
           const frequencyList =
@@ -1399,10 +1400,28 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       });
     }
   }
-  retryOk = () => {
-    this.setState({
-      retryModalVisible: false
-    });
+  retryOk = async () => {
+    const { subscriptionId } = this.state;
+    try {
+      this.setState({ loading: true });
+      let params:any = {
+        subscribeId: subscriptionId,
+      };
+      let { res } = await webapi.retrySubscription(params);
+      if (res.code === Const.SUCCESS_CODE) {
+        message.success(RCi18n({ id: 'PetOwner.OperateSuccessfully' }));
+        this.getSubscriptionDetail();
+      } else {
+        throw new Error(RCi18n({ id: 'PetOwner.Unsuccessful' }))
+      }
+    } catch (err) {
+      this.setState({ loading: false });
+      message.error(err.message);
+    } finally {
+      this.setState({
+        retryModalVisible: false
+      });
+    }
   }
 
   skuSelectedBackFun = async (selectedSkuIds, selectedRows: any) => {
@@ -1980,12 +1999,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           <div>
             {Const.SITE_NAME !== 'MYVETRECO' && (<AuthWrapper functionName="f_subscription_add_discount">
               <a
-                className="iconfont icontianjia"
-                style={styles.edit}
+                className="iconfont iconshuaxin"
+                style={subscriptionInfo.canRetry ?styles.edit:styles.disabled}
                 onClick={() => {
-                  this.setState({
-                    retryModalVisible: true
-                  })
+                  if(subscriptionInfo.canRetry){
+                    this.setState({
+                      retryModalVisible: true
+                    })
+                  }
                 }}
               />
             </AuthWrapper>)}
@@ -3454,5 +3475,10 @@ const styles = {
     marginRight: 10,
     background: '#fff',
     borderRadius: 3
+  },
+  disabled: {
+    paddingRight: 10,
+    color: "#eeeeee",
+    cursor: "not-allowed"
   }
 } as any;

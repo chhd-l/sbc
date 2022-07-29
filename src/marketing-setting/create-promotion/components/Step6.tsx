@@ -85,12 +85,11 @@ export default function Step6({ setLoading }) {
         isSuperimposeSubscription: formData.Conditions.isSuperimposeSubscription, //改版用到的字段
         fullBuyPrice: formData.Conditions.CartLimit === 1 ? formData.Conditions.fullMoney : null,
         fullbuyCount: formData.Conditions.CartLimit === 2 ? formData.Conditions.fullItem : null,
-        couponJoinLevel: formData.Conditions?.customerLevelIds.length ? 1 : formData.Conditions.joinLevel,
+        couponJoinLevel: formData.Conditions?.joinLevel,
         customerLevelIds: formData.Conditions?.customerLevelIds || [],
         segmentIds: formData.Conditions.joinLevel === -3 ? [formData.Conditions.segmentIds] : [], //改版用到的字段
         emailSuffixList:
           formData.Conditions.joinLevel === -4 ? [formData.Conditions.emailSuffixList] : [],
-        customerLevelIds: formData.Conditions?.customerLevelIds ? formData.Conditions?.customerLevelIds : [],
 
         scopeType: switchFile(formData.Conditions.scopeType), //改版用到的字段
         storeCateIds:

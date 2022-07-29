@@ -466,7 +466,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
     };
     // NL 需要启用输入规则
     if (storeId === 123457929) {
-      IMask(element, { mask: [{ mask: '(+31) 000 00 00 00' }] });
+      IMask(element, { mask: '(+31) 000 00 00 00' });
     }
   };
 

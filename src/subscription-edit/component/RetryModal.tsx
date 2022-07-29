@@ -4,7 +4,6 @@ import { FormattedMessage } from 'react-intl';
 import { Headline, Const, cache, AuthWrapper, getOrderStatusValue, RCi18n, util } from 'qmkit';
 import { e } from 'mathjs';
 
-const { Option } = Select
 
 function RetryModal(props) {
   const [visible, setVisible] = useState(false);
@@ -12,11 +11,11 @@ function RetryModal(props) {
   useEffect(() => {
     setVisible(props.retryModalVisible);
   }, [props.retryModalVisible]);
-
-  // couponCode
+  
   return (
     <Modal
       maskClosable={false}
+      bodyStyle={{padding: "40px 10px 10px 20px"}}
       width={300}
       visible={visible}
       onOk={props.onOK}

@@ -29,8 +29,8 @@ function MorePromotionModal({ promotionsArr, visible, handleOk, handleCancel }: 
             <FormattedMessage
               id='Subscription.SaveItem'
               values={{
-                val1: `${item?.id + currencySymbol}`,
-                val2: 'promotion name'
+                val1: `${item?.value + currencySymbol}`,
+                val2: `${item?.name}`
               }}
             />
           </p>)

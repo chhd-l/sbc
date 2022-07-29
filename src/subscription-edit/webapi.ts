@@ -42,6 +42,17 @@ export function getSubscriptionDetail(id: String) {
   });
 }
 
+/**
+ * retrySubscription
+ * @param filterParams
+ */
+ export function retrySubscription(id: String) {
+  return Fetch<TResult>('/retry/retrySubscription' + id, {
+    method: 'POST'
+  });
+}
+
+
 // 根据ID查找字典信息
 export function querySysDictionaryById(filterParams = {}) {
   return Fetch<TResult>('/sysdict/querySysDictionaryById', {

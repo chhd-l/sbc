@@ -293,8 +293,8 @@ class MarketingList extends React.Component<any, any> {
                     </Tooltip>
                   )}
 
-                  {/* !==12 && !==13 && 状态 2 3 显示编辑按钮*/}
-                  {((rowInfo.subType !== 12 && rowInfo.subType !== 13) && ([2, 3].includes(Number(rowInfo['marketingStatus'])))) && (
+                  {/* !==12 && !==13 && !==16 && 状态 2 3 显示编辑按钮*/}
+                  {((rowInfo.subType !== 12 && rowInfo.subType !== 13 && rowInfo.subType !== 16) && ([2, 3].includes(Number(rowInfo['marketingStatus'])))) && (
                     <Tooltip placement="top" title={<FormattedMessage id="Marketing.Edit" />}>
                       <a
                         href="javascript:void(0)"
@@ -309,8 +309,8 @@ class MarketingList extends React.Component<any, any> {
                     </Tooltip>
                   )}
 
-                  {/* !==12 && !==13 && 状态 1 显示编辑按钮*/}
-                  {((rowInfo.subType !== 12 && rowInfo.subType !== 13) && ([1].includes(Number(rowInfo['marketingStatus'])))) && (
+                  {/* !==12 && !==13 && !==16 && 状态 1 显示编辑按钮*/}
+                  {((rowInfo.subType !== 12 && rowInfo.subType !== 13 && rowInfo.subType !== 16) && ([1].includes(Number(rowInfo['marketingStatus'])))) && (
                     <Popconfirm
                       title={<FormattedMessage id="Marketing.EditConfirm" />}
                       onConfirm={() => {

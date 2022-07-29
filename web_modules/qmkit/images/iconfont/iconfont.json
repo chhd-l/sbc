@@ -6,6 +6,13 @@
   "description": "导航",
   "glyphs": [
     {
+      "icon_id": "7339836",
+      "name": "刷新",
+      "font_class": "shuaxin",
+      "unicode": "e6c1",
+      "unicode_decimal": 59073
+    },
+    {
       "icon_id": "30365546",
       "name": "编组 53",
       "font_class": "item-products-node",

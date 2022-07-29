@@ -71,7 +71,7 @@ const ByTypeSelect = ({ onChange, value }: ByTypeSelectPropsType) => {
       onChange={handleChange}
       // onSelect={handleSelect}
       // onDeselect={handleDeselect}
-      // value={checkedarr}
+      value={checkedarr}
       optionLabelProp="label"
       getPopupContainer={triggerNode => triggerNode.parentElement}
     >

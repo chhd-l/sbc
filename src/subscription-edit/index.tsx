@@ -59,6 +59,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       pickupIsOpen: false, // pickup开关
       subscriptionId: this.props.match.params.subId,
       loading: false,
+      retryLoading: false,
       orderInfo: {},
       subscriptionInfo: {},
       subscriptionStatus: '',
@@ -1403,7 +1404,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   retryOk = async () => {
     const { subscriptionId } = this.state;
     try {
-      this.setState({ loading: true });
+      this.setState({ loading: true,retryLoading:true });
+      
       let params:any = {
         subscribeId: subscriptionId,
       };
@@ -1415,11 +1417,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         throw new Error(RCi18n({ id: 'PetOwner.Unsuccessful' }))
       }
     } catch (err) {
-      this.setState({ loading: false });
+      this.setState({ loading: false});
       message.error(err.message);
     } finally {
       this.setState({
-        retryModalVisible: false
+        retryModalVisible: false,
+        retryLoading: false
       });
     }
   }
@@ -1614,6 +1617,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       errvisible,
       addDiscountVisible,
       retryModalVisible,
+      retryLoading,
       addProductVisible,
       refillcode,
       subscriptionNextRefillPromotion
@@ -3446,6 +3450,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           onChange={this.DisacountChange}
         />
         <RetryModal
+          retryLoading={retryLoading}
           retryModalVisible={retryModalVisible}
           onCancel={() => {
             this.setState({
@@ -3454,6 +3459,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           }}
           onOK={this.retryOk}
         />
+        
 
       </div>
     );

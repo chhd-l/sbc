@@ -20,6 +20,7 @@ function RetryModal(props) {
       visible={visible}
       onOk={props.onOK}
       onCancel={props.onCancel}
+      zIndex={3}
     >
       <p >
         <FormattedMessage id={'Marketing.retryModalVisible'} />

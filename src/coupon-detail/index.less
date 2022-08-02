@@ -103,8 +103,9 @@
         margin: 0 auto;
         cursor: pointer;
     }
-    .redline{
-        &::before{
+
+    .redline {
+        &::before {
             content: '';
             position: absolute;
             top: 9px;
@@ -114,20 +115,33 @@
             background-color: #e2001a;
         }
     }
-    textarea::-webkit-scrollbar{
+
+    textarea {
+        border: 1px solid #fff;
+        resize: none;
+        // border:none;
+
+    }
+
+    textarea::-webkit-scrollbar {
         width: 3px !important;
-      }
-      textarea::-webkit-scrollbar-thumb{
+    }
+
+    textarea::-webkit-scrollbar-thumb {
         border-radius: 2px !important;
-        background-color: rgba(0,0,0,.3) !important;
-      }
-      .RemoveRedLine{
-        &:focus{
-          border-color: #d9d9d9;
-          box-shadow: none;
+        background-color: rgba(0, 0, 0, .3) !important;
+    }
+
+    .RemoveRedLine {
+        &:focus {
+            // border-color: #d9d9d9;
+            border-color: #fff;
+            box-shadow: none;
         }
-        &:hover{
-          border-color: #d9d9d9;
+
+        &:hover {
+            // border-color: #d9d9d9;
+            border-color: #fff;
         }
-      }
+    }
 }

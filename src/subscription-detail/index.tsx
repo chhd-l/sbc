@@ -76,7 +76,7 @@ class SubscriptionDetail extends React.Component<any, any> {
       //   name: 'ssss'
 
       // }],
-      totalSubscriptionPrice: 20,
+      totalSubscriptionPrice: 0,
     };
   }
 
@@ -147,6 +147,7 @@ class SubscriptionDetail extends React.Component<any, any> {
           let goodsInfo = subscriptionDetail.goodsInfo;
           let paymentInfo = subscriptionDetail.payPaymentInfo;
           let paymentMethod = subscriptionDetail.paymentMethod;
+          let promotionResponse = subscriptionDetail.promotionResponse;
 
           this.setState(
             {
@@ -163,7 +164,9 @@ class SubscriptionDetail extends React.Component<any, any> {
               completedOrder: subscriptionDetail.completedTradeList,
               isActive: subscriptionDetail.subscribeStatus === '0',
               paymentMethod: paymentMethod,
-              serviceFeePrice: subscriptionInfo.serviceFeePrice ?? 0
+              serviceFeePrice: subscriptionInfo.serviceFeePrice ?? 0,
+              totalSubscriptionPrice: promotionResponse.totalSubscriptionPrice ?? 0,
+              promotionsArr: promotionResponse.promotionVOList || [],
             },
             () => {
               this.applyPromotionCode(this.state.promotionCode);
@@ -1360,6 +1363,8 @@ class SubscriptionDetail extends React.Component<any, any> {
                   ) : null}
                 </Row>
               </Col>
+              {/* fr ru tr  us: 391463*/}
+              {/* [123457909, 123457907, 123457911].includes(storeId) */}
               {promotionsArr?.length > 0 && (<Col span={6}>
                 <Row>
                   <Col span={12}>
@@ -1376,7 +1381,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                     <FormattedMessage
                       id="Subscription.SaveTitle"
                       values={{
-                        val: `${totalSubscriptionPrice + currencySymbol}`
+                        val: `${(totalSubscriptionPrice ?? 0) + currencySymbol}`
                       }}
                     />
                   </Col>
@@ -1384,8 +1389,8 @@ class SubscriptionDetail extends React.Component<any, any> {
                     <FormattedMessage
                       id="Subscription.SavePrice"
                       values={{
-                        money: `${promotionsArr[0]?.value + currencySymbol}`,
-                        code: `${promotionsArr[0]?.name}`
+                        money: `${(promotionsArr[0]?.value || 0) + currencySymbol}`,
+                        code: `${promotionsArr[0].publicStatus === '1' ? (window as any).RCi18n({ id: 'Subscription.SaveItemPublic' }) : (promotionsArr[0]?.code ?? '')}`
                       }}
                     />
                   </Col>

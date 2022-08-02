@@ -73,7 +73,10 @@ function MorePromotionModal({ promotionsArr, visible, handleOk, handleCancel }: 
                 <FormattedMessage
                   id='Subscription.SaveItemDiscount'
                   values={{
-                    discount: `${item?.discount ? ((1 - Number(item?.discount)) * 100).toFixed(2) + '%' : '0%'}`,
+                    discount: `${item?.discount && `${item?.discount}`.includes('%')
+                      ? item?.discount
+                      : Number(item?.discount).toFixed(0) + '%'
+                      }` ?? '0%',
                     code: `${item?.code ?? ''}`
                   }}
                 />

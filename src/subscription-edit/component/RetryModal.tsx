@@ -7,10 +7,15 @@ import { e } from 'mathjs';
 
 function RetryModal(props) {
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     setVisible(props.retryModalVisible);
   }, [props.retryModalVisible]);
+
+  useEffect(()=>{
+    setLoading(props.retryLoading)
+  },[props.retryLoading])
   
   return (
     <Modal
@@ -20,6 +25,14 @@ function RetryModal(props) {
       visible={visible}
       onOk={props.onOK}
       onCancel={props.onCancel}
+      footer={[
+        <Button key="Cancel" onClick={props.onCancel}>
+          Cancel
+        </Button>,
+        <Button key="Confirm" type="primary" loading={loading} onClick={props.onOK}>
+          Confirm
+        </Button>
+      ]}
     >
       <p >
         <FormattedMessage id={'Marketing.retryModalVisible'} />

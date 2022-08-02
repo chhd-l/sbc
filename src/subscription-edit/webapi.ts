@@ -46,9 +46,12 @@ export function getSubscriptionDetail(id: String) {
  * retrySubscription
  * @param filterParams
  */
- export function retrySubscription(id: String) {
-  return Fetch<TResult>('/retry/retrySubscription' + id, {
-    method: 'POST'
+ export function retrySubscription(filterParams = {}) {
+  return Fetch<TResult>('/retry/retrySubscription', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
   });
 }
 

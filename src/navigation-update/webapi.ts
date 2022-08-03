@@ -1,3 +1,11 @@
+/*
+ * @Author: error: git config user.name && git config user.email & please set dead value or install git
+ * @Date: 2022-08-02 13:10:59
+ * @LastEditors: error: git config user.name && git config user.email & please set dead value or install git
+ * @LastEditTime: 2022-08-03 13:23:48
+ * @FilePath: \sbc-supplier-front\src\navigation-update\webapi.ts
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import { Fetch } from 'qmkit';
 
 import {TResult} from 'qmkit/type';
@@ -20,7 +28,11 @@ export function getNavigationById(id) {
     method: 'GET'
   });
 }
-
+export function getNavigation() {
+  return Fetch<TResult>('/navigations?language=English', {
+    method: 'GET',
+  });
+}
 export function addNavigation(filterParams) {
   return Fetch<TResult>('/navigation', {
     method: 'POST',
@@ -29,7 +41,6 @@ export function addNavigation(filterParams) {
     })
   });
 }
-
 export function updateNavigation(filterParams) {
   return Fetch<TResult>('/navigation/' + filterParams.id, {
     method: 'PUT',

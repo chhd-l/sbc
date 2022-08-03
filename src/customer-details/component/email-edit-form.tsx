@@ -28,7 +28,7 @@ const EmailEditForm: React.FC<IProps> = ({ email, form }) => {
 
   return (
     <div>
-      <div><span>{email}</span> <span className="iconfont iconEdit edit-icon-next-text" onClick={() => setVisible(true)}></span></div>
+      <div><span>{email}</span> <span data-testid="icon" className="iconfont iconEdit edit-icon-next-text" onClick={() => setVisible(true)}></span></div>
       <Modal
         title="Edit Email Address"
         visible={visible}
@@ -39,12 +39,12 @@ const EmailEditForm: React.FC<IProps> = ({ email, form }) => {
         onCancel={() => setVisible(false)}
         onOk={handleSave}
       >
-        <Form form={form} layout="inline">
+        <Form layout="inline">
           <Form.Item label="New email address">
             {getFieldDecorator('email', {
               rules: [{ required: true, type: 'email', message: "Invalid email address" }]
             })(
-              <Input style={{width: 300}} />
+              <Input data-testid="email-input" style={{width: 300}} />
             )}
           </Form.Item>
         </Form>

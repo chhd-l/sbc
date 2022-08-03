@@ -1,5 +1,10 @@
 const config = {
   verbose: true,
+  collectCoverage: true,
+  coverageProvider: "babel",
+  setupFilesAfterEnv: ["<rootDir>/setupTest.js"],
+  // collectCoverageFrom: ["src/**/*.{js,jsx,ts,tsx}"],
+  collectCoverageFrom: ["src/customer-details/component/email-edit-form.tsx"],
   testPathIgnorePatterns: ["/node_modules", "/scripts", "/(test|spec)\.[jt]sx?$"],
   transformIgnorePatterns: ["/node_modules/(?!(antd|css-animation|rc.*)/)"],
   testEnvironment: 'jsdom',

@@ -214,6 +214,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           let subscriptionDetail = res.context;
+          let nextDeliveryTime = subscriptionDetail?.goodsInfo[0]?.nextDeliveryTime
           let subscriptionInfo = {
             deliveryTimes: subscriptionDetail.deliveryTimes,
             subscribeStatus: subscriptionDetail.subscribeStatus,
@@ -321,6 +322,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
           this.setState(
             {
+              nextDeliveryTime:nextDeliveryTime,
               subscribeGoods: subscribeGoods,
               subscriptionType: subscriptionDetail.subscriptionType,
               subscriptionStatus: subscriptionDetail.subscriptionStatus,
@@ -1402,12 +1404,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     }
   }
   retryOk = async () => {
-    const { subscriptionId } = this.state;
+    const { subscriptionId,nextDeliveryTime } = this.state;
     try {
       this.setState({ loading: true,retryLoading:true });
       
       let params:any = {
         subscribeId: subscriptionId,
+        nextDeliveryTime,
       };
       let { res } = await webapi.retrySubscription(params);
       if (res.code === Const.SUCCESS_CODE) {

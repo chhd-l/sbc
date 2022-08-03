@@ -407,6 +407,7 @@ export default class Interaction extends React.Component<any, any> {
                     <FormItem {...layout} label={<FormattedMessage id="Content.PagePicture" />}>
                       <AssetManagement choosedImgCount={1} images={navigation.pageImg ? [navigation.pageImg] : []} selectImgFunction={this.updateImg} deleteImgFunction={this.deleteImg} />
                     </FormItem>
+                    
                   </div>
                 ) : null}
                 {pageTypeCode === 'SRP' ? (
@@ -462,88 +463,7 @@ export default class Interaction extends React.Component<any, any> {
                         </Select>
                       )}
                     </FormItem>
-                    <div>
-                      {<FormattedMessage id="Setting.seoSetting" />}
-                      <Row gutter={[24, 12]}>
-                        <Col span={4} style={{textAlign:'right',color:'#333',marginTop:"0.5rem"}}><FormattedMessage id="Setting.Title"/>:</Col>
-                        <Col span={7}>
-                          <FormItem>
-                            {getFieldDecorator('seoTitle', {
-                              initialValue: navigation.seoTitle
-                            })(
-                              <Input
-                                onChange={(e) => {
-                                  const value = (e.target as any).value;
-                                  this.props.addField('seoTitle', value);
-                                }}
-                              />
-                            )}
-                          </FormItem>
-                        </Col>
-                      </Row>
-                      <Row gutter={[24, 12]}>
-                        <Col span={4} style={{textAlign:'right',color:'#333'}}><FormattedMessage id="Setting.MetaKeywords"/>:</Col>
-                        <Col span={7}>
-                          <FormItem>
-                            {getFieldDecorator('MetaKeywords', {
-                              initialValue: navigation.MetaKeywords
-                            })(
-                              <Input.TextArea
-                                rows={6}
-                                autoSize={{ minRows: 3, maxRows: 5 }}
-                                onChange={(e) => {
-                                  const value = (e.target as any).value;
-                                  this.props.addField('metaKeywords', value);
-                                }}
-                              />
-                            )}
-                          </FormItem>
-                        </Col>
-                      </Row>
-                      <Row gutter={[24, 12]}>
-                        <Col span={4} style={{textAlign:'right',color:'#333'}}><FormattedMessage id="Setting.MetaDescription"/>:</Col>
-                        <Col span={7}>
-                          <FormItem>
-                            {getFieldDecorator('MetaDescription', {
-                              initialValue: navigation.MetaDescription
-                            })(
-                              <Input.TextArea
-                                rows={6}
-                                autoSize={{ minRows: 3, maxRows: 5 }}
-                                onChange={(e) => {
-                                  const value = (e.target as any).value;
-                                  this.props.addField('metaDesc', value);
-                                }}
-                              />
-                            )}
-                          </FormItem>
-                        </Col>
-                      </Row>
-                      <Row gutter={[24, 12]}>
-                        <Col span={4} style={{textAlign:'right',color:'#333',marginTop:"0.5rem"}}><FormattedMessage id="H1"/>:</Col>
-                        <Col span={7}>
-                          <FormItem>
-                            {getFieldDecorator('h1', {
-                              initialValue: navigation.h1
-                            })(
-                              <Input disabled/>
-                            )}
-                          </FormItem>
-                        </Col>
-                      </Row>
-                      <Row gutter={[24, 12]}>
-                        <Col span={4} style={{textAlign:'right',color:'#333',marginTop:"0.5rem"}}><FormattedMessage id="H2"/>:</Col>
-                        <Col span={7}>
-                          <FormItem>
-                            {getFieldDecorator('h2', {
-                              initialValue: navigation.h2
-                            })(
-                              <Input disabled/>
-                            )}
-                          </FormItem>
-                        </Col>
-                      </Row>
-                    </div>
+                    
                     
                   </div>
                 ) : pageTypeCode !== '' ? (
@@ -562,6 +482,90 @@ export default class Interaction extends React.Component<any, any> {
                     )}
                   </FormItem>
                 ) : null}
+                {pageTypeCode==='PLP'?(
+                  <div>
+                  {<FormattedMessage id="Setting.seoSetting" />}
+                  <Row gutter={[24, 12]}>
+                    <Col span={4} style={{textAlign:'right',color:'#333',marginTop:"0.5rem"}}><FormattedMessage id="Setting.Title"/>:</Col>
+                    <Col span={7}>
+                      <FormItem>
+                        {getFieldDecorator('seoTitle', {
+                          initialValue: navigation.seoTitle
+                        })(
+                          <Input
+                            onChange={(e) => {
+                              const value = (e.target as any).value;
+                              this.props.addField('seoTitle', value);
+                            }}
+                          />
+                        )}
+                      </FormItem>
+                    </Col>
+                  </Row>
+                  <Row gutter={[24, 12]}>
+                    <Col span={4} style={{textAlign:'right',color:'#333'}}><FormattedMessage id="Setting.MetaKeywords"/>:</Col>
+                    <Col span={7}>
+                      <FormItem>
+                        {getFieldDecorator('MetaKeywords', {
+                          initialValue: navigation.MetaKeywords
+                        })(
+                          <Input.TextArea
+                            rows={6}
+                            autoSize={{ minRows: 3, maxRows: 5 }}
+                            onChange={(e) => {
+                              const value = (e.target as any).value;
+                              this.props.addField('metaKeywords', value);
+                            }}
+                          />
+                        )}
+                      </FormItem>
+                    </Col>
+                  </Row>
+                  <Row gutter={[24, 12]}>
+                    <Col span={4} style={{textAlign:'right',color:'#333'}}><FormattedMessage id="Setting.MetaDescription"/>:</Col>
+                    <Col span={7}>
+                      <FormItem>
+                        {getFieldDecorator('MetaDescription', {
+                          initialValue: navigation.MetaDescription
+                        })(
+                          <Input.TextArea
+                            rows={6}
+                            autoSize={{ minRows: 3, maxRows: 5 }}
+                            onChange={(e) => {
+                              const value = (e.target as any).value;
+                              this.props.addField('metaDesc', value);
+                            }}
+                          />
+                        )}
+                      </FormItem>
+                    </Col>
+                  </Row>
+                  <Row gutter={[24, 12]}>
+                    <Col span={4} style={{textAlign:'right',color:'#333',marginTop:"0.5rem"}}><FormattedMessage id="H1"/>:</Col>
+                    <Col span={7}>
+                      <FormItem>
+                        {getFieldDecorator('h1', {
+                          initialValue: navigation.h1
+                        })(
+                          <Input disabled/>
+                        )}
+                      </FormItem>
+                    </Col>
+                  </Row>
+                  <Row gutter={[24, 12]}>
+                    <Col span={4} style={{textAlign:'right',color:'#333',marginTop:"0.5rem"}}><FormattedMessage id="H2"/>:</Col>
+                    <Col span={7}>
+                      <FormItem>
+                        {getFieldDecorator('h2', {
+                          initialValue: navigation.h2
+                        })(
+                          <Input disabled/>
+                        )}
+                      </FormItem>
+                    </Col>
+                  </Row>
+                </div>
+                ):null}
               </div>
             ) : null}
             {interaction === 1 ? (

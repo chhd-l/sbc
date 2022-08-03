@@ -2001,7 +2001,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'x',
         render: (text, record) => (
           <div>
-            {Const.SITE_NAME !== 'MYVETRECO' && (<AuthWrapper functionName="f_subscription_add_discount">
+            {Const.SITE_NAME !== 'MYVETRECO' && (<AuthWrapper functionName="f_retry_refill">
               <a
                 className="iconfont iconshuaxin"
                 style={subscriptionInfo.canRetry ?styles.edit:styles.disabled}

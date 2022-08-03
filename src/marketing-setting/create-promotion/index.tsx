@@ -346,8 +346,8 @@ export default function index({ ...props }) {
           selectedLeafletRows: detail.goodsList?.goodsInfoPage?.content.filter((item) => {
             return leafletIds.includes(item.goodsInfoId);
           }),
-          appliesType: detail?.appliesType,
-          subscriptionRefillLimit: detail?.subscriptionRefillLimit
+          appliesType: detail?.appliesType || 0,
+          subscriptionRefillLimit: detail?.subscriptionRefillLimit || 50
         },
         /**
          * 类型

@@ -1365,7 +1365,7 @@ class SubscriptionDetail extends React.Component<any, any> {
               </Col>
               {/* fr ru tr  us: 391463*/}
               {/* [123457909, 123457907, 123457911].includes(storeId) */}
-              {promotionsArr?.length > 0 && (<Col span={6}>
+              {promotionsArr?.length > 0 && [123457909, 123457907, 123457911].includes(storeId) && (<Col span={6}>
                 <Row>
                   <Col span={12}>
                     <label className="info-title">

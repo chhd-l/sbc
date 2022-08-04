@@ -46,3 +46,13 @@ yarn build:all:online 部署线上环境原来的 yarn start 和 build:all 依�
 /data/www/s2b/supplier/dist_supplier
 
 https://blog.csdn.net/yichensheng/article/details/79425275
+
+
+## sonar命令
+
+```bash
+sonar-scanner \ 
+-Dsonar.projectKey=RoyalCaninEcommerce_sbc-supplier-front\ 
+-Dsonar.host.url=https://sonarqube.effem.com \ 
+-Dsonar.login=b3e2582861d3210f023fd13b84c5681e047c2ce9 \ 
+```

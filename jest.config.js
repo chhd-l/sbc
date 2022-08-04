@@ -4,12 +4,15 @@ const config = {
   coverageProvider: "babel",
   setupFilesAfterEnv: ["<rootDir>/setupTest.js"],
   // collectCoverageFrom: ["src/**/*.{js,jsx,ts,tsx}"],
-  collectCoverageFrom: ["src/customer-details/component/email-edit-form.tsx"],
+  collectCoverageFrom: ["src/customer-details/component/*.{js,ts,jsx,tsx}"],
   testPathIgnorePatterns: ["/node_modules", "/scripts", "/(test|spec)\.[jt]sx?$"],
   transformIgnorePatterns: ["/node_modules/(?!(antd|css-animation|rc.*)/)"],
   testEnvironment: 'jsdom',
   moduleNameMapper: {
     "\\.(css|less)$": "identity-obj-proxy",
+    "^@/(.*)$": "<rootDir>/src/$1",
+    "qmkit": "<rootDir>/web_modules/qmkit",
+    "biz": "<rootDir>/web_modules/biz",
   },
   transform: {
     "\\.[jt]sx?$": "babel-jest",

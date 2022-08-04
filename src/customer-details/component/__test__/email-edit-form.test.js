@@ -21,7 +21,7 @@ jest.mock('../webapi', () => {
 });
 
 describe('Customer Email Edit Component Test', () => {
-  test('email address should display', () => {
+  test('email address modify component should act properly', () => {
     const email = 'aa@bb.cc';
     const wrapper = render(<EmailEditForm email={email} />);
     expect(screen.getByText(email)).toBeInTheDocument();

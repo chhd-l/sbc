@@ -30,7 +30,7 @@ const EmailEditForm: React.FC<IProps> = ({ customerId, email, disableEdit, form 
             setLoading(false);
           } else {
             customerSaveEmail(customerId, values.email).then(saveResp => {
-              if (saveResp.res.code === Const.SUCCESS_CODE) {
+              if (saveResp.res.code === Const.SUCCESS_CODE && saveResp.res.context) {
                 setDisabled(true);
                 setVisible(false);
               }

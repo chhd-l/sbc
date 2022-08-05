@@ -21,7 +21,7 @@ jest.mock('../webapi', () => {
     ),
     customerSaveEmail: jest.fn(
       () =>
-        new Promise((resolve) => resolve({ res: { code: 'K-000000', content: {}, message: '' } }))
+        new Promise((resolve) => resolve({ res: { code: 'K-000000', context: true, message: '' } }))
     )
   };
 });

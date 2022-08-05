@@ -1686,8 +1686,8 @@ export default class AppStore extends Store {
             data.get('selectedBasePrice') !== 'None' && item.get('subscriptionBasePrice')
               ? item.get('subscriptionBasePrice')
               : null,
-          virtualInventory: item.get('virtualInventory') ? item.get('virtualInventory') : null,
-          virtualAlert: item.get('virtualAlert') ? item.get('virtualAlert') : null,
+          virtualInventory: item.get('virtualInventory'),
+          virtualAlert: item.get('virtualAlert'),
           depth: item.get('depth') || 0,
           depthUnit: item.get('depthUnit') || 'mm',
           width: item.get('width') || 0,

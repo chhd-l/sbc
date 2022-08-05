@@ -1,7 +1,7 @@
 import React from 'react';
 import {Form, Breadcrumb, Tabs, Button} from 'antd';
 import { StoreProvider } from 'plume2';
-import {Headline, BreadCrumb, AuthWrapper} from 'qmkit';
+import {Headline, BreadCrumb, AuthWrapper, Const} from 'qmkit';
 
 import AppStore from './store';
 import StepOne from './editcomponents/step-basic-edit';
@@ -65,11 +65,14 @@ export default class ShopInfoEdit extends React.Component<any, any> {
         <div className="container">
           <Tabs onChange={(key) => this.store.setCurrentTab(key)} activeKey={currentTab}>
             <Tabs.TabPane tab={<FormattedMessage id="Setting.basicInformation" />} key="0" />
-            <Tabs.TabPane tab={<FormattedMessage id="Setting.ssoSetting" />} key="1" />
-            <Tabs.TabPane tab={<FormattedMessage id="Setting.signedInformation" />} key="2" />
-            <Tabs.TabPane tab={<FormattedMessage id="Setting.footer" />} key="3" />
-            <Tabs.TabPane tab={<FormattedMessage id="Setting.consent" />} key="4" />
-            <Tabs.TabPane tab={<FormattedMessage id="Setting.Taxes" />} key="5" />
+            {Const.SITE_NAME !== "MYVETRECO" ?
+            <>
+              <Tabs.TabPane tab={<FormattedMessage id="Setting.ssoSetting" />} key="1" />
+              <Tabs.TabPane tab={<FormattedMessage id="Setting.signedInformation" />} key="2" />
+              <Tabs.TabPane tab={<FormattedMessage id="Setting.footer" />} key="3" />
+              <Tabs.TabPane tab={<FormattedMessage id="Setting.consent" />} key="4" />
+              <Tabs.TabPane tab={<FormattedMessage id="Setting.Taxes" />} key="5" />
+            </> : null}
             {/* <Tabs.TabPane
               tab={<FormattedMessage id="footerConfig" />}
               key="5"

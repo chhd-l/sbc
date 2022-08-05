@@ -5861,5 +5861,9 @@ export default {
   'Home.recommendations': 'Recommendations',
   'Home.sendby': 'Send by {val}',
   'Product.router': 'Router',
-  'PetOwner.PetOwnerName katakana': 'Pet owner name (Fariguna)'
+  'PetOwner.PetOwnerName katakana': 'Pet owner name (Fariguna)',
+  "PetOwner.EditEmailAddress": "Edit Email Address",
+  "PetOwner.NewEmailAddress": "New email address",
+  "PetOwner.InvalidEmailAlert": "Invalid email address",
+  "PetOwner.EmailAddressExisted": "Email address has already existed",
 };

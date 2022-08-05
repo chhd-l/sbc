@@ -2,16 +2,19 @@ import React, { useState } from 'react';
 import { Modal, Form, Input } from 'antd';
 import { FormComponentProps } from 'antd/es/form';
 import { customerEmailExist, customerSaveEmail } from './webapi';
-
-import '../index.less';
+import { FormattedMessage } from 'react-intl';
+import { RCi18n, Const } from 'qmkit';
 
 interface IProps extends FormComponentProps {
+  customerId: string;
   email: string;
+  disableEdit: boolean;
 }
 
-const EmailEditForm: React.FC<IProps> = ({ email, form }) => {
+const EmailEditForm: React.FC<IProps> = ({ customerId, email, disableEdit, form }) => {
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [disabled, setDisabled] = useState(disableEdit);
 
   const { getFieldDecorator } = form;
 
@@ -20,7 +23,21 @@ const EmailEditForm: React.FC<IProps> = ({ email, form }) => {
       if (!err) {
         setLoading(true);
         customerEmailExist(values.email).then(data => {
-          console.log(data);
+          if (data.res.context) {
+            form.setFields({
+              email: { value: values.email, errors: [new Error(RCi18n({id:'PetOwner.EmailAddressExisted'}))] }
+            })
+            setLoading(false);
+          } else {
+            customerSaveEmail(customerId, values.email).then(saveResp => {
+              if (saveResp.res.code === Const.SUCCESS_CODE) {
+                setDisabled(true);
+                setVisible(false);
+              }
+            }).finally(() => {
+              setLoading(false);
+            })
+          }
         })
       }
     })
@@ -28,21 +45,28 @@ const EmailEditForm: React.FC<IProps> = ({ email, form }) => {
 
   return (
     <div>
-      <div><span>{email}</span> <span data-testid="icon" className="iconfont iconEdit edit-icon-next-text" onClick={() => setVisible(true)}></span></div>
+      <div>
+        <span>{email}</span>
+        <span
+          data-testid="icon"
+          className={`iconfont iconEdit edit-icon-next-text ${disabled ? 'disabled' : ''}`}
+          onClick={() => !disabled && setVisible(true)}
+        />
+      </div>
       <Modal
-        title="Edit Email Address"
+        title={<FormattedMessage id="PetOwner.EditEmailAddress" />}
         visible={visible}
         width={640}
-        okText="OK"
-        cancelText="Cancel"
+        okText={<FormattedMessage id="Setting.OK" />}
+        cancelText={<FormattedMessage id="Setting.Cancel" />}
         confirmLoading={loading}
         onCancel={() => setVisible(false)}
         onOk={handleSave}
       >
         <Form layout="inline">
-          <Form.Item label="New email address">
+          <Form.Item label={<FormattedMessage id="PetOwner.NewEmailAddress" />}>
             {getFieldDecorator('email', {
-              rules: [{ required: true, type: 'email', message: "Invalid email address" }]
+              rules: [{ required: true, type: 'email', message: <FormattedMessage id="PetOwner.InvalidEmailAlert" /> }]
             })(
               <Input data-testid="email-input" style={{width: 300}} />
             )}

@@ -309,7 +309,7 @@ export function customerEmailExist(email: string) {
     body: JSON.stringify({
       email,
     })
-  }, { customerTip: true, isHandleResult: true })
+  })
 }
 
 export function customerSaveEmail(customerId: string, email: string) {

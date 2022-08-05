@@ -148,7 +148,6 @@ class SubscriptionDetail extends React.Component<any, any> {
           let paymentInfo = subscriptionDetail.payPaymentInfo;
           let paymentMethod = subscriptionDetail.paymentMethod;
           let promotionResponse = subscriptionDetail.promotionResponse;
-
           this.setState(
             {
               subscriptionInfo: subscriptionInfo,
@@ -165,8 +164,8 @@ class SubscriptionDetail extends React.Component<any, any> {
               isActive: subscriptionDetail.subscribeStatus === '0',
               paymentMethod: paymentMethod,
               serviceFeePrice: subscriptionInfo.serviceFeePrice ?? 0,
-              totalSubscriptionPrice: promotionResponse.totalSubscriptionPrice ?? 0,
-              promotionsArr: promotionResponse.promotionVOList || [],
+              totalSubscriptionPrice: promotionResponse?.totalSubscriptionPrice ?? 0,
+              promotionsArr: promotionResponse?.promotionVOList || [],
             },
             () => {
               this.applyPromotionCode(this.state.promotionCode);
@@ -174,7 +173,9 @@ class SubscriptionDetail extends React.Component<any, any> {
           );
         }
       })
-      .catch((err) => { })
+      .catch((err) => {
+        console.log('getSubscriptionDetail err', err)
+      })
       .finally(() => {
         this.setState({
           loading: false

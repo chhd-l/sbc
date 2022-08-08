@@ -13,7 +13,8 @@ import DeliveryList from './component/delivery-list';
 import DeliveryItem from './component/delivery-item';
 import PaymentList from './component/payment-list';
 import FeedbackList from './component/feedback-list';
-import BenefitsList from './component/benefits-list'
+import BenefitsList from './component/benefits-list';
+import EmailEditForm from './component/email-edit-form';
 import { PostalCodeMsg } from 'biz';
 
 import { getAddressInputTypeSetting, getAddressFieldList, getCountryList, getTaggingList } from './component/webapi';
@@ -400,7 +401,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                         <FormattedMessage id="PetOwner.emailAddress" />
                       </Col>
                       <Col span={8} className="text-highlight">
-                        {basic.email}
+                        <EmailEditForm customerId={this.state.customerId} email={basic.email} disableEdit={basic.hasModify === 1} />
                       </Col>
                       <Col span={4} className="text-tip">
                         <FormattedMessage id="PetOwner.PreferChannel" />

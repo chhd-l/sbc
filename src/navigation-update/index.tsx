@@ -114,12 +114,11 @@ class NavigationUpdate extends Component<any, any> {
             .catch((err) => {});
         } else if (type === 'add') {
           navigation.parentId = id; // add by parentId
-          let obj = {
-            NavigationRequest: navigation,
-            SeoSettingSaveRequest: SeoSettingSaveRequest
-          };
           webapi
-            .addNavigation(obj)
+            .addNavigation({
+              navigationRequest: navigation,
+              seoSettingSaveRequest: SeoSettingSaveRequest
+            })
             .then((data) => {
               const { res } = data;
               if (res.code === Const.SUCCESS_CODE) {

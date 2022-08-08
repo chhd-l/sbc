@@ -19,7 +19,7 @@ const EmailEditForm: React.FC<IProps> = ({ customerId, email, disableEdit, form 
   const { getFieldDecorator } = form;
 
   const handleOpen = () => {
-    if (!disabled) {
+    if (!disabled && !disableEdit) {
       setVisible(true);
       form.resetFields();
     }
@@ -59,7 +59,7 @@ const EmailEditForm: React.FC<IProps> = ({ customerId, email, disableEdit, form 
         <span>{email}</span>
         <span
           data-testid="icon"
-          className={`iconfont iconEdit edit-icon-next-text ${disabled ? 'disabled' : ''}`}
+          className={`iconfont iconEdit edit-icon-next-text ${disabled || disableEdit ? 'disabled' : ''}`}
           onClick={handleOpen}
         />
       </div>

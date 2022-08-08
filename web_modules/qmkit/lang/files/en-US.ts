@@ -5866,4 +5866,5 @@ export default {
   "PetOwner.NewEmailAddress": "New email address",
   "PetOwner.InvalidEmailAlert": "Invalid email address",
   "PetOwner.EmailAddressExisted": "Email address has already existed",
+  "PetOwner.EmailEditSuccessAlert": "Operation successful, please wait confirmation from PO through email.",
 };

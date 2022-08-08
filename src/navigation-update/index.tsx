@@ -115,7 +115,7 @@ class NavigationUpdate extends Component<any, any> {
         } else if (type === 'add') {
           navigation.parentId = id; // add by parentId
           let obj = {
-            navigation: navigation,
+            NavigationRequest: navigation,
             SeoSettingSaveRequest: SeoSettingSaveRequest
           };
           webapi

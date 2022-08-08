@@ -1,4 +1,3 @@
-
 import Common from './config-common';
 
 const host = window.location.host;

@@ -20,8 +20,10 @@ jest.mock('../webapi', () => {
         )
     ),
     customerSaveEmail: jest.fn(
-      () =>
-        new Promise((resolve) => resolve({ res: { code: 'K-000000', context: true, message: '' } }))
+      (customerId, email) =>
+        new Promise((resolve) =>
+          resolve({ res: { code: 'K-000000', context: email === 'aa2@bb.cc', message: '' } })
+        )
     )
   };
 });
@@ -49,12 +51,14 @@ describe('Customer Email Edit Component Test', () => {
     expect(input).toHaveValue('');
 
     userEvent.type(input, email);
-
     await waitFor(() => userEvent.click(saveBtn));
 
     userEvent.clear(input);
     userEvent.type(input, 'aa1@bb.cc');
+    await waitFor(() => userEvent.click(saveBtn));
 
+    userEvent.clear(input);
+    userEvent.type(input, 'aa2@bb.cc');
     await waitFor(() => userEvent.click(saveBtn));
   });
 });

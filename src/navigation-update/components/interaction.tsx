@@ -363,8 +363,8 @@ export default class Interaction extends React.Component<any, any> {
       }
     };
     let defaultFilter = this.getFilterValues(navigation.filter);
-    if(pageTypeCode=="PLP"){
-      SeoSettingSaveRequest.type=5;
+    if (pageTypeCode == 'PLP') {
+      SeoSettingSaveRequest.type = 5;
     }
     return (
       <div>

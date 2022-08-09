@@ -28,8 +28,8 @@ export function getNavigationById(id) {
     method: 'GET'
   });
 }
-export function getNavigation() {
-  return Fetch<TResult>('/navigations?language=English', {
+export function getSeoNavigation(navigationLink) {
+  return Fetch<TResult>(`/seo/setting?navigationLink=${navigationLink}`, {
     method: 'GET',
   });
 }
@@ -42,7 +42,7 @@ export function addNavigation(filterParams) {
   });
 }
 export function updateNavigation(filterParams) {
-  return Fetch<TResult>('/navigation/' + filterParams.id, {
+  return Fetch<TResult>('/navigation/' + filterParams.navigationRequest.id, {
     method: 'PUT',
     body: JSON.stringify({
       ...filterParams

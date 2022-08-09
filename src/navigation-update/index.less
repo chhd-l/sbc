@@ -4,11 +4,12 @@
   }
 
   .tip {
-    position: absolute;
+    position: relative;
     left: 0;
-    top: 30px;
+    top: 0;
     font-size: 12px;
     font-weight: 700;
+    line-height: 20px;
   }
 
   .steps-action {
@@ -39,11 +40,17 @@
     width: 135px;
   }
 
-  .ant-steps-item-finish > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title::after {
+  .ant-steps-item-finish
+    > .ant-steps-item-container
+    > .ant-steps-item-content
+    > .ant-steps-item-title::after {
     border-bottom: 3px dashed var(--primary-color);
   }
 
-  .ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title {
+  .ant-steps-item-process
+    > .ant-steps-item-container
+    > .ant-steps-item-content
+    > .ant-steps-item-title {
     color: var(--primary-color);
   }
 

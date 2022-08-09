@@ -28,8 +28,7 @@ class NavigationUpdate extends Component<any, any> {
       store: {},
       SeoSettingSaveRequest: {
         h1: '{description title}',
-        h2: '{product name}',
-        titleSource: 'Royal Cannin|{name}s'
+        h2: '{product name}'
       }
     };
     this.next = this.next.bind(this);
@@ -70,6 +69,16 @@ class NavigationUpdate extends Component<any, any> {
             this.setState({
               navigation: res.context
             });
+            let link = res.context.navigationLink;
+            webapi.getSeoNavigation(link).then((data) => {
+              this.setState({
+                SeoSettingSaveRequest: {
+                  ...data.res.context.seoSettingVO,
+                  h1: '{description title}',
+                  h2: '{product name}'
+                }
+              });
+            });
           }
         })
         .catch((err) => {});
@@ -77,7 +86,6 @@ class NavigationUpdate extends Component<any, any> {
   }
 
   addField(field, value) {
-    console.log(this.state);
     let data = this.state.navigation;
     data[field] = value;
     this.setState({
@@ -100,7 +108,10 @@ class NavigationUpdate extends Component<any, any> {
         if (type === 'edit') {
           navigation.id = id; // edit by id
           webapi
-            .updateNavigation(navigation)
+            .updateNavigation({
+              navigationRequest: navigation,
+              seoSettingEditRequest: SeoSettingSaveRequest
+            })
             .then((data) => {
               const { res } = data;
               if (res.code === Const.SUCCESS_CODE) {
@@ -189,9 +200,8 @@ class NavigationUpdate extends Component<any, any> {
         <div className="container-search" id="navigationStep">
           <Headline title={title} />
           <Steps current={current} labelPlacement="vertical">
-            {steps.map((item) => (
-              <Step key={item.title} title={item.title} />
-            ))}
+            {steps.length > 0 &&
+              steps.map((item, index) => <Step key={index} title={item.title} />)}
           </Steps>
           <div className="steps-content">{steps[current].controller}</div>
           <div className="steps-action">

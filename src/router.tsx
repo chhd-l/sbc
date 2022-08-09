@@ -883,6 +883,10 @@ const routes = [
     path: '/marketing-banner',
     asyncComponent: () => import('./marketing-banner')
   },
+  {
+    path: '/ribbon-management',
+    asyncComponent: () => import('./marketing-banner')
+  },
   //商品评价
   {
     path: '/nps-list',

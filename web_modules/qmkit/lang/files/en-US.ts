@@ -1390,6 +1390,7 @@ export default {
   'Menu.Market Automation': 'Market Automation',
   'Menu.Marketing': 'Marketing',
   'Menu.Marketing Banner': 'Marketing Banner',
+  'Menu.Set Ribbon': 'Set Ribbon',
   'Menu.Marketing Center': 'Promotion Center',
   'Menu.Marketing List': 'Marketing List',
   'Menu.Marketing Settings': 'Marketing Settings',
@@ -5862,8 +5863,8 @@ export default {
   'Home.sendby': 'Send by {val}',
   'Product.router': 'Router',
   'PetOwner.PetOwnerName katakana': 'Pet owner name (Fariguna)',
-  "PetOwner.EditEmailAddress": "Edit Email Address",
-  "PetOwner.NewEmailAddress": "New email address",
-  "PetOwner.InvalidEmailAlert": "Invalid email address",
-  "PetOwner.EmailAddressExisted": "Email address has already existed",
+  'PetOwner.EditEmailAddress': 'Edit Email Address',
+  'PetOwner.NewEmailAddress': 'New email address',
+  'PetOwner.InvalidEmailAlert': 'Invalid email address',
+  'PetOwner.EmailAddressExisted': 'Email address has already existed'
 };

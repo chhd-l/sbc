@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Input, Checkbox, Row, Col } from 'antd';
 import { AssetManagement } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
+import * as webapi from '../webapi';
 const FormItem = Form.Item;
 const layout = {
   labelCol: { span: 4 },
@@ -30,6 +31,7 @@ export default class BasicInformation extends React.Component<any, any> {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { navigation, noLanguageSelect } = this.props;
+    let testlink = /^\/.*/;
     return (
       <div>
         <h3>
@@ -77,7 +79,22 @@ export default class BasicInformation extends React.Component<any, any> {
             <FormItem {...layout} label={<FormattedMessage id="Content.NavigationLink" />}>
               {getFieldDecorator('navigationLink', {
                 initialValue: navigation.navigationLink,
-                rules: [{ pattern: /^\/.*/, message: 'Please enter correctly' }]
+                rules: [
+                  {
+                    validator: (rule, value, callback) => {
+                      webapi.getSeoNavigation(value).then((res) => {
+                        let { id } = res.res.context.seoSettingVO;
+                        if (id) {
+                          callback(<FormattedMessage id="Content.NavigationLinkTips" />);
+                        } else if (testlink.test(value)) {
+                          callback();
+                        } else {
+                          callback(<FormattedMessage id="Content.NavigationLinkRoute" />);
+                        }
+                      });
+                    }
+                  }
+                ]
               })(
                 <Input
                   onChange={(e) => {

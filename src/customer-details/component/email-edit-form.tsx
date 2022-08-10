@@ -18,6 +18,13 @@ const EmailEditForm: React.FC<IProps> = ({ customerId, email, disableEdit, form 
 
   const { getFieldDecorator } = form;
 
+  const handleOpen = () => {
+    if (!disabled && !disableEdit) {
+      setVisible(true);
+      form.resetFields();
+    }
+  }
+
   const handleSave = () => {
     form.validateFields(null, (err, values) => {
       if (!err) {
@@ -46,13 +53,6 @@ const EmailEditForm: React.FC<IProps> = ({ customerId, email, disableEdit, form 
     })
   }
 
-  const handleOpen = () => {
-    if (!disabled && !disableEdit) {
-      setVisible(true);
-      form.resetFields();
-    }
-  }
-
   return (
     <div>
       <div>
@@ -61,6 +61,7 @@ const EmailEditForm: React.FC<IProps> = ({ customerId, email, disableEdit, form 
           data-testid="icon"
           className={`iconfont iconEdit edit-icon-next-text ${disabled || disableEdit ? 'disabled' : ''}`}
           onClick={handleOpen}
+          style={{visibility:'hidden'}}
         />
       </div>
       <Modal

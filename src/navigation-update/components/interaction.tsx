@@ -53,7 +53,9 @@ export default class Interaction extends React.Component<any, any> {
   }
 
   componentDidMount() {
-    let defaultInteraction = this.props.navigation.interaction ? this.props.navigation.interaction : 0;
+    let defaultInteraction = this.props.navigation.interaction
+      ? this.props.navigation.interaction
+      : 0;
     this.setState({
       interaction: defaultInteraction
     });
@@ -120,10 +122,15 @@ export default class Interaction extends React.Component<any, any> {
           let activeFilters = res.context.filter((x) => x.filterStatus === '1');
           activeFilters.map((item) => {
             let childrenNodes = [];
-            let hasCustmerAttribute = item.storeGoodsFilterValueVOList && item.storeGoodsFilterValueVOList.length > 0;
+            let hasCustmerAttribute =
+              item.storeGoodsFilterValueVOList && item.storeGoodsFilterValueVOList.length > 0;
             let hasAttribute = item.attributesValueList && item.attributesValueList.length > 0;
             if (hasCustmerAttribute || hasAttribute) {
-              let valuesList = hasCustmerAttribute ? item.storeGoodsFilterValueVOList : hasAttribute ? item.attributesValueList : [];
+              let valuesList = hasCustmerAttribute
+                ? item.storeGoodsFilterValueVOList
+                : hasAttribute
+                ? item.attributesValueList
+                : [];
               childrenNodes = valuesList.map((child) => {
                 return {
                   title: child.attributeDetailName,
@@ -186,12 +193,26 @@ export default class Interaction extends React.Component<any, any> {
     }
 
     if (value === 1) {
-      this.clearFields(['pageId', 'navigationCateIds', 'keywords', 'filter', 'searchSort', 'paramsField']);
+      this.clearFields([
+        'pageId',
+        'navigationCateIds',
+        'keywords',
+        'filter',
+        'searchSort',
+        'paramsField'
+      ]);
     }
 
     if (value === 2) {
       this.clearFields(['target']);
-      this.clearFields(['pageId', 'navigationCateIds', 'keywords', 'filter', 'searchSort', 'paramsField']);
+      this.clearFields([
+        'pageId',
+        'navigationCateIds',
+        'keywords',
+        'filter',
+        'searchSort',
+        'paramsField'
+      ]);
     }
   }
 
@@ -249,7 +270,13 @@ export default class Interaction extends React.Component<any, any> {
       if (children.length === 0) {
         return;
       }
-      let selectFilter = { attributeId: item, attributeName: parent && parent.attributeName ? parent.attributeName : '', filterType: children[0].filterType, attributeValues: childTitles, attributeValueIdList: childValues };
+      let selectFilter = {
+        attributeId: item,
+        attributeName: parent && parent.attributeName ? parent.attributeName : '',
+        filterType: children[0].filterType,
+        attributeValues: childTitles,
+        attributeValueIdList: childValues
+      };
       selectFilterList.push(selectFilter);
     });
     let selectFilterListString = JSON.stringify(selectFilterList);
@@ -265,21 +292,36 @@ export default class Interaction extends React.Component<any, any> {
         let childrenIds = parentItem ? parentItem.children.map((x) => x.value) : [];
         let selectedFilters = this.getFilterValues(this.props.navigation.filter);
         let intersection = childrenIds.filter((v) => selectedFilters.includes(v));
-        let singleDisabled = item.isSingle && intersection.length > 0 && item.value != intersection[0];
+        let singleDisabled =
+          item.isSingle && intersection.length > 0 && item.value != intersection[0];
         if (item.children && item.children.length > 0) {
           return (
-            <TreeNode key={'parent' + item.key} value={'partent' + item.value} title={item.title} disabled checkable={false}>
+            <TreeNode
+              key={'parent' + item.key}
+              value={'partent' + item.value}
+              title={item.title}
+              disabled
+              checkable={false}
+            >
               {this.generateFilterTree(item.children)}
             </TreeNode>
           );
         }
-        return <TreeNode key={item.key} value={item.value} title={item.title} disabled={singleDisabled} />;
+        return (
+          <TreeNode
+            key={item.key}
+            value={item.value}
+            title={item.title}
+            disabled={singleDisabled}
+          />
+        );
       })
     );
   }
   getFilterValues(filterObject) {
     let filterValues = [];
-    let selectFilters = filterObject && filterObject.indexOf('{') > -1 ? JSON.parse(filterObject) : [];
+    let selectFilters =
+      filterObject && filterObject.indexOf('{') > -1 ? JSON.parse(filterObject) : [];
     selectFilters.map((x) => {
       if (x.attributeValueIdList) {
         x.attributeValueIdList.map((v) => {
@@ -299,16 +341,16 @@ export default class Interaction extends React.Component<any, any> {
   };
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { navigation, noLanguageSelect } = this.props;
-    const { pageList, interaction,pageTypeCode, treeData, filterList, sortList, example } = this.state;
-    navigation.seoTitle = "Royal Cannin|{name}s";
-    navigation.h1 = "{description title}";
-    navigation.h2 = "{product name}";
+    const { navigation, SeoSettingSaveRequest, noLanguageSelect } = this.props;
+    const { pageList, interaction, pageTypeCode, treeData, filterList, sortList, example } =
+      this.state;
     const targetList = [
       { name: 'External', value: '_blank' },
       { name: 'Self', value: '_self' }
     ];
-    let defaultCategoryIds = navigation.navigationCateIds ? navigation.navigationCateIds.split(',').map((x) => parseInt(x)) : [];
+    let defaultCategoryIds = navigation.navigationCateIds
+      ? navigation.navigationCateIds.split(',').map((x) => parseInt(x))
+      : [];
     const tProps = {
       treeData,
       value: defaultCategoryIds,
@@ -321,9 +363,18 @@ export default class Interaction extends React.Component<any, any> {
       }
     };
     let defaultFilter = this.getFilterValues(navigation.filter);
+    if (pageTypeCode == 'PLP') {
+      SeoSettingSaveRequest.type = 5;
+    }
     return (
       <div>
-        <h3>{noLanguageSelect ? <FormattedMessage id="Content.Step2" /> : <FormattedMessage id="Content.Step3" />}</h3>
+        <h3>
+          {noLanguageSelect ? (
+            <FormattedMessage id="Content.Step2" />
+          ) : (
+            <FormattedMessage id="Content.Step3" />
+          )}
+        </h3>
         <h4>
           <FormattedMessage id="Content.InteractionType" />
           <span className="ant-form-item-required"></span>
@@ -352,7 +403,12 @@ export default class Interaction extends React.Component<any, any> {
                 <FormItem {...layout} label={<FormattedMessage id="Content.Page" />}>
                   {getFieldDecorator('pageId', {
                     initialValue: pageList && pageList.length > 0 ? navigation.pageId : null,
-                    rules: [{ required: true, message: <FormattedMessage id="Content.PleaseSelectPage" /> }]
+                    rules: [
+                      {
+                        required: true,
+                        message: <FormattedMessage id="Content.PleaseSelectPage" />
+                      }
+                    ]
                   })(
                     <Select onChange={this.pageChange}>
                       {pageList &&
@@ -369,7 +425,12 @@ export default class Interaction extends React.Component<any, any> {
                     <FormItem {...layout} label={<FormattedMessage id="Content.SalesCategory" />}>
                       {getFieldDecorator('navigationCateIds', {
                         initialValue: defaultCategoryIds,
-                        rules: [{ required: true, message: <FormattedMessage id="Content.PleaseSelectSalesCategory" /> }]
+                        rules: [
+                          {
+                            required: true,
+                            message: <FormattedMessage id="Content.PleaseSelectSalesCategory" />
+                          }
+                        ]
                       })(<TreeSelect {...tProps} />)}
                     </FormItem>
                     <FormItem {...layout} label={<FormattedMessage id="Content.PageTitle" />}>
@@ -405,16 +466,25 @@ export default class Interaction extends React.Component<any, any> {
                       </Col>
                     </Row>
                     <FormItem {...layout} label={<FormattedMessage id="Content.PagePicture" />}>
-                      <AssetManagement choosedImgCount={1} images={navigation.pageImg ? [navigation.pageImg] : []} selectImgFunction={this.updateImg} deleteImgFunction={this.deleteImg} />
+                      <AssetManagement
+                        choosedImgCount={1}
+                        images={navigation.pageImg ? [navigation.pageImg] : []}
+                        selectImgFunction={this.updateImg}
+                        deleteImgFunction={this.deleteImg}
+                      />
                     </FormItem>
-                    
                   </div>
                 ) : null}
                 {pageTypeCode === 'SRP' ? (
                   <FormItem {...layout} label={<FormattedMessage id="Content.Keywords" />}>
                     {getFieldDecorator('keywords', {
                       initialValue: navigation.keywords,
-                      rules: [{ required: true, message: <FormattedMessage id="Content.PleaseInputKeywords" /> }]
+                      rules: [
+                        {
+                          required: true,
+                          message: <FormattedMessage id="Content.PleaseInputKeywords" />
+                        }
+                      ]
                     })(
                       <Input
                         onChange={(e) => {
@@ -463,8 +533,6 @@ export default class Interaction extends React.Component<any, any> {
                         </Select>
                       )}
                     </FormItem>
-                    
-                    
                   </div>
                 ) : pageTypeCode !== '' ? (
                   <FormItem {...layout} label={<FormattedMessage id="Content.Parameter" />}>
@@ -482,90 +550,105 @@ export default class Interaction extends React.Component<any, any> {
                     )}
                   </FormItem>
                 ) : null}
-                {pageTypeCode==='PLP'?(
+                {pageTypeCode === 'PLP' ? (
                   <div>
-                  {<FormattedMessage id="Setting.seoSetting" />}
-                  <Row gutter={[24, 12]}>
-                    <Col span={4} style={{textAlign:'right',color:'#333',marginTop:"0.5rem"}}><FormattedMessage id="Setting.Title"/>:</Col>
-                    <Col span={7}>
-                      <FormItem>
-                        {getFieldDecorator('seoTitle', {
-                          initialValue: navigation.seoTitle
-                        })(
-                          <Input
-                            onChange={(e) => {
-                              const value = (e.target as any).value;
-                              this.props.addField('seoTitle', value);
-                            }}
-                          />
-                        )}
-                      </FormItem>
-                    </Col>
-                  </Row>
-                  <Row gutter={[24, 12]}>
-                    <Col span={4} style={{textAlign:'right',color:'#333'}}><FormattedMessage id="Setting.MetaKeywords"/>:</Col>
-                    <Col span={7}>
-                      <FormItem>
-                        {getFieldDecorator('MetaKeywords', {
-                          initialValue: navigation.MetaKeywords
-                        })(
-                          <Input.TextArea
-                            rows={6}
-                            autoSize={{ minRows: 3, maxRows: 5 }}
-                            onChange={(e) => {
-                              const value = (e.target as any).value;
-                              this.props.addField('metaKeywords', value);
-                            }}
-                          />
-                        )}
-                      </FormItem>
-                    </Col>
-                  </Row>
-                  <Row gutter={[24, 12]}>
-                    <Col span={4} style={{textAlign:'right',color:'#333'}}><FormattedMessage id="Setting.MetaDescription"/>:</Col>
-                    <Col span={7}>
-                      <FormItem>
-                        {getFieldDecorator('MetaDescription', {
-                          initialValue: navigation.MetaDescription
-                        })(
-                          <Input.TextArea
-                            rows={6}
-                            autoSize={{ minRows: 3, maxRows: 5 }}
-                            onChange={(e) => {
-                              const value = (e.target as any).value;
-                              this.props.addField('metaDesc', value);
-                            }}
-                          />
-                        )}
-                      </FormItem>
-                    </Col>
-                  </Row>
-                  <Row gutter={[24, 12]}>
-                    <Col span={4} style={{textAlign:'right',color:'#333',marginTop:"0.5rem"}}><FormattedMessage id="H1"/>:</Col>
-                    <Col span={7}>
-                      <FormItem>
-                        {getFieldDecorator('h1', {
-                          initialValue: navigation.h1
-                        })(
-                          <Input disabled/>
-                        )}
-                      </FormItem>
-                    </Col>
-                  </Row>
-                  <Row gutter={[24, 12]}>
-                    <Col span={4} style={{textAlign:'right',color:'#333',marginTop:"0.5rem"}}><FormattedMessage id="H2"/>:</Col>
-                    <Col span={7}>
-                      <FormItem>
-                        {getFieldDecorator('h2', {
-                          initialValue: navigation.h2
-                        })(
-                          <Input disabled/>
-                        )}
-                      </FormItem>
-                    </Col>
-                  </Row>
-                </div>
-                ):null}
+                    {<FormattedMessage id="Setting.seoSetting" />}
+                    <Row gutter={[24, 12]}>
+                      <Col
+                        span={4}
+                        style={{ textAlign: 'right', color: '#333', marginTop: '0.5rem' }}
+                      >
+                        <FormattedMessage id="Setting.Title" />:
+                      </Col>
+                      <Col span={7}>
+                        <FormItem>
+                          {getFieldDecorator('titleSource', {
+                            initialValue: SeoSettingSaveRequest.titleSource
+                          })(
+                            <Input
+                              onChange={(e) => {
+                                const value = (e.target as any).value;
+                                this.props.addSeoSetting('titleSource', value);
+                              }}
+                            />
+                          )}
+                        </FormItem>
+                      </Col>
+                    </Row>
+                    <Row gutter={[24, 12]}>
+                      <Col span={4} style={{ textAlign: 'right', color: '#333' }}>
+                        <FormattedMessage id="Setting.MetaKeywords" />:
+                      </Col>
+                      <Col span={7}>
+                        <FormItem>
+                          {getFieldDecorator('metaKeywords', {
+                            initialValue: SeoSettingSaveRequest.metaKeywords
+                          })(
+                            <Input.TextArea
+                              rows={6}
+                              autoSize={{ minRows: 3, maxRows: 5 }}
+                              onChange={(e) => {
+                                const value = (e.target as any).value;
+                                this.props.addSeoSetting('metaKeywords', value);
+                              }}
+                            />
+                          )}
+                        </FormItem>
+                      </Col>
+                    </Row>
+                    <Row gutter={[24, 12]}>
+                      <Col span={4} style={{ textAlign: 'right', color: '#333' }}>
+                        <FormattedMessage id="Setting.MetaDescription" />:
+                      </Col>
+                      <Col span={7}>
+                        <FormItem>
+                          {getFieldDecorator('metaDescription', {
+                            initialValue: SeoSettingSaveRequest.metaDescription
+                          })(
+                            <Input.TextArea
+                              rows={6}
+                              autoSize={{ minRows: 3, maxRows: 5 }}
+                              onChange={(e) => {
+                                const value = (e.target as any).value;
+                                this.props.addSeoSetting('metaDescription', value);
+                              }}
+                            />
+                          )}
+                        </FormItem>
+                      </Col>
+                    </Row>
+                    <Row gutter={[24, 12]}>
+                      <Col
+                        span={4}
+                        style={{ textAlign: 'right', color: '#333', marginTop: '0.5rem' }}
+                      >
+                        <FormattedMessage id="H1" />:
+                      </Col>
+                      <Col span={7}>
+                        <FormItem>
+                          {getFieldDecorator('h1', {
+                            initialValue: SeoSettingSaveRequest.h1
+                          })(<Input disabled />)}
+                        </FormItem>
+                      </Col>
+                    </Row>
+                    <Row gutter={[24, 12]}>
+                      <Col
+                        span={4}
+                        style={{ textAlign: 'right', color: '#333', marginTop: '0.5rem' }}
+                      >
+                        <FormattedMessage id="H2" />:
+                      </Col>
+                      <Col span={7}>
+                        <FormItem>
+                          {getFieldDecorator('h2', {
+                            initialValue: SeoSettingSaveRequest.h2
+                          })(<Input disabled />)}
+                        </FormItem>
+                      </Col>
+                    </Row>
+                  </div>
+                ) : null}
               </div>
             ) : null}
             {interaction === 1 ? (

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Form, Input } from 'antd';
+import { Modal, Form, Input, message } from 'antd';
 import { FormComponentProps } from 'antd/es/form';
 import { customerEmailExist, customerSaveEmail } from './webapi';
 import { FormattedMessage } from 'react-intl';
@@ -18,6 +18,13 @@ const EmailEditForm: React.FC<IProps> = ({ customerId, email, disableEdit, form 
 
   const { getFieldDecorator } = form;
 
+  const handleOpen = () => {
+    if (!disabled && !disableEdit) {
+      setVisible(true);
+      form.resetFields();
+    }
+  }
+
   const handleSave = () => {
     form.validateFields(null, (err, values) => {
       if (!err) {
@@ -31,8 +38,11 @@ const EmailEditForm: React.FC<IProps> = ({ customerId, email, disableEdit, form 
           } else {
             customerSaveEmail(customerId, values.email).then(saveResp => {
               if (saveResp.res.code === Const.SUCCESS_CODE && saveResp.res.context) {
+                message.success(RCi18n({id:'PetOwner.EmailEditSuccessAlert'}));
                 setDisabled(true);
                 setVisible(false);
+              } else {
+                message.error(RCi18n({id:'Product.OperationFailed'}));
               }
             }).finally(() => {
               setLoading(false);
@@ -49,8 +59,8 @@ const EmailEditForm: React.FC<IProps> = ({ customerId, email, disableEdit, form 
         <span>{email}</span>
         <span
           data-testid="icon"
-          className={`iconfont iconEdit edit-icon-next-text ${disabled ? 'disabled' : ''}`}
-          onClick={() => !disabled && setVisible(true)}
+          className={`iconfont iconEdit edit-icon-next-text ${disabled || disableEdit ? 'disabled' : ''}`}
+          onClick={handleOpen}
         />
       </div>
       <Modal

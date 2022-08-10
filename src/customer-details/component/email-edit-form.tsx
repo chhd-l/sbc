@@ -16,54 +16,54 @@ const EmailEditForm: React.FC<IProps> = ({ customerId, email, disableEdit, form 
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(disableEdit);
 
-  const { getFieldDecorator } = form;
+  // const { getFieldDecorator } = form;
 
-  const handleSave = () => {
-    form.validateFields(null, (err, values) => {
-      if (!err) {
-        setLoading(true);
-        customerEmailExist(values.email).then(data => {
-          if (data.res.context) {
-            form.setFields({
-              email: { value: values.email, errors: [new Error(RCi18n({id:'PetOwner.EmailAddressExisted'}))] }
-            })
-            setLoading(false);
-          } else {
-            customerSaveEmail(customerId, values.email).then(saveResp => {
-              if (saveResp.res.code === Const.SUCCESS_CODE && saveResp.res.context) {
-                message.success(RCi18n({id:'PetOwner.EmailEditSuccessAlert'}));
-                setDisabled(true);
-                setVisible(false);
-              } else {
-                message.error(RCi18n({id:'Product.OperationFailed'}));
-              }
-            }).finally(() => {
-              setLoading(false);
-            })
-          }
-        })
-      }
-    })
-  }
+  // const handleSave = () => {
+  //   form.validateFields(null, (err, values) => {
+  //     if (!err) {
+  //       setLoading(true);
+  //       customerEmailExist(values.email).then(data => {
+  //         if (data.res.context) {
+  //           form.setFields({
+  //             email: { value: values.email, errors: [new Error(RCi18n({id:'PetOwner.EmailAddressExisted'}))] }
+  //           })
+  //           setLoading(false);
+  //         } else {
+  //           customerSaveEmail(customerId, values.email).then(saveResp => {
+  //             if (saveResp.res.code === Const.SUCCESS_CODE && saveResp.res.context) {
+  //               message.success(RCi18n({id:'PetOwner.EmailEditSuccessAlert'}));
+  //               setDisabled(true);
+  //               setVisible(false);
+  //             } else {
+  //               message.error(RCi18n({id:'Product.OperationFailed'}));
+  //             }
+  //           }).finally(() => {
+  //             setLoading(false);
+  //           })
+  //         }
+  //       })
+  //     }
+  //   })
+  // }
 
-  const handleOpen = () => {
-    if (!disabled && !disableEdit) {
-      setVisible(true);
-      form.resetFields();
-    }
-  }
+  // const handleOpen = () => {
+  //   if (!disabled && !disableEdit) {
+  //     setVisible(true);
+  //     form.resetFields();
+  //   }
+  // }
 
   return (
     <div>
       <div>
         <span>{email}</span>
-        <span
+        {/* <span
           data-testid="icon"
           className={`iconfont iconEdit edit-icon-next-text ${disabled || disableEdit ? 'disabled' : ''}`}
           onClick={handleOpen}
-        />
+        /> */}
       </div>
-      <Modal
+      {/* <Modal
         title={<FormattedMessage id="PetOwner.EditEmailAddress" />}
         visible={visible}
         width={640}
@@ -82,7 +82,7 @@ const EmailEditForm: React.FC<IProps> = ({ customerId, email, disableEdit, form 
             )}
           </Form.Item>
         </Form>
-      </Modal>
+      </Modal> */}
     </div>
   );
 }

@@ -25,23 +25,23 @@ export default class TabDataGrid extends React.Component<any, any> {
     return (
       <Tabs onChange={(key) => onTabChange(key)} activeKey={key}>
         <Tabs.TabPane tab={<FormattedMessage id="Marketing.All" />} key="0">
-          <MarketingList />
+          <MarketingList tabkey={'0'} />
         </Tabs.TabPane>
 
         <Tabs.TabPane tab={<FormattedMessage id="Marketing.InProcess" />} key="1">
-          <MarketingList />
+          <MarketingList tabkey={'1'} />
         </Tabs.TabPane>
 
         <Tabs.TabPane tab={<FormattedMessage id="Marketing.Pause" />} key="2">
-          <MarketingList />
+          <MarketingList tabkey={'2'} />
         </Tabs.TabPane>
 
         <Tabs.TabPane tab={<FormattedMessage id="Marketing.NotStart" />} key="3">
-          <MarketingList />
+          <MarketingList tabkey={'3'} />
         </Tabs.TabPane>
 
         <Tabs.TabPane tab={<FormattedMessage id="Marketing.Completed" />} key="4">
-          <MarketingList />
+          <MarketingList tabkey={'4'} />
         </Tabs.TabPane>
       </Tabs>
     );

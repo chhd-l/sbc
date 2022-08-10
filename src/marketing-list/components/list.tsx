@@ -87,7 +87,6 @@ class MarketingList extends React.Component<any, any> {
     const { loading, dataList, pageSize, total, currentPage, init, onDelete, customerLevels, onPause, close, onStart, download, onPageChange } = this.props.relaxProps;
     const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || '';
     const isShowFirstOrder = (promotionCode) => {
-      // debugger
       const { tabkey } = this.props;
       if (!tabkey) {
         return true;
@@ -100,7 +99,6 @@ class MarketingList extends React.Component<any, any> {
             } else {
               return true
             }
-            break;
           case '1':
             if ([123457910].includes(storeId)) {
               return !['NEWPET20', 'SAVE10', 'SAVE10STAFF', 'SAVE15'].includes(promotionCode);
@@ -109,16 +107,12 @@ class MarketingList extends React.Component<any, any> {
             }
           case '2':
             return true;
-            break;
           case '3':
             return true;
-            break;
           case '4':
             return true;
-            break;
           default:
             return true;
-            break;
         }
       }
     }

@@ -102,6 +102,7 @@ export default class BasicInformation extends React.Component<any, any> {
                 ]
               })(
                 <Input
+                  data-testid="basicTest"
                   onChange={(e) => {
                     const value = (e.target as any).value;
                     this.props.addField('navigationLink', value);

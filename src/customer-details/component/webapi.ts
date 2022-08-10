@@ -292,6 +292,26 @@ export function getSuggestionAddressListByDQE(address = '') {
  * @param pays 
  * @param streetNumber 
  */
+
+ export function customerSaveEmail(customerId: string, email: string) {
+  return Fetch<TResult>('/customer-email-modify', {
+    method: 'POST',
+    body: JSON.stringify({
+      customerId,
+      email,
+    })
+  })
+}
+
+ export function customerEmailExist(email: string) {
+  return Fetch<TResult>('/customer-email-modify/email-exsit', {
+    method: 'POST',
+    body: JSON.stringify({
+      email,
+    })
+  })
+}
+
 export function returnDQE(idVoie : string, pays : string, streetNumber : string) {
   return Fetch<TResult>('/address-input-auto/returnDQE', {
     method: 'POST',
@@ -303,21 +323,6 @@ export function returnDQE(idVoie : string, pays : string, streetNumber : string)
   });
 }
 
-export function customerEmailExist(email: string) {
-  return Fetch<TResult>('/customer-email-modify/email-exsit', {
-    method: 'POST',
-    body: JSON.stringify({
-      email,
-    })
-  })
-}
 
-export function customerSaveEmail(customerId: string, email: string) {
-  return Fetch<TResult>('/customer-email-modify', {
-    method: 'POST',
-    body: JSON.stringify({
-      customerId,
-      email,
-    })
-  })
-}
+
+

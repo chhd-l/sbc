@@ -82,21 +82,27 @@ export default class BasicInformation extends React.Component<any, any> {
                 rules: [
                   {
                     validator: (rule, value, callback) => {
-                      webapi.getSeoNavigation(value).then((res) => {
-                        let { id } = res.res.context.seoSettingVO;
-                        if (id) {
-                          callback(<FormattedMessage id="Content.NavigationLinkTips" />);
-                        } else if (testlink.test(value)) {
-                          callback();
-                        } else {
-                          callback(<FormattedMessage id="Content.NavigationLinkRoute" />);
-                        }
-                      });
+                      if (testlink.test(value)) {
+                        callback();
+                      } else {
+                        callback(<FormattedMessage id="Content.NavigationLinkRoute" />);
+                      }
+                      // webapi.getSeoNavigation(value).then((res) => {
+                      //   let { id } = res.res.context.seoSettingVO;
+                      //   if (id) {
+                      //     callback(<FormattedMessage id="Content.NavigationLinkTips" />);
+                      //   } else if (testlink.test(value)) {
+                      //     callback();
+                      //   } else {
+                      //     callback(<FormattedMessage id="Content.NavigationLinkRoute" />);
+                      //   }
+                      // });
                     }
                   }
                 ]
               })(
                 <Input
+                  data-testid="basicTest"
                   onChange={(e) => {
                     const value = (e.target as any).value;
                     this.props.addField('navigationLink', value);

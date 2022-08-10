@@ -22,6 +22,7 @@
     "server": "http-server dist",
     "dev": "cross-env BABEL_ENV=development webpack-dev-server --inline --progress --config ./web_modules/qmkit/build.ts dev",
     "test": "jest",
+    "cov": "jest --coverage",
     "clean": "rm -rf ./dist/*",
     "moon": "electron ./node_modules/moon-app/dist/main.js",
     "api": "node ./node_modules/moon-wanmi/lib/swagger-api/index.js",

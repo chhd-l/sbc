@@ -22,7 +22,7 @@ const SUB_TYPE = {
   4: 'Full amount gift',
   5: 'Full quantity gift',
   6: '',
-  7: '',
+  7: ''
 };
 const PROMOTION_TYPE = {
   0: RCi18n({ id: 'Marketing.All' }),
@@ -47,7 +47,6 @@ class MarketingList extends React.Component<any, any> {
   props: {
     history?: any;
     intl: any;
-    tabkey?: string;
     relaxProps?: {
       loading: boolean;
       dataList: IList;
@@ -84,38 +83,22 @@ class MarketingList extends React.Component<any, any> {
   };
 
   render() {
-    const { loading, dataList, pageSize, total, currentPage, init, onDelete, customerLevels, onPause, close, onStart, download, onPageChange } = this.props.relaxProps;
+    const {
+      loading,
+      dataList,
+      pageSize,
+      total,
+      currentPage,
+      init,
+      onDelete,
+      customerLevels,
+      onPause,
+      close,
+      onStart,
+      download,
+      onPageChange
+    } = this.props.relaxProps;
     const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || '';
-    const isShowFirstOrder = (promotionCode) => {
-      const { tabkey } = this.props;
-      if (!tabkey) {
-        return true;
-      }
-      else {
-        switch (tabkey) {
-          case '0':
-            if ([123457910].includes(storeId)) {
-              return !['NEWPET20', 'SAVE10', 'SAVE10STAFF', 'SAVE15'].includes(promotionCode);
-            } else {
-              return true
-            }
-          case '1':
-            if ([123457910].includes(storeId)) {
-              return !['NEWPET20', 'SAVE10', 'SAVE10STAFF', 'SAVE15'].includes(promotionCode);
-            } else {
-              return true
-            }
-          case '2':
-            return true;
-          case '3':
-            return true;
-          case '4':
-            return true;
-          default:
-            return true;
-        }
-      }
-    }
     return (
       <DataGrid
         loading={loading}
@@ -127,7 +110,7 @@ class MarketingList extends React.Component<any, any> {
           pageSize: pageSize,
           total: total,
           onChange: (pageNum, pageSize) => {
-            onPageChange(pageNum)
+            onPageChange(pageNum);
             init({ pageNum: pageNum - 1, pageSize });
           }
         }}
@@ -146,7 +129,11 @@ class MarketingList extends React.Component<any, any> {
             );
           }}
         />*/}
-        <Column title={<FormattedMessage id="Marketing.CampaignName" />} key="marketingName" dataIndex="marketingName" />
+        <Column
+          title={<FormattedMessage id="Marketing.CampaignName" />}
+          key="marketingName"
+          dataIndex="marketingName"
+        />
         <Column
           title={<FormattedMessage id="Marketing.PromotionType" />}
           key="promotionType"
@@ -163,7 +150,11 @@ class MarketingList extends React.Component<any, any> {
             return SUB_TYPE[subType];
           }}
         />
-        <Column title={<FormattedMessage id="Marketing.PromotionCode" />} key="promotionCode" dataIndex="promotionCode" />
+        <Column
+          title={<FormattedMessage id="Marketing.PromotionCode" />}
+          key="promotionCode"
+          dataIndex="promotionCode"
+        />
         <Column
           title={<FormattedMessage id="Marketing.Time" />}
           width="15%"
@@ -233,14 +224,21 @@ class MarketingList extends React.Component<any, any> {
           width="10%"
           dataIndex="publicStatus"
           render={(publicStatus) => {
-            console.log(publicStatus)
+            console.log(publicStatus);
             switch (publicStatus) {
               case '0':
-                return <span><FormattedMessage id="Marketing.private" /></span>
+                return (
+                  <span>
+                    <FormattedMessage id="Marketing.private" />
+                  </span>
+                );
               case '1':
-                return <span><FormattedMessage id="Marketing.public" /></span>
+                return (
+                  <span>
+                    <FormattedMessage id="Marketing.public" />
+                  </span>
+                );
             }
-
           }}
         />
         {/*
@@ -255,7 +253,6 @@ class MarketingList extends React.Component<any, any> {
           dataIndex="createName"
           key={'createName'}
         />
-
 
         <Column
           title={<FormattedMessage id="Marketing.Operation" />}
@@ -277,11 +274,11 @@ class MarketingList extends React.Component<any, any> {
             // } else if (rowInfo.subType === 13){
             //     url = `/subscription-welcome-box-add/${rowInfo['marketingId']}`;
             // }
-            let url = `/create-promotion/promotion/${rowInfo['marketingId']}`
+            let url = `/create-promotion/promotion/${rowInfo['marketingId']}`;
             if (rowInfo.subType === 12) {
-              url = `/subscription-benefit-setting-add/${rowInfo['marketingId']}`
+              url = `/subscription-benefit-setting-add/${rowInfo['marketingId']}`;
             } else if (rowInfo.subType === 13) {
-              url = `/subscription-welcome-box-add/${rowInfo['marketingId']}`
+              url = `/subscription-welcome-box-add/${rowInfo['marketingId']}`;
             }
             /**
              *  marketingStatus 0 全部 ，1 进行中，2 暂停中， 3 未开始， 4已结束， 5 进行中&未开始
@@ -306,82 +303,129 @@ class MarketingList extends React.Component<any, any> {
                 </AuthWrapper>
                 <AuthWrapper functionName="f_marketing_operate">
                   <Tooltip placement="top" title={<FormattedMessage id="Marketing.Download" />}>
-                    <a style={{ marginRight: 5 }} onClick={() => download(rowInfo['marketingId'])} className="iconfont iconbtn-offshelf"></a>
+                    <a
+                      style={{ marginRight: 5 }}
+                      onClick={() => download(rowInfo['marketingId'])}
+                      className="iconfont iconbtn-offshelf"
+                    ></a>
                   </Tooltip>
 
                   {/* ==12 || ==13  && 状态 1 3 显示编辑按钮*/}
-                  {((rowInfo.subType === 12 || rowInfo.subType === 13) && ([1, 3].includes(Number(rowInfo['marketingStatus'])))) && (
-                    <Tooltip placement="top" title={<FormattedMessage id="Marketing.Edit" />}>
-                      <a
-                        href="javascript:void(0)"
-                        style={{ marginRight: 5 }}
-                        onClick={() =>
-                          history.push({
-                            pathname: url
-                          })
-                        }
-                        className="iconfont iconEdit"
-                      ></a>
-                    </Tooltip>
-                  )}
+                  {(rowInfo.subType === 12 || rowInfo.subType === 13) &&
+                    [1, 3].includes(Number(rowInfo['marketingStatus'])) && (
+                      <Tooltip placement="top" title={<FormattedMessage id="Marketing.Edit" />}>
+                        <a
+                          href="javascript:void(0)"
+                          style={{ marginRight: 5 }}
+                          onClick={() =>
+                            history.push({
+                              pathname: url
+                            })
+                          }
+                          className="iconfont iconEdit"
+                        ></a>
+                      </Tooltip>
+                    )}
 
                   {/* !==12 && !==13 && !==16 && 状态 2 3 显示编辑按钮*/}
-                  {((rowInfo.subType !== 12 && rowInfo.subType !== 13 && rowInfo.subType !== 16) && ([2, 3].includes(Number(rowInfo['marketingStatus'])))) && (
-                    <Tooltip placement="top" title={<FormattedMessage id="Marketing.Edit" />}>
-                      <a
-                        href="javascript:void(0)"
-                        style={{ marginRight: 5 }}
-                        onClick={() =>
-                          history.push({
-                            pathname: url
-                          })
-                        }
-                        className="iconfont iconEdit"
-                      ></a>
-                    </Tooltip>
-                  )}
+                  {rowInfo.subType !== 12 &&
+                    rowInfo.subType !== 13 &&
+                    rowInfo.subType !== 16 &&
+                    [2, 3].includes(Number(rowInfo['marketingStatus'])) && (
+                      <Tooltip placement="top" title={<FormattedMessage id="Marketing.Edit" />}>
+                        <a
+                          href="javascript:void(0)"
+                          style={{ marginRight: 5 }}
+                          onClick={() =>
+                            history.push({
+                              pathname: url
+                            })
+                          }
+                          className="iconfont iconEdit"
+                        ></a>
+                      </Tooltip>
+                    )}
 
                   {/* !==12 && !==13 && !==16 && 状态 1 显示编辑按钮*/}
-                  {((rowInfo.subType !== 12 && rowInfo.subType !== 13 && rowInfo.subType !== 16) && ([1].includes(Number(rowInfo['marketingStatus'])))) && (
+                  {rowInfo.subType !== 12 &&
+                    rowInfo.subType !== 13 &&
+                    rowInfo.subType !== 16 &&
+                    [1].includes(Number(rowInfo['marketingStatus'])) && (
+                      <Popconfirm
+                        title={<FormattedMessage id="Marketing.EditConfirm" />}
+                        onConfirm={() => {
+                          /* 先暂停 再去编辑 */
+                          onPause(rowInfo['marketingId'], () => {
+                            history.push({
+                              pathname: url
+                            });
+                          });
+                        }}
+                        okText="Confirm"
+                        cancelText="Cancel"
+                      >
+                        <Tooltip placement="top" title={<FormattedMessage id="Marketing.Edit" />}>
+                          <a
+                            href="javascript:void(0)"
+                            style={{ marginRight: 5 }}
+                            className="iconfont iconEdit"
+                          ></a>
+                        </Tooltip>
+                      </Popconfirm>
+                    )}
+
+                  {rowInfo['marketingStatus'] == 2 &&
+                    rowInfo['marketingName'] !== '40% скидка' &&
+                    rowInfo['marketingName'] !== '25% скидка' && (
+                      <Tooltip placement="top" title={<FormattedMessage id="Marketing.Open" />}>
+                        <a
+                          href="javascript:void(0);"
+                          style={{ marginRight: 5 }}
+                          onClick={() => onStart(rowInfo['marketingId'])}
+                          className="iconfont iconbtn-open"
+                        ></a>
+                      </Tooltip>
+                    )}
+                  {rowInfo['marketingStatus'] == 1 &&
+                    rowInfo['marketingName'] !== '40% скидка' &&
+                    rowInfo['marketingName'] !== '25% скидка' && (
+                      <Tooltip placement="top" title={<FormattedMessage id="Marketing.Stop" />}>
+                        <a
+                          href="javascript:void(0);"
+                          style={{ marginRight: 5 }}
+                          onClick={() => onPause(rowInfo['marketingId'])}
+                          className="iconfont iconbtn-stop"
+                        ></a>
+                      </Tooltip>
+                    )}
+                  {rowInfo['marketingStatus'] == 1 &&
+                    rowInfo['marketingName'] !== '40% скидка' &&
+                    rowInfo['marketingName'] !== '25% скидка' &&
+                    ![123457910].includes(storeId) &&
+                    !['NEWPET20', 'SAVE10', 'SAVE10STAFF', 'SAVE15'].includes(
+                      rowInfo['promotionCode']
+                    ) && (
+                      <Tooltip placement="top" title={<FormattedMessage id="Marketing.Close" />}>
+                        <a
+                          style={{ marginRight: 5 }}
+                          onClick={() => close(rowInfo['marketingId'])}
+                          className="iconfont iconbtn-cancelall"
+                        ></a>
+                      </Tooltip>
+                    )}
+                  {rowInfo['marketingStatus'] == 3 && (
                     <Popconfirm
-                      title={<FormattedMessage id="Marketing.EditConfirm" />}
-                      onConfirm={() => {
-                        /* 先暂停 再去编辑 */
-                        onPause(rowInfo['marketingId'], () => {
-                          history.push({
-                            pathname: url
-                          })
-                        })
-                      }}
+                      title={<FormattedMessage id="Marketing.DeleteConfirm" />}
+                      onConfirm={() => onDelete(rowInfo['marketingId'])}
                       okText="Confirm"
                       cancelText="Cancel"
                     >
-                      <Tooltip placement="top" title={<FormattedMessage id="Marketing.Edit" />}>
-                        <a href="javascript:void(0)" style={{ marginRight: 5 }} className="iconfont iconEdit"></a>
-                      </Tooltip>
-                    </Popconfirm>
-                  )}
-
-
-                  {rowInfo['marketingStatus'] == 2 && rowInfo['marketingName'] !== '40% скидка' && rowInfo['marketingName'] !== '25% скидка' && (
-                    <Tooltip placement="top" title={<FormattedMessage id="Marketing.Open" />}>
-                      <a href="javascript:void(0);" style={{ marginRight: 5 }} onClick={() => onStart(rowInfo['marketingId'])} className="iconfont iconbtn-open"></a>
-                    </Tooltip>
-                  )}
-                  {rowInfo['marketingStatus'] == 1 && rowInfo['marketingName'] !== '40% скидка' && rowInfo['marketingName'] !== '25% скидка' && (
-                    <Tooltip placement="top" title={<FormattedMessage id="Marketing.Stop" />}>
-                      <a href="javascript:void(0);" style={{ marginRight: 5 }} onClick={() => onPause(rowInfo['marketingId'])} className="iconfont iconbtn-stop"></a>
-                    </Tooltip>
-                  )}
-                  {rowInfo['marketingStatus'] == 1 && rowInfo['marketingName'] !== '40% скидка' && rowInfo['marketingName'] !== '25% скидка' && isShowFirstOrder(rowInfo['promotionCode']) && (
-                    <Tooltip placement="top" title={<FormattedMessage id="Marketing.Close" />}>
-                      <a style={{ marginRight: 5 }} onClick={() => close(rowInfo['marketingId'])} className="iconfont iconbtn-cancelall"></a>
-                    </Tooltip>
-                  )}
-                  {rowInfo['marketingStatus'] == 3 && (
-                    <Popconfirm title={<FormattedMessage id="Marketing.DeleteConfirm" />} onConfirm={() => onDelete(rowInfo['marketingId'])} okText="Confirm" cancelText="Cancel">
                       <Tooltip placement="top" title={<FormattedMessage id="Marketing.Delete" />}>
-                        <a href="javascript:void(0);" style={{ marginRight: 5 }} className="iconfont iconDelete"></a>
+                        <a
+                          href="javascript:void(0);"
+                          style={{ marginRight: 5 }}
+                          className="iconfont iconDelete"
+                        ></a>
                       </Tooltip>
                     </Popconfirm>
                   )}
@@ -394,4 +438,4 @@ class MarketingList extends React.Component<any, any> {
     );
   }
 }
-export default injectIntl(MarketingList)
+export default injectIntl(MarketingList);

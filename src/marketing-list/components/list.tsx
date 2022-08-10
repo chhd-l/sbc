@@ -47,6 +47,7 @@ class MarketingList extends React.Component<any, any> {
   props: {
     history?: any;
     intl: any;
+    tabkey?: string;
     relaxProps?: {
       loading: boolean;
       dataList: IList;
@@ -85,6 +86,42 @@ class MarketingList extends React.Component<any, any> {
   render() {
     const { loading, dataList, pageSize, total, currentPage, init, onDelete, customerLevels, onPause, close, onStart, download, onPageChange } = this.props.relaxProps;
     const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || '';
+    const isShowFirstOrder = (promotionCode) => {
+      // debugger
+      const { tabkey } = this.props;
+      if (!tabkey) {
+        return true;
+      }
+      else {
+        switch (tabkey) {
+          case '0':
+            if ([123457910].includes(storeId)) {
+              return !['NEWPET20', 'SAVE10', 'SAVE10STAFF', 'SAVE15'].includes(promotionCode);
+            } else {
+              return true
+            }
+            break;
+          case '1':
+            if ([123457910].includes(storeId)) {
+              return !['NEWPET20', 'SAVE10', 'SAVE10STAFF', 'SAVE15'].includes(promotionCode);
+            } else {
+              return true
+            }
+          case '2':
+            return true;
+            break;
+          case '3':
+            return true;
+            break;
+          case '4':
+            return true;
+            break;
+          default:
+            return true;
+            break;
+        }
+      }
+    }
     return (
       <DataGrid
         loading={loading}
@@ -342,7 +379,7 @@ class MarketingList extends React.Component<any, any> {
                       <a href="javascript:void(0);" style={{ marginRight: 5 }} onClick={() => onPause(rowInfo['marketingId'])} className="iconfont iconbtn-stop"></a>
                     </Tooltip>
                   )}
-                  {rowInfo['marketingStatus'] == 1 && rowInfo['marketingName'] !== '40% скидка' && rowInfo['marketingName'] !== '25% скидка' && ![123457910].includes(storeId) && !['NEWPET20', 'SAVE10', 'SAVE10STAFF', 'SAVE15'].includes(rowInfo['promotionCode']) && (
+                  {rowInfo['marketingStatus'] == 1 && rowInfo['marketingName'] !== '40% скидка' && rowInfo['marketingName'] !== '25% скидка' && isShowFirstOrder(rowInfo['promotionCode']) && (
                     <Tooltip placement="top" title={<FormattedMessage id="Marketing.Close" />}>
                       <a style={{ marginRight: 5 }} onClick={() => close(rowInfo['marketingId'])} className="iconfont iconbtn-cancelall"></a>
                     </Tooltip>

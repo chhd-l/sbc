@@ -401,7 +401,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                         <FormattedMessage id="PetOwner.emailAddress" />
                       </Col>
                       <Col span={8} className="text-highlight">
-                        <EmailEditForm email={basic.email} />
+                        <EmailEditForm customerId={this.state.customerId} email={basic.email} disableEdit={basic.hasModify === 1} />
                       </Col>
                       <Col span={4} className="text-tip">
                         <FormattedMessage id="PetOwner.PreferChannel" />

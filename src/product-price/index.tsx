@@ -95,18 +95,18 @@ class ProductPrice extends Component<any, any> {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        if (values.marketPricePercentage < (values.subscriptionPricePercentage || 100)) {
-          message.error(RCi18n({ id: 'Product.ProductPrice.priceprompt' }));
-          return;
-        }
+        // if (values.marketPricePercentage < (values.subscriptionPricePercentage || 100)) {
+        //   message.error(RCi18n({ id: 'Product.ProductPrice.priceprompt' }));
+        //   return;
+        // }
         let goodsInfoIds = this.state.goodsInfoIds;
         values.marketPricePercentage = values.marketPricePercentage.toString();
-        values.subscriptionPricePercentage = values.subscriptionPricePercentage
-          ? values.subscriptionPricePercentage.toString()
-          : '100';
-        this.props.form.setFieldsValue({
-          subscriptionPricePercentage: values.subscriptionPricePercentage
-        });
+        values.subscriptionPricePercentage = values.subscriptionPricePercentage.toString();
+          // ? values.subscriptionPricePercentage.toString()
+          // : '100';
+        // this.props.form.setFieldsValue({
+        //   subscriptionPricePercentage: values.subscriptionPricePercentage
+        // });
         let allP = {
           goodsInfoIds,
           ...values,
@@ -198,7 +198,7 @@ class ProductPrice extends Component<any, any> {
   //检测用户输入
   checkFomeInput = (e, name) => {
     objP[name] = e;
-    let bool = objP.marketPricePercentage > 0;
+    let bool = objP.marketPricePercentage > 0 && objP.subscriptionPricePercentage >= 0 && objP.subscriptionPricePercentage <= 100;
     this.setState({
       isDisabled: !bool
     });
@@ -429,13 +429,11 @@ class ProductPrice extends Component<any, any> {
               <Form layout="inline" onSubmit={(e) => this.submitApply(e)}>
                 <Form.Item label={RCi18n({ id: 'Product.MarketpricepercentageIncl' })}>
                   {getFieldDecorator('marketPricePercentage', {
-                    initialValue: 100,
                     onChange: (e) => this.checkFomeInput(e, 'marketPricePercentage')
                   })(<InputNumber min={0} precision={2} />)}
                 </Form.Item>
                 <Form.Item label={RCi18n({ id: 'Product.Subscriptiondiscountpercentage' })}>
                   {getFieldDecorator('subscriptionPricePercentage', {
-                    initialValue: '100',
                     onChange: (e) => this.checkFomeInput(e, 'subscriptionPricePercentage')
                   })(<InputNumber min={0} max={100} precision={2} />)}
                 </Form.Item>

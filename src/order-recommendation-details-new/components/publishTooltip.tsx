@@ -189,7 +189,7 @@ export default class DetailPublish extends React.Component<any, any> {
               //checked={this.state.checkbox}
             />
             {Const.SITE_NAME === 'MYVETRECO'
-              ? 'The pet owner has agreed to receive an invitation e-mail from My VetReco'
+              ? 'I have informed the pet owner that they will receive an email with the recommendation, and I have obtained their consent to share their personal data to Royal Canin for this purpose'
               : RCi18n({ id: 'Order.sendEmail' })}
           </div>
         </div>

@@ -148,7 +148,6 @@ class SubscriptionDetail extends React.Component<any, any> {
           let paymentInfo = subscriptionDetail.payPaymentInfo;
           let paymentMethod = subscriptionDetail.paymentMethod;
           let promotionResponse = subscriptionDetail.promotionResponse;
-
           this.setState(
             {
               subscriptionInfo: subscriptionInfo,
@@ -165,8 +164,8 @@ class SubscriptionDetail extends React.Component<any, any> {
               isActive: subscriptionDetail.subscribeStatus === '0',
               paymentMethod: paymentMethod,
               serviceFeePrice: subscriptionInfo.serviceFeePrice ?? 0,
-              totalSubscriptionPrice: promotionResponse.totalSubscriptionPrice ?? 0,
-              promotionsArr: promotionResponse.promotionVOList || [],
+              totalSubscriptionPrice: promotionResponse?.totalSubscriptionPrice ?? 0,
+              promotionsArr: promotionResponse?.promotionVOList || [],
             },
             () => {
               this.applyPromotionCode(this.state.promotionCode);
@@ -174,7 +173,9 @@ class SubscriptionDetail extends React.Component<any, any> {
           );
         }
       })
-      .catch((err) => { })
+      .catch((err) => {
+        console.log('getSubscriptionDetail err', err)
+      })
       .finally(() => {
         this.setState({
           loading: false
@@ -1365,7 +1366,7 @@ class SubscriptionDetail extends React.Component<any, any> {
               </Col>
               {/* fr ru tr  us: 391463*/}
               {/* [123457909, 123457907, 123457911].includes(storeId) */}
-              {promotionsArr?.length > 0 && [123457909, 123457907, 123457911].includes(storeId) && (<Col span={6}>
+              {[123457909, 123457907, 123457911].includes(storeId) && (<Col span={6}>
                 <Row>
                   <Col span={12}>
                     <label className="info-title">
@@ -1390,7 +1391,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                       id="Subscription.SavePrice"
                       values={{
                         money: `${(promotionsArr[0]?.value || 0) + currencySymbol}`,
-                        code: `${promotionsArr[0].publicStatus === '1' ? (window as any).RCi18n({ id: 'Subscription.SaveItemPublic' }) : (promotionsArr[0]?.code ?? '')}`
+                        code: `${promotionsArr[0]?.publicStatus === '0' ? (promotionsArr[0]?.code ?? '') : (window as any).RCi18n({ id: 'Subscription.SaveItemPublic' })}`
                       }}
                     />
                   </Col>

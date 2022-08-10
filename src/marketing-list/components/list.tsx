@@ -4,7 +4,7 @@ import { List } from 'immutable';
 import { Popconfirm, Tooltip } from 'antd';
 import moment from 'moment';
 import { withRouter } from 'react-router';
-import { DataGrid, noop, history, AuthWrapper, Const, RCi18n } from 'qmkit';
+import { DataGrid, noop, history, AuthWrapper, Const, RCi18n, cache } from 'qmkit';
 import { IList, IMap } from 'typings/globalType';
 import { Table } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -84,6 +84,7 @@ class MarketingList extends React.Component<any, any> {
 
   render() {
     const { loading, dataList, pageSize, total, currentPage, init, onDelete, customerLevels, onPause, close, onStart, download, onPageChange } = this.props.relaxProps;
+    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || '';
     return (
       <DataGrid
         loading={loading}
@@ -341,7 +342,7 @@ class MarketingList extends React.Component<any, any> {
                       <a href="javascript:void(0);" style={{ marginRight: 5 }} onClick={() => onPause(rowInfo['marketingId'])} className="iconfont iconbtn-stop"></a>
                     </Tooltip>
                   )}
-                  {rowInfo['marketingStatus'] == 1 && rowInfo['marketingName'] !== '40% скидка' && rowInfo['marketingName'] !== '25% скидка' && (
+                  {rowInfo['marketingStatus'] == 1 && rowInfo['marketingName'] !== '40% скидка' && rowInfo['marketingName'] !== '25% скидка' && ![123457910].includes(storeId) && !['NEWPET20', 'SAVE10', 'SAVE10STAFF', 'SAVE15'].includes(rowInfo['promotionCode']) && (
                     <Tooltip placement="top" title={<FormattedMessage id="Marketing.Close" />}>
                       <a style={{ marginRight: 5 }} onClick={() => close(rowInfo['marketingId'])} className="iconfont iconbtn-cancelall"></a>
                     </Tooltip>

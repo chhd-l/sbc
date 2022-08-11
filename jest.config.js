@@ -5,10 +5,12 @@ const config = {
   setupFilesAfterEnv: ["<rootDir>/setupTest.js"],
   collectCoverageFrom: [
     "src/**/*.{js,jsx,ts,tsx}",
-    // "src/marketing-list/component/*.{js,jsx,ts,tsx}",
     "!src/**/*.d.ts"
   ],
-  // collectCoverageFrom: ["src/customer-details/component/*.{js,jsx,ts,tsx}"],
+  // collectCoverageFrom: [
+  //   // "src/customer-details/component/*.{js,jsx,ts,tsx}",
+  //   "src/marketing-list/components/*.{js,jsx,ts,tsx}",
+  //   "!src/**/*.d.ts"],
   testPathIgnorePatterns: ["/node_modules", "/scripts", "/(test|spec)\.[jt]sx?$"],
   transformIgnorePatterns: ["/node_modules/(?!(antd|css-animation|rc.*)/)"],
   testEnvironment: 'jsdom',

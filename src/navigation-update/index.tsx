@@ -70,6 +70,7 @@ class NavigationUpdate extends Component<any, any> {
               navigation: res.context
             });
             let link = res.context.navigationLink;
+
             webapi.getSeoNavigation(link).then((data) => {
               this.setState({
                 SeoSettingSaveRequest: {

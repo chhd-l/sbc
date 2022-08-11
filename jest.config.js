@@ -4,8 +4,8 @@ const config = {
   coverageProvider: 'babel',
   setupFilesAfterEnv: ['<rootDir>/setupTest.js'],
   collectCoverageFrom: [
-    "src/**/*.{js,jsx,ts,tsx}",
-    // "src/marketing-list/component/*.{js,jsx,ts,tsx}",
+    //"src/**/*.{js,jsx,ts,tsx}",
+   "src/marketing-list/components/*.{js,jsx,ts,tsx}",
     "!src/**/*.d.ts"
   ],
   // collectCoverageFrom: ["src/customer-details/component/*.{js,jsx,ts,tsx}"],

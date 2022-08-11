@@ -58,12 +58,12 @@ class ManualOrder extends Component<any, any> {
     });
   }
 
-  turnShowPage = (token, promocode) => {
+  turnShowPage = (token, promocode, customerId) => {
     let { customer, url, guest, guestId, storeId, felinStore } = this.state;
     let userGroup = felinStore ? `userGroup=felinStore&` : 'userGroup=fgs&';
     let spromocode = promocode ? `spromocode=${promocode}&` : '';
     let guestParams = `guestId=${guestId}&userGroup=felinStore&petOwnerType=guest`;
-    let params = guest ? guestParams : `${userGroup}${spromocode}stoken=${token}`
+    let params = guest ? guestParams : `${userGroup}${spromocode}stoken=${token}&scustomerId=${customerId}`
     let winObj = window.open(
       `${url.replace(/\/$/gi, '')}/cart?${params}`,
       'newwindow',
@@ -110,7 +110,7 @@ class ManualOrder extends Component<any, any> {
       }
       promocode = res.context?.couponCode;
     }
-    this.turnShowPage(shopToken, promocode);
+    this.turnShowPage(shopToken, promocode, customer.customerId);
     this.setState({
       payinfotoken: shopToken
     })

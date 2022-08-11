@@ -23,35 +23,40 @@ const EmailEditForm: React.FC<IProps> = ({ customerId, email, disableEdit, form 
       setVisible(true);
       form.resetFields();
     }
-  }
+  };
 
   const handleSave = () => {
     form.validateFields(null, (err, values) => {
       if (!err) {
         setLoading(true);
-        customerEmailExist(values.email).then(data => {
+        customerEmailExist(values.email).then((data) => {
           if (data.res.context) {
             form.setFields({
-              email: { value: values.email, errors: [new Error(RCi18n({id:'PetOwner.EmailAddressExisted'}))] }
-            })
+              email: {
+                value: values.email,
+                errors: [new Error(RCi18n({ id: 'PetOwner.EmailAddressExisted' }))]
+              }
+            });
             setLoading(false);
           } else {
-            customerSaveEmail(customerId, values.email).then(saveResp => {
-              if (saveResp.res.code === Const.SUCCESS_CODE && saveResp.res.context) {
-                message.success(RCi18n({id:'PetOwner.EmailEditSuccessAlert'}));
-                setDisabled(true);
-                setVisible(false);
-              } else {
-                message.error(RCi18n({id:'Product.OperationFailed'}));
-              }
-            }).finally(() => {
-              setLoading(false);
-            })
+            customerSaveEmail(customerId, values.email)
+              .then((saveResp) => {
+                if (saveResp.res.code === Const.SUCCESS_CODE && saveResp.res.context) {
+                  message.success(RCi18n({ id: 'PetOwner.EmailEditSuccessAlert' }));
+                  setDisabled(true);
+                  setVisible(false);
+                } else {
+                  message.error(RCi18n({ id: 'Product.OperationFailed' }));
+                }
+              })
+              .finally(() => {
+                setLoading(false);
+              });
           }
-        })
+        });
       }
-    })
-  }
+    });
+  };
 
   return (
     <div>
@@ -59,9 +64,11 @@ const EmailEditForm: React.FC<IProps> = ({ customerId, email, disableEdit, form 
         <span>{email}</span>
         <span
           data-testid="icon"
-          className={`iconfont iconEdit edit-icon-next-text ${disabled || disableEdit ? 'disabled' : ''}`}
+          className={`iconfont iconEdit edit-icon-next-text ${
+            disabled || disableEdit ? 'disabled' : ''
+          }`}
           onClick={handleOpen}
-          style={{visibility:'hidden'}}
+          style={{ visibility: 'hidden' }}
         />
       </div>
       <Modal
@@ -77,15 +84,19 @@ const EmailEditForm: React.FC<IProps> = ({ customerId, email, disableEdit, form 
         <Form layout="inline">
           <Form.Item label={<FormattedMessage id="PetOwner.NewEmailAddress" />}>
             {getFieldDecorator('email', {
-              rules: [{ required: true, type: 'email', message: <FormattedMessage id="PetOwner.InvalidEmailAlert" /> }]
-            })(
-              <Input data-testid="email-input" style={{width: 300}} />
-            )}
+              rules: [
+                {
+                  required: true,
+                  type: 'email',
+                  message: <FormattedMessage id="PetOwner.InvalidEmailAlert" />
+                }
+              ]
+            })(<Input data-testid="email-input" style={{ width: 300 }} />)}
           </Form.Item>
         </Form>
       </Modal>
     </div>
   );
-}
+};
 
 export default Form.create<IProps>()(EmailEditForm);

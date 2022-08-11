@@ -25,11 +25,16 @@ class NavigationUpdate extends Component<any, any> {
       },
       noLanguageSelect: this.props.location.state && this.props.location.state.noLanguageSelect,
       topNames: this.props.location.state ? this.props.location.state.topNames : [],
-      store: {}
+      store: {},
+      SeoSettingSaveRequest: {
+        h1: '{description title}',
+        h2: '{product name}'
+      }
     };
     this.next = this.next.bind(this);
     this.prev = this.prev.bind(this);
     this.addField = this.addField.bind(this);
+    this.addSeoSetting = this.addSeoSetting.bind(this);
   }
   next(e) {
     e.preventDefault();
@@ -48,7 +53,12 @@ class NavigationUpdate extends Component<any, any> {
 
   componentWillMount() {
     this.setState({
-      title: this.state.type === 'edit' ? <FormattedMessage id="Content.EditNavigationItem" /> : <FormattedMessage id="Content.CreateNavigationItem" />
+      title:
+        this.state.type === 'edit' ? (
+          <FormattedMessage id="Content.EditNavigationItem" />
+        ) : (
+          <FormattedMessage id="Content.CreateNavigationItem" />
+        )
     });
     if (this.state.type === 'edit') {
       webapi
@@ -58,6 +68,17 @@ class NavigationUpdate extends Component<any, any> {
           if (res.code === Const.SUCCESS_CODE) {
             this.setState({
               navigation: res.context
+            });
+            let link = res.context.navigationLink;
+
+            webapi.getSeoNavigation(link).then((data) => {
+              this.setState({
+                SeoSettingSaveRequest: {
+                  ...data.res.context.seoSettingVO,
+                  h1: '{description title}',
+                  h2: '{product name}'
+                }
+              });
             });
           }
         })
@@ -72,32 +93,52 @@ class NavigationUpdate extends Component<any, any> {
       navigation: data
     });
   }
+  addSeoSetting(field, value) {
+    console.log(this.state);
+    let data = this.state.SeoSettingSaveRequest;
+    data[field] = value;
+    this.setState({
+      SeoSettingSaveRequest: data
+    });
+  }
   updateNavigation(e) {
     e.preventDefault();
     this.props.form.validateFields((err) => {
       if (!err) {
-        const { navigation, type, id } = this.state;
+        const { navigation, SeoSettingSaveRequest, type, id } = this.state;
         if (type === 'edit') {
           navigation.id = id; // edit by id
           webapi
-            .updateNavigation(navigation)
+            .updateNavigation({
+              navigationRequest: navigation,
+              seoSettingEditRequest: SeoSettingSaveRequest
+            })
             .then((data) => {
               const { res } = data;
               if (res.code === Const.SUCCESS_CODE) {
-                message.success(RCi18n({id:"Content.OperateSuccessfully"}));
-                history.push({ pathname: '/navigation-list', state: { language: navigation.language } });
+                message.success(RCi18n({ id: 'Content.OperateSuccessfully' }));
+                history.push({
+                  pathname: '/navigation-list',
+                  state: { language: navigation.language }
+                });
               }
             })
             .catch((err) => {});
         } else if (type === 'add') {
           navigation.parentId = id; // add by parentId
           webapi
-            .addNavigation(navigation)
+            .addNavigation({
+              navigationRequest: navigation,
+              seoSettingSaveRequest: SeoSettingSaveRequest
+            })
             .then((data) => {
               const { res } = data;
               if (res.code === Const.SUCCESS_CODE) {
-                message.success(RCi18n({id:"Content.OperateSuccessfully"}));
-                history.push({ pathname: '/navigation-list', state: { language: navigation.language } });
+                message.success(RCi18n({ id: 'Content.OperateSuccessfully' }));
+                history.push({
+                  pathname: '/navigation-list',
+                  state: { language: navigation.language }
+                });
               }
             })
             .catch((err) => {});
@@ -106,7 +147,16 @@ class NavigationUpdate extends Component<any, any> {
     });
   }
   render() {
-    const { id, current, title, navigation, store, noLanguageSelect, topNames } = this.state;
+    const {
+      id,
+      current,
+      title,
+      navigation,
+      SeoSettingSaveRequest,
+      store,
+      noLanguageSelect,
+      topNames
+    } = this.state;
     const steps = [
       {
         title: <FormattedMessage id="Content.NavigationLanguage" />,
@@ -114,11 +164,29 @@ class NavigationUpdate extends Component<any, any> {
       },
       {
         title: <FormattedMessage id="Content.BasicInformation" />,
-        controller: <BasicInformation navigation={navigation} addField={this.addField} form={this.props.form} noLanguageSelect={noLanguageSelect} store={store} topNames={topNames} />
+        controller: (
+          <BasicInformation
+            navigation={navigation}
+            addField={this.addField}
+            form={this.props.form}
+            noLanguageSelect={noLanguageSelect}
+            store={store}
+            topNames={topNames}
+          />
+        )
       },
       {
         title: <FormattedMessage id="Content.Interaction" />,
-        controller: <Interaction navigation={navigation} addField={this.addField} form={this.props.form} noLanguageSelect={noLanguageSelect} />
+        controller: (
+          <Interaction
+            navigation={navigation}
+            SeoSettingSaveRequest={SeoSettingSaveRequest}
+            addField={this.addField}
+            addSeoSetting={this.addSeoSetting}
+            form={this.props.form}
+            noLanguageSelect={noLanguageSelect}
+          />
+        )
       }
     ];
     if (noLanguageSelect) {
@@ -133,9 +201,8 @@ class NavigationUpdate extends Component<any, any> {
         <div className="container-search" id="navigationStep">
           <Headline title={title} />
           <Steps current={current} labelPlacement="vertical">
-            {steps.map((item) => (
-              <Step key={item.title} title={item.title} />
-            ))}
+            {steps.length > 0 &&
+              steps.map((item, index) => <Step key={index} title={item.title} />)}
           </Steps>
           <div className="steps-content">{steps[current].controller}</div>
           <div className="steps-action">

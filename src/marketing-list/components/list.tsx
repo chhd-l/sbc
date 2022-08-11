@@ -4,7 +4,7 @@ import { List } from 'immutable';
 import { Popconfirm, Tooltip } from 'antd';
 import moment from 'moment';
 import { withRouter } from 'react-router';
-import { DataGrid, noop, history, AuthWrapper, Const, RCi18n } from 'qmkit';
+import { DataGrid, noop, history, AuthWrapper, Const, RCi18n, cache } from 'qmkit';
 import { IList, IMap } from 'typings/globalType';
 import { Table } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -22,7 +22,7 @@ const SUB_TYPE = {
   4: 'Full amount gift',
   5: 'Full quantity gift',
   6: '',
-  7: '',
+  7: ''
 };
 const PROMOTION_TYPE = {
   0: RCi18n({ id: 'Marketing.All' }),
@@ -83,7 +83,54 @@ class MarketingList extends React.Component<any, any> {
   };
 
   render() {
-    const { loading, dataList, pageSize, total, currentPage, init, onDelete, customerLevels, onPause, close, onStart, download, onPageChange } = this.props.relaxProps;
+    const {
+      loading,
+      dataList,
+      pageSize,
+      total,
+      currentPage,
+      init,
+      onDelete,
+      customerLevels,
+      onPause,
+      close,
+      onStart,
+      download,
+      onPageChange
+    } = this.props.relaxProps;
+    console.log(1234,dataList.toJS())
+    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || '';
+    const isShowFirstOrder = (promotionCode) => {
+      const { tabkey } = this.props;
+      console.log({tabkey})
+      if (!tabkey) {
+        return true;
+      }
+      else {
+        switch (tabkey) {
+          case '0':
+            if ([123457910].includes(storeId)) {
+              return !['NEWPET20', 'SAVE10', 'SAVE10STAFF', 'SAVE15'].includes(promotionCode);
+            } else {
+              return true
+            }
+          case '1':
+            if ([123457910].includes(storeId)) {
+              return !['NEWPET20', 'SAVE10', 'SAVE10STAFF', 'SAVE15'].includes(promotionCode);
+            } else {
+              return true
+            }
+          case '2':
+            return true;
+          case '3':
+            return true;
+          case '4':
+            return true;
+          default:
+            return true;
+        }
+      }
+    }
     return (
       <DataGrid
         loading={loading}
@@ -341,7 +388,7 @@ class MarketingList extends React.Component<any, any> {
                       <a href="javascript:void(0);" style={{ marginRight: 5 }} onClick={() => onPause(rowInfo['marketingId'])} className="iconfont iconbtn-stop"></a>
                     </Tooltip>
                   )}
-                  {rowInfo['marketingStatus'] == 1 && rowInfo['marketingName'] !== '40% скидка' && rowInfo['marketingName'] !== '25% скидка' && (
+                  {rowInfo['marketingStatus'] == 1 && rowInfo['marketingName'] !== '40% скидка' && rowInfo['marketingName'] !== '25% скидка' && isShowFirstOrder(rowInfo['promotionCode']) && (
                     <Tooltip placement="top" title={<FormattedMessage id="Marketing.Close" />}>
                       <a style={{ marginRight: 5 }} onClick={() => close(rowInfo['marketingId'])} className="iconfont iconbtn-cancelall"></a>
                     </Tooltip>
@@ -362,4 +409,4 @@ class MarketingList extends React.Component<any, any> {
     );
   }
 }
-export default injectIntl(MarketingList)
+export default injectIntl(MarketingList);

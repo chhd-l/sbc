@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Input, Checkbox, Row, Col } from 'antd';
 import { AssetManagement } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
+import * as webapi from '../webapi';
 const FormItem = Form.Item;
 const layout = {
   labelCol: { span: 4 },
@@ -30,9 +31,16 @@ export default class BasicInformation extends React.Component<any, any> {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { navigation, noLanguageSelect } = this.props;
+    let testlink = /^\/.*/;
     return (
       <div>
-        <h3>{noLanguageSelect ? <FormattedMessage id="Content.Step1" /> : <FormattedMessage id="Content.Step2" />}</h3>
+        <h3>
+          {noLanguageSelect ? (
+            <FormattedMessage id="Content.Step1" />
+          ) : (
+            <FormattedMessage id="Content.Step2" />
+          )}
+        </h3>
         <h4>
           <FormattedMessage id="Content.BasicInformation" />
           <span className="ant-form-item-required"></span>
@@ -43,11 +51,16 @@ export default class BasicInformation extends React.Component<any, any> {
               {getFieldDecorator('navigationName', {
                 initialValue: navigation.navigationName,
                 rules: [
-                  { required: true, message: <FormattedMessage id="Content.PleaseInputNavigationName" /> },
+                  {
+                    required: true,
+                    message: <FormattedMessage id="Content.PleaseInputNavigationName" />
+                  },
                   {
                     validator: (_rule, value, callback) => {
                       if (this.props.topNames && this.props.topNames.includes(value)) {
-                        callback(<FormattedMessage id="Content.ToplevelNavigationCannotBeRepeated" />);
+                        callback(
+                          <FormattedMessage id="Content.ToplevelNavigationCannotBeRepeated" />
+                        );
                       } else {
                         callback();
                       }
@@ -64,19 +77,41 @@ export default class BasicInformation extends React.Component<any, any> {
               )}
             </FormItem>
             <FormItem {...layout} label={<FormattedMessage id="Content.NavigationLink" />}>
-              <span className="tip ant-form-item-required" style={{ top: '20px' }}>
-                <FormattedMessage id="Content.URLLike" />
-              </span>
               {getFieldDecorator('navigationLink', {
-                initialValue: navigation.navigationLink
+                initialValue: navigation.navigationLink,
+                rules: [
+                  {
+                    validator: (rule, value, callback) => {
+                      if (testlink.test(value)) {
+                        callback();
+                      } else {
+                        callback(<FormattedMessage id="Content.NavigationLinkRoute" />);
+                      }
+                      // webapi.getSeoNavigation(value).then((res) => {
+                      //   let { id } = res.res.context.seoSettingVO;
+                      //   if (id) {
+                      //     callback(<FormattedMessage id="Content.NavigationLinkTips" />);
+                      //   } else if (testlink.test(value)) {
+                      //     callback();
+                      //   } else {
+                      //     callback(<FormattedMessage id="Content.NavigationLinkRoute" />);
+                      //   }
+                      // });
+                    }
+                  }
+                ]
               })(
                 <Input
+                  data-testid="basicTest"
                   onChange={(e) => {
                     const value = (e.target as any).value;
                     this.props.addField('navigationLink', value);
                   }}
                 />
               )}
+              <span className="tip ant-form-item-required">
+                <FormattedMessage id="Content.URLLike" />
+              </span>
             </FormItem>
             <FormItem {...layout} label={<FormattedMessage id="Content.NavigationDescription" />}>
               {getFieldDecorator('navigationDesc', {
@@ -98,7 +133,12 @@ export default class BasicInformation extends React.Component<any, any> {
               </Col>
             </Row>
             <FormItem {...layout} label={<FormattedMessage id="Content.PictureImage" />}>
-              <AssetManagement choosedImgCount={1} images={navigation.imageLink ? [navigation.imageLink] : []} selectImgFunction={this.updateImg} deleteImgFunction={this.deleteImg} />
+              <AssetManagement
+                choosedImgCount={1}
+                images={navigation.imageLink ? [navigation.imageLink] : []}
+                selectImgFunction={this.updateImg}
+                deleteImgFunction={this.deleteImg}
+              />
             </FormItem>
             <FormItem>
               <Checkbox

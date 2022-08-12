@@ -99,9 +99,11 @@ class MarketingList extends React.Component<any, any> {
       download,
       onPageChange
     } = this.props.relaxProps;
+    console.log(1234,dataList.toJS())
     const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || '';
     const isShowFirstOrder = (promotionCode) => {
       const { tabkey } = this.props;
+      console.log({tabkey})
       if (!tabkey) {
         return true;
       }

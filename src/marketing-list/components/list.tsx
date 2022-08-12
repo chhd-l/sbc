@@ -101,6 +101,7 @@ class MarketingList extends React.Component<any, any> {
     } = this.props.relaxProps;
     console.log(1234, dataList.toJS());
     const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || '';
+    // console.log('storeId', storeId)
     const isShowFirstOrder = (promotionCode) => {
       const { tabkey } = this.props;
       console.log({ tabkey });
@@ -328,13 +329,15 @@ class MarketingList extends React.Component<any, any> {
                   <AuthWrapper functionName="f_marketing_view">
                     <Tooltip placement="top" title={<FormattedMessage id="Marketing.View" />}>
                       <a
+                        data-testid="iconView"
                         style={{ marginRight: 5 }}
-                        href="javascript:void(0)"
-                        onClick={() =>
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
                           history.push({
                             pathname: `/marketing-details/${rowInfo['marketingId']}`
-                          })
-                        }
+                          });
+                        }}
                         className="iconfont iconView"
                       ></a>
                     </Tooltip>
@@ -417,9 +420,13 @@ class MarketingList extends React.Component<any, any> {
                       rowInfo['marketingName'] !== '25% скидка' && (
                         <Tooltip placement="top" title={<FormattedMessage id="Marketing.Open" />}>
                           <a
-                            href="javascript:void(0);"
+                            data-testid="iconbtn-open"
                             style={{ marginRight: 5 }}
-                            onClick={() => onStart(rowInfo['marketingId'])}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              e.preventDefault();
+                              onStart(rowInfo['marketingId']);
+                            }}
                             className="iconfont iconbtn-open"
                           ></a>
                         </Tooltip>
@@ -429,9 +436,13 @@ class MarketingList extends React.Component<any, any> {
                       rowInfo['marketingName'] !== '25% скидка' && (
                         <Tooltip placement="top" title={<FormattedMessage id="Marketing.Stop" />}>
                           <a
-                            href="javascript:void(0);"
+                            data-testid="iconbtn-stop"
                             style={{ marginRight: 5 }}
-                            onClick={() => onPause(rowInfo['marketingId'])}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              e.preventDefault();
+                              onPause(rowInfo['marketingId']);
+                            }}
                             className="iconfont iconbtn-stop"
                           ></a>
                         </Tooltip>
@@ -442,8 +453,13 @@ class MarketingList extends React.Component<any, any> {
                       isShowFirstOrder(rowInfo['promotionCode']) && (
                         <Tooltip placement="top" title={<FormattedMessage id="Marketing.Close" />}>
                           <a
+                            data-testid="iconbtn-cancelall"
                             style={{ marginRight: 5 }}
-                            onClick={() => close(rowInfo['marketingId'])}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              e.preventDefault();
+                              close(rowInfo['marketingId']);
+                            }}
                             className="iconfont iconbtn-cancelall"
                           ></a>
                         </Tooltip>

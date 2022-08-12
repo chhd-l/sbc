@@ -4,6 +4,7 @@ declare module '*.json' {
 }
 declare module 'wangeditor' {
   const wangeditor: any;
-  export = wangeditor
+  export = wangeditor;
 }
-declare module '*.svg'
+declare module '*.svg';
+declare const __DEV__: any;

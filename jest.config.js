@@ -6,6 +6,7 @@ const config = {
   collectCoverageFrom: [
     //"src/**/*.{js,jsx,ts,tsx}",
     "src/marketing-list/components/*.{js,jsx,ts,tsx}",
+    //"src/customer-details/component/*.{js,jsx,ts,tsx}",
     "!src/**/*.d.ts"
   ],
   "testMatch": [
@@ -20,7 +21,7 @@ const config = {
   moduleNameMapper: {
     '\\.(css|less)$': 'identity-obj-proxy',
     '^@/(.*)$': '<rootDir>/src/$1',
-    '^qmkit/(.*)$': '<rootDir>/web_modules/qmkit/$1',
+    'qmkit': '<rootDir>/web_modules/qmkit',
     '^biz/(.*)$': '<rootDir>/web_modules/biz/$1'
   },
   transform: {

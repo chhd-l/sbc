@@ -2,8 +2,7 @@ import React from 'react';
 import List from '../list.tsx';
 import { render, act } from '@testing-library/react';
 import { fromJS } from 'immutable';
-import { checkAuth } from '../../../jest-mcok/checkAuth';
-import { stringify } from 'querystring';
+import { DataGrid, noop, history, AuthWrapper, Const, RCi18n, cache } from 'qmkit';
 
 jest.mock('plume2', () => {
   return {
@@ -24,6 +23,18 @@ jest.mock('react-intl', () => {
   return {
     FormattedMessage: () => <div>1</div>,
     injectIntl: (e) => e
+  };
+});
+
+jest.mock('qmkit', () => {
+  const originalModule = jest.requireActual('qmkit');
+  return {
+    __esModule: true,
+    ...originalModule,
+    AuthWrapper:
+      ({ children }) =>
+      () =>
+        <div>{children}</div>
   };
 });
 
@@ -66,8 +77,6 @@ const relaxProps = {
 };
 
 describe('Marketing List Component Test', () => {
-  //sessionStorage.setItem('s2b-supplier@functions', JSON,stringify(checkAuth));
-
   test('Component list', async () => {
     await act(async () => {
       render(<List tabkey={false} relaxProps={relaxProps} />);

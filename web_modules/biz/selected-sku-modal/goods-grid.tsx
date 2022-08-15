@@ -194,9 +194,9 @@ export default class GoodsGrid extends React.Component<any, any> {
       // Commercial Leaflet
       if (cates.length) {
         const id = cates.filter((item) => (item?.cateName === 'Commercial Leaflet'))[0]?.cateId || null;
-        params.notCateIds = [id];
+        id ? params.notCateIds = [id] : params.notCateIds = null;
       } else {
-        params.notCateIds = [];
+        params.notCateIds = null;
       }
 
     }

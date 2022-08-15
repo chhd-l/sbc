@@ -6,6 +6,7 @@ import { cache } from 'qmkit';
  * @param {string} functionName
  */
 export function checkAuth(functionName: string) {
+  console.log(123,sessionStorage.getItem(cache.LOGIN_FUNCTIONS))
   if (functionName && sessionStorage.getItem(cache.LOGIN_FUNCTIONS) != 'null') {
     const functionsList = JSON.parse(
       sessionStorage.getItem(cache.LOGIN_FUNCTIONS)

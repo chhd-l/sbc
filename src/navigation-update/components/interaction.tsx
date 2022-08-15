@@ -379,7 +379,7 @@ export default class Interaction extends React.Component<any, any> {
           <FormattedMessage id="Content.InteractionType" />
           <span className="ant-form-item-required"></span>
         </h4>
-        <div className="interaction">
+        <div className="interaction" data-testid="interactionTest">
           <Form>
             <FormItem>
               {getFieldDecorator('interaction', {

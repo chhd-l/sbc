@@ -4,9 +4,9 @@ const config = {
   coverageProvider: 'babel',
   setupFilesAfterEnv: ['<rootDir>/setupTest.js'],
   collectCoverageFrom: [
-    //"src/**/*.{js,jsx,ts,tsx}",
-    'src/customer-details/component/*.{js,jsx,ts,tsx}'
-    //"!src/**/*.d.ts"
+    // 'src/**/*.{js,jsx,ts,tsx}',
+    'src/navigation-update/components/*.{js,jsx,ts,tsx}'
+    // '!src/**/*.d.ts'
   ],
   // collectCoverageFrom: ["src/customer-details/component/*.{js,jsx,ts,tsx}"],
   testPathIgnorePatterns: ['/node_modules', '/scripts', '/(test|spec).[jt]sx?$'],

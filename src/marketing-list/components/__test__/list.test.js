@@ -68,7 +68,7 @@ const relaxProps = {
 };
 
 describe('Marketing List Component Test', () => {
-  //sessionStorage.setItem('s2b-supplier@functions', JSON,stringify(checkAuth));
+  sessionStorage.setItem('s2b-supplier@functions', JSON.stringify(checkAuth));
 
   test('Component list', async () => {
     await act(async () => {
@@ -82,6 +82,42 @@ describe('Marketing List Component Test', () => {
     sessionStorage.setItem('s2b-supplier@login', JSON.stringify(obj));
     await act(async () => {
       render(<List tabkey="0" relaxProps={relaxProps} />);
+    });
+  });
+  test('Component list', async () => {
+    const obj = {
+      storeId: 123457910
+    };
+    sessionStorage.setItem('s2b-supplier@login', JSON.stringify(obj));
+    await act(async () => {
+      render(<List tabkey="2" relaxProps={relaxProps} />);
+    });
+  });
+  test('Component list', async () => {
+    const obj = {
+      storeId: 123457910
+    };
+    sessionStorage.setItem('s2b-supplier@login', JSON.stringify(obj));
+    await act(async () => {
+      render(<List tabkey="3" relaxProps={relaxProps} />);
+    });
+  });
+  test('Component list', async () => {
+    const obj = {
+      storeId: 123457910
+    };
+    sessionStorage.setItem('s2b-supplier@login', JSON.stringify(obj));
+    await act(async () => {
+      render(<List tabkey="4" relaxProps={relaxProps} />);
+    });
+  });
+  test('Component list', async () => {
+    const obj = {
+      storeId: 123457910
+    };
+    sessionStorage.setItem('s2b-supplier@login', JSON.stringify(obj));
+    await act(async () => {
+      render(<List tabkey="5" relaxProps={relaxProps} />);
     });
   });
   test('Component list', async () => {
@@ -273,5 +309,41 @@ describe('Marketing List Component Test', () => {
     userEvent.click(screen.getByRole('button', { name: /Cancel/i }));
     //   const Confirm = screen.getByRole('button', {/ Confirm / i});
     // fireEvent.click(Confirm);
+  });
+  test('Component list', async () => {
+    const obj = {
+      storeId: 123457910
+    };
+    sessionStorage.setItem(cache.LOGIN_DATA, JSON.stringify(obj));
+    relaxProps.dataList = fromJS([
+      {
+        marketingId: 1579,
+        promotionCode: 'pqj5cq809897288952',
+        publicStatus: '0',
+        marketingName: 'adadada',
+        subType: 12,
+        beginTime: '2022-08-08 14:30:53.000',
+        endTime: '2022-08-16 14:30:53.000',
+        joinLevel: '-5',
+        isPause: 0,
+        marketingStatus: 3,
+        marketingScopeList: [],
+        marketingJoinLevel: 1,
+        marketingType: 0,
+        promotionType: 0,
+        appliesType: null,
+        joinLevelList: [-5],
+        createName: 'Royal America',
+        promotionDescription: ''
+      }
+    ]);
+    await act(async () => {
+      render(<List tabkey="1" relaxProps={relaxProps} />);
+    });
+    // iconDelete
+    const iconDelete = screen.getByTestId('iconDelete');
+    fireEvent.click(iconDelete);
+    userEvent.click(screen.getByRole('button', { name: /Confirm/i }));
+    userEvent.click(screen.getByRole('button', { name: /Cancel/i }));
   });
 });

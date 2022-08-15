@@ -14,13 +14,13 @@ const config = {
     // "<rootDir>/src/marketing-list/components/__test__/list.test.{js,jsx,ts,tsx}"
   ],
   // collectCoverageFrom: ["src/customer-details/component/*.{js,jsx,ts,tsx}"],
-  testPathIgnorePatterns: ["/node_modules", "/scripts", "/(test|spec)\.[jt]sx?$"],
-  transformIgnorePatterns: ["/node_modules/(?!(antd|css-animation|rc.*)/)"],
+  testPathIgnorePatterns: ['/node_modules', '/scripts', '/(test|spec).[jt]sx?$'],
+  transformIgnorePatterns: ['/node_modules/(?!(antd|css-animation|rc.*)/)'],
   testEnvironment: 'jsdom',
   moduleNameMapper: {
     '\\.(css|less)$': 'identity-obj-proxy',
     '^@/(.*)$': '<rootDir>/src/$1',
-    '^qmkit/(.*)$': '<rootDir>/web_modules/qmkit/$1',
+    qmkit: '<rootDir>/web_modules/qmkit',
     '^biz/(.*)$': '<rootDir>/web_modules/biz/$1'
   },
   transform: {

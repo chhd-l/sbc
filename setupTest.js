@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom';
+import { RCi18n } from 'qmkit';
 
 const localStorageMock = (function () {
   let store = {}
@@ -29,4 +30,8 @@ Object.defineProperty(window, 'sessionStorage', {
 
 Object.defineProperty(window, '__DEV__', {
   value: true
+})
+
+Object.defineProperty(window, 'RCi18n', {
+  value: RCi18n
 })

@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
-import renderWithProvider from '../../../../jest/renderWithProvider';
+import renderWithProvider from '@/jest/renderWithProvider';
 import { fromJS } from 'immutable';
 import List from '../list';
 

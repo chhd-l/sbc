@@ -80,7 +80,7 @@ const Index = () => {
       if (res.code == Const.SUCCESS_CODE) {
         message.success('Operation successful');
       } else {
-        message.error('error');
+        // message.error('error');
       }
     });
   }

@@ -104,7 +104,7 @@ class MarketingList extends React.Component<any, any> {
     // console.log('storeId', storeId)
     const isShowFirstOrder = (promotionCode) => {
       const { tabkey } = this.props;
-      // console.log({ tabkey })
+      console.log({ tabkey, promotionCode, storeId })
       if (!tabkey) {
         return true;
       }

@@ -1190,15 +1190,49 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 deliveryDateList[0].dateTimeInfos[0].endTime
             });
           } else {
+            let timeSlotStr = deliveryDateList[0] &&
+            deliveryDateList[0].dateTimeInfos[0].startTime +
+            `${deliveryDateList[0].dateTimeInfos[0].endTime ? '-' : ''}` +
+            deliveryDateList[0].dateTimeInfos[0].endTime
+            let timeSlotLists = (deliveryDateList[0] && deliveryDateList[0].dateTimeInfos) || [];
+            // 日本特殊处理timeslot不依赖deliveryDate
+            const COUNTRY= (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}')['storeId'] || ''];
+            let isJp = COUNTRY==='ja-JP'
+            if(isJp){
+              let list = [];
+              deliveryDateList.forEach((el) => {
+                el.dateTimeInfos.forEach((cel) => {
+                  list.push(cel.startTime + (cel.endTime ? '-' + cel.endTime : ''));
+                });
+              });
+              console.info('list', list);
+              let uniList = this.distinct(list).map((el) => {
+                let startTimeStr = el.split('-')[0];
+                let timeSlotObj:any = {
+                  startTime: startTimeStr,
+                  // name: startTimeStr,
+                  // value: startTimeStr
+                };
+                let endTimeStr = el.split('-')[1];
+                if (endTimeStr) {
+                  let valueStr = startTimeStr + '-' + endTimeStr;
+                  timeSlotObj.endTime = endTimeStr;
+                  // timeSlotObj.name = valueStr;
+                  // timeSlotObj.value = valueStr;
+                }
+                return timeSlotObj;
+              });
+              timeSlotLists = uniList.sort((a, b) => {
+                console.info('aaaa', a, b);
+                return Number(a.startTime) - Number(b.startTime);
+              });
+             console.info('timeSlotListstimeSlotLists',timeSlotLists,deliveryDateList)
+            }
             this.setState({
               deliveryDateList: deliveryDateList,
-              timeSlotList: (deliveryDateList[0] && deliveryDateList[0].dateTimeInfos) || [],
+              timeSlotList: timeSlotLists,
               deliveryDate: deliveryDateList[0] && deliveryDateList[0].date,
-              timeSlot:
-                deliveryDateList[0] &&
-                deliveryDateList[0].dateTimeInfos[0].startTime +
-                `${deliveryDateList[0].dateTimeInfos[0].endTime ? '-' : ''}` +
-                deliveryDateList[0].dateTimeInfos[0].endTime
+              timeSlot:timeSlotStr,
             });
           }
         } else {
@@ -1212,7 +1246,20 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       }
     });
   };
-
+  distinct = (arr:any) => {
+    let i,
+      obj = {},
+      result = [],
+      len = arr.length;
+    for (i = 0; i < arr.length; i++) {
+      if (!obj[arr[i]]) {
+        //如果能查找到，证明数组元素重复了
+        obj[arr[i]] = 1;
+        result.push(arr[i]);
+      }
+    }
+    return result;
+  };
   deliveryDateChange = (value: any) => {
     const { deliveryDateList, deliveryDate, timeSlot } = this.state;
     let timeSlots = deliveryDateList.find((item) => item.date === value).dateTimeInfos || [];

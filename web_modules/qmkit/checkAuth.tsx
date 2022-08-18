@@ -6,11 +6,14 @@ import { cache } from 'qmkit';
  * @param {string} functionName
  */
 export function checkAuth(functionName: string) {
+  console.log(123,sessionStorage.getItem(cache.LOGIN_FUNCTIONS))
+  console.log(123,sessionStorage.getItem(cache.LOGIN_FUNCTIONS))
+  console.log(123,sessionStorage.getItem(cache.LOGIN_FUNCTIONS))
   if (functionName && sessionStorage.getItem(cache.LOGIN_FUNCTIONS) != 'null') {
     const functionsList = JSON.parse(
       sessionStorage.getItem(cache.LOGIN_FUNCTIONS)
     ) as Array<string>;
-    return functionsList.some((func) => func == functionName);
+    return functionsList?.some((func) => func == functionName);
   } else {
     return false;
   }
@@ -47,7 +50,7 @@ export function checkMenu(functionName) {
     }
     //获得权限明细
     const functions = functionName.split(',');
-    let flag = functions.some((f) => functionsList.some((v) => v == f));
+    let flag = functions.some((f) => functionsList?.some((v) => v == f));
     return flag;
   } else {
     return false;

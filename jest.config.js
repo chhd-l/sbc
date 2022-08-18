@@ -5,17 +5,22 @@ const config = {
   setupFilesAfterEnv: ['<rootDir>/setupTest.js'],
   collectCoverageFrom: [
     //"src/**/*.{js,jsx,ts,tsx}",
-   "src/marketing-list/components/*.{js,jsx,ts,tsx}",
-    "!src/**/*.d.ts"
+    "web_modules/qmkit/*.{js,jsx,ts,tsx}"
+    //"!src/**/*.d.ts"
+  ],
+  "testMatch": [
+    // "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
+    // "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
+    "<rootDir>/web_modules/qmkit/__test__/**/*.{js,jsx,ts,tsx}"
   ],
   // collectCoverageFrom: ["src/customer-details/component/*.{js,jsx,ts,tsx}"],
-  testPathIgnorePatterns: ["/node_modules", "/scripts", "/(test|spec)\.[jt]sx?$"],
-  transformIgnorePatterns: ["/node_modules/(?!(antd|css-animation|rc.*)/)"],
+  testPathIgnorePatterns: ['/node_modules', '/scripts', '/(test|spec).[jt]sx?$'],
+  transformIgnorePatterns: ['/node_modules/(?!(antd|css-animation|rc.*)/)'],
   testEnvironment: 'jsdom',
   moduleNameMapper: {
     '\\.(css|less)$': 'identity-obj-proxy',
     '^@/(.*)$': '<rootDir>/src/$1',
-    '^qmkit/(.*)$': '<rootDir>/web_modules/qmkit/$1',
+    qmkit: '<rootDir>/web_modules/qmkit',
     '^biz/(.*)$': '<rootDir>/web_modules/biz/$1'
   },
   transform: {

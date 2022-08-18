@@ -35,8 +35,8 @@ export default function ChooseProductForm({ updateValue }) {
     const token = (window as any).token;
     let result = JSON.stringify({ token: token });
     let encrypted = base64.urlEncode(result);
-    const { res } = await automationGetTemplate(encrypted);
-    window.open(res.context);
+    let exportHref = Const.HOST + `/automation/excel/template/${encrypted}`;
+    window.open(exportHref);
   };
   const handleUpload = async () => {
     try {

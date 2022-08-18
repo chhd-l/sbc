@@ -1,28 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { BreadCrumb, Const } from 'qmkit';
 import { Row, Col, Button, message, Switch } from 'antd';
-
-import { FormattedMessage } from 'react-intl';
-// import TextArea from 'antd/es/input/TextArea';
 import TextArea from 'antd/lib/input/TextArea';
 import * as webapi from './webapi';
 
-const index = () => {
-  const [bannerContent, setBannerContent] = useState(' ');
-  const [buttonContent, setButtonContent] = useState(' ');
-  const [buttonLink, setButtonLink] = useState(' ');
+import { FormattedMessage } from 'react-intl';
 
-  const [bannerStatus, setBannerStatus] = useState(false);
-  const [buttonStatus, setButtonStatus] = useState(false);
-  const [bannerIconStatus, setBannerIconStatus] = useState(false);
+const Index = () => {
   const [bannerForm, setBannerForm] = useState({
     id: '',
-    status: Number(bannerStatus),
-    content: bannerContent,
-    iconStatus: Number(bannerIconStatus),
-    buttonStatus: Number(buttonStatus),
-    buttonContent: buttonContent,
-    buttonHyperlink: buttonLink
+    status: false,
+    content: '',
+    iconStatus: false,
+    buttonStatus: false,
+    buttonContent: '',
+    buttonHyperlink: ''
   });
 
   useEffect(() => {
@@ -31,14 +23,18 @@ const index = () => {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          let data = JSON.parse(JSON.stringify(res.context));
-          setBannerStatus(res.context.status === 1);
-          setBannerIconStatus(res.context.iconStatus === 1);
-          setButtonStatus(res.context.buttonStatus === 1);
-          setBannerContent(res.context.content);
-          setButtonContent(res.context.buttonContent);
-          setButtonLink(res.context.buttonHyperlink);
-          bannerForm.id = data.id;
+          const result = JSON.parse(JSON.stringify(res.context));
+          const { status, iconStatus, buttonStatus, content, buttonContent, buttonHyperlink } =
+            res.context;
+          setBannerForm({
+            status: status === 1,
+            iconStatus: iconStatus === 1,
+            buttonStatus: buttonStatus === 1,
+            content,
+            buttonContent,
+            buttonHyperlink,
+            id: result.id
+          });
         } else if (res.code === 'marketingBannerVO is not exist') {
           message.warning('Data does not exist, please add it manually ');
         } else {
@@ -51,21 +47,16 @@ const index = () => {
   }, []);
 
   function onTagFormChange({ field, value }) {
-    // let data = this.state.tagForm;
-    // data[field] = value;
-    // this.setState({
-    //   searchForm: data
-    // });
     switch (field) {
       case 'bannerContent':
-        setBannerContent(value);
+        setBannerForm({ ...bannerForm, content: value });
         break;
       case 'buttonContent':
-        setButtonContent(value);
+        setBannerForm({ ...bannerForm, buttonContent: value });
         break;
       case 'buttonLink':
         if (/^((https|http|ftp|rtsp|mms))/) {
-          setButtonLink(value);
+          setBannerForm({ ...bannerForm, buttonHyperlink: value });
         }
 
         break;
@@ -73,31 +64,23 @@ const index = () => {
   }
 
   function saveBannerSet() {
-    let data = JSON.parse(JSON.stringify(bannerForm));
-    if (bannerStatus) {
-      data.status = 1;
-    } else {
-      data.status = 0;
-    }
-    if (bannerIconStatus) {
-      data.iconStatus = 1;
-    } else {
-      data.iconStatus = 0;
-    }
-    if (buttonStatus) {
-      data.buttonStatus = 1;
-    } else {
-      data.buttonStatus = 0;
-    }
-    data.content = bannerContent;
-    data.buttonContent = buttonContent;
-    data.buttonHyperlink = buttonLink;
+    const { id, status, iconStatus, buttonStatus, content, buttonContent, buttonHyperlink } =
+      bannerForm;
+    const data = {
+      status: status ? 1 : 0,
+      iconStatus: iconStatus ? 1 : 0,
+      buttonStatus: buttonStatus ? 1 : 0,
+      content,
+      buttonContent,
+      buttonHyperlink,
+      id
+    };
 
     webapi.setBannerForm(data).then(({ res }) => {
       if (res.code == Const.SUCCESS_CODE) {
         message.success('Operation successful');
       } else {
-        message.error('error');
+        // message.error('error');
       }
     });
   }
@@ -114,11 +97,14 @@ const index = () => {
             <p>Enable:</p>
           </Col>
           <Col span={4}>
-            <Switch checked={bannerStatus} onChange={setBannerStatus} />
+            <Switch
+              checked={bannerForm.status}
+              onChange={(checked) => setBannerForm({ ...bannerForm, status: checked })}
+            />
           </Col>
         </Row>
 
-        {bannerStatus ? (
+        {bannerForm.status ? (
           <>
             <div style={{ padding: '22px' }}>
               <Row gutter={[16, 16]}>
@@ -129,7 +115,10 @@ const index = () => {
                   <p>Enable:</p>
                 </Col>
                 <Col span={4}>
-                  <Switch checked={bannerIconStatus} onChange={setBannerIconStatus} />
+                  <Switch
+                    checked={bannerForm.iconStatus}
+                    onChange={(checked) => setBannerForm({ ...bannerForm, iconStatus: checked })}
+                  />
                 </Col>
               </Row>
               <Row gutter={[16, 16]}>
@@ -139,7 +128,7 @@ const index = () => {
                 <Col span={9}>
                   <TextArea
                     rows={3}
-                    value={bannerContent}
+                    value={bannerForm.content}
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       onTagFormChange({
@@ -159,11 +148,13 @@ const index = () => {
                   <p>Enable:</p>
                 </Col>
                 <Col span={4}>
-                  <Switch checked={buttonStatus} onChange={setButtonStatus} />
+                  <Switch
+                    checked={bannerForm.buttonStatus}
+                    onChange={(checked) => setBannerForm({ ...bannerForm, buttonStatus: checked })}
+                  />
                 </Col>
               </Row>
-
-              {buttonStatus ? (
+              {bannerForm.buttonStatus && (
                 <>
                   <Row gutter={[16, 16]}>
                     <Col span={1} />
@@ -175,7 +166,7 @@ const index = () => {
                     <Col span={9}>
                       <TextArea
                         rows={3}
-                        value={buttonContent}
+                        value={bannerForm.buttonContent}
                         onChange={(e) => {
                           const value = (e.target as any).value;
                           onTagFormChange({
@@ -194,7 +185,7 @@ const index = () => {
                     <Col span={9}>
                       <TextArea
                         rows={1}
-                        value={buttonLink}
+                        value={bannerForm.buttonHyperlink}
                         onChange={(e) => {
                           const value = (e.target as any).value;
                           onTagFormChange({
@@ -206,7 +197,7 @@ const index = () => {
                     </Col>
                   </Row>
                 </>
-              ) : null}
+              )}
             </div>
           </>
         ) : null}
@@ -219,4 +210,4 @@ const index = () => {
     </div>
   );
 };
-export default index;
+export default Index;

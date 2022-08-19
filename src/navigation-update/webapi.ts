@@ -32,6 +32,7 @@ export function getSeoNavigation(navigationLink) {
   if (navigationLink.substr(-1, 1) == '/') {
     navigationLink = navigationLink.slice(0,-1)
   }
+  navigationLink = navigationLink.replace(/\&/g,'%26')
   return Fetch<TResult>(`/seo/setting?navigationLink=${navigationLink}`, {
     method: 'GET',
   });

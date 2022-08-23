@@ -19,7 +19,6 @@ import { FormattedMessage } from 'react-intl';
 import ItemProductsNode from './components/nodes/ItemProductsNode';
 
 const { TabPane } = Tabs;
-
 export default withPropsAPI(
   class WorkFlow extends Component<any, any> {
     constructor(props) {

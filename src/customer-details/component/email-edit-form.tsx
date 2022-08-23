@@ -68,7 +68,6 @@ const EmailEditForm: React.FC<IProps> = ({ customerId, email, disableEdit, form 
             disabled || disableEdit ? 'disabled' : ''
           }`}
           onClick={handleOpen}
-          style={{ visibility: 'hidden' }}
         />
       </div>
       <Modal

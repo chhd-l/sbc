@@ -41,7 +41,7 @@ export default class PaymentSettingActor extends Actor {
     let paymentForm = state.get('paymentForm').toJS()
     paymentForm.payPspItemVOList.map(item => {
       if(item.id === id) {
-        if(field == 'isOpen' || field == 'supportSubscription' || field == 'payPspItemCardTypeVOList' || field == 'maxAmount' || field == 'isDisplay' || field == 'isTwoStages') {
+        if(field == 'isOpen' || field == 'supportSubscription' || field == 'payPspItemCardTypeVOList' || field == 'maxAmount' || field == 'businessType' || field == 'isTwoStages') {
           item[field] = value
         } else {
           if(!item.pspConfigSupplierVO) {

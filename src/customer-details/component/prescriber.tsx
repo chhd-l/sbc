@@ -1,10 +1,11 @@
-import { Button, Col, Form, Icon, Input, message, Modal, Row, Table } from 'antd';
+import { Button, Col, Form, Icon, Input, message, Modal, Row, Table, Select } from 'antd';
 import React, { useState } from 'react';
 import { useCallbackState } from 'use-callback-state';
-import { Const, RCi18n } from 'qmkit';
+import { Const, RCi18n, SelectGroup } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './webapi';
 const FormItem = Form.Item;
+const { Option } = Select;
 const styles = {
   label: {
     width: 120,
@@ -13,18 +14,18 @@ const styles = {
 } as any;
 const columns_attribute = [
   {
-    title: <FormattedMessage id="Product.AttributeName" />,
-    dataIndex: 'attributeName',
+    title: <FormattedMessage id="Prescriber.PrescriberID" />,
+    dataIndex: 'prescriberid',
     key: 'attributeName'
   },
   {
-    title: <FormattedMessage id="Product.DisplayName" />,
-    dataIndex: 'attributeNameEn',
+    title: <FormattedMessage id="Prescriber.PrescriberName" />,
+    dataIndex: 'prescribername',
     key: 'attributeNameEn'
   },
   {
-    title: <FormattedMessage id="Product.AttributeValue" />,
-    dataIndex: 'attributeValue',
+    title: <FormattedMessage id="PetOwner.PrescriberCity" />,
+    dataIndex: 'prescribercity',
     key: 'attributeValue',
     width: '30%',
     render: (text, record) => (
@@ -32,6 +33,16 @@ const columns_attribute = [
         {record.attributesValuesVOList ? this.getAttributeValue(record.attributesValuesVOList) : ''}
       </p>
     )
+  },
+  {
+    title: <FormattedMessage id="Prescriber.PrescriberType" />,
+    dataIndex: 'prescribertype',
+    key: 'attributeNameEn'
+  },
+  {
+    title: <FormattedMessage id="Prescriber.PrescriberStatus" />,
+    dataIndex: 'prescriberstatus',
+    key: 'attributeNameEn'
   }
 ];
 const prescriber = () => {
@@ -183,7 +194,7 @@ const prescriber = () => {
         </span>
       </Button>
       <Modal
-        title={<FormattedMessage id="Product.SelectAttribute" />}
+        title={<FormattedMessage id="Prescriber-information-add.title" values={{ count: 1 }} />}
         visible={visible}
         width="800px"
         confirmLoading={confirmLoading}
@@ -194,12 +205,12 @@ const prescriber = () => {
           <div style={{ marginBottom: 16 }}>
             <Form className="filter-content" layout="inline">
               <Row>
-                <Col span={10}>
+                <Col span={7}>
                   <FormItem>
                     <Input
                       addonBefore={
                         <p style={styles.label} title={RCi18n({ id: 'Product.AttributeName' })}>
-                          <FormattedMessage id="Product.AttributeName" />
+                          <FormattedMessage id="Order.PrescriberId" />
                         </p>
                       }
                       value={searchForm.attributeName}
@@ -213,12 +224,12 @@ const prescriber = () => {
                     />
                   </FormItem>
                 </Col>
-                <Col span={10}>
+                <Col span={7}>
                   <FormItem>
                     <Input
                       addonBefore={
                         <p style={styles.label} title={RCi18n({ id: 'Product.AttributeValue' })}>
-                          <FormattedMessage id="Product.AttributeValue" />
+                          <FormattedMessage id="Prescriber.PrescriberName" />
                         </p>
                       }
                       value={searchForm.attributeValue}
@@ -232,7 +243,36 @@ const prescriber = () => {
                     />
                   </FormItem>
                 </Col>
-                <Col span={4} style={{ textAlign: 'center' }}>
+                <Col span={7}>
+                  <FormItem>
+                    <SelectGroup
+                      defaultValue=""
+                      label={
+                        <p style={styles.label} title={RCi18n({ id: 'PetOwner.ConsumerType' })}>
+                          {RCi18n({ id: 'Prescriber.PrescriberType' })}
+                        </p>
+                      }
+                      style={{ width: 120 }}
+                      onChange={(value) => {
+                        value = value === '' ? null : value;
+                        onFormChange({
+                          field: 'customerTypeId',
+                          value
+                        });
+                      }}
+                    >
+                      <Option value="">{RCi18n({ id: 'PetOwner.All' })}</Option>
+                      {/* {customerTypeArr.map((item) => (
+                        <Option value={item.id} key={item.id}>
+                          {item.name}
+                        </Option>
+                      ))} */}
+                    </SelectGroup>
+                  </FormItem>
+                </Col>
+              </Row>
+              <Row>
+                <Col offset={10} span={4} style={{ textAlign: 'center' }}>
                   <FormItem>
                     <Button
                       type="primary"

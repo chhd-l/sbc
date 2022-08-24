@@ -330,8 +330,26 @@ export function addAttributeToFilter(filterParams = {}) {
     })
   });
 }
-export function getAttributes(filterParams = {}) {
-  return Fetch<TResult>('/attribute_library/attributes', {
+export function fetchClinicList(filterParams = {}) {
+  return Fetch<TResult>('/prescriber/listPage', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+//PrescriberType
+export function fetchPrescriberType(filterParams = {}) {
+  return Fetch<TResult>('/prescriberDictionary/listAll', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+//用户展示关联的prescriber
+export function fetchPrescriberList(filterParams = {}) {
+  return Fetch<TResult>('/customerPrescriberRela/listByCustomer', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

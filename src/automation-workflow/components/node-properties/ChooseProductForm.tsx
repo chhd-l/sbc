@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Icon, message, Button, Alert, Upload, notification, Spin } from 'antd';
 import { Const, RCi18n, util } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { DraggerProps } from 'antd/lib/upload';
-import { automationGetTemplate } from '@/automation-workflow/webapi';
 
 const { Dragger } = Upload;
 const FormItem = Form.Item;
@@ -12,13 +11,20 @@ const header = {
   Accept: 'application/json',
   authorization: 'Bearer ' + (window as any).token
 };
-export default function ChooseProductForm({ updateValue }) {
+export default function ChooseProductForm({ updateValue, productData }) {
   const { id } = useParams();
   const [fileData, setFileData] = useState({
     file: null,
     uploadBtnEnable: false,
     loading: false
   });
+  useEffect(() => {
+    setFileData({
+      file: { name: productData.path },
+      uploadBtnEnable: false,
+      loading: false
+    });
+  }, [productData.path]);
   const uploadProps: DraggerProps = {
     name: 'file',
     showUploadList: false,
@@ -26,6 +32,7 @@ export default function ChooseProductForm({ updateValue }) {
     action: Const.HOST + '/automation/excel/import',
     beforeUpload: (file) => {
       setFileData((s) => ({ ...s, file, uploadBtnEnable: true }));
+
       return false;
     }
   };
@@ -49,11 +56,11 @@ export default function ChooseProductForm({ updateValue }) {
         headers: header,
         body: formData
       });
-      const { context, code, message: msg } = await resp.json();
+      const { code, message: msg } = await resp.json();
       if (code === Const.SUCCESS_CODE) {
         message.success(RCi18n({ id: 'Setting.Operatesuccessfully' }));
-        setFileData({ loading: false, file: null, uploadBtnEnable: false });
-        updateValue('productData', { path: context });
+        updateValue('productData', { path: fileData.file.name });
+        setFileData((s) => ({ ...s, loading: false, uploadBtnEnable: false }));
       } else {
         notification.error({
           message: 'System Notification',
@@ -73,7 +80,7 @@ export default function ChooseProductForm({ updateValue }) {
       setFileData((s) => ({ ...s, loading: false }));
     }
   };
-
+  const path = fileData.file?.name?.split('/').pop();
   return (
     <div className="chooseProductForm">
       <h4>
@@ -114,7 +121,7 @@ export default function ChooseProductForm({ updateValue }) {
       </Dragger>
 
       <div className="desc-container">
-        <p>{fileData.file?.name}</p>
+        <p>{path}</p>
         <p className="ant-upload-hint">
           <FormattedMessage id="Product.importInfo2" />
         </p>

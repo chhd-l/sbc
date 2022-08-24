@@ -24,6 +24,23 @@ export default class AppStore extends Store {
     this.dispatch('loading:start')
     const { res } = await webapi.getPaymentSetting();
     if (res.code === Const.SUCCESS_CODE) {
+      res.context?.forEach((el,idx)=>{
+        if(el.payPspBussinessTypeVOList){
+          let bussinessTypeVOListArr = []
+          for(var bussinessTypeVOList in el.payPspBussinessTypeVOList ){
+            let obj={value:bussinessTypeVOList,label:el.payPspBussinessTypeVOList[bussinessTypeVOList]}
+            // bussinessTypeVOListArr[bussinessTypeVOList]=el.payPspBussinessTypeVOList[bussinessTypeVOList]
+            bussinessTypeVOListArr.push(obj)
+          }
+         el.payPspBussinessTypeVOList = bussinessTypeVOListArr
+        }
+        if(el.payPspItemVOList){
+          el.payPspItemVOList.forEach((payItem,idx)=>{
+          let bussinessTypeValueListArr = payItem.businessType.split(',')
+          payItem.businessType = bussinessTypeValueListArr
+          })
+        }
+      })
       this.dispatch('payment:paymentList', fromJS(res.context))
       this.setCurrentTabKey(this.state().get('key') ? this.state().get('key') : res.context[0].payPspItemVOList[0].id)
       this.dispatch('loading:end')

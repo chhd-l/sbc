@@ -322,6 +322,22 @@ export function returnDQE(idVoie : string, pays : string, streetNumber : string)
     })
   });
 }
+export function addAttributeToFilter(filterParams = {}) {
+  return Fetch<TResult>('/goods_filter/batch/filter', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+export function getAttributes(filterParams = {}) {
+  return Fetch<TResult>('/attribute_library/attributes', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
 
 
 

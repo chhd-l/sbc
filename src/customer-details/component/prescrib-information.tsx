@@ -3,7 +3,8 @@ import { Table, Popover, Input, Button } from 'antd';
 import { cache, Const, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { getPrescriberList, editPrescriberId } from '../webapi';
-
+import { Link } from 'react-router-dom';
+import Prescriber from './prescriber';
 interface Iprop {
   customerAccount: string;
   customerId: string;
@@ -40,7 +41,11 @@ export default class PrescribInformation extends React.Component<Iprop, any> {
       .then((data) => {
         this.setState({
           loading: false,
-          list: (data.res.context?.content ?? []).map(item => ({ ...item, newPrescriberId: item.prescriberId, editVisible: false })),
+          list: (data.res.context?.content ?? []).map((item) => ({
+            ...item,
+            newPrescriberId: item.prescriberId,
+            editVisible: false
+          })),
           pagination: {
             ...pagination,
             total: data.res.context.total
@@ -65,7 +70,7 @@ export default class PrescribInformation extends React.Component<Iprop, any> {
 
   handleVisibleChange = (id, visible) => {
     const { list } = this.state;
-    list.forEach(item => {
+    list.forEach((item) => {
       if (item.id === id) {
         item.editVisible = visible;
       }
@@ -75,7 +80,7 @@ export default class PrescribInformation extends React.Component<Iprop, any> {
 
   onChangeNewPrescriberId = (id, value) => {
     const { list } = this.state;
-    list.forEach(item => {
+    list.forEach((item) => {
       if (item.id === id) {
         item.newPrescriberId = value;
       }
@@ -84,27 +89,29 @@ export default class PrescribInformation extends React.Component<Iprop, any> {
   };
 
   onSavePrescriberId = (id) => {
-    const prescriber = this.state.list.find(item => item.id === id);
+    const prescriber = this.state.list.find((item) => item.id === id);
     this.setState({ editLoading: true });
     editPrescriberId({
       customerId: this.props.customerId,
       prescriberPrimaryKey: id,
       prescriberIdBefore: prescriber.prescriberId,
       prescriberIdAfter: prescriber.newPrescriberId
-    }).then(data => {
-      if (data.res.code === Const.SUCCESS_CODE) {
-        this.getPrescriberList();
-      }
-    }).finally(() => {
-      this.setState({ editLoading: false });
     })
+      .then((data) => {
+        if (data.res.code === Const.SUCCESS_CODE) {
+          this.getPrescriberList();
+        }
+      })
+      .finally(() => {
+        this.setState({ editLoading: false });
+      });
   };
 
   render() {
     const { list, pagination, loading, editLoading } = this.state;
     const columns = [
       {
-        title: RCi18n({ id: "PetOwner.PrescriberID" }),
+        title: RCi18n({ id: 'PetOwner.PrescriberID' }),
         dataIndex: 'prescriberId',
         key: 'id',
         render: (text, row) => (
@@ -115,8 +122,19 @@ export default class PrescribInformation extends React.Component<Iprop, any> {
               placement="right"
               content={
                 <Input.Group compact style={{ width: 320 }}>
-                  <Input style={{ width: '70%' }} value={row.newPrescriberId} onChange={(e) => this.onChangeNewPrescriberId(row.id, e.target.value)} />
-                  <Button type="primary" style={{ width: '30%' }} loading={editLoading} onClick={() => this.onSavePrescriberId(row.id)}><FormattedMessage id="PetOwner.Save" /></Button>
+                  <Input
+                    style={{ width: '70%' }}
+                    value={row.newPrescriberId}
+                    onChange={(e) => this.onChangeNewPrescriberId(row.id, e.target.value)}
+                  />
+                  <Button
+                    type="primary"
+                    style={{ width: '30%' }}
+                    loading={editLoading}
+                    onClick={() => this.onSavePrescriberId(row.id)}
+                  >
+                    <FormattedMessage id="PetOwner.Save" />
+                  </Button>
                 </Input.Group>
               }
               onVisibleChange={(visible) => this.handleVisibleChange(row.id, visible)}
@@ -129,22 +147,22 @@ export default class PrescribInformation extends React.Component<Iprop, any> {
         )
       },
       {
-        title: RCi18n({ id: "PetOwner.PrescriberName" }),
+        title: RCi18n({ id: 'PetOwner.PrescriberName' }),
         dataIndex: 'prescriberName',
         key: 'name'
       },
       {
-        title: RCi18n({ id: "PetOwner.PrescriberPhone" }),
+        title: RCi18n({ id: 'PetOwner.PrescriberPhone' }),
         dataIndex: 'phone',
         key: 'phone'
       },
       {
-        title: RCi18n({ id: "PetOwner.PrescriberCity" }),
+        title: RCi18n({ id: 'PetOwner.PrescriberCity' }),
         dataIndex: 'primaryCity',
         key: 'city'
       },
       {
-        title: RCi18n({ id: "PetOwner.PrescriberType" }),
+        title: RCi18n({ id: 'PetOwner.PrescriberType' }),
         dataIndex: 'prescriberType',
         key: 'type'
       }
@@ -152,6 +170,7 @@ export default class PrescribInformation extends React.Component<Iprop, any> {
 
     return (
       <div>
+        <Prescriber />
         <Table
           rowKey="id"
           loading={loading}

@@ -3,6 +3,7 @@ import { Table, Popover, Input, Button } from 'antd';
 import { cache, Const, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { getPrescriberList, editPrescriberId } from '../webapi';
+import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
 import Prescriber from './prescriber';
 interface Iprop {
@@ -31,32 +32,43 @@ export default class PrescribInformation extends React.Component<Iprop, any> {
   }
 
   getPrescriberList = () => {
-    const { pagination } = this.state;
-    this.setState({ loading: true });
-    getPrescriberList({
-      customerAccount: this.props.customerAccount,
-      pageNum: pagination.current - 1,
-      pageSize: pagination.pageSize
-    })
-      .then((data) => {
-        this.setState({
-          loading: false,
-          list: (data.res.context?.content ?? []).map((item) => ({
-            ...item,
-            newPrescriberId: item.prescriberId,
-            editVisible: false
-          })),
-          pagination: {
-            ...pagination,
-            total: data.res.context.total
-          }
-        });
+    webapi
+      .fetchPrescriberList({ customerId: this.props.customerId })
+      .then((res) => {
+        console.log(res);
       })
       .catch(() => {
         this.setState({
           loading: false
         });
       });
+    // const { pagination } = this.state;
+    // this.setState({ loading: true });
+    // getPrescriberList({
+    //   customerAccount: this.props.customerAccount,
+    //   pageNum: pagination.current - 1,
+    //   pageSize: pagination.pageSize
+    // })
+    //   .then((data) => {
+    //     this.setState({
+    //       loading: false,
+    //       list: (data.res.context?.content ?? []).map((item) => ({
+    //         ...item,
+    //         newPrescriberId: item.prescriberId,
+    //         editVisible: false
+    //       })),
+    //       pagination: {
+    //         ...pagination,
+    //         total: data.res.context.total
+    //       }
+    //     });
+    //     debugger;
+    //   })
+    //   .catch(() => {
+    //     this.setState({
+    //       loading: false
+    //     });
+    //   });
   };
 
   onTableChange = (pagination) => {

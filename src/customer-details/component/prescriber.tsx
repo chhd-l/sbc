@@ -1,5 +1,5 @@
 import { Button, Col, Form, Icon, Input, message, Modal, Row, Table, Select } from 'antd';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCallbackState } from 'use-callback-state';
 import { Const, RCi18n, SelectGroup } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
@@ -15,34 +15,34 @@ const styles = {
 const columns_attribute = [
   {
     title: <FormattedMessage id="Prescriber.PrescriberID" />,
-    dataIndex: 'prescriberid',
-    key: 'attributeName'
+    dataIndex: 'prescriberId',
+    key: 'prescriberId'
   },
   {
     title: <FormattedMessage id="Prescriber.PrescriberName" />,
-    dataIndex: 'prescribername',
-    key: 'attributeNameEn'
+    dataIndex: 'prescriberName',
+    key: 'prescriberName'
   },
   {
     title: <FormattedMessage id="PetOwner.PrescriberCity" />,
-    dataIndex: 'prescribercity',
-    key: 'attributeValue',
-    width: '30%',
-    render: (text, record) => (
-      <p>
-        {record.attributesValuesVOList ? this.getAttributeValue(record.attributesValuesVOList) : ''}
-      </p>
-    )
+    dataIndex: 'primaryCity',
+    key: 'primaryCity'
+    // width: '30%',
+    // render: (text, record) => (
+    //   <p>
+    //     {record.attributesValuesVOList ? this.getAttributeValue(record.attributesValuesVOList) : ''}
+    //   </p>
+    // )
   },
   {
     title: <FormattedMessage id="Prescriber.PrescriberType" />,
-    dataIndex: 'prescribertype',
-    key: 'attributeNameEn'
+    dataIndex: 'prescriberType',
+    key: 'prescriberType'
   },
   {
     title: <FormattedMessage id="Prescriber.PrescriberStatus" />,
-    dataIndex: 'prescriberstatus',
-    key: 'attributeNameEn'
+    dataIndex: 'auditStatus',
+    key: 'auditStatus'
   }
 ];
 const prescriber = () => {
@@ -55,6 +55,7 @@ const prescriber = () => {
   const [oldSelectedRowList, setOldSelectedRowList] = useState([]);
   const [prevPropSelectedRowList, setPrevPropSelectedRowList] = useState([]);
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [prescribertype, setPrescribertype] = useState([]);
   const [pagination, setPagination]: any = useCallbackState(
     {
       current: 1,
@@ -67,6 +68,17 @@ const prescriber = () => {
     attributeName: '',
     attributeValue: ''
   });
+  useEffect(() => {
+    webapi
+      .fetchPrescriberType({ type: 'clinicType' })
+      .then((res) => {
+        let { context } = res.res;
+        setPrescribertype([...context]);
+      })
+      .catch((err) => {
+        message.error(err.toString() || <FormattedMessage id="Product.OperationFailed" />);
+      });
+  }, []);
   const handleOk = () => {
     setConfirmLoading(true);
     let storeGoodsFilterList = [];
@@ -82,22 +94,22 @@ const prescriber = () => {
     let params = {
       storeGoodsFilterList: storeGoodsFilterList
     };
-    webapi
-      .addAttributeToFilter(params)
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          message.success(<FormattedMessage id="Product.OperateSuccessfully" />);
-          setConfirmLoading(false);
-          setVisible(false);
-          //   this.props.refreshList();
-        } else {
-          setConfirmLoading(true);
-        }
-      })
-      .catch((err) => {
-        setConfirmLoading(false);
-      });
+    // webapi
+    //   .addAttributeToFilter(params)
+    //   .then((data) => {
+    //     const { res } = data;
+    //     if (res.code === Const.SUCCESS_CODE) {
+    //       message.success(<FormattedMessage id="Product.OperateSuccessfully" />);
+    //       setConfirmLoading(false);
+    //       setVisible(false);
+    //       //   this.props.refreshList();
+    //     } else {
+    //       setConfirmLoading(true);
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     setConfirmLoading(false);
+    //   });
   };
   const handleCancel = () => {
     setVisible(false);
@@ -108,7 +120,6 @@ const prescriber = () => {
     setSearchForm({ ...data });
   };
   const getAttributes = () => {
-    const { pagination, searchForm } = this.state;
     let params = {
       attributeName: searchForm.attributeName,
       attributeValue: searchForm.attributeValue,
@@ -118,13 +129,12 @@ const prescriber = () => {
       searchType: 'filter'
     };
     webapi
-      .getAttributes(params)
+      .fetchClinicList(params)
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          pagination.total = res.context.total;
-          const attributeList = res.context.attributesList;
-          setAttributeList({ ...pagination });
+          const attributeList = res.context.content;
+          setAttributeList([...attributeList]);
         }
       })
       .catch((err) => {
@@ -157,6 +167,8 @@ const prescriber = () => {
   };
   const rowSelection = {
     selectedRowKeys,
+    columnTitle: ' ', // 去掉全选
+    hideDefaultSelections: true,
     onChange: onSelectChange,
     getCheckboxProps: (record) => ({
       disabled: JSON.stringify(oldSelectedRowKeys).indexOf(record.id) !== -1, // Column configuration not to be checked
@@ -262,11 +274,11 @@ const prescriber = () => {
                       }}
                     >
                       <Option value="">{RCi18n({ id: 'PetOwner.All' })}</Option>
-                      {/* {customerTypeArr.map((item) => (
+                      {prescribertype.map((item) => (
                         <Option value={item.id} key={item.id}>
                           {item.name}
                         </Option>
-                      ))} */}
+                      ))}
                     </SelectGroup>
                   </FormItem>
                 </Col>

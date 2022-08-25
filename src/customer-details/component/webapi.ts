@@ -357,6 +357,17 @@ export function fetchPrescriberList(filterParams = {}) {
   });
 }
 
+/**
+ * 根据城市信息查询运费
+ */
+ export function stockNoticeInfo(Params = {}) {
+  return Fetch<TResult>('/goods/stockNoticeInfo', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...Params
+    })
+  });
+}
 
 
 

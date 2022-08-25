@@ -44,6 +44,7 @@ import {
 
 import './index.less';
 import json from 'web_modules/qmkit/json';
+import OOSwaitingList from './component/OOSwaitingList';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -107,11 +108,10 @@ const calcPetAge = (dateStr: string) => {
   } else {
     const diffYear = Math.floor(diffMonth / 12);
     const diffMonthAfterYear = diffMonth % 12;
-    return `${diffYear} ${diffYear > 1 ? 'years' : 'year'} ${
-      diffMonthAfterYear === 0
+    return `${diffYear} ${diffYear > 1 ? 'years' : 'year'} ${diffMonthAfterYear === 0
         ? ''
         : `${diffMonthAfterYear} ${diffMonthAfterYear > 1 ? 'months' : 'month'}`
-    }`;
+      }`;
   }
 };
 
@@ -219,8 +219,8 @@ export default class CustomerDetails extends React.Component<any, any> {
         ...pet,
         petsBreedName: pet.isPurebred
           ? ((pet.petsType === 'dog' ? dogBreedList : catBreedList).find(
-              (breed) => breed.value === pet.petsBreed || breed.valueEn === pet.petsBreed
-            ) ?? {})['name'] ?? pet.petsBreed
+            (breed) => breed.value === pet.petsBreed || breed.valueEn === pet.petsBreed
+          ) ?? {})['name'] ?? pet.petsBreed
           : webapi.getMixedBreedDisplayName()
       }));
     });
@@ -247,7 +247,7 @@ export default class CustomerDetails extends React.Component<any, any> {
           .map((tag) => tag.id),
         segmentType: 0
       })
-      .then(() => {});
+      .then(() => { });
     this.setState({
       petOwnerTag: values
     });
@@ -261,11 +261,11 @@ export default class CustomerDetails extends React.Component<any, any> {
   showConfirm(id) {
     const that = this;
     confirm({
-      title: RCi18n({ id: 'PetOwner.DeleteThisItem' }),
+      title: RCi18n({ id: "PetOwner.DeleteThisItem" }),
       onOk() {
         return that.removeConsumer(id);
       },
-      onCancel() {}
+      onCancel() { }
     });
   }
 
@@ -283,7 +283,7 @@ export default class CustomerDetails extends React.Component<any, any> {
       .delCustomer(params)
       .then((data) => {
         if (data.res.code === Const.SUCCESS_CODE) {
-          message.success(RCi18n({ id: 'PetOwner.OperateSuccessfully' }));
+          message.success(RCi18n({ id: "PetOwner.OperateSuccessfully" }));
           history.push('/customer-list');
         } else {
           this.setState({
@@ -493,9 +493,8 @@ export default class CustomerDetails extends React.Component<any, any> {
                         <>
                           <Col key={`label${idx * Math.rdmValue()}`} span={4} className="text-tip">
                             {RCi18n({
-                              id: `PetOwner.${storeId === 123457919 ? 'AddressForm.' : ''}${
-                                field.fieldName
-                              }`
+                              id: `PetOwner.${storeId === 123457919 ? 'AddressForm.' : ''}${field.fieldName
+                                }`
                             })}
                           </Col>
                           <Col
@@ -513,10 +512,10 @@ export default class CustomerDetails extends React.Component<any, any> {
                       ))}
                       {!basic?.validFlag
                         ? basic.alert && (
-                            <Col span={24}>
-                              <PostalCodeMsg text={basic.alert} />
-                            </Col>
-                          )
+                          <Col span={24}>
+                            <PostalCodeMsg text={basic.alert} />
+                          </Col>
+                        )
                         : null}
                     </Row>
                   </Col>
@@ -580,8 +579,8 @@ export default class CustomerDetails extends React.Component<any, any> {
                               <span className="Membership-info-box-text">
                                 {memberShip.admissionDate
                                   ? moment(memberShip.admissionDate, 'YYYY-MM-DD').format(
-                                      'YYYY-MM-DD'
-                                    )
+                                    'YYYY-MM-DD'
+                                  )
                                   : ''}
                               </span>
                             </div>
@@ -672,14 +671,11 @@ export default class CustomerDetails extends React.Component<any, any> {
               </Row>
             </div>
             <div className="detail-container" id="pets-list">
-              <Headline title={RCi18n({ id: 'PetOwner.PetInformation' })} />
+              <Headline title={RCi18n({ id: "PetOwner.PetInformation" })} />
               <Row gutter={16}>
                 {pets.map((pet, idx) => (
                   <Col key={idx} span={8} style={{ margin: '10px 0' }}>
-                    <Card
-                      bodyStyle={{ padding: '10px 20px' }}
-                      style={{ height: 120, overflow: 'hidden' }}
-                    >
+                    <Card bodyStyle={{ padding: '10px 20px' }} style={{ height: 120, overflow: 'hidden' }}>
                       <div className="text-align-right">
                         {/* <Popconfirm placement="topRight" title="Are you sure to remove this item?" onConfirm={() => {}} okText="Confirm" cancelText="Cancel">
                           <Button type="link">
@@ -701,8 +697,8 @@ export default class CustomerDetails extends React.Component<any, any> {
                               pet.petsImg && pet.petsImg.startsWith('http')
                                 ? pet.petsImg
                                 : pet.petsType === 'dog'
-                                ? dogImg
-                                : catImg
+                                  ? dogImg
+                                  : catImg
                             }
                           />
                         </Col>
@@ -762,81 +758,45 @@ export default class CustomerDetails extends React.Component<any, any> {
             </div>
             <div className="container">
               <Headline
-                title={RCi18n({ id: 'PetOwner.OtherInformation' })}
-                extra={
-                  <RangePicker
-                    style={{
-                      display:
-                        ['order', 'subscrib', 'benefit'].indexOf(this.state.activeKey) > -1
-                          ? 'block'
-                          : 'none'
-                    }}
-                    allowClear={false}
-                    value={[moment(startDate, 'YYYY-MM-DD'), moment(endDate, 'YYYY-MM-DD')]}
-                    onChange={this.handleChangeDateRange}
-                    getCalendarContainer={() => document.getElementById('page-content')}
-                  />
-                }
+                title={RCi18n({ id: "PetOwner.OtherInformation" })}
+                extra={<RangePicker style={{ display: ['order', 'subscrib', 'benefit'].indexOf(this.state.activeKey) > -1 ? 'block' : 'none' }} allowClear={false} value={[moment(startDate, 'YYYY-MM-DD'), moment(endDate, 'YYYY-MM-DD')]} onChange={this.handleChangeDateRange} getCalendarContainer={() => document.getElementById('page-content')} />}
               />
               <Tabs activeKey={this.state.activeKey} onChange={this.clickTabs}>
-                <TabPane tab={RCi18n({ id: 'PetOwner.OrderInformation' })} key="order">
-                  <OrderInformation
-                    startDate={startDate}
-                    endDate={endDate}
-                    customerId={this.state.customerId}
-                  />
+                <TabPane tab={RCi18n({ id: "PetOwner.OrderInformation" })} key="order">
+                  <OrderInformation startDate={startDate} endDate={endDate} customerId={this.state.customerId} />
                 </TabPane>
-                <TabPane tab={RCi18n({ id: 'PetOwner.SubscriptionInformation' })} key="subscrib">
-                  <SubscribInformation
-                    startDate={startDate}
-                    endDate={endDate}
-                    customerAccount={this.state.customerAccount}
-                  />
+                <TabPane tab={RCi18n({ id: "PetOwner.SubscriptionInformation" })} key="subscrib">
+                  <SubscribInformation startDate={startDate} endDate={endDate} customerAccount={this.state.customerAccount} />
                 </TabPane>
-                <TabPane tab={RCi18n({ id: 'PetOwner.PrescriberInformation' })} key="prescrib">
-                  <PrescribInformation
-                    customerAccount={this.state.customerAccount}
-                    customerId={this.state.customerId}
-                  />
+                <TabPane tab={RCi18n({ id: "PetOwner.PrescriberInformation" })} key="prescrib">
+                  <PrescribInformation customerAccount={this.state.customerAccount} customerId={this.state.customerId} />
                 </TabPane>
-                <TabPane tab={RCi18n({ id: 'PetOwner.DeliveryInformation' })} key="delivery">
-                  {displayPage === 'detail' && (
-                    <DeliveryList
-                      customerId={this.state.customerId}
-                      type="DELIVERY"
-                      onEdit={(record) => this.openDeliveryPage('delivery', record)}
-                    />
-                  )}
+                <TabPane tab={RCi18n({ id: "PetOwner.DeliveryInformation" })} key="delivery">
+                  {displayPage === 'detail' && <DeliveryList customerId={this.state.customerId} type="DELIVERY" onEdit={(record) => this.openDeliveryPage('delivery', record)} />}
                 </TabPane>
-                {[123457907, 123457919].indexOf(storeId) === -1 ? (
-                  <TabPane tab={RCi18n({ id: 'PetOwner.BillingInfomation' })} key="billing">
-                    {displayPage === 'detail' && (
-                      <DeliveryList
-                        customerId={this.state.customerId}
-                        type="BILLING"
-                        onEdit={(record) => this.openDeliveryPage('billing', record)}
-                      />
-                    )}
-                  </TabPane>
-                ) : null}
-                <TabPane tab={RCi18n({ id: 'PetOwner.PaymentMethods' })} key="payment">
-                  <PaymentList
-                    customerId={this.state.customerId}
-                    customerAccount={this.state.customerAccount}
-                  />
+                {
+                  [123457907, 123457919].indexOf(storeId) === -1
+                    ? <TabPane tab={RCi18n({ id: "PetOwner.BillingInfomation" })} key="billing">{displayPage === 'detail' && <DeliveryList customerId={this.state.customerId} type="BILLING" onEdit={(record) => this.openDeliveryPage('billing', record)} />}</TabPane>
+                    : null
+                }
+                <TabPane tab={RCi18n({ id: "PetOwner.PaymentMethods" })} key="payment">
+                  <PaymentList customerId={this.state.customerId} customerAccount={this.state.customerAccount} />
                 </TabPane>
-                <TabPane tab={RCi18n({ id: 'PetOwner.Feedback' })} key="feedback">
+                <TabPane tab={RCi18n({ id: "PetOwner.Feedback" })} key="feedback">
                   <FeedbackList customerId={this.state.customerId} />
                 </TabPane>
-                {isClubMember ? (
-                  <TabPane tab={<FormattedMessage id="PetOwner.Benefit" />} key="benefit">
-                    <BenefitsList
-                      startDate={startDate}
-                      endDate={endDate}
-                      customerAccount={this.state.customerAccount}
-                    />
-                  </TabPane>
-                ) : null}
+                {
+                  isClubMember
+                    ? (
+                      <TabPane tab={<FormattedMessage id="PetOwner.Benefit" />} key="benefit">
+                        <BenefitsList startDate={startDate} endDate={endDate} customerAccount={this.state.customerAccount} />
+                      </TabPane>
+                    )
+                    : null
+                }
+                <TabPane tab={RCi18n({ id: "PetOwner.OOSwaitingList" })} key="oss">
+                  <OOSwaitingList customerId={this.state.customerId} />
+                </TabPane>
               </Tabs>
             </div>
           </Spin>

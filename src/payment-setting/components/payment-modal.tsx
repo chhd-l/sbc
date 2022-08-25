@@ -436,20 +436,53 @@ class PaymentModal extends React.Component<any, any> {
                       {item.isOpen == 1 && (
                         <Col span={24} className="newAddSwitch">
                           <FormItem {...formItemLayout} label={<FormattedMessage id="displayCheckoutPage" />}>
-                            {getFieldDecorator(item.id + 'isDisplay', {
-                              initialValue: item.isDisplay == this.isDisplayValue(item.code)
+                            {getFieldDecorator(item.id + 'businessType', {
+                              initialValue:
+                              item.businessType
+                              // initialValue: item.isDisplay == this.isDisplayValue(item.code)
                             })(
-                              <Switch
-                                defaultChecked={item.isDisplay == this.isDisplayValue(item.code)}
-                                checked={item.isDisplay == this.isDisplayValue(item.code)}
-                                onChange={(value) => {
-                                  onFormChange({
-                                    id: key,
-                                    field: 'isDisplay',
-                                    value: value ? this.isDisplayValue(item.code) : 0
+                              <Select
+                              mode="multiple"
+                              onChange={(values) => {
+                                let businessTypeList = [];
+                                console.info('values',values)
+                                paymentForm.payPspBussinessTypeVOList?.map((item) => {
+                                  values.map((value) => {
+                                    if (value == item.value) {
+                                      businessTypeList.push(value)
+                                      // businessTypeList[idx] = value;
+                                    }
                                   });
-                                }}
-                              />
+                                });
+                                console.info('businessTypeListbusinessTypeList',businessTypeList)
+                                onFormChange({
+                                  id: key,
+                                  field: 'businessType',
+                                  value: businessTypeList
+                                });
+                              }}
+                            >
+                              {paymentForm.payPspBussinessTypeVOList &&
+                                paymentForm.payPspBussinessTypeVOList.map((b, i) => {
+                                  // console.info(b,'bbbbbbbbbbbbbbbbbbbbbbbbbb')
+                                  return (
+                                    <Option value={b.value} key={i}>
+                                      {b.label}
+                                    </Option>
+                                  );
+                                })}
+                            </Select>
+                              // <Switch
+                              //   defaultChecked={item.isDisplay == this.isDisplayValue(item.code)}
+                              //   checked={item.isDisplay == this.isDisplayValue(item.code)}
+                              //   onChange={(value) => {
+                              //     onFormChange({
+                              //       id: key,
+                              //       field: 'isDisplay',
+                              //       value: value ? this.isDisplayValue(item.code) : 0
+                              //     });
+                              //   }}
+                              // />
                             )}
                           </FormItem>
                         </Col>
@@ -551,20 +584,49 @@ class PaymentModal extends React.Component<any, any> {
                         {item.isOpen == 1 && (
                           <Col span={24} className="newAddSwitch">
                             <FormItem {...formItemLayout} label={<FormattedMessage id="Display on checkout page" />}>
-                              {getFieldDecorator(item.id + 'isDisplay', {
-                                initialValue: item.isDisplay == 1
+                              {getFieldDecorator(item.id + 'businessType', {
+                                initialValue:
+                                item.businessType
+                                // initialValue: item.isDisplay == 1
                               })(
-                                <Switch
-                                  defaultChecked={item.isDisplay == 1}
-                                  checked={item.isDisplay == 1}
-                                  onChange={(value) => {
-                                    onFormChange({
-                                      id: key,
-                                      field: 'isDisplay',
-                                      value: value ? 1 : 0
-                                    });
-                                  }}
-                                />
+                                <Select
+                              mode="multiple"
+                              onChange={(values) => {
+                                let businessTypeList = [];
+                                paymentForm.payPspBussinessTypeVOList.map((item) => {
+                                  values.map((value) => {
+                                    if (value === item.value) {
+                                      businessTypeList.push(value);
+                                    }
+                                  });
+                                });
+                                onFormChange({
+                                  id: key,
+                                  field: 'businessType',
+                                  value: businessTypeList
+                                });
+                              }}
+                            >
+                              {paymentForm.payPspBussinessTypeVOList &&
+                                paymentForm.payPspBussinessTypeVOList.map((b, i) => {
+                                  return (
+                                    <Option value={b.value} key={i}>
+                                      {b.label}
+                                    </Option>
+                                  );
+                                })}
+                            </Select>
+                                // <Switch
+                                //   defaultChecked={item.isDisplay == 1}
+                                //   checked={item.isDisplay == 1}
+                                //   onChange={(value) => {
+                                //     onFormChange({
+                                //       id: key,
+                                //       field: 'isDisplay',
+                                //       value: value ? 1 : 0
+                                //     });
+                                //   }}
+                                // />
                               )}
                             </FormItem>
                           </Col>
@@ -686,7 +748,8 @@ class PaymentModal extends React.Component<any, any> {
                   ? payPspItemVOList.pspConfigSupplierVO.pspItemId
                   : payPspItemVOList.id,
               isOpen: payPspItemVOList.isOpen,
-              isDisplay: payPspItemVOList.isDisplay,
+              isDisplay: payPspItemVOList.businessType?.length==0?0:1,
+              businessType: payPspItemVOList.businessType.join(','),
               isTwoStages: payPspItemVOList.isTwoStages,
               maxAmount: payPspItemVOList.maxAmount,
               pspItemCardTypeSaveRequestList: payPspItemVOList.payPspItemCardTypeVOList,

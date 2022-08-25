@@ -1,5 +1,23 @@
 import React from 'react';
-import { Form, Card, Avatar, Input, InputNumber, DatePicker, Button, Select, message, Table, Row, Col, Breadcrumb, Modal, Empty, Icon, Tooltip } from 'antd';
+import {
+  Form,
+  Card,
+  Avatar,
+  Input,
+  InputNumber,
+  DatePicker,
+  Button,
+  Select,
+  message,
+  Table,
+  Row,
+  Col,
+  Breadcrumb,
+  Modal,
+  Empty,
+  Icon,
+  Tooltip
+} from 'antd';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
@@ -17,7 +35,12 @@ import BenefitsList from './component/benefits-list';
 import EmailEditForm from './component/email-edit-form';
 import { PostalCodeMsg } from 'biz';
 
-import { getAddressInputTypeSetting, getAddressFieldList, getCountryList, getTaggingList } from './component/webapi';
+import {
+  getAddressInputTypeSetting,
+  getAddressFieldList,
+  getCountryList,
+  getTaggingList
+} from './component/webapi';
 
 import './index.less';
 import json from 'web_modules/qmkit/json';
@@ -54,14 +77,17 @@ export const FORM_FIELD_MAP = {
 };
 
 export async function getPetsBreedListByType(type: string) {
-  return await webapi.querySysDictionary({
-    type: type
-  }).then((data) => {
-    return data.res.context?.sysDictionaryVOS ?? [];
-  }).catch(() => {
-    return [];
-  });
-};
+  return await webapi
+    .querySysDictionary({
+      type: type
+    })
+    .then((data) => {
+      return data.res.context?.sysDictionaryVOS ?? [];
+    })
+    .catch(() => {
+      return [];
+    });
+}
 
 export async function getAddressConfig() {
   let fields = [];
@@ -70,7 +96,7 @@ export async function getAddressConfig() {
     fields = await getAddressFieldList(addressInputType);
   }
   return fields;
-};
+}
 
 const calcPetAge = (dateStr: string) => {
   const birthday = moment(dateStr, 'YYYY-MM-DD');
@@ -82,7 +108,10 @@ const calcPetAge = (dateStr: string) => {
   } else {
     const diffYear = Math.floor(diffMonth / 12);
     const diffMonthAfterYear = diffMonth % 12;
-    return `${diffYear} ${diffYear > 1 ? 'years' : 'year'} ${diffMonthAfterYear === 0 ? '' : `${diffMonthAfterYear} ${diffMonthAfterYear > 1 ? 'months' : 'month'}`}`;
+    return `${diffYear} ${diffYear > 1 ? 'years' : 'year'} ${diffMonthAfterYear === 0
+        ? ''
+        : `${diffMonthAfterYear} ${diffMonthAfterYear > 1 ? 'months' : 'month'}`
+      }`;
   }
 };
 
@@ -112,7 +141,7 @@ export default class CustomerDetails extends React.Component<any, any> {
       endDate: moment().format('YYYY-MM-DD'),
       fieldList: [],
       countryList: [],
-      showElem: false,
+      showElem: false
     };
   }
   componentDidMount() {
@@ -122,7 +151,9 @@ export default class CustomerDetails extends React.Component<any, any> {
     this.getTagList();
     this.getAddressCon();
     if (this.props.location.query && this.props.location.query.hash) {
-      document.getElementById('page-content').scrollTo(0, document.getElementById(this.props.location.query.hash).offsetTop + 40);
+      document
+        .getElementById('page-content')
+        .scrollTo(0, document.getElementById(this.props.location.query.hash).offsetTop + 40);
     }
   }
 
@@ -179,11 +210,18 @@ export default class CustomerDetails extends React.Component<any, any> {
 
   getPetsList = async () => {
     const { customerAccount } = this.state;
-    const [dogBreedList, catBreedList] = await Promise.all([getPetsBreedListByType('dogBreed'), getPetsBreedListByType('catBreed')]);
+    const [dogBreedList, catBreedList] = await Promise.all([
+      getPetsBreedListByType('dogBreed'),
+      getPetsBreedListByType('catBreed')
+    ]);
     const pets = await webapi.petsByConsumer({ consumerAccount: customerAccount }).then((data) => {
-      return (data.res.context?.context ?? []).map(pet => ({
+      return (data.res.context?.context ?? []).map((pet) => ({
         ...pet,
-        petsBreedName: pet.isPurebred ? (((pet.petsType === 'dog' ? dogBreedList : catBreedList).find(breed => breed.value === pet.petsBreed || breed.valueEn === pet.petsBreed) ?? {})['name'] ?? pet.petsBreed) : webapi.getMixedBreedDisplayName()
+        petsBreedName: pet.isPurebred
+          ? ((pet.petsType === 'dog' ? dogBreedList : catBreedList).find(
+            (breed) => breed.value === pet.petsBreed || breed.valueEn === pet.petsBreed
+          ) ?? {})['name'] ?? pet.petsBreed
+          : webapi.getMixedBreedDisplayName()
       }));
     });
     this.setState({
@@ -204,7 +242,9 @@ export default class CustomerDetails extends React.Component<any, any> {
     webapi
       .setTagging({
         relationId: this.state.customerId,
-        segmentIdList: tagList.filter((tag) => values.indexOf(tag.name) > -1 && tag.segmentType == 0).map((tag) => tag.id),
+        segmentIdList: tagList
+          .filter((tag) => values.indexOf(tag.name) > -1 && tag.segmentType == 0)
+          .map((tag) => tag.id),
         segmentType: 0
       })
       .then(() => { });
@@ -290,7 +330,7 @@ export default class CustomerDetails extends React.Component<any, any> {
     this.setState((state) => ({
       showElem: !state.showElem
     }));
-  }
+  };
   openDeliveryPage = (addressType, delivery) => {
     this.setState({
       displayPage: 'delivery',
@@ -315,7 +355,8 @@ export default class CustomerDetails extends React.Component<any, any> {
   };
 
   render() {
-    const { displayPage, basic, memberShip, pets, delivery, addressType, startDate, endDate } = this.state;
+    const { displayPage, basic, memberShip, pets, delivery, addressType, startDate, endDate } =
+      this.state;
 
     if (displayPage === 'delivery') {
       return (
@@ -331,9 +372,18 @@ export default class CustomerDetails extends React.Component<any, any> {
                 <FormattedMessage id="PetOwner.petOwnerDetail" />
               </a>
             </Breadcrumb.Item>
-            <Breadcrumb.Item>{addressType === 'delivery' ? RCi18n({ id: "Order.deliveryInformation" }) : RCi18n({ id: "Subscription.Billing information" })}</Breadcrumb.Item>
+            <Breadcrumb.Item>
+              {addressType === 'delivery'
+                ? RCi18n({ id: 'Order.deliveryInformation' })
+                : RCi18n({ id: 'Subscription.Billing information' })}
+            </Breadcrumb.Item>
           </BreadCrumb>
-          <DeliveryItem customerId={this.state.customerId} delivery={delivery} addressType={addressType} backToDetail={this.backToDetail} />
+          <DeliveryItem
+            customerId={this.state.customerId}
+            delivery={delivery}
+            addressType={addressType}
+            backToDetail={this.backToDetail}
+          />
         </div>
       );
     }
@@ -345,20 +395,29 @@ export default class CustomerDetails extends React.Component<any, any> {
       <>
         <div>
           <BreadCrumb thirdLevel={true}>
-            <Breadcrumb.Item><FormattedMessage id="PetOwner.petOwnerDetail" /></Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <FormattedMessage id="PetOwner.petOwnerDetail" />
+            </Breadcrumb.Item>
           </BreadCrumb>
           {/*导航面包屑*/}
           <Spin spinning={this.state.loading}>
             <div className="detail-container">
               <Headline
-                title={RCi18n({ id: "PetOwner.BasicInformation" })}
+                title={RCi18n({ id: 'PetOwner.BasicInformation' })}
                 extra={
                   <>
-                    <Link to={`/edit-petowner/${this.state.customerId}/${this.state.customerAccount}`}>
-                      <i className="iconfont iconDetails"></i> <FormattedMessage id="PetOwner.Detail" />
+                    <Link
+                      to={`/edit-petowner/${this.state.customerId}/${this.state.customerAccount}`}
+                    >
+                      <i className="iconfont iconDetails"></i>{' '}
+                      <FormattedMessage id="PetOwner.Detail" />
                     </Link>
-                    <Link to={`/pet-owner-activity/${this.state.customerId}`} style={{ marginLeft: '20px' }}>
-                      <i className="iconfont iconfenxiang"></i> <FormattedMessage id="Home.Overview" />
+                    <Link
+                      to={`/pet-owner-activity/${this.state.customerId}`}
+                      style={{ marginLeft: '20px' }}
+                    >
+                      <i className="iconfont iconfenxiang"></i>{' '}
+                      <FormattedMessage id="Home.Overview" />
                     </Link>
                   </>
                 }
@@ -384,7 +443,9 @@ export default class CustomerDetails extends React.Component<any, any> {
                     <div style={{ paddingLeft: 19 }}>{basic.customerName}</div>
                   </Col>
                   <Col span={4}>
-                    <div style={{ paddingLeft: 19 }}>{basic.birthDay ? calcPetOwnerAge(basic.birthDay) : ''}</div>
+                    <div style={{ paddingLeft: 19 }}>
+                      {basic.birthDay ? calcPetOwnerAge(basic.birthDay) : ''}
+                    </div>
                   </Col>
                 </Row>
               </div>
@@ -396,13 +457,19 @@ export default class CustomerDetails extends React.Component<any, any> {
                         <FormattedMessage id="PetOwner.RegistrationDate" />
                       </Col>
                       <Col span={8} className="text-highlight">
-                        {basic.createTime ? moment(basic.createTime, 'YYYY-MM-DD').format('YYYY-MM-DD') : ''}
+                        {basic.createTime
+                          ? moment(basic.createTime, 'YYYY-MM-DD').format('YYYY-MM-DD')
+                          : ''}
                       </Col>
                       <Col span={4} className="text-tip">
                         <FormattedMessage id="PetOwner.emailAddress" />
                       </Col>
                       <Col span={8} className="text-highlight">
-                        <EmailEditForm customerId={this.state.customerId} email={basic.email} disableEdit={basic.hasModify === 1} />
+                        <EmailEditForm
+                          customerId={this.state.customerId}
+                          email={basic.email}
+                          disableEdit={basic.hasModify === 1}
+                        />
                       </Col>
                       <Col span={4} className="text-tip">
                         <FormattedMessage id="PetOwner.PreferChannel" />
@@ -411,7 +478,11 @@ export default class CustomerDetails extends React.Component<any, any> {
                         {['Email', 'Phone', 'Print']
                           .reduce((prev, curr) => {
                             if (+basic[`communication${curr}`]) {
-                              prev.push(curr === 'Print' ? RCi18n({ id: "PetOwner.Message" }) : RCi18n({ id: `PetOwner.${curr}` }));
+                              prev.push(
+                                curr === 'Print'
+                                  ? RCi18n({ id: 'PetOwner.Message' })
+                                  : RCi18n({ id: `PetOwner.${curr}` })
+                              );
                             }
                             return prev;
                           }, [])
@@ -420,22 +491,32 @@ export default class CustomerDetails extends React.Component<any, any> {
 
                       {this.state.fieldList.map((field, idx) => (
                         <>
-                          <Col key={`label${idx * Math.rdmValue()}`} span={4} className="text-tip">{RCi18n({ id: `PetOwner.${storeId === 123457919 ? 'AddressForm.' : ''}${field.fieldName}` })}</Col>
-                          <Col key={`field${idx * Math.rdmValue()}`} span={8} className="text-highlight">
-                            {
-                              field.fieldName === 'Country'
-                                ? (basic.countryId ? this.state.countryList.find(c => c.id === basic.countryId)?.name : basic.country)
-                                : (basic[FORM_FIELD_MAP[field.fieldName]])
-                            }
+                          <Col key={`label${idx * Math.rdmValue()}`} span={4} className="text-tip">
+                            {RCi18n({
+                              id: `PetOwner.${storeId === 123457919 ? 'AddressForm.' : ''}${field.fieldName
+                                }`
+                            })}
+                          </Col>
+                          <Col
+                            key={`field${idx * Math.rdmValue()}`}
+                            span={8}
+                            className="text-highlight"
+                          >
+                            {field.fieldName === 'Country'
+                              ? basic.countryId
+                                ? this.state.countryList.find((c) => c.id === basic.countryId)?.name
+                                : basic.country
+                              : basic[FORM_FIELD_MAP[field.fieldName]]}
                           </Col>
                         </>
                       ))}
-                      {
-                        !basic?.validFlag
-                          ? basic.alert && <Col span={24}><PostalCodeMsg text={basic.alert} /></Col>
-                          : null
-                      }
-
+                      {!basic?.validFlag
+                        ? basic.alert && (
+                          <Col span={24}>
+                            <PostalCodeMsg text={basic.alert} />
+                          </Col>
+                        )
+                        : null}
                     </Row>
                   </Col>
                 </Row>
@@ -448,82 +529,135 @@ export default class CustomerDetails extends React.Component<any, any> {
                     {basic.userConsentList && basic.userConsentList.length > 0 ? basic.userConsentList.map((consent, idx) => <div key={idx} dangerouslySetInnerHTML={{ __html: consent.consentTitle }}></div>) : null}
                   </Col>
                 </Row> */}
-
               </div>
             </div>
-            {
-              isClubMember
-                ? (
-                  <div className="detail-container">
-                    <Headline
-                      title={<FormattedMessage id="PetOwner.Membership" />}
-                    />
-                    <Row>
-                      <Col span={24}>
-                        <div className="Membership-info-detail">
-                          <Row type="flex" align="middle">
-                            <Col span={13}>
-                              <i className="iconfont iconhuangguan1" style={{ fontSize: '20px', marginRight: '20px', color: 'var(--primary-color)' }} />
-                              <FormattedMessage id="PetOwner.ClubMember" />
-                            </Col>
-                            <Col span={11}>
-                              <div style={{
-                                position: 'absolute',
-                                right: '20px',
-                                top: "-10px"
-                              }}>
-                                <span onClick={this.handleChangeshowElem} style={{ cursor: 'pointer', color: "var(--primary-color)" }}><FormattedMessage id="PetOwner.more" /> <i style={{ fontSize: "12px", marginLeft: '-2px' }}><Icon type={this.state.showElem ? 'down' : 'up'} /></i></span>
-                              </div>
-                            </Col>
-                          </Row>
-                          <div className={`${this.state.showElem ? '' : 'hide'} word-style`}>
-                            <Row gutter={16}>
-                              <Col span={12} className="text-tip">
-                                <div className='Membership-info-box'>
-                                  <span className='Membership-info-box-label'><FormattedMessage id="PetOwner.AdmissionDate" />:</span>
-                                  <span className='Membership-info-box-text'>{memberShip.admissionDate ? moment(memberShip.admissionDate, 'YYYY-MM-DD').format('YYYY-MM-DD') : ''}</span>
-                                </div>
-                              </Col>
-                              <Col span={12} className="text-tip">
-                                <div className='Membership-info-box'>
-                                  <span className='Membership-info-box-label'><FormattedMessage id="PetOwner.SubscriptionNo" />:</span>
-                                  <span className='Membership-info-box-text' style={{ color: "var(--primary-color)", textDecoration: "underline" }}>{memberShip.subscriptionNo}</span>
-                                </div>
-                              </Col>
-                            </Row>
-                            <Row gutter={16}>
-                              <Col span={24} className="text-tip" >
-                                <FormattedMessage id="PetOwner.ClubLoyaltyProgram" />
-                                {/*<span>{memberShip.clubLoyaltyProgram}</span>*/}
-                              </Col>
-                              <Col span={12} className="text-tip">
-                                <div className='Membership-info-box'>
-                                  <span className='Membership-info-box-label'><FormattedMessage id="PetOwner.WelcomeBox" />:</span>
-                                  <span className='Membership-info-box-text' style={{ color: "#585858", fontSize: 16 }}>{memberShip.welcomeBox}</span>
-                                </div>
-                              </Col>
-                              <Col span={12} className="text-tip">
-                                <div className='Membership-info-box'>
-                                  <span className='Membership-info-box-label'><FormattedMessage id="PetOwner.ConsumptionGift" />:</span>
-                                  <span className='Membership-info-box-text' style={{ color: "var(--primary-color)", textDecoration: "underline" }}>{memberShip.consumptionGift}</span>
-                                </div>
-                              </Col>
-                            </Row>
+            {isClubMember ? (
+              <div className="detail-container">
+                <Headline title={<FormattedMessage id="PetOwner.Membership" />} />
+                <Row>
+                  <Col span={24}>
+                    <div className="Membership-info-detail">
+                      <Row type="flex" align="middle">
+                        <Col span={13}>
+                          <i
+                            className="iconfont iconhuangguan1"
+                            style={{
+                              fontSize: '20px',
+                              marginRight: '20px',
+                              color: 'var(--primary-color)'
+                            }}
+                          />
+                          <FormattedMessage id="PetOwner.ClubMember" />
+                        </Col>
+                        <Col span={11}>
+                          <div
+                            style={{
+                              position: 'absolute',
+                              right: '20px',
+                              top: '-10px'
+                            }}
+                          >
+                            <span
+                              onClick={this.handleChangeshowElem}
+                              style={{ cursor: 'pointer', color: 'var(--primary-color)' }}
+                            >
+                              <FormattedMessage id="PetOwner.more" />{' '}
+                              <i style={{ fontSize: '12px', marginLeft: '-2px' }}>
+                                <Icon type={this.state.showElem ? 'down' : 'up'} />
+                              </i>
+                            </span>
                           </div>
-                        </div>
-                      </Col>
-                    </Row>
-                  </div>
-                )
-                : null
-            }
+                        </Col>
+                      </Row>
+                      <div className={`${this.state.showElem ? '' : 'hide'} word-style`}>
+                        <Row gutter={16}>
+                          <Col span={12} className="text-tip">
+                            <div className="Membership-info-box">
+                              <span className="Membership-info-box-label">
+                                <FormattedMessage id="PetOwner.AdmissionDate" />:
+                              </span>
+                              <span className="Membership-info-box-text">
+                                {memberShip.admissionDate
+                                  ? moment(memberShip.admissionDate, 'YYYY-MM-DD').format(
+                                    'YYYY-MM-DD'
+                                  )
+                                  : ''}
+                              </span>
+                            </div>
+                          </Col>
+                          <Col span={12} className="text-tip">
+                            <div className="Membership-info-box">
+                              <span className="Membership-info-box-label">
+                                <FormattedMessage id="PetOwner.SubscriptionNo" />:
+                              </span>
+                              <span
+                                className="Membership-info-box-text"
+                                style={{
+                                  color: 'var(--primary-color)',
+                                  textDecoration: 'underline'
+                                }}
+                              >
+                                {memberShip.subscriptionNo}
+                              </span>
+                            </div>
+                          </Col>
+                        </Row>
+                        <Row gutter={16}>
+                          <Col span={24} className="text-tip">
+                            <FormattedMessage id="PetOwner.ClubLoyaltyProgram" />
+                            {/*<span>{memberShip.clubLoyaltyProgram}</span>*/}
+                          </Col>
+                          <Col span={12} className="text-tip">
+                            <div className="Membership-info-box">
+                              <span className="Membership-info-box-label">
+                                <FormattedMessage id="PetOwner.WelcomeBox" />:
+                              </span>
+                              <span
+                                className="Membership-info-box-text"
+                                style={{ color: '#585858', fontSize: 16 }}
+                              >
+                                {memberShip.welcomeBox}
+                              </span>
+                            </div>
+                          </Col>
+                          <Col span={12} className="text-tip">
+                            <div className="Membership-info-box">
+                              <span className="Membership-info-box-label">
+                                <FormattedMessage id="PetOwner.ConsumptionGift" />:
+                              </span>
+                              <span
+                                className="Membership-info-box-text"
+                                style={{
+                                  color: 'var(--primary-color)',
+                                  textDecoration: 'underline'
+                                }}
+                              >
+                                {memberShip.consumptionGift}
+                              </span>
+                            </div>
+                          </Col>
+                        </Row>
+                      </div>
+                    </div>
+                  </Col>
+                </Row>
+              </div>
+            ) : null}
             <div className="detail-container">
               <Headline title="Tagging" />
               <Row>
                 <Col span={12}>
-                  <div className="text-highlight"><FormattedMessage id="PetOwner.TagName" /></div>
+                  <div className="text-highlight">
+                    <FormattedMessage id="PetOwner.TagName" />
+                  </div>
                   <div>
-                    <Select style={{ width: '100%' }} value={this.state.petOwnerTag} mode="multiple" onChange={this.setPetOwnerTagging} getPopupContainer={(trigger: any) => trigger.parentNode}>
+                    <Select
+                      style={{ width: '100%' }}
+                      value={this.state.petOwnerTag}
+                      mode="multiple"
+                      onChange={this.setPetOwnerTagging}
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
+                    >
                       {this.state.tagList
                         .filter((item) => item.segmentType == 0)
                         .map((v, idx) => (
@@ -548,13 +682,25 @@ export default class CustomerDetails extends React.Component<any, any> {
                             <span className="iconfont iconDelete"></span> Delete
                           </Button>
                         </Popconfirm> */}
-                        <Link to={`/edit-pet/${this.state.customerId}/${this.state.customerAccount}/${pet.petsId}`}>
-                          <span className="iconfont iconDetails"></span> <FormattedMessage id="PetOwner.Detail" />
+                        <Link
+                          to={`/edit-pet/${this.state.customerId}/${this.state.customerAccount}/${pet.petsId}`}
+                        >
+                          <span className="iconfont iconDetails"></span>{' '}
+                          <FormattedMessage id="PetOwner.Detail" />
                         </Link>
                       </div>
                       <Row gutter={10}>
                         <Col span={6}>
-                          <Avatar size={70} src={pet.petsImg && pet.petsImg.startsWith('http') ? pet.petsImg : pet.petsType === 'dog' ? dogImg : catImg} />
+                          <Avatar
+                            size={70}
+                            src={
+                              pet.petsImg && pet.petsImg.startsWith('http')
+                                ? pet.petsImg
+                                : pet.petsType === 'dog'
+                                  ? dogImg
+                                  : catImg
+                            }
+                          />
                         </Col>
                         <Col span={18}>
                           <Row>
@@ -563,21 +709,41 @@ export default class CustomerDetails extends React.Component<any, any> {
                             </Col>
                           </Row>
                           <Row gutter={4} className="text-tip">
-                            <Col span={12}><FormattedMessage id="PetOwner.Age" /></Col>
-                            <Col span={12}><FormattedMessage id="PetOwner.Breed" /></Col>
+                            <Col span={12}>
+                              <FormattedMessage id="PetOwner.Age" />
+                            </Col>
+                            <Col span={12}>
+                              <FormattedMessage id="PetOwner.Breed" />
+                            </Col>
                           </Row>
                           <Row gutter={4} style={{ fontSize: 16 }}>
                             <Col span={12}>
                               {pet.birthOfPets && (
                                 <Tooltip title={calcPetAge(pet.birthOfPets)}>
-                                  <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>{calcPetAge(pet.birthOfPets)}</div>
+                                  <div
+                                    style={{
+                                      whiteSpace: 'nowrap',
+                                      textOverflow: 'ellipsis',
+                                      overflow: 'hidden'
+                                    }}
+                                  >
+                                    {calcPetAge(pet.birthOfPets)}
+                                  </div>
                                 </Tooltip>
                               )}
                             </Col>
                             <Col span={12}>
                               {pet.petsBreed && (
                                 <Tooltip title={pet.petsBreedName}>
-                                  <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>{pet.petsBreedName}</div>
+                                  <div
+                                    style={{
+                                      whiteSpace: 'nowrap',
+                                      textOverflow: 'ellipsis',
+                                      overflow: 'hidden'
+                                    }}
+                                  >
+                                    {pet.petsBreedName}
+                                  </div>
                                 </Tooltip>
                               )}
                             </Col>

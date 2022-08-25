@@ -21,6 +21,7 @@ import { getAddressInputTypeSetting, getAddressFieldList, getCountryList, getTag
 
 import './index.less';
 import json from 'web_modules/qmkit/json';
+import OOSwaitingList from './component/OOSwaitingList';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -220,7 +221,7 @@ export default class CustomerDetails extends React.Component<any, any> {
   showConfirm(id) {
     const that = this;
     confirm({
-      title: RCi18n({id:"PetOwner.DeleteThisItem"}),
+      title: RCi18n({ id: "PetOwner.DeleteThisItem" }),
       onOk() {
         return that.removeConsumer(id);
       },
@@ -242,7 +243,7 @@ export default class CustomerDetails extends React.Component<any, any> {
       .delCustomer(params)
       .then((data) => {
         if (data.res.code === Const.SUCCESS_CODE) {
-          message.success(RCi18n({id:"PetOwner.OperateSuccessfully"}));
+          message.success(RCi18n({ id: "PetOwner.OperateSuccessfully" }));
           history.push('/customer-list');
         } else {
           this.setState({
@@ -330,7 +331,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                 <FormattedMessage id="PetOwner.petOwnerDetail" />
               </a>
             </Breadcrumb.Item>
-            <Breadcrumb.Item>{addressType === 'delivery' ? RCi18n({id:"Order.deliveryInformation"}) : RCi18n({id:"Subscription.Billing information"})}</Breadcrumb.Item>
+            <Breadcrumb.Item>{addressType === 'delivery' ? RCi18n({ id: "Order.deliveryInformation" }) : RCi18n({ id: "Subscription.Billing information" })}</Breadcrumb.Item>
           </BreadCrumb>
           <DeliveryItem customerId={this.state.customerId} delivery={delivery} addressType={addressType} backToDetail={this.backToDetail} />
         </div>
@@ -350,7 +351,7 @@ export default class CustomerDetails extends React.Component<any, any> {
           <Spin spinning={this.state.loading}>
             <div className="detail-container">
               <Headline
-                title={RCi18n({id:"PetOwner.BasicInformation"})}
+                title={RCi18n({ id: "PetOwner.BasicInformation" })}
                 extra={
                   <>
                     <Link to={`/edit-petowner/${this.state.customerId}/${this.state.customerAccount}`}>
@@ -410,28 +411,28 @@ export default class CustomerDetails extends React.Component<any, any> {
                         {['Email', 'Phone', 'Print']
                           .reduce((prev, curr) => {
                             if (+basic[`communication${curr}`]) {
-                              prev.push(curr === 'Print' ? RCi18n({id:"PetOwner.Message"}) : RCi18n({id:`PetOwner.${curr}`}));
+                              prev.push(curr === 'Print' ? RCi18n({ id: "PetOwner.Message" }) : RCi18n({ id: `PetOwner.${curr}` }));
                             }
                             return prev;
                           }, [])
                           .join(' ')}
                       </Col>
-                    
+
                       {this.state.fieldList.map((field, idx) => (
                         <>
-                          <Col key={`label${idx*Math.rdmValue()}`} span={4} className="text-tip">{RCi18n({id:`PetOwner.${storeId === 123457919 ? 'AddressForm.' : ''}${field.fieldName}`})}</Col>
-                          <Col key={`field${idx*Math.rdmValue()}`} span={8} className="text-highlight">
+                          <Col key={`label${idx * Math.rdmValue()}`} span={4} className="text-tip">{RCi18n({ id: `PetOwner.${storeId === 123457919 ? 'AddressForm.' : ''}${field.fieldName}` })}</Col>
+                          <Col key={`field${idx * Math.rdmValue()}`} span={8} className="text-highlight">
                             {
                               field.fieldName === 'Country'
-                              ? (basic.countryId ? this.state.countryList.find(c => c.id === basic.countryId)?.name : basic.country)
-                              : (basic[FORM_FIELD_MAP[field.fieldName]])
+                                ? (basic.countryId ? this.state.countryList.find(c => c.id === basic.countryId)?.name : basic.country)
+                                : (basic[FORM_FIELD_MAP[field.fieldName]])
                             }
                           </Col>
                         </>
                       ))}
                       {
                         !basic?.validFlag
-                          ?basic.alert && <Col span={24}><PostalCodeMsg text={basic.alert}/></Col>
+                          ? basic.alert && <Col span={24}><PostalCodeMsg text={basic.alert} /></Col>
                           : null
                       }
 
@@ -452,69 +453,69 @@ export default class CustomerDetails extends React.Component<any, any> {
             </div>
             {
               isClubMember
-                  ? (
-                      <div className="detail-container">
-                        <Headline
-                            title={<FormattedMessage id="PetOwner.Membership" />}
-                        />
-                        <Row>
-                          <Col span={24}>
-                            <div className="Membership-info-detail">
-                              <Row type="flex" align="middle">
-                                <Col span={13}>
-                                  <i className="iconfont iconhuangguan1" style={{fontSize: '20px', marginRight: '20px', color: 'var(--primary-color)'}}/>
-                                  <FormattedMessage id="PetOwner.ClubMember" />
-                                </Col>
-                                <Col span={11}>
-                                  <div style={{
-                                    position: 'absolute',
-                                    right: '20px',
-                                    top: "-10px"
-                                  }}>
-                                    <span onClick={this.handleChangeshowElem} style={{ cursor: 'pointer', color: "var(--primary-color)" }}><FormattedMessage id="PetOwner.more" /> <i style={{ fontSize: "12px", marginLeft: '-2px' }}><Icon type={this.state.showElem ? 'down' : 'up'} /></i></span>
-                                  </div>
-                                </Col>
-                              </Row>
-                              <div className={`${this.state.showElem ? '' : 'hide'} word-style`}>
-                                <Row gutter={16}>
-                                  <Col span={12} className="text-tip">
-                                    <div className='Membership-info-box'>
-                                      <span className='Membership-info-box-label'><FormattedMessage id="PetOwner.AdmissionDate" />:</span>
-                                      <span className='Membership-info-box-text'>{memberShip.admissionDate ? moment(memberShip.admissionDate, 'YYYY-MM-DD').format('YYYY-MM-DD') : ''}</span>
-                                    </div>
-                                  </Col>
-                                  <Col span={12} className="text-tip">
-                                    <div className='Membership-info-box'>
-                                      <span className='Membership-info-box-label'><FormattedMessage id="PetOwner.SubscriptionNo" />:</span>
-                                      <span className='Membership-info-box-text' style={{ color: "var(--primary-color)", textDecoration: "underline" }}>{memberShip.subscriptionNo}</span>
-                                    </div>
-                                  </Col>
-                                </Row>
-                                <Row gutter={16}>
-                                  <Col span={24} className="text-tip" >
-                                    <FormattedMessage id="PetOwner.ClubLoyaltyProgram" />
-                                    {/*<span>{memberShip.clubLoyaltyProgram}</span>*/}
-                                  </Col>
-                                  <Col span={12} className="text-tip">
-                                    <div className='Membership-info-box'>
-                                      <span className='Membership-info-box-label'><FormattedMessage id="PetOwner.WelcomeBox" />:</span>
-                                      <span className='Membership-info-box-text' style={{ color: "#585858", fontSize: 16 }}>{memberShip.welcomeBox}</span>
-                                    </div>
-                                  </Col>
-                                  <Col span={12} className="text-tip">
-                                    <div className='Membership-info-box'>
-                                      <span className='Membership-info-box-label'><FormattedMessage id="PetOwner.ConsumptionGift" />:</span>
-                                      <span className='Membership-info-box-text' style={{ color: "var(--primary-color)", textDecoration: "underline" }}>{memberShip.consumptionGift}</span>
-                                    </div>
-                                  </Col>
-                                </Row>
+                ? (
+                  <div className="detail-container">
+                    <Headline
+                      title={<FormattedMessage id="PetOwner.Membership" />}
+                    />
+                    <Row>
+                      <Col span={24}>
+                        <div className="Membership-info-detail">
+                          <Row type="flex" align="middle">
+                            <Col span={13}>
+                              <i className="iconfont iconhuangguan1" style={{ fontSize: '20px', marginRight: '20px', color: 'var(--primary-color)' }} />
+                              <FormattedMessage id="PetOwner.ClubMember" />
+                            </Col>
+                            <Col span={11}>
+                              <div style={{
+                                position: 'absolute',
+                                right: '20px',
+                                top: "-10px"
+                              }}>
+                                <span onClick={this.handleChangeshowElem} style={{ cursor: 'pointer', color: "var(--primary-color)" }}><FormattedMessage id="PetOwner.more" /> <i style={{ fontSize: "12px", marginLeft: '-2px' }}><Icon type={this.state.showElem ? 'down' : 'up'} /></i></span>
                               </div>
-                            </div>
-                          </Col>
-                        </Row>
-                      </div>
-                  )
-                  : null
+                            </Col>
+                          </Row>
+                          <div className={`${this.state.showElem ? '' : 'hide'} word-style`}>
+                            <Row gutter={16}>
+                              <Col span={12} className="text-tip">
+                                <div className='Membership-info-box'>
+                                  <span className='Membership-info-box-label'><FormattedMessage id="PetOwner.AdmissionDate" />:</span>
+                                  <span className='Membership-info-box-text'>{memberShip.admissionDate ? moment(memberShip.admissionDate, 'YYYY-MM-DD').format('YYYY-MM-DD') : ''}</span>
+                                </div>
+                              </Col>
+                              <Col span={12} className="text-tip">
+                                <div className='Membership-info-box'>
+                                  <span className='Membership-info-box-label'><FormattedMessage id="PetOwner.SubscriptionNo" />:</span>
+                                  <span className='Membership-info-box-text' style={{ color: "var(--primary-color)", textDecoration: "underline" }}>{memberShip.subscriptionNo}</span>
+                                </div>
+                              </Col>
+                            </Row>
+                            <Row gutter={16}>
+                              <Col span={24} className="text-tip" >
+                                <FormattedMessage id="PetOwner.ClubLoyaltyProgram" />
+                                {/*<span>{memberShip.clubLoyaltyProgram}</span>*/}
+                              </Col>
+                              <Col span={12} className="text-tip">
+                                <div className='Membership-info-box'>
+                                  <span className='Membership-info-box-label'><FormattedMessage id="PetOwner.WelcomeBox" />:</span>
+                                  <span className='Membership-info-box-text' style={{ color: "#585858", fontSize: 16 }}>{memberShip.welcomeBox}</span>
+                                </div>
+                              </Col>
+                              <Col span={12} className="text-tip">
+                                <div className='Membership-info-box'>
+                                  <span className='Membership-info-box-label'><FormattedMessage id="PetOwner.ConsumptionGift" />:</span>
+                                  <span className='Membership-info-box-text' style={{ color: "var(--primary-color)", textDecoration: "underline" }}>{memberShip.consumptionGift}</span>
+                                </div>
+                              </Col>
+                            </Row>
+                          </div>
+                        </div>
+                      </Col>
+                    </Row>
+                  </div>
+                )
+                : null
             }
             <div className="detail-container">
               <Headline title="Tagging" />
@@ -536,11 +537,11 @@ export default class CustomerDetails extends React.Component<any, any> {
               </Row>
             </div>
             <div className="detail-container" id="pets-list">
-              <Headline title={RCi18n({id:"PetOwner.PetInformation"})} />
+              <Headline title={RCi18n({ id: "PetOwner.PetInformation" })} />
               <Row gutter={16}>
                 {pets.map((pet, idx) => (
                   <Col key={idx} span={8} style={{ margin: '10px 0' }}>
-                    <Card bodyStyle={{ padding: '10px 20px' }} style={{height:120,overflow:'hidden'}}>
+                    <Card bodyStyle={{ padding: '10px 20px' }} style={{ height: 120, overflow: 'hidden' }}>
                       <div className="text-align-right">
                         {/* <Popconfirm placement="topRight" title="Are you sure to remove this item?" onConfirm={() => {}} okText="Confirm" cancelText="Cancel">
                           <Button type="link">
@@ -591,42 +592,45 @@ export default class CustomerDetails extends React.Component<any, any> {
             </div>
             <div className="container">
               <Headline
-                title={RCi18n({id:"PetOwner.OtherInformation"})}
-                extra={<RangePicker style={{ display: ['order', 'subscrib','benefit'].indexOf(this.state.activeKey) > -1 ? 'block' : 'none' }} allowClear={false} value={[moment(startDate, 'YYYY-MM-DD'), moment(endDate, 'YYYY-MM-DD')]} onChange={this.handleChangeDateRange} getCalendarContainer={() => document.getElementById('page-content')} />}
+                title={RCi18n({ id: "PetOwner.OtherInformation" })}
+                extra={<RangePicker style={{ display: ['order', 'subscrib', 'benefit'].indexOf(this.state.activeKey) > -1 ? 'block' : 'none' }} allowClear={false} value={[moment(startDate, 'YYYY-MM-DD'), moment(endDate, 'YYYY-MM-DD')]} onChange={this.handleChangeDateRange} getCalendarContainer={() => document.getElementById('page-content')} />}
               />
               <Tabs activeKey={this.state.activeKey} onChange={this.clickTabs}>
-                <TabPane tab={RCi18n({id:"PetOwner.OrderInformation"})} key="order">
+                <TabPane tab={RCi18n({ id: "PetOwner.OrderInformation" })} key="order">
                   <OrderInformation startDate={startDate} endDate={endDate} customerId={this.state.customerId} />
                 </TabPane>
-                <TabPane tab={RCi18n({id:"PetOwner.SubscriptionInformation"})} key="subscrib">
+                <TabPane tab={RCi18n({ id: "PetOwner.SubscriptionInformation" })} key="subscrib">
                   <SubscribInformation startDate={startDate} endDate={endDate} customerAccount={this.state.customerAccount} />
                 </TabPane>
-                <TabPane tab={RCi18n({id:"PetOwner.PrescriberInformation"})} key="prescrib">
+                <TabPane tab={RCi18n({ id: "PetOwner.PrescriberInformation" })} key="prescrib">
                   <PrescribInformation customerAccount={this.state.customerAccount} customerId={this.state.customerId} />
                 </TabPane>
-                <TabPane tab={RCi18n({id:"PetOwner.DeliveryInformation"})} key="delivery">
+                <TabPane tab={RCi18n({ id: "PetOwner.DeliveryInformation" })} key="delivery">
                   {displayPage === 'detail' && <DeliveryList customerId={this.state.customerId} type="DELIVERY" onEdit={(record) => this.openDeliveryPage('delivery', record)} />}
                 </TabPane>
                 {
                   [123457907, 123457919].indexOf(storeId) === -1
-                  ? <TabPane tab={RCi18n({id:"PetOwner.BillingInfomation"})} key="billing">{displayPage === 'detail' && <DeliveryList customerId={this.state.customerId} type="BILLING" onEdit={(record) => this.openDeliveryPage('billing', record)} />}</TabPane>
-                  : null
+                    ? <TabPane tab={RCi18n({ id: "PetOwner.BillingInfomation" })} key="billing">{displayPage === 'detail' && <DeliveryList customerId={this.state.customerId} type="BILLING" onEdit={(record) => this.openDeliveryPage('billing', record)} />}</TabPane>
+                    : null
                 }
-                <TabPane tab={RCi18n({id:"PetOwner.PaymentMethods"})} key="payment">
-                  <PaymentList customerId={this.state.customerId} customerAccount={this.state.customerAccount}/>
+                <TabPane tab={RCi18n({ id: "PetOwner.PaymentMethods" })} key="payment">
+                  <PaymentList customerId={this.state.customerId} customerAccount={this.state.customerAccount} />
                 </TabPane>
-                <TabPane tab={RCi18n({id:"PetOwner.Feedback"})} key="feedback">
+                <TabPane tab={RCi18n({ id: "PetOwner.Feedback" })} key="feedback">
                   <FeedbackList customerId={this.state.customerId} />
                 </TabPane>
                 {
                   isClubMember
-                      ? (
-                          <TabPane tab={<FormattedMessage id="PetOwner.Benefit" />} key="benefit">
-                            <BenefitsList startDate={startDate} endDate={endDate} customerAccount={this.state.customerAccount} />
-                          </TabPane>
-                      )
-                      : null
+                    ? (
+                      <TabPane tab={<FormattedMessage id="PetOwner.Benefit" />} key="benefit">
+                        <BenefitsList startDate={startDate} endDate={endDate} customerAccount={this.state.customerAccount} />
+                      </TabPane>
+                    )
+                    : null
                 }
+                <TabPane tab={RCi18n({ id: "PetOwner.OOSwaitingList" })} key="oss">
+                  <OOSwaitingList customerId={this.state.customerId} />
+                </TabPane>
               </Tabs>
             </div>
           </Spin>

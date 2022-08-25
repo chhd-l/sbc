@@ -40,6 +40,16 @@ const routes = [
     asyncComponent: () => import('./set-banner')
   },
   {
+    path: '/set-redirection',
+    exact: true,
+    asyncComponent: () => import('./redirection')
+  },
+  {
+    path: '/redirection-import',
+    exact: true,
+    asyncComponent: () => import('./redirection-import')
+  },
+  {
     path: '/seo-setting',
     exact: true,
     asyncComponent: () => import('./seo-setting')

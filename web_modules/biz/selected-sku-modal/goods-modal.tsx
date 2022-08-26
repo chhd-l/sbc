@@ -26,7 +26,8 @@ class GoodsModal extends React.Component<any, any> {
     //英文的product category name
     goodsCate?: string;
     isSubsrciptionEdit?: boolean;
-    pageType?: string
+    pageType?: string;
+    subscriptionType?:string;
   };
 
   constructor(props) {
@@ -57,7 +58,8 @@ class GoodsModal extends React.Component<any, any> {
       titleContent = null,
       goodsCate,
       isSubsrciptionEdit = false,
-      pageType
+      pageType,
+      subscriptionType
     } = this.props;
     const { selectedSkuIds, selectedRows } = this.state;
     return (
@@ -123,6 +125,7 @@ class GoodsModal extends React.Component<any, any> {
             goodsCate={goodsCate}
             isSubsrciptionEdit={isSubsrciptionEdit}
             pageType={pageType}
+            subscriptionType={subscriptionType}
           />
         }
       </Modal>

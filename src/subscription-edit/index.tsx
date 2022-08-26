@@ -168,10 +168,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     let bool = false;
     const storeIdArr = ['123457907', '123457909', '123457911'];
     const { subscriptionType } = this.state;
-
-    if (storeIdArr.includes(storeId.toString())) {
-      bool = subscriptionType?.toLowerCase() === 'club';
-    }
+    // if (storeIdArr.includes(storeId.toString())) {
+      bool = ['club','autoship'].indexOf(subscriptionType?.toLowerCase()) >-1 ;
+    // }
 
     return bool;
   }
@@ -1434,13 +1433,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     const { subscriptionId, goodsInfo, subscriptionType, subscriptionStatus, deliveryAddressId, curChangeProductItem, subscriptionNextRefillPromotion } = this.state;
     if (!Array.isArray(selectedSkuIds) || !Array.isArray(selectedRows?.toJS())) return;
     if (selectedSkuIds.length === 0 || selectedRows?.toJS()?.length === 0) return;
-    // 法国、俄罗斯、土耳其需要选择错误提示
-    if (storeId === 123457909 || storeId === 123457907 || storeId === 123457911) {
-      // selectedRows?.toJS()[0].promotions?
-      // subscriptionType?.toLowerCase()
-      // subscriptionStatus ==
       if (
-        selectedRows?.toJS()[0].promotions?.toLowerCase() !== 'club' ||
+        ['club','autoship']?.indexOf(selectedRows?.toJS()[0].promotions?.toLowerCase())<0 ||
         selectedRows?.toJS()[0].subscriptionStatus === 0
       ) {
         this.setState({
@@ -1448,9 +1442,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         });
         return;
       }
-    }
 
-    console.log('selectedRows?.toJS()', selectedRows?.toJS());
     this.setState({
       selectedSkuIds: selectedSkuIds,
       selectedRows: selectedRows
@@ -1548,6 +1540,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   };
 
   titleContent = () => {
+   const bool = ['autoship'].indexOf(this.state.subscriptionType?.toLowerCase()) >-1 ;
+    if(bool){
+      return
+    }
     let url = '#';
     switch (storeId) {
       case 123457907:
@@ -3395,6 +3391,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         )}
 
         <GoodsModal
+        subscriptionType={this.state.subscriptionType}
           pageType='subscriptionEdit'
           titleContent={titleContent}
           skuLimit={1}
@@ -3423,7 +3420,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           visible={errvisible}
           footer={null}
         >
-          <p style={{ fontSize: '18px' }}>This product cannot be used for Club Subscription.</p>
+          <p style={{ fontSize: '18px' }}>This product cannot be used for {this.state.subscriptionType} Subscription.</p>
           <br />
           <p style={{ fontSize: '18px' }}>Please, choose another one.</p>
           <div style={{ textAlign: 'right' }}>

@@ -4,6 +4,7 @@ import { useCallbackState } from 'use-callback-state';
 import { Const, RCi18n, SelectGroup } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './webapi';
+import { PaginationConfig } from 'antd/lib/pagination';
 const FormItem = Form.Item;
 const { Option } = Select;
 const styles = {
@@ -27,12 +28,6 @@ const columns_attribute = [
     title: <FormattedMessage id="PetOwner.PrescriberCity" />,
     dataIndex: 'primaryCity',
     key: 'primaryCity'
-    // width: '30%',
-    // render: (text, record) => (
-    //   <p>
-    //     {record.attributesValuesVOList ? this.getAttributeValue(record.attributesValuesVOList) : ''}
-    //   </p>
-    // )
   },
   {
     title: <FormattedMessage id="Prescriber.PrescriberType" />,
@@ -45,96 +40,148 @@ const columns_attribute = [
     key: 'auditStatus'
   }
 ];
-const prescriber = () => {
+
+type PrescriberProps = {
+  customerId: string;
+  getPrescriberList: () => void;
+  setSelectedRowKeys: (newSelectedRowKeys: any) => void;
+  selectedRowKeys: Array<string>;
+  showModer: boolean;
+  setShowModer: () => void;
+  editPrescriberId: string;
+};
+const Prescriber = (props: PrescriberProps) => {
   const [visible, setVisible] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [oldSelectedRowKeys, setOldSelectedRowKeys] = useState([]);
   const [prevPropSelectedRowKeys, setPrevPropSelectedRowKeys] = useState([]);
   const [attributeList, setAttributeList] = useState([]);
+  const [selectedRowItem, setSelectedRowItem]: any = useState([]);
   const [selectedRowList, setSelectedRowList] = useState([]);
   const [oldSelectedRowList, setOldSelectedRowList] = useState([]);
   const [prevPropSelectedRowList, setPrevPropSelectedRowList] = useState([]);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [prescribertype, setPrescribertype] = useState([]);
-  const [pagination, setPagination]: any = useCallbackState(
-    {
-      current: 1,
-      pageSize: 8,
-      total: 0
-    },
-    () => {}
-  );
+  const [paginations, setPaginations]: any = useState({
+    current: 0,
+    pageSize: 10,
+    total: 0
+  });
+  const [sumTotal, setSumtotal] = useState(1);
   const [searchForm, setSearchForm] = useState({
     attributeName: '',
-    attributeValue: ''
+    attributeValue: '',
+    prescriberId: '',
+    prescriberName: '',
+    prescriberType: ''
   });
   useEffect(() => {
-    webapi
-      .fetchPrescriberType({ type: 'clinicType' })
-      .then((res) => {
-        let { context } = res.res;
-        setPrescribertype([...context]);
-      })
-      .catch((err) => {
-        message.error(err.toString() || <FormattedMessage id="Product.OperationFailed" />);
-      });
+    getAttributes({});
   }, []);
+  useEffect(() => {
+    if (props.showModer) {
+      webapi
+        .fetchPrescriberType({ type: 'clinicType' })
+        .then((res) => {
+          let { context } = res.res;
+          setPrescribertype([...context]);
+        })
+        .catch((err) => {
+          message.error(err.toString() || <FormattedMessage id="Product.OperationFailed" />);
+        });
+    }
+  }, [props.showModer]);
   const handleOk = () => {
     setConfirmLoading(true);
-    let storeGoodsFilterList = [];
-    for (let i = 0; i < selectedRowList.length; i++) {
-      let item = {
-        attributeId: selectedRowList[i].id,
-        attributeName: selectedRowList[i].attributeName,
-        filterType: '0',
-        filterStatus: '1'
-      };
-      storeGoodsFilterList.push(item);
+    if (selectedRowItem.length && props.customerId) {
+      if (props.showModer) {
+        webapi
+          .fetchUpdPrescriber({
+            customerId: props.customerId,
+            updatePrescriberId: selectedRowItem[0],
+            oldPrescriberId: props.editPrescriberId
+          })
+          .then((data) => {
+            if (data.res.code == 'K-000000') {
+              setConfirmLoading(false);
+              setVisible(false);
+              props.getPrescriberList();
+              setSelectedRowKeys([]);
+              props.setShowModer();
+            } else {
+              setConfirmLoading(false);
+            }
+          })
+          .catch((err) => {
+            message.error(err.toString());
+            setConfirmLoading(false);
+          });
+      } else {
+        webapi
+          .fetchAddPrescriber({
+            customerId: props.customerId,
+            prescriberIds: selectedRowItem,
+            defaultPrescriberFlag: 0
+          })
+          .then((data) => {
+            if (data.res.code == 'K-000000') {
+              setConfirmLoading(false);
+              setVisible(false);
+              props.getPrescriberList();
+              setSelectedRowKeys([]);
+            } else {
+              setConfirmLoading(false);
+            }
+          })
+          .catch((err) => {
+            message.error(err.toString());
+            setConfirmLoading(false);
+          });
+      }
+    } else {
+      message.error(<FormattedMessage id="Product.OperationFailed" />);
     }
-    let params = {
-      storeGoodsFilterList: storeGoodsFilterList
-    };
-    // webapi
-    //   .addAttributeToFilter(params)
-    //   .then((data) => {
-    //     const { res } = data;
-    //     if (res.code === Const.SUCCESS_CODE) {
-    //       message.success(<FormattedMessage id="Product.OperateSuccessfully" />);
-    //       setConfirmLoading(false);
-    //       setVisible(false);
-    //       //   this.props.refreshList();
-    //     } else {
-    //       setConfirmLoading(true);
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     setConfirmLoading(false);
-    //   });
+    setConfirmLoading(false);
   };
   const handleCancel = () => {
     setVisible(false);
+    props.setShowModer();
   };
   const onFormChange = ({ field, value }) => {
     let data = searchForm;
     data[field] = value;
     setSearchForm({ ...data });
   };
-  const getAttributes = () => {
+  const getAttributes = ({ pageSize = 10, current = 1, total = 0 }: PaginationConfig) => {
+    // console.log(pagination);
     let params = {
-      attributeName: searchForm.attributeName,
-      attributeValue: searchForm.attributeValue,
+      prescriberId: searchForm.prescriberId,
+      prescriberName: searchForm.prescriberName,
+      prescriberType: searchForm.prescriberType,
+      // attributeName: searchForm.attributeName,
+      // attributeValue: searchForm.attributeValue,
       attributeStatus: true,
-      pageSize: pagination.pageSize,
-      pageNum: pagination.current - 1,
-      searchType: 'filter'
+      enabled: true,
+      pageSize,
+      pageNum: current - 1
     };
+    // debugger;
     webapi
       .fetchClinicList(params)
       .then((data) => {
-        const { res } = data;
+        const {
+          res,
+          res: { context }
+        } = data;
         if (res.code === Const.SUCCESS_CODE) {
           const attributeList = res.context.content;
           setAttributeList([...attributeList]);
+          setPaginations({
+            current: context.number + 1,
+            pageSize: context.size,
+            total: context.total
+          });
+          setSumtotal(context.total);
         }
       })
       .catch((err) => {
@@ -142,21 +189,24 @@ const prescriber = () => {
       });
   };
   const onSearch = () => {
-    setPagination(
-      {
-        current: 1,
-        pageSize: 8,
-        total: 0
-      },
-      () => {
-        getAttributes();
-      }
-    );
+    getAttributes({});
   };
-  const onSelectChange = (selectedRowKeys, selectedRow) => {
-    setSelectedRowList([...selectedRowList.concat(selectedRow)]);
-    setSelectedRowList([...arrayFilter(selectedRowKeys, selectedRowList)]);
-    setSelectedRowKeys([...selectedRowKeys]);
+  const onSelectChange = (selectedRowKey, selectedRow) => {
+    // setSelectedRowList([...selectedRowList.concat(selectedRow)]);
+    // setSelectedRowList([...arrayFilter(selectedRowKey, selectedRowList)]);
+    setSelectedRowKeys([...selectedRowKey]);
+    // props.setSelectedRowKeys([...props.selectedRowKeys, ...selectedRow.prescriberId]);
+    // let checkoutitem: any = {};
+    // attributeList.forEach((item) => {
+    //   if (item.id == selectedRowKey) {
+    //     checkoutitem = item;
+    //   }
+    // });
+    if (selectedRowKey.length !== 0) {
+      selectedRow.forEach((item) => {
+        setSelectedRowItem([...selectedRowItem, item.prescriberId]);
+      });
+    }
   };
   const arrayFilter = (arrKey, arrList) => {
     let tempList = [];
@@ -171,28 +221,27 @@ const prescriber = () => {
     hideDefaultSelections: true,
     onChange: onSelectChange,
     getCheckboxProps: (record) => ({
-      disabled: JSON.stringify(oldSelectedRowKeys).indexOf(record.id) !== -1, // Column configuration not to be checked
-      name: record.id
+      disabled: props.selectedRowKeys.indexOf(record.prescriberId) !== -1 ? 'disabled' : '', // Column configuration not to be checked
+      name: record.prescriberId
     })
   };
-  const handleTableChange = (pagination: any) => {
-    setPagination({ ...pagination }, () => getAttributes());
+  const handleTableChange = async (pagination: any) => {
+    // setPaginations({
+    //   ...pagination
+    // });
+    getAttributes(pagination);
   };
   const openSelectAttribute = () => {
     setVisible(true);
-    setPagination(
-      {
-        current: 1,
-        pageSize: 8,
-        total: 0
-      },
-      () => {}
-    );
     setSearchForm({
       attributeName: '',
-      attributeValue: ''
+      attributeValue: '',
+      prescriberId: '',
+      prescriberName: '',
+      prescriberType: ''
     });
-    getAttributes();
+    setOldSelectedRowList([...props.selectedRowKeys]);
+    getAttributes({});
   };
   return (
     <>
@@ -206,8 +255,10 @@ const prescriber = () => {
         </span>
       </Button>
       <Modal
-        title={<FormattedMessage id="Prescriber-information-add.title" values={{ count: 1 }} />}
-        visible={visible}
+        title={
+          <FormattedMessage id="Prescriber-information-add.title" values={{ count: sumTotal }} />
+        }
+        visible={visible || props.showModer}
         width="800px"
         confirmLoading={confirmLoading}
         onOk={handleOk}
@@ -225,11 +276,11 @@ const prescriber = () => {
                           <FormattedMessage id="Order.PrescriberId" />
                         </p>
                       }
-                      value={searchForm.attributeName}
+                      value={searchForm.prescriberId}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         onFormChange({
-                          field: 'attributeName',
+                          field: 'prescriberId',
                           value
                         });
                       }}
@@ -244,11 +295,11 @@ const prescriber = () => {
                           <FormattedMessage id="Prescriber.PrescriberName" />
                         </p>
                       }
-                      value={searchForm.attributeValue}
+                      value={searchForm.prescriberName}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         onFormChange({
-                          field: 'attributeValue',
+                          field: 'prescriberName',
                           value
                         });
                       }}
@@ -268,14 +319,14 @@ const prescriber = () => {
                       onChange={(value) => {
                         value = value === '' ? null : value;
                         onFormChange({
-                          field: 'customerTypeId',
+                          field: 'prescriberType',
                           value
                         });
                       }}
                     >
                       <Option value="">{RCi18n({ id: 'PetOwner.All' })}</Option>
                       {prescribertype.map((item) => (
-                        <Option value={item.id} key={item.id}>
+                        <Option value={item.name} key={item.id}>
                           {item.name}
                         </Option>
                       ))}
@@ -291,10 +342,7 @@ const prescriber = () => {
                       htmlType="submit"
                       icon="search"
                       shape="round"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        onSearch();
-                      }}
+                      onClick={onSearch}
                     >
                       <span>
                         <FormattedMessage id="Product.search" />
@@ -311,11 +359,11 @@ const prescriber = () => {
             columns={columns_attribute}
             dataSource={attributeList}
             onChange={handleTableChange}
-            pagination={pagination}
+            pagination={paginations}
           />
         </div>
       </Modal>
     </>
   );
 };
-export default prescriber;
+export default Prescriber;

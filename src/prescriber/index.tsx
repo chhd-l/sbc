@@ -1,6 +1,20 @@
 import React, { Component } from 'react';
 import { Headline, SelectGroup, BreadCrumb, util, Const, cache } from 'qmkit';
-import { Form, Select, Input, Button, Table, Divider, message, Modal, Tooltip, Row, Col, Upload, Popconfirm } from 'antd';
+import {
+  Form,
+  Select,
+  Input,
+  Button,
+  Table,
+  Divider,
+  message,
+  Modal,
+  Tooltip,
+  Row,
+  Col,
+  Upload,
+  Popconfirm
+} from 'antd';
 import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
@@ -47,25 +61,33 @@ export default class ClinicList extends Component<any, any> {
       const res = data.res;
       if (res.code === Const.SUCCESS_CODE) {
         if (res.context) {
-          let selectType = res.context.find(x=>x.configType === 'selection_type') 
-          this.setState({
-            isMapMode: selectType && selectType.status === 0
-          }, () => {
-            sessionStorage.setItem(cache.MAP_MODE, this.state.isMapMode ? '1' : '0')
-            this.querySysDictionary('city');
-            this.queryClinicsDictionary('clinicType');
-            this.init();
-          })
+          let selectType = res.context.find((x) => x.configType === 'selection_type');
+          this.setState(
+            {
+              isMapMode: selectType && selectType.status === 0
+            },
+            () => {
+              sessionStorage.setItem(cache.MAP_MODE, this.state.isMapMode ? '1' : '0');
+              this.querySysDictionary('city');
+              this.queryClinicsDictionary('clinicType');
+              this.init();
+            }
+          );
         }
       }
-    })
+    });
   }
   init = async ({ pageNum, pageSize } = { pageNum: 1, pageSize: 10 }) => {
     this.setState({
       loading: true
     });
     const query = this.state.searchForm;
-    query.enabled = query.enabled.toString() === 'true' ? true : query.enabled.toString() === 'false' ? false : '';
+    query.enabled =
+      query.enabled.toString() === 'true'
+        ? true
+        : query.enabled.toString() === 'false'
+        ? false
+        : '';
     pageNum = pageNum - 1;
     const { res } = await webapi.fetchClinicList({
       ...query,
@@ -189,18 +211,18 @@ export default class ClinicList extends Component<any, any> {
   //   document.body.appendChild(link);
   //   link.click();
   // }
-  onUpload = (info)=>{
-    const {file} = info
+  onUpload = (info) => {
+    const { file } = info;
     if (file.status !== 'uploading') {
     }
-    console.info('infoinfoinfo', info)
-    if (file.status === 'done'&&file.response&&file.response.code=='K-000000') {
-        this.init()
-        message.success(`${file.name} file uploaded successfully`);
+    console.info('infoinfoinfo', info);
+    if (file.status === 'done' && file.response && file.response.code == 'K-000000') {
+      this.init();
+      message.success(`${file.name} file uploaded successfully`);
     } else if (file.status === 'error' || file.status === 'done') {
       message.error(`${file.name} file upload failed:${file.response.message}`);
     }
-  }
+  };
   onExport = () => {
     const params = this.state.searchForm;
     return new Promise((resolve) => {
@@ -238,28 +260,50 @@ export default class ClinicList extends Component<any, any> {
     const { cityArr, typeArr, searchForm } = this.state;
     const columns = [
       {
-        title: <FormattedMessage id={Const.SITE_NAME === 'MYVETRECO' ? "Clinic.ClinicId" : "Prescriber.PrescriberID"} />,
+        title: (
+          <FormattedMessage
+            id={Const.SITE_NAME === 'MYVETRECO' ? 'Clinic.ClinicId' : 'Prescriber.PrescriberID'}
+          />
+        ),
         dataIndex: 'prescriberId',
-        key: 'prescriberID',
+        key: 'prescriberID'
       },
       {
-        title: <FormattedMessage id={Const.SITE_NAME === 'MYVETRECO' ? "Clinic.ClinicName" : "Prescriber.PrescriberName"} />,
+        title: (
+          <FormattedMessage
+            id={Const.SITE_NAME === 'MYVETRECO' ? 'Clinic.ClinicName' : 'Prescriber.PrescriberName'}
+          />
+        ),
         dataIndex: 'prescriberName',
         key: 'prescriberName',
         ellipsis: true
       },
       {
-        title: <FormattedMessage id={Const.SITE_NAME === 'MYVETRECO' ? "Clinic.ClinicPhone" : "Prescriber.PrescriberPhone"} />,
+        title: (
+          <FormattedMessage
+            id={
+              Const.SITE_NAME === 'MYVETRECO' ? 'Clinic.ClinicPhone' : 'Prescriber.PrescriberPhone'
+            }
+          />
+        ),
         dataIndex: 'phone',
-        key: 'prescriberPhone',
+        key: 'prescriberPhone'
       },
       {
-        title: <FormattedMessage id={Const.SITE_NAME === 'MYVETRECO' ? "Clinic.ClinicCity" : "Prescriber.PrescriberCity"} />,
+        title: (
+          <FormattedMessage
+            id={Const.SITE_NAME === 'MYVETRECO' ? 'Clinic.ClinicCity' : 'Prescriber.PrescriberCity'}
+          />
+        ),
         dataIndex: 'primaryCity',
-        key: 'prescriberCity',
+        key: 'prescriberCity'
       },
       {
-        title: <FormattedMessage id={Const.SITE_NAME === 'MYVETRECO' ? "Clinic.ClinicType" : "Prescriber.PrescriberType"} />,
+        title: (
+          <FormattedMessage
+            id={Const.SITE_NAME === 'MYVETRECO' ? 'Clinic.ClinicType' : 'Prescriber.PrescriberType'}
+          />
+        ),
         dataIndex: 'prescriberType',
         key: 'prescriberType',
         render: (text, record) => <span>{text}</span>
@@ -275,14 +319,22 @@ export default class ClinicList extends Component<any, any> {
             <Tooltip placement="top" title={<FormattedMessage id="Prescriber.Details" />}>
               <Link to={'/prescriber-edit/' + record.id} className="iconfont iconDetails"></Link>
             </Tooltip>
-            {record.defaultFlag != '1' ? <>
-              <Divider type="vertical" />
-              <Popconfirm placement="topLeft" title={<FormattedMessage id="Setting.Areyousuretodelete" />} onConfirm={() => this.delClinic(record.id)} okText={<FormattedMessage id="Setting.Confirm" />} cancelText={<FormattedMessage id="Setting.Cancel" />}>
-                <Tooltip placement="top" title={RCi18n({id:"Prescriber.Delete"})}>
-                  <a type="link" className="iconfont iconDelete"></a>
-                </Tooltip>
-              </Popconfirm>
-            </> : null}
+            {record.defaultFlag != '1' ? (
+              <>
+                <Divider type="vertical" />
+                <Popconfirm
+                  placement="topLeft"
+                  title={<FormattedMessage id="Setting.Areyousuretodelete" />}
+                  onConfirm={() => this.delClinic(record.id)}
+                  okText={<FormattedMessage id="Setting.Confirm" />}
+                  cancelText={<FormattedMessage id="Setting.Cancel" />}
+                >
+                  <Tooltip placement="top" title={RCi18n({ id: 'Prescriber.Delete' })}>
+                    <a type="link" className="iconfont iconDelete"></a>
+                  </Tooltip>
+                </Popconfirm>
+              </>
+            ) : null}
           </div>
         )
       });
@@ -297,23 +349,34 @@ export default class ClinicList extends Component<any, any> {
         title: <FormattedMessage id="Prescriber.PrescriberStatus" />,
         dataIndex: 'enabled',
         key: 'enabled',
-        render: (text, record) => <p>{record.enabled ? RCi18n({id:'Prescriber.Enabled'}) :RCi18n({id:'Disabled'})}</p>
+        render: (text, record) => (
+          <p>
+            {record.enabled ? RCi18n({ id: 'Prescriber.Enabled' }) : RCi18n({ id: 'Disabled' })}
+          </p>
+        )
       });
       columns.push({
         title: <FormattedMessage id="Prescriber.Action" />,
         dataIndex: 'id',
         key: 'action',
-        render: (text, record) => record.prescriberName && record.prescriberType ? (
-          <div>
-            <Tooltip placement="top" title={<FormattedMessage id="Prescriber.Details" />}>
-              <Link to={'/prescriber-edit/' + record.id} className="iconfont iconDetails"></Link>
-            </Tooltip>
-            <Divider type="vertical" />
-            <Tooltip placement="top" title={record.enabled ? RCi18n({id:'Disable'}) : RCi18n({id:'Enable'})}>
-              <a onClick={() => this.enableAndDisable(record.id)} className="iconfont iconbtn-disable"></a>
-            </Tooltip>
-          </div>
-        ) : null
+        render: (text, record) =>
+          record.prescriberName && record.prescriberType ? (
+            <div>
+              <Tooltip placement="top" title={<FormattedMessage id="Prescriber.Details" />}>
+                <Link to={'/prescriber-edit/' + record.id} className="iconfont iconDetails"></Link>
+              </Tooltip>
+              <Divider type="vertical" />
+              <Tooltip
+                placement="top"
+                title={record.enabled ? RCi18n({ id: 'Disable' }) : RCi18n({ id: 'Enable' })}
+              >
+                <a
+                  onClick={() => this.enableAndDisable(record.id)}
+                  className="iconfont iconbtn-disable"
+                ></a>
+              </Tooltip>
+            </div>
+          ) : null
       });
     }
     return (
@@ -321,7 +384,15 @@ export default class ClinicList extends Component<any, any> {
         <BreadCrumb />
         {/*导航面包屑*/}
         <div id="inputs" className="container-search">
-          <Headline title={<FormattedMessage id={Const.SITE_NAME === "MYVETRECO" ? "Menu.Clinic list" : "Prescriber.PrescriberList"} />} />
+          <Headline
+            title={
+              <FormattedMessage
+                id={
+                  Const.SITE_NAME === 'MYVETRECO' ? 'Menu.Clinic list' : 'Prescriber.PrescriberList'
+                }
+              />
+            }
+          />
           {/*搜索条件*/}
           <Form layout="inline">
             <Row id="input-lable-wwidth">
@@ -331,8 +402,22 @@ export default class ClinicList extends Component<any, any> {
                 <FormItem style={styles.formItemStyle}>
                   <Input
                     addonBefore={
-                      <p className="prescriber-iput-lable" title={RCi18n({id:Const.SITE_NAME === "MYVETRECO" ? 'Clinic.ClinicId' : 'Prescriber.prescriberId'})}>
-                        <FormattedMessage id={Const.SITE_NAME === "MYVETRECO" ? "Clinic.ClinicId":"Prescriber.prescriberId"} />
+                      <p
+                        className="prescriber-iput-lable"
+                        title={RCi18n({
+                          id:
+                            Const.SITE_NAME === 'MYVETRECO'
+                              ? 'Clinic.ClinicId'
+                              : 'Prescriber.prescriberId'
+                        })}
+                      >
+                        <FormattedMessage
+                          id={
+                            Const.SITE_NAME === 'MYVETRECO'
+                              ? 'Clinic.ClinicId'
+                              : 'Prescriber.prescriberId'
+                          }
+                        />
                       </p>
                     }
                     onChange={(e) => {
@@ -350,8 +435,22 @@ export default class ClinicList extends Component<any, any> {
                 <FormItem style={styles.formItemStyle}>
                   <Input
                     addonBefore={
-                      <p className="PrescriberCity" title={RCi18n({id:Const.SITE_NAME === "MYVETRECO" ?'Clinic.ClinicCity':'Prescriber.PrescriberCity'})}>
-                        <FormattedMessage id={Const.SITE_NAME === "MYVETRECO" ?"Clinic.ClinicCity":"Prescriber.PrescriberCity"} />
+                      <p
+                        className="PrescriberCity"
+                        title={RCi18n({
+                          id:
+                            Const.SITE_NAME === 'MYVETRECO'
+                              ? 'Clinic.ClinicCity'
+                              : 'Prescriber.PrescriberCity'
+                        })}
+                      >
+                        <FormattedMessage
+                          id={
+                            Const.SITE_NAME === 'MYVETRECO'
+                              ? 'Clinic.ClinicCity'
+                              : 'Prescriber.PrescriberCity'
+                          }
+                        />
                       </p>
                     }
                     onChange={(e) => {
@@ -391,7 +490,15 @@ export default class ClinicList extends Component<any, any> {
                   <SelectGroup
                     defaultValue=""
                     getPopupContainer={() => document.getElementById('page-content')}
-                    label={<FormattedMessage id={Const.SITE_NAME === "MYVETRECO" ?"Clinic.ClinicType":"Prescriber.PrescriberType"} />}
+                    label={
+                      <FormattedMessage
+                        id={
+                          Const.SITE_NAME === 'MYVETRECO'
+                            ? 'Clinic.ClinicType'
+                            : 'Prescriber.PrescriberType'
+                        }
+                      />
+                    }
                     // style={{ width: 80 }}
                     onChange={(value) => {
                       value = value === '' ? null : value;
@@ -417,8 +524,22 @@ export default class ClinicList extends Component<any, any> {
                 <FormItem style={styles.formItemStyle}>
                   <Input
                     addonBefore={
-                      <p className="prescriber-iput-lable" title={RCi18n({id:Const.SITE_NAME === "MYVETRECO" ?'Clinic.ClinicName':'Prescriber.prescriberName'})}>
-                        <FormattedMessage id={Const.SITE_NAME === "MYVETRECO" ?"Clinic.ClinicName":"Prescriber.prescriberName"} />
+                      <p
+                        className="prescriber-iput-lable"
+                        title={RCi18n({
+                          id:
+                            Const.SITE_NAME === 'MYVETRECO'
+                              ? 'Clinic.ClinicName'
+                              : 'Prescriber.prescriberName'
+                        })}
+                      >
+                        <FormattedMessage
+                          id={
+                            Const.SITE_NAME === 'MYVETRECO'
+                              ? 'Clinic.ClinicName'
+                              : 'Prescriber.prescriberName'
+                          }
+                        />
                       </p>
                     }
                     onChange={(e) => {
@@ -432,30 +553,49 @@ export default class ClinicList extends Component<any, any> {
                 </FormItem>
               </Col>
 
-              {Const.SITE_NAME === "MYVETRECO" ? null : <Col span={8}>
-                <FormItem style={styles.formItemStyle}>
-                  <Input
-                    addonBefore={
-                      <p className="prescriber-iput-lable" title={RCi18n({id:'Prescriber.prescriberZip'})}>
-                        <FormattedMessage id="Prescriber.prescriberZip" />
-                      </p>
-                    }
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onFormChange({
-                        field: 'primaryZip',
-                        value
-                      });
-                    }}
-                  />
-                </FormItem>
-              </Col>}
+              {Const.SITE_NAME === 'MYVETRECO' ? null : (
+                <Col span={8}>
+                  <FormItem style={styles.formItemStyle}>
+                    <Input
+                      addonBefore={
+                        <p
+                          className="prescriber-iput-lable"
+                          title={RCi18n({ id: 'Prescriber.prescriberZip' })}
+                        >
+                          <FormattedMessage id="Prescriber.prescriberZip" />
+                        </p>
+                      }
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'primaryZip',
+                          value
+                        });
+                      }}
+                    />
+                  </FormItem>
+                </Col>
+              )}
               <Col span={8}>
                 <FormItem style={styles.formItemStyle}>
                   <Input
                     addonBefore={
-                      <p className="prescriber-iput-lable" title={RCi18n({id:Const.SITE_NAME === "MYVETRECO" ?'Clinic.ClinicPhone':'Prescriber.prescriberPhone'})}>
-                        <FormattedMessage id={Const.SITE_NAME === "MYVETRECO" ?"Clinic.ClinicPhone":"Prescriber.prescriberPhone"} />
+                      <p
+                        className="prescriber-iput-lable"
+                        title={RCi18n({
+                          id:
+                            Const.SITE_NAME === 'MYVETRECO'
+                              ? 'Clinic.ClinicPhone'
+                              : 'Prescriber.prescriberPhone'
+                        })}
+                      >
+                        <FormattedMessage
+                          id={
+                            Const.SITE_NAME === 'MYVETRECO'
+                              ? 'Clinic.ClinicPhone'
+                              : 'Prescriber.prescriberPhone'
+                          }
+                        />
                       </p>
                     }
                     onChange={(e) => {
@@ -468,52 +608,59 @@ export default class ClinicList extends Component<any, any> {
                   />
                 </FormItem>
               </Col>
-              {Const.SITE_NAME === "MYVETRECO" ? null : <Col span={8} id="select-group-width">
-                <FormItem style={styles.formItemStyle}>
-                  <SelectGroup
-                    defaultValue="true"
-                    label={<FormattedMessage id="Prescriber.PrescriberStatus" />}
-                    getPopupContainer={() => document.getElementById('page-content')}
-                    // style={{ width: 80 }}
-                    onChange={(value) => {
-                      value = value === '' ? '' : value;
-                      this.onFormChange({
-                        field: 'enabled',
-                        value
-                      });
-                    }}
-                    style={styles.wrapper}
-                  >
-                    <Option value="">
-                      <FormattedMessage id="Prescriber.All" />{' '}
-                    </Option>
-                    <Option value="true" key="enabled">
-                      <FormattedMessage id="Prescriber.enabled" />
-                    </Option>
-                    <Option value="false" key="disabled">
-                      <FormattedMessage id="Prescriber.disabled" />
-                    </Option>
-                  </SelectGroup>
-                </FormItem>
-              </Col>}
-              {Const.SITE_NAME === "MYVETRECO" ? null : <Col span={8}>
-                <FormItem style={styles.formItemStyle}>
-                  <Input
-                    addonBefore={
-                      <p className="prescriber-iput-lable" title={RCi18n({id:'Prescriber.RecommendationCode'})}>
-                        <FormattedMessage id="Prescriber.RecommendationCode" />
-                      </p>
-                    }
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onFormChange({
-                        field: 'prescriberCode',
-                        value
-                      });
-                    }}
-                  />
-                </FormItem>
-              </Col>}
+              {Const.SITE_NAME === 'MYVETRECO' ? null : (
+                <Col span={8} id="select-group-width">
+                  <FormItem style={styles.formItemStyle}>
+                    <SelectGroup
+                      defaultValue="true"
+                      label={<FormattedMessage id="Prescriber.PrescriberStatus" />}
+                      getPopupContainer={() => document.getElementById('page-content')}
+                      // style={{ width: 80 }}
+                      onChange={(value) => {
+                        value = value === '' ? '' : value;
+                        this.onFormChange({
+                          field: 'enabled',
+                          value
+                        });
+                      }}
+                      style={styles.wrapper}
+                    >
+                      <Option value="">
+                        <FormattedMessage id="Prescriber.All" />{' '}
+                      </Option>
+                      <Option value="true" key="enabled">
+                        <FormattedMessage id="Prescriber.enabled" />
+                      </Option>
+                      <Option value="false" key="disabled">
+                        <FormattedMessage id="Prescriber.disabled" />
+                      </Option>
+                    </SelectGroup>
+                  </FormItem>
+                </Col>
+              )}
+              {Const.SITE_NAME === 'MYVETRECO' ? null : (
+                <Col span={8}>
+                  <FormItem style={styles.formItemStyle}>
+                    <Input
+                      addonBefore={
+                        <p
+                          className="prescriber-iput-lable"
+                          title={RCi18n({ id: 'Prescriber.RecommendationCode' })}
+                        >
+                          <FormattedMessage id="Prescriber.RecommendationCode" />
+                        </p>
+                      }
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'prescriberCode',
+                          value
+                        });
+                      }}
+                    />
+                  </FormItem>
+                </Col>
+              )}
 
               <Col span={24} style={{ textAlign: 'center' }}>
                 <FormItem>
@@ -551,28 +698,32 @@ export default class ClinicList extends Component<any, any> {
             >
               <FormattedMessage id="Prescriber.export" />
             </Button>
-            {(window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] === 'de'?<span
-            style={{
-              marginLeft: '20px'
-            }}>
-            <Upload
-              showUploadList={false}
-              name="file"
-              action={`${Const.HOST}/prescriber/list/excelImport`}
-              headers={{ 
-              authorization:
-              'Bearer' + ((window as any).token ? ' ' + (window as any).token : '') }}
-              onChange={this.onUpload}
-              accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-              // accept='.xlsx'
-            >
-              <Button
-                icon="upload"
+            {(window as any).countryEnum[
+              JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0
+            ] === 'de' ? (
+              <span
+                style={{
+                  marginLeft: '20px'
+                }}
               >
-                <FormattedMessage id="Prescriber.Upload" />
-              </Button>
-            </Upload>
-            </span>:null}
+                <Upload
+                  showUploadList={false}
+                  name="file"
+                  action={`${Const.HOST}/prescriber/list/excelImport`}
+                  headers={{
+                    authorization:
+                      'Bearer' + ((window as any).token ? ' ' + (window as any).token : '')
+                  }}
+                  onChange={this.onUpload}
+                  accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                  // accept='.xlsx'
+                >
+                  <Button icon="upload">
+                    <FormattedMessage id="Prescriber.Upload" />
+                  </Button>
+                </Upload>
+              </span>
+            ) : null}
             <Button
               style={{
                 backgroundColor: 'var(--primary-color)',

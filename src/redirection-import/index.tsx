@@ -203,7 +203,7 @@ export default class GoodsImport extends React.Component<any, any> {
       let encrypted = base64.urlEncode(result);
 
       // 新窗口下载
-      const exportHref = Const.HOST + `/queryExcel/${encrypted}`;
+      const exportHref = Const.HOST + `/redirectionUrl/queryExcel/${encrypted}`;
       window.open(exportHref);
     } else {
       message.error('请登录');

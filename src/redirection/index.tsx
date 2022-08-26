@@ -14,22 +14,7 @@ export default class OrderList extends Component<any, any> {
       searchParams: {
         url: ''
       },
-      dataSource: [
-        {
-          key: '1',
-          url: '胡彦斌',
-          redirection: 32,
-          redirectionType: '302',
-          status: 0
-        },
-        {
-          key: '2',
-          url: '胡彦祖',
-          redirection: 42,
-          redirectionType: '301',
-          status: 1
-        },
-      ]
+      dataSource: []
     }
   }
 
@@ -122,17 +107,17 @@ export default class OrderList extends Component<any, any> {
     const { dataSource, SearchListloading } = this.state;
     return (
       <div className='content-redirection'>
-        {/* <AuthWrapper functionName="fOrderList001"> */}
-        <div className="order-con">
-          <BreadCrumb />
-          <div className="container-search">
-            <SearchHead onSearch={this.onSearch} init={this.init} />
+        <AuthWrapper functionName="f_redirection_list">
+          <div className="order-con">
+            <BreadCrumb />
+            <div className="container-search">
+              <SearchHead onSearch={this.onSearch} init={this.init} />
+            </div>
+            <div className="container">
+              <SearchList dataSource={dataSource} Onchange={this.statusOnchange} loading={SearchListloading} init={this.init} redirectionDel={this.redirectionDel} />
+            </div>
           </div>
-          <div className="container">
-            <SearchList dataSource={dataSource} Onchange={this.statusOnchange} loading={SearchListloading} init={this.init} redirectionDel={this.redirectionDel} />
-          </div>
-        </div>
-        {/* </AuthWrapper> */}
+        </AuthWrapper>
       </div>
     );
   }

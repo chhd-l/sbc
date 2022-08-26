@@ -356,41 +356,18 @@ export function fetchPrescriberList(filterParams = {}) {
     })
   });
 }
-//2.用户添加prescriber
-export function fetchAddPrescriber(filterParams = {}) {
-  return Fetch<TResult>('/customerPrescriberRela/batchAddPrescriber', {
+
+/**
+ * 根据城市信息查询运费
+ */
+ export function stockNoticeInfo(Params = {}) {
+  return Fetch<TResult>('/goods/stockNoticeInfo', {
     method: 'POST',
     body: JSON.stringify({
-      ...filterParams
+      ...Params
     })
   });
 }
-//3.用户删除prescriber
-export function fetchDeletePrescriber(filterParams = {}) {
-  return Fetch<TResult>('/customerPrescriberRela/delete', {
-    method: 'POST',
-    body: JSON.stringify({
-      ...filterParams
-    })
-  });
-}
-//用户修改默认的prescriber
-export function fetchUpdDefaultPrescriber(filterParams = {}) {
-  return Fetch<TResult>('/customerPrescriberRela/updateDefaultPrescriber', {
-    method: 'POST',
-    body: JSON.stringify({
-      ...filterParams
-    })
-  });
-}
-//.用户编辑prescriberId
-export function fetchUpdPrescriber(filterParams = {}) {
-  return Fetch<TResult>('/customerPrescriberRela/editPrescriber', {
-    method: 'POST',
-    body: JSON.stringify({
-      ...filterParams
-    })
-  });
-}
+
 
 

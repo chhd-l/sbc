@@ -43,24 +43,22 @@ const SearchHead = ({ onSearch, init }: SearchHeadtype) => {
 
   let hasMenu = false;
   if (
-    (checkAuth('fOrderList002')) || checkAuth('fOrderList004')) {
+    (checkAuth('fContentbatchExport')) || checkAuth('fContentbatchUpload')) {
     hasMenu = true;
   }
 
   const menu = (
     <Menu>
       <Menu.Item>
-        {/* <AuthWrapper functionName="fOrderList004"> */}
-        <Link to="/redirection-import">
-          <FormattedMessage id="Content.batchUpload" />
-        </Link>
-        {/* </AuthWrapper> */}
+        <AuthWrapper functionName="fContentbatchUpload">
+          <Link to="/redirection-import">
+            <FormattedMessage id="Content.batchUpload" />
+          </Link>
+        </AuthWrapper>
       </Menu.Item>
       <Menu.Item>
-        <AuthWrapper functionName="fOrderList004">
-          {/* <Link to="/redirection-import"> */}
+        <AuthWrapper functionName="fContentbatchExport">
           <FormattedMessage id="Order.batchExport" />
-          {/* </Link> */}
         </AuthWrapper>
       </Menu.Item>
     </Menu>

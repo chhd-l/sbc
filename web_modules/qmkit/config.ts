@@ -11,11 +11,9 @@ const COLORS = {
 
 export default {
   /* dev */
-  // HOST: 'https://121.36.199.41:8390',
+  //HOST: 'https://121.36.199.41:8390',
 
   /* stg */
-  // HOST: 'https://storedev.royalcanin.com/api',
-
   HOST: 'https://storesit.royalcanin.com/api',
   PAYMENT_ENVIRONMENT:'test',
   /* product */

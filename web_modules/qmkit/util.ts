@@ -532,3 +532,15 @@ export function optimizeImage(
 export function getRandomValues() {
   return Math.rdmValue();
 }
+
+/**
+ * 获取pickup信息
+ */
+export const getCurPickUpInfo = (item) => {
+  let sitem = sessionStorage.getItem('rc-portal-homeDeliveryAndPickup') || null;
+  let pickupItem = '';
+  if (sitem) {
+    pickupItem = JSON.parse(sitem).pickup[item];
+  }
+  return pickupItem;
+};

@@ -19,7 +19,7 @@ import {
   Calendar
 } from 'antd';
 import DeliveryItem from '../customer-details/component/delivery-item';
-import { Headline, Const, cache, AuthWrapper, RCi18n, history } from 'qmkit';
+import { Headline, Const, cache, AuthWrapper, RCi18n, history,util } from 'qmkit';
 import { PostalCodeMsg } from 'biz';
 import { FormattedMessage } from 'react-intl';
 import './index.less';
@@ -512,7 +512,10 @@ export default class ManageAllSubscription extends React.Component<any, any> {
       consigneeNumber: pickupFormData.phoneNumber,
       deliveryAddress: pickupFormData.address1,
       type: 'DELIVERY',
-      isDefaltAddress: pickupFormData.isDefaltAddress ? 1 : 0
+      isDefaltAddress: pickupFormData.isDefaltAddress ? 1 : 0,
+      contractNumber: util.getCurPickUpInfo('contractNumber'),
+      courier: util.getCurPickUpInfo('courier'),
+      courierCode: util.getCurPickUpInfo('courierCode')
     });
     this.setState({
       pickupLoading: true

@@ -114,7 +114,7 @@ export default class OrderList extends Component<any, any> {
               <SearchHead onSearch={this.onSearch} init={this.init} />
             </div>
             <div className="container">
-              <SearchList dataSource={dataSource} Onchange={this.statusOnchange} loading={SearchListloading} init={this.init} redirectionDel={this.redirectionDel} />
+              <SearchList dataSource={dataSource || []} Onchange={this.statusOnchange} loading={SearchListloading} init={this.init} redirectionDel={this.redirectionDel} />
             </div>
           </div>
         </AuthWrapper>

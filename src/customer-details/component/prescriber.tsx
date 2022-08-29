@@ -53,13 +53,8 @@ type PrescriberProps = {
 const Prescriber = (props: PrescriberProps) => {
   const [visible, setVisible] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [oldSelectedRowKeys, setOldSelectedRowKeys] = useState([]);
-  const [prevPropSelectedRowKeys, setPrevPropSelectedRowKeys] = useState([]);
   const [attributeList, setAttributeList] = useState([]);
   const [selectedRowItem, setSelectedRowItem]: any = useState([]);
-  const [selectedRowList, setSelectedRowList] = useState([]);
-  const [oldSelectedRowList, setOldSelectedRowList] = useState([]);
-  const [prevPropSelectedRowList, setPrevPropSelectedRowList] = useState([]);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [prescribertype, setPrescribertype] = useState([]);
   const [paginations, setPaginations]: any = useState({
@@ -95,6 +90,7 @@ const Prescriber = (props: PrescriberProps) => {
     setConfirmLoading(true);
     if (selectedRowItem.length && props.customerId) {
       if (props.showModer) {
+        //如果是编辑状态
         webapi
           .fetchUpdPrescriber({
             customerId: props.customerId,
@@ -107,6 +103,7 @@ const Prescriber = (props: PrescriberProps) => {
               setVisible(false);
               props.getPrescriberList();
               setSelectedRowKeys([]);
+              setSelectedRowItem([]);
               props.setShowModer();
             } else {
               setConfirmLoading(false);
@@ -127,8 +124,9 @@ const Prescriber = (props: PrescriberProps) => {
             if (data.res.code == 'K-000000') {
               setConfirmLoading(false);
               setVisible(false);
-              props.getPrescriberList();
               setSelectedRowKeys([]);
+              setSelectedRowItem([]);
+              props.getPrescriberList();
             } else {
               setConfirmLoading(false);
             }
@@ -240,7 +238,6 @@ const Prescriber = (props: PrescriberProps) => {
       prescriberName: '',
       prescriberType: ''
     });
-    setOldSelectedRowList([...props.selectedRowKeys]);
     getAttributes({});
   };
   return (

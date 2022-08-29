@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Alert, Breadcrumb, Button, Icon, message, Row, Spin, Steps, Upload } from 'antd';
+import { Alert, Breadcrumb, Button, Icon, message, notification, Row, Spin, Steps, Upload } from 'antd';
 import { Const, Fetch, Headline, util, BreadCrumb } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { RCi18n } from 'qmkit';
@@ -54,10 +54,11 @@ export default class GoodsImport extends React.Component<any, any> {
       errBtn: false,
       loading: false,
       isImport: true,
-      textvalue: '',
+      textvalue: [],
       file: null,
     };
   }
+
   next() {
     const current = this.state.current + 1;
     this.setState({ current });
@@ -110,7 +111,7 @@ export default class GoodsImport extends React.Component<any, any> {
           {current == 1 ? (
             <Spin spinning={this.state.loading}>
               <div className="steps-content" style={styles.center}>
-                <Dragger name="uploadFile" multiple={false} showUploadList={false} accept=".xls,.xlsx" headers={header} action={Const.HOST + '/redirectionUrl/import'} onChange={this.changeImage}>
+                <Dragger name="file" multiple={false} showUploadList={false} accept=".xls,.xlsx" headers={header} action={Const.HOST + '/redirectionUrl/import'} onChange={this.changeImage}>
                   <div style={styles.content}>
                     <p className="ant-upload-hint" style={{ fontSize: 14, color: 'black' }}>
                       {' '}
@@ -151,7 +152,11 @@ export default class GoodsImport extends React.Component<any, any> {
                   <p style={styles.greyBig}><FormattedMessage id="Content.successInfo" /></p>
                   <br />
                   <p style={styles.greyBig}><FormattedMessage id="Content.successInfo2" /></p>
-                  <TextArea value={textvalue} autoSize={{ minRows: 5 }} readOnly />
+                  <TextArea
+                    value={textvalue?.length > 0 && textvalue.join('\n')}
+                    autoSize={{ minRows: 5, maxRows: 10 }}
+                    readOnly
+                  />
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
 
@@ -206,17 +211,17 @@ export default class GoodsImport extends React.Component<any, any> {
       const exportHref = Const.HOST + `/redirectionUrl/queryExcel/${encrypted}`;
       window.open(exportHref);
     } else {
-      message.error('请登录');
+      message.error('please login');
     }
   }
 
   _importGoods = async () => {
     const { ext, file } = this.state;
     if (ext == '') {
-      message.error('请上传文件');
+      // 请上传文件
+      message.error('Please upload the file');
       return;
     }
-
     let loading = true;
     this.setState({ loading });
     const importRes: any = await importGoods(file);
@@ -240,6 +245,7 @@ export default class GoodsImport extends React.Component<any, any> {
     const status = info.file.status;
     let loading = true;
     let err = false;
+    console.log('info', info)
     if (status == 'uploading') {
       const fileName = '';
       const ext = '';
@@ -252,16 +258,25 @@ export default class GoodsImport extends React.Component<any, any> {
       if (info.file.response.code == Const.SUCCESS_CODE) {
         fileName = info.file.name;
         ext = info.file.response.context;
+        const textvalue = info.file.response.context;
         const formData = new FormData();
         formData.append('file', info.file);
         let isImport = false;
-        this.setState({ isImport, file: formData });
+        this.setState({ isImport, file: formData, textvalue: textvalue });
         message.success(fileName + '上传成功');
       } else {
         if (info.file.response === 'Method Not Allowed') {
+          // You do not have permission to access this feature
           message.error('此功能您没有权限访问');
         } else {
-          message.error(info.file.response.message);
+          // message.error(info.file.response.message);
+          let errStr = `${info.file.response.message}（${info.file.response.code}）`;
+          notification.error({
+            message: 'System Notification',
+            duration: 5,
+            key: 'error_pop',
+            description: errStr,
+          });
         }
       }
       this.setState({ ext, fileName, loading, err });

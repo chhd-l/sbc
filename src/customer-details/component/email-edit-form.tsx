@@ -3,7 +3,7 @@ import { Modal, Form, Input, message } from 'antd';
 import { FormComponentProps } from 'antd/es/form';
 import { customerEmailExist, customerSaveEmail } from './webapi';
 import { FormattedMessage } from 'react-intl';
-import { RCi18n, Const } from 'qmkit';
+import { RCi18n, Const, AuthWrapper } from 'qmkit';
 
 interface IProps extends FormComponentProps {
   customerId: string;
@@ -62,13 +62,15 @@ const EmailEditForm: React.FC<IProps> = ({ customerId, email, disableEdit, form 
     <div>
       <div>
         <span>{email}</span>
-        <span
-          data-testid="icon"
-          className={`iconfont iconEdit edit-icon-next-text ${
-            disabled || disableEdit ? 'disabled' : ''
-          }`}
-          onClick={handleOpen}
-        />
+        <AuthWrapper functionName="f_pet_owner_change_email">
+          <span
+            data-testid="icon"
+            className={`iconfont iconEdit edit-icon-next-text ${
+              disabled || disableEdit ? 'disabled' : ''
+            }`}
+            onClick={handleOpen}
+          />
+        </AuthWrapper>
       </div>
       <Modal
         title={<FormattedMessage id="PetOwner.EditEmailAddress" />}

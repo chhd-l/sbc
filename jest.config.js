@@ -5,13 +5,16 @@ const config = {
   setupFilesAfterEnv: ['<rootDir>/setupTest.js'],
   collectCoverageFrom: [
     //"src/**/*.{js,jsx,ts,tsx}",
-    "web_modules/qmkit/*.{js,jsx,ts,tsx}"
-    //"!src/**/*.d.ts"
+    "web_modules/qmkit/*.{js,jsx,ts,tsx}",
+    // '/src/redirection/index.{js,jsx,ts,tsx}',
+    // "!src/**/*.d.ts"
   ],
   "testMatch": [
     // "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
     // "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
     "<rootDir>/web_modules/qmkit/__test__/**/*.{js,jsx,ts,tsx}"
+    // "<rootDir>/src/redirection/__test__/**/*.{js,jsx,ts,tsx}"
+
   ],
   // collectCoverageFrom: ["src/customer-details/component/*.{js,jsx,ts,tsx}"],
   testPathIgnorePatterns: ['/node_modules', '/scripts', '/(test|spec).[jt]sx?$'],

@@ -6,7 +6,7 @@ import SearchList from './components/list';
 import { redirectionUrlDelByUrl, redirectionUrlQuery, redirectionUrlUpdByUrl } from './webapi';
 import { message } from 'antd';
 
-export default class OrderList extends Component<any, any> {
+export default class Redirection extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {

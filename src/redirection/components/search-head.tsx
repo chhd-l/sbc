@@ -4,27 +4,21 @@ import { Link } from 'react-router-dom';
 import {
   Form,
   Input,
-  Select,
   Button,
   Menu,
   Dropdown,
   Icon,
-  DatePicker,
   Row,
   Col,
-  Modal,
   message
 } from 'antd';
 import {
-  noop,
-  ExportModal,
   Const,
   AuthWrapper,
   checkAuth,
   Headline,
-  ShippStatus,
-  PaymentStatus,
-  RCi18n
+  RCi18n,
+  util
 } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import './search-head.less';
@@ -47,6 +41,22 @@ const SearchHead = ({ onSearch, init }: SearchHeadtype) => {
     hasMenu = true;
   }
 
+  const toDownTempl = () => {
+    // 参数加密
+    let base64 = new util.Base64();
+    const token = (window as any).token;
+    if (token) {
+      let result = JSON.stringify({ token: token });
+      let encrypted = base64.urlEncode(result);
+
+      // 新窗口下载
+      const exportHref = Const.HOST + `/redirectionUrl/queryExcel/${encrypted}`;
+      window.open(exportHref);
+    } else {
+      message.error('please login');
+    }
+  }
+
   const menu = (
     <Menu>
       <Menu.Item>
@@ -58,7 +68,9 @@ const SearchHead = ({ onSearch, init }: SearchHeadtype) => {
       </Menu.Item>
       <Menu.Item>
         <AuthWrapper functionName="fContentbatchExport">
-          <FormattedMessage id="Order.batchExport" />
+          <div onClick={() => toDownTempl()}>
+            <FormattedMessage id="Order.batchExport" />
+          </div>
         </AuthWrapper>
       </Menu.Item>
     </Menu>
@@ -142,12 +154,6 @@ const SearchHead = ({ onSearch, init }: SearchHeadtype) => {
       </div>
 
       <AddNewRedirectionModal
-        // RedirectionData={{
-        //   url: '胡彦祖',
-        //   redirection: 42,
-        //   redirectionType: '西湖区湖底公园1号',
-        //   status: false
-        // } || null}
         onCancel={() => setModalVisable(false)}
         visable={modalVisable}
         init={init}

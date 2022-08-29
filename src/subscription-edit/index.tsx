@@ -722,7 +722,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       consigneeNumber: pickupFormData.phoneNumber,
       deliveryAddress: pickupFormData.address1,
       type: 'DELIVERY',
-      isDefaltAddress: pickupFormData.isDefaltAddress ? 1 : 0
+      isDefaltAddress: pickupFormData.isDefaltAddress ? 1 : 0,
+      contractNumber: util.getCurPickUpInfo('contractNumber'),
+      courier: util.getCurPickUpInfo('courier'),
+      courierCode: util.getCurPickUpInfo('courierCode')
     });
     this.setState({
       pickupLoading: true

@@ -143,6 +143,7 @@ export default class DeliveryList extends React.Component<Iprop, any> {
   pickupConfirm = async () => {
     const { customerId } = this.props;
     const { homeDeliveryList, pickupList, pickupFormData, countryArr } = this.state;
+    debugger
 
     let tempPickup = Object.keys(homeDeliveryList[0]).reduce((pre, cur) => {
       return Object.assign(pre, { [cur]: '' });
@@ -158,9 +159,9 @@ export default class DeliveryList extends React.Component<Iprop, any> {
       deliveryAddress: pickupFormData.address1,
       type: 'DELIVERY',
       isDefaltAddress: pickupFormData.isDefaltAddress ? 1 : 0,
-      contractNumber: pickupFormData?.contractNumber,
+      contractNumber: pickupFormData?.pickup?.contractNumber,
       pickupName: pickupFormData?.pickupName,
-      courierCode: pickupFormData?.courierCode
+      courierCode: pickupFormData?.pickup?.courierCode
     });
     this.setState({
       pickupLoading: true

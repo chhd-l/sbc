@@ -158,9 +158,9 @@ export default class DeliveryList extends React.Component<Iprop, any> {
       deliveryAddress: pickupFormData.address1,
       type: 'DELIVERY',
       isDefaltAddress: pickupFormData.isDefaltAddress ? 1 : 0,
-      contractNumber: util.getCurPickUpInfo('contractNumber'),
-      courier: util.getCurPickUpInfo('courier'),
-      courierCode: util.getCurPickUpInfo('courierCode')
+      contractNumber: pickupFormData?.contractNumber,
+      pickupName: pickupFormData?.pickupName,
+      courierCode: pickupFormData?.courierCode
     });
     this.setState({
       pickupLoading: true

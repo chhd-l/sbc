@@ -9,7 +9,7 @@ const FormItem = Form.Item;
 const { Option } = Select;
 const styles = {
   label: {
-    width: 120,
+    width: 103,
     textAlign: 'center'
   }
 } as any;
@@ -37,7 +37,10 @@ const columns_attribute = [
   {
     title: <FormattedMessage id="Prescriber.PrescriberStatus" />,
     dataIndex: 'auditStatus',
-    key: 'auditStatus'
+    key: 'auditStatus',
+    render: (text, record, index) => {
+      return <p>{text ? RCi18n({ id: 'Prescriber.Enabled' }) : RCi18n({ id: 'Disabled' })}</p>;
+    }
   }
 ];
 
@@ -71,6 +74,15 @@ const Prescriber = (props: PrescriberProps) => {
     prescriberType: ''
   });
   useEffect(() => {
+    webapi
+      .fetchPrescriberType({ type: 'clinicType' })
+      .then((res) => {
+        let { context } = res.res;
+        setPrescribertype([...context]);
+      })
+      .catch((err) => {
+        message.error(err.toString() || <FormattedMessage id="Product.OperationFailed" />);
+      });
     getAttributes({});
   }, []);
   useEffect(() => {
@@ -190,16 +202,7 @@ const Prescriber = (props: PrescriberProps) => {
     getAttributes({});
   };
   const onSelectChange = (selectedRowKey, selectedRow) => {
-    // setSelectedRowList([...selectedRowList.concat(selectedRow)]);
-    // setSelectedRowList([...arrayFilter(selectedRowKey, selectedRowList)]);
     setSelectedRowKeys([...selectedRowKey]);
-    // props.setSelectedRowKeys([...props.selectedRowKeys, ...selectedRow.prescriberId]);
-    // let checkoutitem: any = {};
-    // attributeList.forEach((item) => {
-    //   if (item.id == selectedRowKey) {
-    //     checkoutitem = item;
-    //   }
-    // });
     if (selectedRowKey.length !== 0) {
       selectedRow.forEach((item) => {
         setSelectedRowItem([...selectedRowItem, item.prescriberId]);
@@ -243,6 +246,7 @@ const Prescriber = (props: PrescriberProps) => {
   return (
     <>
       <Button
+        data-testid="addnewBtn"
         type="primary"
         style={{ margin: '10px 0 10px 0' }}
         onClick={() => openSelectAttribute()}
@@ -253,7 +257,19 @@ const Prescriber = (props: PrescriberProps) => {
       </Button>
       <Modal
         title={
-          <FormattedMessage id="Prescriber-information-add.title" values={{ count: sumTotal }} />
+          <FormattedMessage
+            id="Prescriber-information-add.title"
+            values={{
+              count: (
+                <>
+                  <strong>
+                    <FormattedMessage id="Prescriber-information-add-title.title" />
+                  </strong>
+                  <span style={{ color: 'rgb(226, 0, 26)' }}>{sumTotal} </span>
+                </>
+              )
+            }}
+          />
         }
         visible={visible || props.showModer}
         width="800px"
@@ -265,7 +281,7 @@ const Prescriber = (props: PrescriberProps) => {
           <div style={{ marginBottom: 16 }}>
             <Form className="filter-content" layout="inline">
               <Row>
-                <Col span={7}>
+                <Col span={8}>
                   <FormItem>
                     <Input
                       addonBefore={
@@ -284,7 +300,7 @@ const Prescriber = (props: PrescriberProps) => {
                     />
                   </FormItem>
                 </Col>
-                <Col span={7}>
+                <Col span={8}>
                   <FormItem>
                     <Input
                       addonBefore={
@@ -303,7 +319,7 @@ const Prescriber = (props: PrescriberProps) => {
                     />
                   </FormItem>
                 </Col>
-                <Col span={7}>
+                <Col span={8}>
                   <FormItem>
                     <SelectGroup
                       defaultValue=""
@@ -312,7 +328,7 @@ const Prescriber = (props: PrescriberProps) => {
                           {RCi18n({ id: 'Prescriber.PrescriberType' })}
                         </p>
                       }
-                      style={{ width: 120 }}
+                      style={{ width: '90px' }}
                       onChange={(value) => {
                         value = value === '' ? null : value;
                         onFormChange({

@@ -333,10 +333,10 @@ const styles = {
   },
   default: {
     display: 'flex',
-    justifyItems: 'center',
+    justifyContent: 'center',
     alignItems: 'center',
-    color: 'rgb(226, 0, 26',
-    border: '1px solid rgb(226, 0, 26',
+    color: 'rgb(226, 0, 26)',
+    border: '1px solid rgb(226, 0, 26)',
     borderRadius: '2rem',
     padding: '5px',
     fontSize: '0.9rem'

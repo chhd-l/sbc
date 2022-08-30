@@ -209,13 +209,6 @@ const Prescriber = (props: PrescriberProps) => {
       });
     }
   };
-  const arrayFilter = (arrKey, arrList) => {
-    let tempList = [];
-    arrKey.map((item) => {
-      tempList.push(arrList.find((el) => el.id === item));
-    });
-    return tempList;
-  };
   const rowSelection = {
     selectedRowKeys,
     columnTitle: ' ', // 去掉全选
@@ -290,6 +283,7 @@ const Prescriber = (props: PrescriberProps) => {
                         </p>
                       }
                       value={searchForm.prescriberId}
+                      data-testid="inputOnchange"
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         onFormChange({
@@ -309,6 +303,7 @@ const Prescriber = (props: PrescriberProps) => {
                         </p>
                       }
                       value={searchForm.prescriberName}
+                      data-testid="inputOnchange1"
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         onFormChange({
@@ -356,6 +351,7 @@ const Prescriber = (props: PrescriberProps) => {
                       icon="search"
                       shape="round"
                       onClick={onSearch}
+                      data-testid="onSearch"
                     >
                       <span>
                         <FormattedMessage id="Product.search" />

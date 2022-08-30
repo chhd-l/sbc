@@ -202,16 +202,7 @@ const Prescriber = (props: PrescriberProps) => {
     getAttributes({});
   };
   const onSelectChange = (selectedRowKey, selectedRow) => {
-    // setSelectedRowList([...selectedRowList.concat(selectedRow)]);
-    // setSelectedRowList([...arrayFilter(selectedRowKey, selectedRowList)]);
     setSelectedRowKeys([...selectedRowKey]);
-    // props.setSelectedRowKeys([...props.selectedRowKeys, ...selectedRow.prescriberId]);
-    // let checkoutitem: any = {};
-    // attributeList.forEach((item) => {
-    //   if (item.id == selectedRowKey) {
-    //     checkoutitem = item;
-    //   }
-    // });
     if (selectedRowKey.length !== 0) {
       selectedRow.forEach((item) => {
         setSelectedRowItem([...selectedRowItem, item.prescriberId]);
@@ -266,7 +257,19 @@ const Prescriber = (props: PrescriberProps) => {
       </Button>
       <Modal
         title={
-          <FormattedMessage id="Prescriber-information-add.title" values={{ count: sumTotal }} />
+          <FormattedMessage
+            id="Prescriber-information-add.title"
+            values={{
+              count: (
+                <>
+                  <strong>
+                    <FormattedMessage id="Prescriber-information-add-title.title" />
+                  </strong>
+                  <span style={{ color: 'rgb(226, 0, 26)' }}>{sumTotal} </span>
+                </>
+              )
+            }}
+          />
         }
         visible={visible || props.showModer}
         width="800px"
@@ -325,7 +328,7 @@ const Prescriber = (props: PrescriberProps) => {
                           {RCi18n({ id: 'Prescriber.PrescriberType' })}
                         </p>
                       }
-                      style={{ width: 110 }}
+                      style={{ width: '90px' }}
                       onChange={(value) => {
                         value = value === '' ? null : value;
                         onFormChange({

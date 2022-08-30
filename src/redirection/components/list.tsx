@@ -84,7 +84,7 @@ function List(props: any) {
     <div>
       <Table
         rowKey={'url'}
-        dataSource={dataSource}
+        dataSource={dataSource || []}
         columns={columns}
         loading={loading}
         pagination={{

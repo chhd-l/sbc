@@ -6,7 +6,7 @@ import SearchList from './components/list';
 import { redirectionUrlDelByUrl, redirectionUrlQuery, redirectionUrlUpdByUrl } from './webapi';
 import { message } from 'antd';
 
-export default class OrderList extends Component<any, any> {
+export default class Redirection extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -114,7 +114,7 @@ export default class OrderList extends Component<any, any> {
               <SearchHead onSearch={this.onSearch} init={this.init} />
             </div>
             <div className="container">
-              <SearchList dataSource={dataSource} Onchange={this.statusOnchange} loading={SearchListloading} init={this.init} redirectionDel={this.redirectionDel} />
+              <SearchList dataSource={dataSource || []} Onchange={this.statusOnchange} loading={SearchListloading} init={this.init} redirectionDel={this.redirectionDel} />
             </div>
           </div>
         </AuthWrapper>

@@ -32,7 +32,7 @@ function List(props: any) {
       dataIndex: 'status',
       key: 'status',
       render: (status, rowinfo) => {
-        return <Switch checked={status ? true : false} onChange={(e) => statusOnchange(e, rowinfo)} />
+        return <Switch checked={status ? true : false} onChange={(e) => Onchange(e, rowinfo)} />
       }
     },
     {
@@ -45,6 +45,7 @@ function List(props: any) {
             {/* 编辑 */}
             <Tooltip placement="top" title={(window as any).RCi18n({ id: 'edit' })}>
               <a
+                data-testid="iconEdit"
                 className="iconfont iconEdit"
                 style={{ margin: "0 5px" }}
                 onClick={(e) => {
@@ -61,13 +62,13 @@ function List(props: any) {
               placement="topLeft"
               title="Are you sure you want to delete this redirection?"
               onConfirm={() => {
-                redirectionUrlDel(rowinfo);
+                redirectionDel(rowinfo);
               }}
               okText="Confirm"
               cancelText="Cancel"
             >
               <Tooltip placement="top" title={(window as any).RCi18n({ id: 'delete' })}>
-                <a className="iconfont iconDelete" style={{ margin: "0 5px" }}></a>
+                <a data-testid="iconDelete" className="iconfont iconDelete" style={{ margin: "0 5px" }}></a>
               </Tooltip>
             </Popconfirm>
           </div>
@@ -75,13 +76,6 @@ function List(props: any) {
       }
     },
   ];
-
-  const statusOnchange = (value, rowinfo) => {
-    Onchange(value, rowinfo);
-  }
-  const redirectionUrlDel = (rowinfo) => {
-    redirectionDel(rowinfo);
-  }
   // console.log({ dataSource, Onchange, loading, init, pageNum, redirectionDel });
 
   return (

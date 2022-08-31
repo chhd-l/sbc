@@ -9,7 +9,7 @@ const FormItem = Form.Item;
 const { Option } = Select;
 const styles = {
   label: {
-    width: 120,
+    width: 103,
     textAlign: 'center'
   }
 } as any;
@@ -36,8 +36,11 @@ const columns_attribute = [
   },
   {
     title: <FormattedMessage id="Prescriber.PrescriberStatus" />,
-    dataIndex: 'auditStatus',
-    key: 'auditStatus'
+    dataIndex: 'enabled',
+    key: 'enabled',
+    render: (text, record, index) => {
+      return <p>{text ? RCi18n({ id: 'Prescriber.Enabled' }) : RCi18n({ id: 'Disabled' })}</p>;
+    }
   }
 ];
 
@@ -62,7 +65,7 @@ const Prescriber = (props: PrescriberProps) => {
     pageSize: 10,
     total: 0
   });
-  const [sumTotal, setSumtotal] = useState(1);
+  const [sumTotal, setSumtotal] = useState(0);
   const [searchForm, setSearchForm] = useState({
     attributeName: '',
     attributeValue: '',
@@ -71,6 +74,15 @@ const Prescriber = (props: PrescriberProps) => {
     prescriberType: ''
   });
   useEffect(() => {
+    webapi
+      .fetchPrescriberType({ type: 'clinicType' })
+      .then((res) => {
+        let { context } = res.res;
+        setPrescribertype([...context]);
+      })
+      .catch((err) => {
+        message.error(err.toString() || <FormattedMessage id="Product.OperationFailed" />);
+      });
     getAttributes({});
   }, []);
   useEffect(() => {
@@ -158,7 +170,7 @@ const Prescriber = (props: PrescriberProps) => {
       prescriberType: searchForm.prescriberType,
       // attributeName: searchForm.attributeName,
       // attributeValue: searchForm.attributeValue,
-      attributeStatus: true,
+      // attributeStatus: true,
       enabled: true,
       pageSize,
       pageNum: current - 1
@@ -179,7 +191,6 @@ const Prescriber = (props: PrescriberProps) => {
             pageSize: context.size,
             total: context.total
           });
-          setSumtotal(context.total);
         }
       })
       .catch((err) => {
@@ -190,28 +201,13 @@ const Prescriber = (props: PrescriberProps) => {
     getAttributes({});
   };
   const onSelectChange = (selectedRowKey, selectedRow) => {
-    // setSelectedRowList([...selectedRowList.concat(selectedRow)]);
-    // setSelectedRowList([...arrayFilter(selectedRowKey, selectedRowList)]);
     setSelectedRowKeys([...selectedRowKey]);
-    // props.setSelectedRowKeys([...props.selectedRowKeys, ...selectedRow.prescriberId]);
-    // let checkoutitem: any = {};
-    // attributeList.forEach((item) => {
-    //   if (item.id == selectedRowKey) {
-    //     checkoutitem = item;
-    //   }
-    // });
     if (selectedRowKey.length !== 0) {
+      setSumtotal(selectedRowKey.length);
       selectedRow.forEach((item) => {
         setSelectedRowItem([...selectedRowItem, item.prescriberId]);
       });
     }
-  };
-  const arrayFilter = (arrKey, arrList) => {
-    let tempList = [];
-    arrKey.map((item) => {
-      tempList.push(arrList.find((el) => el.id === item));
-    });
-    return tempList;
   };
   const rowSelection = {
     selectedRowKeys,
@@ -243,6 +239,7 @@ const Prescriber = (props: PrescriberProps) => {
   return (
     <>
       <Button
+        data-testid="addnewBtn"
         type="primary"
         style={{ margin: '10px 0 10px 0' }}
         onClick={() => openSelectAttribute()}
@@ -253,7 +250,19 @@ const Prescriber = (props: PrescriberProps) => {
       </Button>
       <Modal
         title={
-          <FormattedMessage id="Prescriber-information-add.title" values={{ count: sumTotal }} />
+          <FormattedMessage
+            id="Prescriber-information-add.title"
+            values={{
+              count: (
+                <>
+                  <strong>
+                    <FormattedMessage id="Prescriber-information-add-title.title" />
+                  </strong>
+                  <span style={{ color: 'rgb(226, 0, 26)' }}>{sumTotal} </span>
+                </>
+              )
+            }}
+          />
         }
         visible={visible || props.showModer}
         width="800px"
@@ -265,7 +274,7 @@ const Prescriber = (props: PrescriberProps) => {
           <div style={{ marginBottom: 16 }}>
             <Form className="filter-content" layout="inline">
               <Row>
-                <Col span={7}>
+                <Col span={8}>
                   <FormItem>
                     <Input
                       addonBefore={
@@ -274,6 +283,7 @@ const Prescriber = (props: PrescriberProps) => {
                         </p>
                       }
                       value={searchForm.prescriberId}
+                      data-testid="inputOnchange"
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         onFormChange({
@@ -284,7 +294,7 @@ const Prescriber = (props: PrescriberProps) => {
                     />
                   </FormItem>
                 </Col>
-                <Col span={7}>
+                <Col span={8}>
                   <FormItem>
                     <Input
                       addonBefore={
@@ -293,6 +303,7 @@ const Prescriber = (props: PrescriberProps) => {
                         </p>
                       }
                       value={searchForm.prescriberName}
+                      data-testid="inputOnchange1"
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         onFormChange({
@@ -303,7 +314,7 @@ const Prescriber = (props: PrescriberProps) => {
                     />
                   </FormItem>
                 </Col>
-                <Col span={7}>
+                <Col span={8}>
                   <FormItem>
                     <SelectGroup
                       defaultValue=""
@@ -312,7 +323,7 @@ const Prescriber = (props: PrescriberProps) => {
                           {RCi18n({ id: 'Prescriber.PrescriberType' })}
                         </p>
                       }
-                      style={{ width: 120 }}
+                      style={{ width: '90px' }}
                       onChange={(value) => {
                         value = value === '' ? null : value;
                         onFormChange({
@@ -340,6 +351,7 @@ const Prescriber = (props: PrescriberProps) => {
                       icon="search"
                       shape="round"
                       onClick={onSearch}
+                      data-testid="onSearch"
                     >
                       <span>
                         <FormattedMessage id="Product.search" />

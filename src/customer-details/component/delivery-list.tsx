@@ -143,7 +143,6 @@ export default class DeliveryList extends React.Component<Iprop, any> {
   pickupConfirm = async () => {
     const { customerId } = this.props;
     const { homeDeliveryList, pickupList, pickupFormData, countryArr } = this.state;
-    debugger
 
     let tempPickup = Object.keys(homeDeliveryList[0]).reduce((pre, cur) => {
       return Object.assign(pre, { [cur]: '' });

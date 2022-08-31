@@ -115,22 +115,6 @@ export default class Redirection extends Component<any, any> {
     const { dataSource, SearchListloading, pageNum } = this.state;
     return (
       <div className='content-redirection'>
-        <div data-testid="statusOnchange" style={{ display: 'none' }} onClick={() => this.statusOnchange(true, {
-          "url": "https://shopsit.royalcanin.com/fr/shop/light-weight-care-25240300R0",
-          "redirectionUrl": "https://shopsit.royalcanin.com/fr/shop",
-          "status": 0,
-          "code": 301,
-        })}></div>
-        <div
-          data-testid="redirectionDel"
-          style={{ display: 'none' }}
-          onClick={() => this.redirectionDel({
-            "url": "https://shopsit.royalcanin.com/fr/shop/light-weight-care-25240300R0",
-            "redirectionUrl": "https://shopsit.royalcanin.com/fr/shop",
-            "status": 0,
-            "code": 301,
-          })}
-        ></div>
         <AuthWrapper functionName="f_redirection_list">
           <div className="order-con">
             <BreadCrumb />

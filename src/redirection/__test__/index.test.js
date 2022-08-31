@@ -38,11 +38,101 @@ jest.mock('../webapi', () => {
               context: {
                 redirectionUrlVOList: [
                   {
-                    url: 'https://shopsit.royalcanin.com/fr/shop/light-weight-care-25240300R0',
+                    url: 'https://shopsit.royalcanin.com/fr/shop/light-weight-care-25240300R16',
                     redirectionUrl: 'https://shopsit.royalcanin.com/fr/shop',
                     status: 1,
                     code: 301
                   }
+                  // {
+                  //   url: 'https://shopsit.royalcanin.com/fr/shop/light-weight-care-25240300R15',
+                  //   redirectionUrl: 'https://shopsit.royalcanin.com/fr/shop',
+                  //   status: 0,
+                  //   code: 301
+                  // },
+                  // {
+                  //   url: 'https://shopsit.royalcanin.com/fr/shop/light-weight-care-25240300R14',
+                  //   redirectionUrl: 'https://shopsit.royalcanin.com/fr/shop',
+                  //   status: 0,
+                  //   code: 302
+                  // },
+                  // {
+                  //   url: 'https://shopsit.royalcanin.com/fr/shop/light-weight-care-25240300R13',
+                  //   redirectionUrl: 'https://shopsit.royalcanin.com/fr/shop',
+                  //   status: 1,
+                  //   code: 302
+                  // },
+                  // {
+                  //   url: 'https://shopsit.royalcanin.com/fr/shop/light-weight-care-25240300R12',
+                  //   redirectionUrl: 'https://shopsit.royalcanin.com/fr/shop',
+                  //   status: 0,
+                  //   code: 301
+                  // },
+                  // {
+                  //   url: 'https://shopsit.royalcanin.com/fr/shop/light-weight-care-25240300R11',
+                  //   redirectionUrl: 'https://shopsit.royalcanin.com/fr/shop',
+                  //   status: 0,
+                  //   code: 301
+                  // },
+                  // {
+                  //   url: 'https://shopsit.royalcanin.com/fr/shop/light-weight-care-25240300R10',
+                  //   redirectionUrl: 'https://shopsit.royalcanin.com/fr/shop',
+                  //   status: 0,
+                  //   code: 301
+                  // },
+                  // {
+                  //   url: 'https://shopsit.royalcanin.com/fr/shop/light-weight-care-25240300R9',
+                  //   redirectionUrl: 'https://shopsit.royalcanin.com/fr/shop',
+                  //   status: 0,
+                  //   code: 301
+                  // },
+                  // {
+                  //   url: 'https://shopsit.royalcanin.com/fr/shop/light-weight-care-25240300R8',
+                  //   redirectionUrl: 'https://shopsit.royalcanin.com/fr/shop',
+                  //   status: 0,
+                  //   code: 301
+                  // },
+                  // {
+                  //   url: 'https://shopsit.royalcanin.com/fr/shop/light-weight-care-25240300R7',
+                  //   redirectionUrl: 'https://shopsit.royalcanin.com/fr/shop',
+                  //   status: 0,
+                  //   code: 301
+                  // },
+                  // {
+                  //   url: 'https://shopsit.royalcanin.com/fr/shop/light-weight-care-25240300R6',
+                  //   redirectionUrl: 'https://shopsit.royalcanin.com/fr/shop',
+                  //   status: 0,
+                  //   code: 301
+                  // },
+                  // {
+                  //   url: 'https://shopsit.royalcanin.com/fr/shop/light-weight-care-25240300R5',
+                  //   redirectionUrl: 'https://shopsit.royalcanin.com/fr/shop',
+                  //   status: 0,
+                  //   code: 301
+                  // },
+                  // {
+                  //   url: 'https://shopsit.royalcanin.com/fr/shop/light-weight-care-25240300R4',
+                  //   redirectionUrl: 'https://shopsit.royalcanin.com/fr/shop',
+                  //   status: 0,
+                  //   code: 301
+                  // },
+                  // {
+                  //   url: 'https://shopsit.royalcanin.com/fr/shop/light-weight-care-25240300R3',
+                  //   redirectionUrl: 'https://shopsit.royalcanin.com/fr/shop',
+                  //   status: 0,
+                  //   code: 301
+                  // },
+                  // {
+                  //   url: 'https://shopsit.royalcanin.com/fr/shop/light-weight-care-25240300R2',
+                  //   redirectionUrl: 'https://shopsit.royalcanin.com/fr/shop',
+                  //   status: 0,
+                  //   code: 301
+                  // },
+                  // {
+                  //   url: 'https://shopsit.royalcanin.com/fr/shop/light-weight-care-25240300R1',
+                  //   redirectionUrl: 'https://shopsit.royalcanin.com/fr/shop',
+                  //   status: 0,
+                  //   code: 301
+                  // }
                 ]
               },
               defaultLocalDateTime: '2022-08-30 10:04:28.987'
@@ -94,11 +184,14 @@ describe('Redirection Index Component Test', () => {
       const searchInput = screen.getByTestId('searchUrl');
       await userEvent.type(searchInput, '2');
       const searchBtn = screen.getByTestId('searchBtn');
-      userEvent.click(searchBtn);
-      const statusOnchangeBtn = screen.getByTestId('statusOnchange');
-      await userEvent.click(statusOnchangeBtn);
-      const redirectionDelBtn = screen.getByTestId('redirectionDel');
-      await userEvent.click(redirectionDelBtn);
+      await userEvent.click(searchBtn);
+      const switchBtn = screen.getAllByRole('switch')[0];
+      await userEvent.click(switchBtn);
+      await userEvent.click(switchBtn);
+      const iconDelete = screen.getAllByTestId('iconDelete')[0];
+      await userEvent.click(iconDelete);
+      const Confirm = screen.getByText('Confirm');
+      await userEvent.click(Confirm);
     });
   });
 
@@ -226,7 +319,7 @@ describe('Redirection Index Component Test', () => {
   //     );
   //     // debug();
   //     const searchInput = screen.getByTestId('searchUrl');
-  //     await userEvent.type(searchInput, '2');
+  //     await userEvent.type(searchInput, '3');
   //     const searchBtn = screen.getByTestId('searchBtn');
   //     userEvent.click(searchBtn);
   //   });

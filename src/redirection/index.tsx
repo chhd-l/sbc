@@ -41,6 +41,12 @@ export default class Redirection extends Component<any, any> {
     redirectionUrlQuery(searchParams).then((data) => {
       // console.log('redirectionUrlQueryres', data.res);
       const { res } = data;
+
+      if (res.context?.redirectionUrlVOList.length > 0) {
+        res.context?.redirectionUrlVOList.sort((a, b) => {
+          return a.createTime < b.createTime ? 1 : -1;
+        });
+      }
       this.setState({
         dataSource: res.context?.redirectionUrlVOList,
         SearchListloading: false,

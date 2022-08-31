@@ -77,7 +77,9 @@ function List(props: any) {
     },
   ];
   // console.log({ dataSource, Onchange, loading, init, pageNum, redirectionDel });
-
+  useEffect(() => {
+    setcurrent(pageNum)
+  }, [dataSource?.length])
   return (
     <div>
       <Table
@@ -86,7 +88,7 @@ function List(props: any) {
         columns={columns}
         loading={loading}
         pagination={{
-          current: pageNum || current,
+          current: current,
           total: dataSource?.length || 0,
           onChange: (page: number, pageSize?: number) => {
             setcurrent(page)

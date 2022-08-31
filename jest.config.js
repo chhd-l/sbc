@@ -6,7 +6,7 @@ const config = {
   collectCoverageFrom: [
     //"src/**/*.{js,jsx,ts,tsx}",
     "web_modules/qmkit/*.{js,jsx,ts,tsx}",
-    // '/src/redirection/index.{js,jsx,ts,tsx}',
+    // 'src/redirection/index.{js,jsx,ts,tsx}',
     // "!src/**/*.d.ts"
   ],
   "testMatch": [

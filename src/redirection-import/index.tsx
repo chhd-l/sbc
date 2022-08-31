@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { Alert, Breadcrumb, Button, Icon, message, notification, Row, Spin, Steps, Upload } from 'antd';
 import { Const, Fetch, Headline, util, BreadCrumb } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-import { RCi18n } from 'qmkit';
 import TextArea from 'antd/lib/input/TextArea';
 const Dragger = Upload.Dragger;
 const Step = Steps.Step;
@@ -80,7 +79,7 @@ export default class GoodsImport extends React.Component<any, any> {
         <div className="container-search">
           <Headline title={<FormattedMessage id="Content.redirectionImport" />} />
           <Alert
-            message={RCi18n({ id: 'Product.OperationDescription' })}
+            message={(window as any).RCi18n({ id: 'Product.OperationDescription' })}
             description={
               <ul>
                 <li>1、{<FormattedMessage id="Content.importInfo1" />}</li>
@@ -238,7 +237,7 @@ export default class GoodsImport extends React.Component<any, any> {
         const textvalue = info.file.response.context || [];
         let isImport = false;
         this.setState({ isImport, textvalue: textvalue });
-        message.success(fileName + 'upload successfully');
+        message.success(fileName + ` ${(window as any).RCi18n({ id: "Public.Upload.uploadsuccess" })}`);
       } else {
         if (info.file.response === 'Method Not Allowed') {
           // 此功能您没有权限访问
@@ -256,7 +255,7 @@ export default class GoodsImport extends React.Component<any, any> {
       this.setState({ fileName, loading });
     } else if (status === 'error') {
       // 上传失败
-      message.error('fail to upload');
+      message.error((window as any).RCi18n({ id: 'Public.Upload.uploadfailed' }));
       loading = false;
       this.setState({ loading });
     }

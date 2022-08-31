@@ -96,6 +96,7 @@ const SearchHead = ({ onSearch, init }: SearchHeadtype) => {
                     onChange={(e) => {
                       SetUrl((e.target as any).value);
                     }}
+                    data-testid="searchUrl"
                   />
                 </FormItem>
               </Col>
@@ -110,6 +111,7 @@ const SearchHead = ({ onSearch, init }: SearchHeadtype) => {
                     onClick={(e) => {
                       onSearch({ url });
                     }}
+                    data-testid="searchBtn"
                   >
                     <span>
                       <FormattedMessage id="Order.search" />

@@ -14,7 +14,8 @@ export default class Redirection extends Component<any, any> {
       searchParams: {
         url: ''
       },
-      dataSource: []
+      dataSource: [],
+      pageNum: 0
     }
   }
 
@@ -38,11 +39,12 @@ export default class Redirection extends Component<any, any> {
     })
     const { searchParams } = this.state;
     redirectionUrlQuery(searchParams).then((data) => {
-      console.log('redirectionUrlQueryres', data.res);
+      // console.log('redirectionUrlQueryres', data.res);
       const { res } = data;
       this.setState({
         dataSource: res.context?.redirectionUrlVOList,
-        SearchListloading: false
+        SearchListloading: false,
+        pageNum: 1
       })
     }).catch((err) => {
       this.setState({
@@ -88,7 +90,7 @@ export default class Redirection extends Component<any, any> {
         status: rowinfo.status ? 1 : 0
       }
       redirectionUrlDelByUrl(params).then((data) => {
-        console.log('redirectionUrlDelByUrl', data.res);
+        // console.log('redirectionUrlDelByUrl', data.res);
         if (data.res.code === 'K-000000') {
           message.success(RCi18n({ id: 'Subscription.OperateSuccessfully' }))
         } else {
@@ -104,9 +106,25 @@ export default class Redirection extends Component<any, any> {
   }
 
   render() {
-    const { dataSource, SearchListloading } = this.state;
+    const { dataSource, SearchListloading, pageNum } = this.state;
     return (
       <div className='content-redirection'>
+        <div data-testid="statusOnchange" style={{ display: 'none' }} onClick={() => this.statusOnchange(true, {
+          "url": "https://shopsit.royalcanin.com/fr/shop/light-weight-care-25240300R0",
+          "redirectionUrl": "https://shopsit.royalcanin.com/fr/shop",
+          "status": 0,
+          "code": 301,
+        })}></div>
+        <div
+          data-testid="redirectionDel"
+          style={{ display: 'none' }}
+          onClick={() => this.redirectionDel({
+            "url": "https://shopsit.royalcanin.com/fr/shop/light-weight-care-25240300R0",
+            "redirectionUrl": "https://shopsit.royalcanin.com/fr/shop",
+            "status": 0,
+            "code": 301,
+          })}
+        ></div>
         <AuthWrapper functionName="f_redirection_list">
           <div className="order-con">
             <BreadCrumb />
@@ -114,7 +132,7 @@ export default class Redirection extends Component<any, any> {
               <SearchHead onSearch={this.onSearch} init={this.init} />
             </div>
             <div className="container">
-              <SearchList dataSource={dataSource || []} Onchange={this.statusOnchange} loading={SearchListloading} init={this.init} redirectionDel={this.redirectionDel} />
+              <SearchList pageNum={pageNum} dataSource={dataSource.length > 0 ? dataSource : []} Onchange={this.statusOnchange} loading={SearchListloading} init={this.init} redirectionDel={this.redirectionDel} />
             </div>
           </div>
         </AuthWrapper>

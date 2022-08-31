@@ -226,8 +226,30 @@ describe('prescriber Test', () => {
     const btn3 = screen.getByRole('button', { name: /Cancel/ });
     fireEvent.click(btn3);
 
-    // const btn4 = screen.getByRole('input', { type: /checkbox/ });
-    // fireEvent.click(btn4);
-    // fireEvent.click(btn2);
+    const inputChange = screen.getByTestId('inputOnchange');
+    fireEvent.change(inputChange, { target: { value: '887766' } });
+
+    const inputChange1 = screen.getByTestId('inputOnchange1');
+    fireEvent.change(inputChange1, { target: { value: 'test01' } });
+
+    const onSearch = screen.getByTestId('onSearch');
+    fireEvent.click(onSearch);
+  });
+  test('Prescriber1', () => {
+    render(
+      <Prescriber
+        customerId="123123"
+        getPrescriberList={() => {}}
+        setSelectedRowKeys={() => {}}
+        selectedRowKeys="[1,2,3]"
+        setShowModer={() => {}}
+        editPrescriberId="123123"
+      />
+    );
+    const btn1 = screen.getByTestId('addnewBtn');
+    fireEvent.click(btn1);
+
+    const btn2 = screen.getByRole('button', { name: /OK/ });
+    fireEvent.click(btn2);
   });
 });

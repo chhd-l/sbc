@@ -36,8 +36,8 @@ const columns_attribute = [
   },
   {
     title: <FormattedMessage id="Prescriber.PrescriberStatus" />,
-    dataIndex: 'auditStatus',
-    key: 'auditStatus',
+    dataIndex: 'enabled',
+    key: 'enabled',
     render: (text, record, index) => {
       return <p>{text ? RCi18n({ id: 'Prescriber.Enabled' }) : RCi18n({ id: 'Disabled' })}</p>;
     }
@@ -65,7 +65,7 @@ const Prescriber = (props: PrescriberProps) => {
     pageSize: 10,
     total: 0
   });
-  const [sumTotal, setSumtotal] = useState(1);
+  const [sumTotal, setSumtotal] = useState(0);
   const [searchForm, setSearchForm] = useState({
     attributeName: '',
     attributeValue: '',
@@ -170,7 +170,7 @@ const Prescriber = (props: PrescriberProps) => {
       prescriberType: searchForm.prescriberType,
       // attributeName: searchForm.attributeName,
       // attributeValue: searchForm.attributeValue,
-      attributeStatus: true,
+      // attributeStatus: true,
       enabled: true,
       pageSize,
       pageNum: current - 1
@@ -191,7 +191,6 @@ const Prescriber = (props: PrescriberProps) => {
             pageSize: context.size,
             total: context.total
           });
-          setSumtotal(context.total);
         }
       })
       .catch((err) => {
@@ -204,17 +203,11 @@ const Prescriber = (props: PrescriberProps) => {
   const onSelectChange = (selectedRowKey, selectedRow) => {
     setSelectedRowKeys([...selectedRowKey]);
     if (selectedRowKey.length !== 0) {
+      setSumtotal(selectedRowKey.length);
       selectedRow.forEach((item) => {
         setSelectedRowItem([...selectedRowItem, item.prescriberId]);
       });
     }
-  };
-  const arrayFilter = (arrKey, arrList) => {
-    let tempList = [];
-    arrKey.map((item) => {
-      tempList.push(arrList.find((el) => el.id === item));
-    });
-    return tempList;
   };
   const rowSelection = {
     selectedRowKeys,
@@ -290,6 +283,7 @@ const Prescriber = (props: PrescriberProps) => {
                         </p>
                       }
                       value={searchForm.prescriberId}
+                      data-testid="inputOnchange"
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         onFormChange({
@@ -309,6 +303,7 @@ const Prescriber = (props: PrescriberProps) => {
                         </p>
                       }
                       value={searchForm.prescriberName}
+                      data-testid="inputOnchange1"
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         onFormChange({
@@ -356,6 +351,7 @@ const Prescriber = (props: PrescriberProps) => {
                       icon="search"
                       shape="round"
                       onClick={onSearch}
+                      data-testid="onSearch"
                     >
                       <span>
                         <FormattedMessage id="Product.search" />

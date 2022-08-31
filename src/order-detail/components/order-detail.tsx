@@ -149,7 +149,8 @@ class OrderDetailTab extends React.Component<any, any> {
         num: gift.quantity,
         originalPrice: 0,
         price: 0,
-        isGift: true
+        isGift: true,
+        quantityAndRealtimestock: gift?.quantityAndRealtimestock
       };
       return tempGift;
     });
@@ -978,11 +979,11 @@ class OrderDetailTab extends React.Component<any, any> {
                       <FormattedMessage id="Order.Entrance" />: {consignee.entrance}
                     </p>
                     {
-                      (storeId === 123457919 || storeId === 123457907)?(
+                      (storeId === 123457919 || storeId === 123457907) ? (
                         <p>
                           <FormattedMessage id="Order.timeSlot" />: {consignee.timeSlot}
                         </p>
-                      ):null
+                      ) : null
                     }
                     <Tooltip
                       overlayStyle={{
@@ -1038,9 +1039,9 @@ class OrderDetailTab extends React.Component<any, any> {
                             {getFormatDeliveryDateStr(consignee.deliveryDate)}
                           </p>
                         </Tooltip>
-                      ):null
+                      ) : null
                     }
-                    
+
                     {storeId === 123457907 && (
                       <Tooltip
                         overlayStyle={{

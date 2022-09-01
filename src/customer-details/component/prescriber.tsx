@@ -201,12 +201,17 @@ const Prescriber = (props: PrescriberProps) => {
     getAttributes({});
   };
   const onSelectChange = (selectedRowKey, selectedRow) => {
-    setSelectedRowKeys([...selectedRowKey]);
-    if (selectedRowKey.length !== 0) {
-      setSumtotal(selectedRowKey.length);
-      selectedRow.forEach((item) => {
-        setSelectedRowItem([...selectedRowItem, item.prescriberId]);
-      });
+    if (props.showModer) {
+      setSelectedRowKeys([selectedRowKey[selectedRowKey.length - 1]]);
+      setSelectedRowItem([selectedRow[0].prescriberId]);
+    } else {
+      setSelectedRowKeys([...selectedRowKey]);
+      if (selectedRowKey.length !== 0) {
+        setSumtotal(selectedRowKey.length);
+        selectedRow.forEach((item) => {
+          setSelectedRowItem([...selectedRowItem, item.prescriberId]);
+        });
+      }
     }
   };
   const rowSelection = {

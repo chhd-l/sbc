@@ -14,7 +14,8 @@ export default class Redirection extends Component<any, any> {
       searchParams: {
         url: ''
       },
-      dataSource: []
+      dataSource: [],
+      pageNum: 0
     }
   }
 
@@ -38,11 +39,18 @@ export default class Redirection extends Component<any, any> {
     })
     const { searchParams } = this.state;
     redirectionUrlQuery(searchParams).then((data) => {
-      console.log('redirectionUrlQueryres', data.res);
+      // console.log('redirectionUrlQueryres', data.res);
       const { res } = data;
+
+      if (res.context?.redirectionUrlVOList.length > 0) {
+        res.context?.redirectionUrlVOList.sort((a, b) => {
+          return a.createTime < b.createTime ? 1 : -1;
+        });
+      }
       this.setState({
         dataSource: res.context?.redirectionUrlVOList,
-        SearchListloading: false
+        SearchListloading: false,
+        pageNum: 1
       })
     }).catch((err) => {
       this.setState({
@@ -88,7 +96,7 @@ export default class Redirection extends Component<any, any> {
         status: rowinfo.status ? 1 : 0
       }
       redirectionUrlDelByUrl(params).then((data) => {
-        console.log('redirectionUrlDelByUrl', data.res);
+        // console.log('redirectionUrlDelByUrl', data.res);
         if (data.res.code === 'K-000000') {
           message.success(RCi18n({ id: 'Subscription.OperateSuccessfully' }))
         } else {
@@ -104,7 +112,7 @@ export default class Redirection extends Component<any, any> {
   }
 
   render() {
-    const { dataSource, SearchListloading } = this.state;
+    const { dataSource, SearchListloading, pageNum } = this.state;
     return (
       <div className='content-redirection'>
         <AuthWrapper functionName="f_redirection_list">
@@ -114,7 +122,7 @@ export default class Redirection extends Component<any, any> {
               <SearchHead onSearch={this.onSearch} init={this.init} />
             </div>
             <div className="container">
-              <SearchList dataSource={dataSource || []} Onchange={this.statusOnchange} loading={SearchListloading} init={this.init} redirectionDel={this.redirectionDel} />
+              <SearchList pageNum={pageNum} dataSource={dataSource.length > 0 ? dataSource : []} Onchange={this.statusOnchange} loading={SearchListloading} init={this.init} redirectionDel={this.redirectionDel} />
             </div>
           </div>
         </AuthWrapper>

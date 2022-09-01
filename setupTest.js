@@ -35,3 +35,11 @@ Object.defineProperty(window, '__DEV__', {
 Object.defineProperty(window, 'RCi18n', {
   value: RCi18n
 })
+
+// 新增随机数方法
+function rdmValue() {
+  return Math.random() * 10 / 4294967296;
+};
+Object.defineProperty(Math, 'rdmValue', {
+  value: rdmValue
+});

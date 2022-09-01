@@ -7,14 +7,6 @@ type TResult = {
   defaultLocalDateTime?:any
 };
 
-/**
- * 验证订单是否存在售后申请
- * @param tid
- * @returns {Promise<IAsyncResult<TResult>>}
- */
-export const deliverVerify = (tid: string) => {
-  return Fetch<TResult>(`/trade/deliver/verify/${tid}`);
-};
 
 /**
  * 查询list

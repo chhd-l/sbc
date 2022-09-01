@@ -107,7 +107,7 @@ export default class CreditCard extends Component<any> {
                 return ['mc', 'visa', 'amex', 'discover'];
             case 'de':
                 return ['mc', 'visa'];
-            case 'jp': 
+            case 'ja-JP': 
                 return ['mc', 'visa', 'amex','jcb','diners']
             default:
                 return ['mc', 'visa', 'amex'];

@@ -15,6 +15,11 @@ function List(props: any) {
       key: 'url',
     },
     {
+      title: <FormattedMessage id='Content.encodeUrl' />,
+      dataIndex: 'encodeUrl',
+      key: 'encodeUrl',
+    },
+    {
       title: <FormattedMessage id='Content.Redirection' />,
       dataIndex: 'redirectionUrl',
       key: 'redirectionUrl',
@@ -101,7 +106,8 @@ function List(props: any) {
             url: RedirectionData.url,
             redirectionUrl: RedirectionData.redirectionUrl,
             status: RedirectionData.status ? true : false,
-            code: RedirectionData.code
+            code: RedirectionData.code,
+            encodeUrl: RedirectionData?.RedirectionData ?? ''
           }}
           onCancel={() => setModalVisable(false)}
           visable={modalVisable}

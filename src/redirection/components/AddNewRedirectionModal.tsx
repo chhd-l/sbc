@@ -123,7 +123,7 @@ function AddNewRedirectionModal(props: any) {
   return (
     <Modal
       maskClosable={false}
-      title={RCi18n({ id: 'Content.AddNewRedirection' })}
+      title={RedirectionData ? RCi18n({ id: 'Content.EditRedirection' }) : RCi18n({ id: 'Content.AddNewRedirection' })}
       visible={visable}
       okText={RCi18n({ id: 'Content.Confirm' })}
       cancelText={RCi18n({ id: 'Content.Cancel' })}
@@ -143,6 +143,17 @@ function AddNewRedirectionModal(props: any) {
                 required: true,
                 validator: (rule, value, callback) => urlvalidator(rule, value, callback)
               }
+            ],
+          })(<Input disabled={RedirectionData ? true : false} />)}
+          {/* {errmsg && (<span>{errmsg}</span>)} */}
+        </Form.Item>
+        <Form.Item label={<FormattedMessage id='Content.encodeUrl' />}>
+          {getFieldDecorator('encodeUrl', {
+            rules: [
+              {
+                required: true,
+                message: RCi18n({ id: 'Content.requiredUrl' }),
+              },
             ],
           })(<Input disabled={RedirectionData ? true : false} />)}
           {/* {errmsg && (<span>{errmsg}</span>)} */}

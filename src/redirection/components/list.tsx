@@ -107,7 +107,7 @@ function List(props: any) {
             redirectionUrl: RedirectionData.redirectionUrl,
             status: RedirectionData.status ? true : false,
             code: RedirectionData.code,
-            encodeUrl: RedirectionData?.RedirectionData ?? ''
+            encodeUrl: RedirectionData?.encodeUrl ?? ''
           }}
           onCancel={() => setModalVisable(false)}
           visable={modalVisable}

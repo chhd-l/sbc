@@ -11,7 +11,7 @@ type DeliverParam = {
 
 export const fetchReturnDetail = rid => {
   return Fetch<TResult>(`/return/detail/${rid}`, {
-    method: 'GET'
+    method: 'POST'
   });
 };
 

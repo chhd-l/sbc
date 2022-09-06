@@ -68,7 +68,7 @@ const SearchHead = ({ onSearch, init }: SearchHeadtype) => {
       </Menu.Item>
       <Menu.Item>
         <AuthWrapper functionName="fContentbatchExport">
-          <div onClick={() => toDownTempl()}>
+          <div data-testid="toDownTempl" onClick={() => toDownTempl()}>
             <FormattedMessage id="Order.batchExport" />
           </div>
         </AuthWrapper>
@@ -78,6 +78,7 @@ const SearchHead = ({ onSearch, init }: SearchHeadtype) => {
 
   return (
     <div className=''>
+      <div data-testid="testToDownTempl" style={{ display: 'none' }} onClick={() => toDownTempl()}></div>
       <Row>
         <Col span={12}>
           <Headline title={<FormattedMessage id="Menu.Redirection Management" />} />
@@ -129,6 +130,7 @@ const SearchHead = ({ onSearch, init }: SearchHeadtype) => {
             <Button
               type="primary"
               style={{ textAlign: 'center' }}
+              data-testid="AddNewRedirection"
               onClick={() => setModalVisable(true)}
             >
               <FormattedMessage id="Content.AddNewRedirection" />
@@ -145,7 +147,7 @@ const SearchHead = ({ onSearch, init }: SearchHeadtype) => {
                   placement="bottomLeft"
                   getPopupContainer={(trigger: any) => trigger.parentNode}
                 >
-                  <Button>
+                  <Button data-testid="hoverbtn">
                     <FormattedMessage id="Content.BatchOperations" /> <Icon type="down" />
                   </Button>
                 </Dropdown>

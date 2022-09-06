@@ -47,9 +47,9 @@ function AddNewRedirectionModal(props: any) {
           ...params,
           status: params.status ? 1 : 0
         }
-        if (RedirectionData && RedirectionData?.url === params?.url) {
-          // 相等则是修改
-          console.log(' 相等则是修改', '相等则是修改');
+        if (RedirectionData) {
+          // 修改
+          console.log(' 修改', '修改');
           redirectionUrlUpdByUrl(params).then((data) => {
             console.log('redirectionUrlUpdByUrl', data.res);
             if (data.res.code === 'K-000000') {
@@ -65,8 +65,8 @@ function AddNewRedirectionModal(props: any) {
             init();
           })
         } else {
-          // 不相等则是新增
-          console.log('不相等则是新增', '不相等则是新增');
+          // 新增
+          console.log('新增', '新增');
           redirectionUrlAdd(params).then((data) => {
             console.log('redirectionUrlAdd', data.res);
             if (data.res.code === 'K-090006') {
@@ -144,7 +144,7 @@ function AddNewRedirectionModal(props: any) {
                 validator: (rule, value, callback) => urlvalidator(rule, value, callback)
               }
             ],
-          })(<Input disabled={RedirectionData ? true : false} />)}
+          })(<Input data-testid="url" disabled={RedirectionData ? true : false} />)}
           {/* {errmsg && (<span>{errmsg}</span>)} */}
         </Form.Item>
         <Form.Item label={<FormattedMessage id='Content.encodeUrl' />}>
@@ -155,8 +155,7 @@ function AddNewRedirectionModal(props: any) {
                 message: RCi18n({ id: 'Content.requiredUrl' }),
               },
             ],
-          })(<Input disabled={RedirectionData ? true : false} />)}
-          {/* {errmsg && (<span>{errmsg}</span>)} */}
+          })(<Input data-testid="encodeUrl" disabled={RedirectionData ? true : false} />)}
         </Form.Item>
         <Form.Item label={<FormattedMessage id='Content.Redirection' />}>
           {getFieldDecorator('redirectionUrl', {
@@ -167,23 +166,19 @@ function AddNewRedirectionModal(props: any) {
               },
 
             ],
-          })(<Input />)}
+          })(<Input data-testid="redirectionUrl" />)}
         </Form.Item>
         <Form.Item label={<FormattedMessage id='Content.Status' />}>
           {getFieldDecorator('status', {
             valuePropName: 'checked',
             initialValue: true,
-            rules: [
-
-            ],
+            rules: [],
           })(<Switch />)}
         </Form.Item>
         <Form.Item label={<FormattedMessage id='Content.RedirectionType' />}>
           {getFieldDecorator('code', {
             initialValue: 302,
-            rules: [
-
-            ],
+            rules: [],
           })(<Select>
             <Option value={302}> <FormattedMessage id='Content.Temporary' /></Option>
             <Option value={301}><FormattedMessage id='Content.Permanent' /></Option>

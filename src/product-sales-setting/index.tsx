@@ -1,6 +1,19 @@
 import React, { Component } from 'react';
 import { BreadCrumb, SelectGroup, Const, Headline, cache } from 'qmkit';
-import { Form, InputNumber, Select, Modal, Button, Radio, message, Col, Row, Popconfirm, Tooltip, Switch } from 'antd';
+import {
+  Form,
+  InputNumber,
+  Select,
+  Modal,
+  Button,
+  Radio,
+  message,
+  Col,
+  Row,
+  Popconfirm,
+  Tooltip,
+  Switch
+} from 'antd';
 import ModalForm from './conponents/modal-form';
 import ModalFormClub from './conponents/modal-form-club';
 import ModalFormIndividual from './conponents/modal-form-individual';
@@ -36,7 +49,7 @@ class ProductSearchSetting extends Component<any, any> {
     defaultQuantitySelected: '',
     discountDisplayTypeInfo: '',
     dailyPortion: '',
-    notify_me_block:'',
+    notify_me_block: '',
     maximum_number_of_orders_per_sku: '20',
     maximum_number_of_items_per_cart: '',
     maximum_number_of_orders_sku_total: '',
@@ -96,7 +109,6 @@ class ProductSearchSetting extends Component<any, any> {
     );
   };
 
-
   showIndividualModal = () => {
     this.setState({
       visibleIndividual: true
@@ -120,7 +132,6 @@ class ProductSearchSetting extends Component<any, any> {
     );
   };
 
-
   /**
    * 获取更新频率月｜ 周
    */
@@ -138,7 +149,6 @@ class ProductSearchSetting extends Component<any, any> {
       querySysDictionary({ type: 'Frequency_day_individual' }),
       querySysDictionary({ type: 'Frequency_week_individual' }),
       querySysDictionary({ type: 'Frequency_month_individual' })
-
     ]);
     let {
       defaultPurchaseType,
@@ -212,18 +222,16 @@ class ProductSearchSetting extends Component<any, any> {
     this.props.form.setFieldsValue({
       [type]: null
     });
-
   }
 
   showConfirm(item, type) {
     const _this = this;
     confirm({
-      content: RCi18n({id:'Product.Areyousuretodelete'}),
+      content: RCi18n({ id: 'Product.Areyousuretodelete' }),
       onOk() {
         _this.deleteDict(item, type);
       },
-      onCancel() {
-      }
+      onCancel() {}
     });
   }
 
@@ -239,39 +247,52 @@ class ProductSearchSetting extends Component<any, any> {
         values.notify_me_block = values.notify_me_block ? '1' : '0';
         const res: any = await defaultProductSetting({
           ...values,
-          systemConfigs: [{
-            configName: "defaultQuantitySelected",
-            context: values.defaultQuantitySelected
-          },{
-            configName: "discountDisplayTypeInfo",
-            context: values.discountDisplayTypeInfo
-          },{
-            configName: "dailyPortion",
-            context: values.dailyPortion
-          }, {
-            configName: "notify_me_block",
-            context: values.notify_me_block
-          }, {
-            configName: "maximum_number_of_orders_per_sku",
-            context: `${values.maximum_number_of_orders_per_sku}`
-          }, {
-            configName: "maximum_number_of_orders_sku_total",
-            context: `${values.maximum_number_of_orders_sku_total}`
-          }]
+          systemConfigs: [
+            {
+              configName: 'defaultQuantitySelected',
+              context: values.defaultQuantitySelected
+            },
+            {
+              configName: 'discountDisplayTypeInfo',
+              context: values.discountDisplayTypeInfo
+            },
+            {
+              configName: 'dailyPortion',
+              context: values.dailyPortion
+            },
+            {
+              configName: 'notify_me_block',
+              context: values.notify_me_block
+            },
+            {
+              configName: 'maximum_number_of_orders_per_sku',
+              context: `${values.maximum_number_of_orders_per_sku}`
+            },
+            {
+              configName: 'maximum_number_of_orders_sku_total',
+              context: `${values.maximum_number_of_orders_sku_total}`
+            }
+          ]
         });
         this.setState({ loading: false });
         if (res.res.code === Const.SUCCESS_CODE) {
           message.success(res.res.message);
           let obj = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
-          sessionStorage.setItem(cache.PRODUCT_SALES_SETTING, JSON.stringify({ ...obj, ...values }));
-          sessionStorage.setItem(cache.PRODUCT_SALES_CONFIG, JSON.stringify({
-            defaultQuantitySelected: values.defaultQuantitySelected,
-            discountDisplayTypeInfo: values.discountDisplayTypeInfo,
-            dailyPortion: values.dailyPortion,
-            notify_me_block:values.notify_me_block,
-            maximum_number_of_orders_per_sku: `${values.maximum_number_of_orders_per_sku}`,
-            maximum_number_of_orders_sku_total: `${values.maximum_number_of_orders_sku_total}`
-          }));
+          sessionStorage.setItem(
+            cache.PRODUCT_SALES_SETTING,
+            JSON.stringify({ ...obj, ...values })
+          );
+          sessionStorage.setItem(
+            cache.PRODUCT_SALES_CONFIG,
+            JSON.stringify({
+              defaultQuantitySelected: values.defaultQuantitySelected,
+              discountDisplayTypeInfo: values.discountDisplayTypeInfo,
+              dailyPortion: values.dailyPortion,
+              notify_me_block: values.notify_me_block,
+              maximum_number_of_orders_per_sku: `${values.maximum_number_of_orders_per_sku}`,
+              maximum_number_of_orders_sku_total: `${values.maximum_number_of_orders_sku_total}`
+            })
+          );
         }
       }
     });
@@ -310,24 +331,35 @@ class ProductSearchSetting extends Component<any, any> {
         <BreadCrumb />
         <div style={styles.formContainer}>
           <Form
-            name='complex'
+            name="complex"
             onSubmit={this.onFinish}
-            labelAlign='right'
+            labelAlign="right"
             labelCol={{ span: 6 }}
             wrapperCol={{ span: 16 }}
           >
-
-
             <Form.Item
-              label={<span style={{ color: '#666' }}><FormattedMessage id='Product.Defaultpurchasetype' /></span>}
-              style={{display:Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block'}}
+              label={
+                <span style={{ color: '#666' }}>
+                  <FormattedMessage id="Product.Defaultpurchasetype" />
+                </span>
+              }
+              style={{ display: Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block' }}
             >
               {getFieldDecorator('defaultPurchaseType', {
                 initialValue: defaultPurchaseType,
                 rules: [
                   {
                     required: true,
-                    message: RCi18n({ id: 'Product.PleaseSelectPurchaseType' })
+                    message: RCi18n({ id: 'Product.PleaseSelectPurchaseType' }),
+                    validator: (rule, value, callback) => {
+                      const bool = purchaseType.filter((item) => value === item.id);
+                      if (bool.length === 0) {
+                        this.setState({ defaultPurchaseType: 0 });
+                        callback(RCi18n({ id: 'Product.PleaseSelectPurchaseType' }));
+                      } else {
+                        callback();
+                      }
+                    }
                   }
                 ]
               })(
@@ -351,8 +383,8 @@ class ProductSearchSetting extends Component<any, any> {
 
             <Form.Item
               label={
-                <span className='ant-form-item-required' style={{ color: '#666' }}>
-                 <FormattedMessage id='Product.Defaultautoshipfrequency' />
+                <span className="ant-form-item-required" style={{ color: '#666' }}>
+                  <FormattedMessage id="Product.Defaultautoshipfrequency" />
                 </span>
               }
               style={{ marginBottom: 0 }}
@@ -371,22 +403,32 @@ class ProductSearchSetting extends Component<any, any> {
                     })(
                       <Select
                         disabled={disabled}
-                        optionLabelProp='label'
+                        optionLabelProp="label"
                         placeholder={RCi18n({ id: 'Product.PleaseSelectSubscriptionFrequency' })}
-                        style={{ width: 220 }}>
+                        style={{ width: 220 }}
+                      >
                         {options.map((item) => (
                           <Option key={item.id} value={item.id} label={item.name}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative' }}>
+                            <div
+                              style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                position: 'relative'
+                              }}
+                            >
                               <span>{item.name}</span>
 
-                              <div onClick={e => e.stopPropagation()} style={{
-                                background: '#fff',
-                                height: '90vh',
-                                padding: '5px 12px',
-                                position: 'absolute',
-                                right: -10,
-                                top: -5
-                              }}>
+                              <div
+                                onClick={(e) => e.stopPropagation()}
+                                style={{
+                                  background: '#fff',
+                                  height: '90vh',
+                                  padding: '5px 12px',
+                                  position: 'absolute',
+                                  right: -10,
+                                  top: -5
+                                }}
+                              >
                                 {/* <Popconfirm placement="topLeft" title="Are you sure you want to delete this frequency?" onConfirm={(e) => this.deleteDict(item,'defaultSubscriptionFrequencyId')} okText="Confirm" cancelText="Cancel">
                               <Tooltip placement="top" title="Delete">
                                 <a>
@@ -394,8 +436,15 @@ class ProductSearchSetting extends Component<any, any> {
                                 </a>
                               </Tooltip>
                             </Popconfirm> */}
-                                <a onClick={(e) => this.showConfirm(item, 'defaultSubscriptionFrequencyId')}>
-                                  <span className='icon iconfont iconDelete' style={{ fontSize: 15 }} />
+                                <a
+                                  onClick={(e) =>
+                                    this.showConfirm(item, 'defaultSubscriptionFrequencyId')
+                                  }
+                                >
+                                  <span
+                                    className="icon iconfont iconDelete"
+                                    style={{ fontSize: 15 }}
+                                  />
                                 </a>
                               </div>
                             </div>
@@ -406,27 +455,32 @@ class ProductSearchSetting extends Component<any, any> {
                   </Form.Item>
                 </Col>
                 <Col span={4}>
-                  <Button type='primary' size='default' onClick={this.showModal} disabled={disabled}>
-                    <FormattedMessage id='Product.Addnewfrequency' />
+                  <Button
+                    type="primary"
+                    size="default"
+                    onClick={this.showModal}
+                    disabled={disabled}
+                  >
+                    <FormattedMessage id="Product.Addnewfrequency" />
                   </Button>
                 </Col>
               </Row>
-
-
             </Form.Item>
 
             <Form.Item
               label={
-                <span className='ant-form-item-required' style={{ color: '#666' }}>
-                 <FormattedMessage id='Product.Defaultclubfrequency' />
+                <span className="ant-form-item-required" style={{ color: '#666' }}>
+                  <FormattedMessage id="Product.Defaultclubfrequency" />
                 </span>
               }
-              style={{ marginBottom: 0, display: Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block' }}
+              style={{
+                marginBottom: 0,
+                display: Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block'
+              }}
             >
               <Row gutter={20}>
                 <Col span={8}>
                   <Form.Item>
-
                     {getFieldDecorator('defaultSubscriptionClubFrequencyId', {
                       initialValue: defaultSubscriptionClubFrequencyId || '',
                       rules: [
@@ -435,24 +489,34 @@ class ProductSearchSetting extends Component<any, any> {
                           message: RCi18n({ id: 'Product.PleaseSelectSubscriptionFrequency' })
                         }
                       ]
-
                     })(
-                      <Select disabled={disabled}
-                              optionLabelProp='label'
-                              placeholder={RCi18n({ id: 'Product.PleaseSelectSubscriptionFrequency' })}
-                              style={{ width: 220 }}>
+                      <Select
+                        disabled={disabled}
+                        optionLabelProp="label"
+                        placeholder={RCi18n({ id: 'Product.PleaseSelectSubscriptionFrequency' })}
+                        style={{ width: 220 }}
+                      >
                         {optionsClub.map((item) => (
                           <Option key={item.id} value={item.id} label={item.name}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative' }}>
+                            <div
+                              style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                position: 'relative'
+                              }}
+                            >
                               <span>{item.name}</span>
 
-                              <div onClick={e => e.stopPropagation()} style={{
-                                background: '#fff',
-                                padding: '5px 12px',
-                                position: 'absolute',
-                                right: -10,
-                                top: -5
-                              }}>
+                              <div
+                                onClick={(e) => e.stopPropagation()}
+                                style={{
+                                  background: '#fff',
+                                  padding: '5px 12px',
+                                  position: 'absolute',
+                                  right: -10,
+                                  top: -5
+                                }}
+                              >
                                 {/* <Popconfirm placement="right" style={{zIndex:9999999}} title="Are you sure you want to delete this frequency?" onConfirm={(e) => this.deleteDict(item,'defaultSubscriptionClubFrequencyId')} okText="Confirm" cancelText="Cancel">
                                 <Tooltip placement="top" title="Delete">
                                   <a>
@@ -460,8 +524,15 @@ class ProductSearchSetting extends Component<any, any> {
                                   </a>
                                 </Tooltip>
                               </Popconfirm> */}
-                                <a onClick={(e) => this.showConfirm(item, 'defaultSubscriptionClubFrequencyId')}>
-                                  <span className='icon iconfont iconDelete' style={{ fontSize: 15 }}></span>
+                                <a
+                                  onClick={(e) =>
+                                    this.showConfirm(item, 'defaultSubscriptionClubFrequencyId')
+                                  }
+                                >
+                                  <span
+                                    className="icon iconfont iconDelete"
+                                    style={{ fontSize: 15 }}
+                                  ></span>
                                 </a>
                               </div>
                             </div>
@@ -469,23 +540,31 @@ class ProductSearchSetting extends Component<any, any> {
                         ))}
                       </Select>
                     )}
-                  </Form.Item></Col>
+                  </Form.Item>
+                </Col>
                 <Col span={4}>
-                  <Button type='primary' size='default' onClick={this.showClubModal} disabled={disabled}>
-                    <FormattedMessage id='Product.Addnewfrequency' />
+                  <Button
+                    type="primary"
+                    size="default"
+                    onClick={this.showClubModal}
+                    disabled={disabled}
+                  >
+                    <FormattedMessage id="Product.Addnewfrequency" />
                   </Button>
                 </Col>
               </Row>
-
-
             </Form.Item>
 
             <Form.Item
-              label={<span style={{ color: '#666' }}>
-                  <FormattedMessage id='Product.DefaultIndividualfrequency' />
+              label={
+                <span style={{ color: '#666' }}>
+                  <FormattedMessage id="Product.DefaultIndividualfrequency" />
                 </span>
               }
-              style={{ marginBottom: 0, display: Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block' }}
+              style={{
+                marginBottom: 0,
+                display: Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block'
+              }}
             >
               <Row gutter={20}>
                 <Col span={8}>
@@ -502,22 +581,31 @@ class ProductSearchSetting extends Component<any, any> {
                       <Select
                         allowClear
                         disabled={disabled}
-                        optionLabelProp='label'
+                        optionLabelProp="label"
                         placeholder={RCi18n({ id: 'Product.PleaseSelectSubscriptionFrequency' })}
                         style={{ width: 220 }}
                       >
                         {optionsIndividual.map((item) => (
                           <Option key={item.id} value={item.id} label={item.name}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative' }}>
+                            <div
+                              style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                position: 'relative'
+                              }}
+                            >
                               <span>{item.name}</span>
 
-                              <div onClick={e => e.stopPropagation()} style={{
-                                background: '#fff',
-                                padding: '5px 12px',
-                                position: 'absolute',
-                                right: -10,
-                                top: -5
-                              }}>
+                              <div
+                                onClick={(e) => e.stopPropagation()}
+                                style={{
+                                  background: '#fff',
+                                  padding: '5px 12px',
+                                  position: 'absolute',
+                                  right: -10,
+                                  top: -5
+                                }}
+                              >
                                 {/* <Popconfirm placement="right" style={{zIndex:9999999}} title="Are you sure you want to delete this frequency?" onConfirm={(e) => this.deleteDict(item,'defaultSubscriptionClubFrequencyId')} okText="Confirm" cancelText="Cancel">
                                 <Tooltip placement="top" title="Delete">
                                   <a>
@@ -525,8 +613,18 @@ class ProductSearchSetting extends Component<any, any> {
                                   </a>
                                 </Tooltip>
                               </Popconfirm> */}
-                                <a onClick={(e) => this.showConfirm(item, 'defaultSubscriptionIndividualFrequencyId')}>
-                                  <span className='icon iconfont iconDelete' style={{ fontSize: 15 }} />
+                                <a
+                                  onClick={(e) =>
+                                    this.showConfirm(
+                                      item,
+                                      'defaultSubscriptionIndividualFrequencyId'
+                                    )
+                                  }
+                                >
+                                  <span
+                                    className="icon iconfont iconDelete"
+                                    style={{ fontSize: 15 }}
+                                  />
                                 </a>
                               </div>
                             </div>
@@ -534,40 +632,64 @@ class ProductSearchSetting extends Component<any, any> {
                         ))}
                       </Select>
                     )}
-                  </Form.Item></Col>
+                  </Form.Item>
+                </Col>
                 <Col span={4}>
-                  <Button type='primary' size='default' onClick={this.showIndividualModal} disabled={disabled}>
-                    <FormattedMessage id='Product.Addnewfrequency' />
+                  <Button
+                    type="primary"
+                    size="default"
+                    onClick={this.showIndividualModal}
+                    disabled={disabled}
+                  >
+                    <FormattedMessage id="Product.Addnewfrequency" />
                   </Button>
                 </Col>
               </Row>
             </Form.Item>
 
             <Form.Item
-              label={<span style={{ color: '#666' }}><FormattedMessage id='Product.PriceDisplayMethod' /></span>}
-              style={{display:Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block'}}
+              label={
+                <span style={{ color: '#666' }}>
+                  <FormattedMessage id="Product.PriceDisplayMethod" />
+                </span>
+              }
+              style={{ display: Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block' }}
             >
               {getFieldDecorator('priceDisplayMethod', {
                 initialValue: priceDisplayMethod || 0,
                 rules: [
                   {
                     required: true,
-                    message: RCi18n({id:'Product.PleaseSelectPriceDisplayMethod'})
+                    message: RCi18n({ id: 'Product.PleaseSelectPriceDisplayMethod' })
                   }
                 ]
-              })(<Select disabled={disabled}
-                         optionLabelProp='label'
-                         placeholder={RCi18n({id:'Product.PleaseSelectPriceDisplayMethod'})} style={{ width: 220 }}>
-                {['From the lowest to highest', 'Above the lowest', 'Lowest one-off and subscription price'].map((item, index) => (
-                  <Option key={index} title={item} value={index} label={item}>{item}</Option>
-                ))}
-              </Select>)}
+              })(
+                <Select
+                  disabled={disabled}
+                  optionLabelProp="label"
+                  placeholder={RCi18n({ id: 'Product.PleaseSelectPriceDisplayMethod' })}
+                  style={{ width: 220 }}
+                >
+                  {[
+                    'From the lowest to highest',
+                    'Above the lowest',
+                    'Lowest one-off and subscription price'
+                  ].map((item, index) => (
+                    <Option key={index} title={item} value={index} label={item}>
+                      {item}
+                    </Option>
+                  ))}
+                </Select>
+              )}
             </Form.Item>
 
-
             <Form.Item
-              label={<span style={{ color: '#666' }}><FormattedMessage id='Product.BasePriceShowedInPDP' /></span>}
-              style={{display:Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block'}}
+              label={
+                <span style={{ color: '#666' }}>
+                  <FormattedMessage id="Product.BasePriceShowedInPDP" />
+                </span>
+              }
+              style={{ display: Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block' }}
               required
             >
               {getFieldDecorator('basePricePDPShowedFlag', {
@@ -577,71 +699,131 @@ class ProductSearchSetting extends Component<any, any> {
             </Form.Item>
 
             <Form.Item
-              label={<span style={{ color: '#666' }}><FormattedMessage id='Product.DefaultQuantitySelected' /></span>}
-              style={{display:Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block'}}
+              label={
+                <span style={{ color: '#666' }}>
+                  <FormattedMessage id="Product.DefaultQuantitySelected" />
+                </span>
+              }
+              style={{ display: Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block' }}
             >
               {getFieldDecorator('defaultQuantitySelected', {
                 initialValue: defaultQuantitySelected || '0',
                 rules: [
                   {
                     required: true,
-                    message: RCi18n({id:'Product.PleaseSelectDefaultQuantitySelected'})
+                    message: RCi18n({ id: 'Product.PleaseSelectDefaultQuantitySelected' })
                   }
                 ]
-              })(<Select disabled={disabled}
-                         optionLabelProp='label'
-                         placeholder={RCi18n({id:'Product.PleaseSelectDefaultQuantitySelected'})} style={{ width: 220 }}>
-                <Option value="0" label="The smallest">The smallest</Option>
-                <Option value="1" label="Second smallest one">Second smallest one</Option>
-                <Option value="2" label="The largest">The largest</Option>
-              </Select>)}
+              })(
+                <Select
+                  disabled={disabled}
+                  optionLabelProp="label"
+                  placeholder={RCi18n({ id: 'Product.PleaseSelectDefaultQuantitySelected' })}
+                  style={{ width: 220 }}
+                >
+                  <Option value="0" label="The smallest">
+                    The smallest
+                  </Option>
+                  <Option value="1" label="Second smallest one">
+                    Second smallest one
+                  </Option>
+                  <Option value="2" label="The largest">
+                    The largest
+                  </Option>
+                </Select>
+              )}
             </Form.Item>
 
             <Form.Item
-              label={<span style={{ color: '#666' }}><FormattedMessage id='Product.maxOfSku' /></span>}
-              style={{display:Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block'}}
+              label={
+                <span style={{ color: '#666' }}>
+                  <FormattedMessage id="Product.maxOfSku" />
+                </span>
+              }
+              style={{ display: Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block' }}
               required
             >
               {getFieldDecorator('maximum_number_of_orders_per_sku', {
-                rules: [{ required: true, type: 'integer', max: 20, min: 1, message: RCi18n({id: "Product.maxOfSkuErr"}) }],
-                initialValue: maximum_number_of_orders_per_sku ? parseInt(maximum_number_of_orders_per_sku) : 20
-              })(<InputNumber precision={0} style={{width: 220}} />)}
+                rules: [
+                  {
+                    required: true,
+                    type: 'integer',
+                    max: 20,
+                    min: 1,
+                    message: RCi18n({ id: 'Product.maxOfSkuErr' })
+                  }
+                ],
+                initialValue: maximum_number_of_orders_per_sku
+                  ? parseInt(maximum_number_of_orders_per_sku)
+                  : 20
+              })(<InputNumber precision={0} style={{ width: 220 }} />)}
             </Form.Item>
 
             <Form.Item
-              label={<span style={{ color: '#666' }}><FormattedMessage id='Product.maxOfCart' /></span>}
-              style={{display:Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block'}}
+              label={
+                <span style={{ color: '#666' }}>
+                  <FormattedMessage id="Product.maxOfCart" />
+                </span>
+              }
+              style={{ display: Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block' }}
               required
             >
               {getFieldDecorator('maximum_number_of_orders_sku_total', {
-                rules: [{ required: true, type: 'integer', max: 100, min: 10, message: RCi18n({id: "Product.maxOfCartErr"}) }],
-                initialValue: maximum_number_of_orders_sku_total ? parseInt(maximum_number_of_orders_sku_total) : null
-              })(<InputNumber precision={0} style={{width: 220}} />)}
+                rules: [
+                  {
+                    required: true,
+                    type: 'integer',
+                    max: 100,
+                    min: 10,
+                    message: RCi18n({ id: 'Product.maxOfCartErr' })
+                  }
+                ],
+                initialValue: maximum_number_of_orders_sku_total
+                  ? parseInt(maximum_number_of_orders_sku_total)
+                  : null
+              })(<InputNumber precision={0} style={{ width: 220 }} />)}
             </Form.Item>
 
             <Form.Item
-              label={<span style={{ color: '#666' }}><FormattedMessage id='Product.PromotionDisplayFormat' /></span>}
-              style={{display:Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block'}}
+              label={
+                <span style={{ color: '#666' }}>
+                  <FormattedMessage id="Product.PromotionDisplayFormat" />
+                </span>
+              }
+              style={{ display: Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block' }}
             >
               {getFieldDecorator('discountDisplayTypeInfo', {
                 initialValue: discountDisplayTypeInfo,
                 rules: [
                   {
                     required: true,
-                    message: RCi18n({id:'Product.PleaseSelectPromotionDisplayFormat'})
+                    message: RCi18n({ id: 'Product.PleaseSelectPromotionDisplayFormat' })
                   }
                 ]
-              })(<Select disabled={disabled}
-                         optionLabelProp='label'
-                         placeholder={RCi18n({id:'Product.PleaseSelectPromotionDisplayFormat'})} style={{ width: 220 }}>
-                <Option value="Percentage" label="Percentage">Percentage</Option>
-                <Option value="Amount" label="Amount">Amount</Option>
-              </Select>)}
+              })(
+                <Select
+                  disabled={disabled}
+                  optionLabelProp="label"
+                  placeholder={RCi18n({ id: 'Product.PleaseSelectPromotionDisplayFormat' })}
+                  style={{ width: 220 }}
+                >
+                  <Option value="Percentage" label="Percentage">
+                    Percentage
+                  </Option>
+                  <Option value="Amount" label="Amount">
+                    Amount
+                  </Option>
+                </Select>
+              )}
             </Form.Item>
 
             <Form.Item
-              label={<span style={{ color: '#666' }}><FormattedMessage id='Product.DailyPortionTool' /></span>}
-              style={{display:Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block'}}
+              label={
+                <span style={{ color: '#666' }}>
+                  <FormattedMessage id="Product.DailyPortionTool" />
+                </span>
+              }
+              style={{ display: Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block' }}
               required
             >
               {getFieldDecorator('dailyPortion', {
@@ -651,8 +833,12 @@ class ProductSearchSetting extends Component<any, any> {
             </Form.Item>
 
             <Form.Item
-              label={<span style={{ color: '#666' }}><FormattedMessage id='Product.notifyMeBlock' /></span>}
-              style={{display:Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block'}}
+              label={
+                <span style={{ color: '#666' }}>
+                  <FormattedMessage id="Product.notifyMeBlock" />
+                </span>
+              }
+              style={{ display: Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block' }}
               required
             >
               {getFieldDecorator('notify_me_block', {
@@ -660,11 +846,10 @@ class ProductSearchSetting extends Component<any, any> {
                 initialValue: notify_me_block === '1'
               })(<Switch />)}
             </Form.Item>
-            
 
-            <div className='bar-button' style={{ marginLeft: -40 }}>
-              <Button loading={loading} type='primary' htmlType='submit'>
-                <FormattedMessage id='Product.Save' />
+            <div className="bar-button" style={{ marginLeft: -40 }}>
+              <Button loading={loading} type="primary" htmlType="submit">
+                <FormattedMessage id="Product.Save" />
               </Button>
             </div>
           </Form>

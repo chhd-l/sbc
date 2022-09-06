@@ -97,11 +97,11 @@ export default class GoodsImport extends React.Component<any, any> {
           </div>
           {current == 0 ? (
             <div style={styles.center}>
-              <Button type="primary" icon="download" style={{ marginTop: 10 }} onClick={this.toDownTempl}>
+              <Button data-testid="download" type="primary" icon="download" style={{ marginTop: 10 }} onClick={this.toDownTempl}>
                 {<FormattedMessage id="Product.downloadRedirectionImportTemplate" />}
               </Button>
               <div style={{ marginTop: 40 }}>
-                <Button type="primary" onClick={this._next}>
+                <Button data-testid="downloadnext" type="primary" onClick={this._next}>
                   {<FormattedMessage id="Product.next" />}
                 </Button>
               </div>
@@ -110,7 +110,7 @@ export default class GoodsImport extends React.Component<any, any> {
           {current == 1 ? (
             <Spin spinning={this.state.loading}>
               <div className="steps-content" style={styles.center}>
-                <Dragger name="file" multiple={false} showUploadList={false} accept=".xls,.xlsx" headers={header} action={Const.HOST + '/redirectionUrl/import'} onChange={this.changeImage}>
+                <Dragger name="file" multiple={false} showUploadList={false} accept=".xls,.xlsx" headers={header} action={Const.HOST + '/redirectionUrl/import'} onChange={this.changeImage} beforeUpload={this.beforeUpload}>
                   <div style={styles.content}>
                     <p className="ant-upload-hint" style={{ fontSize: 14, color: 'black' }}>
                       {' '}
@@ -220,6 +220,9 @@ export default class GoodsImport extends React.Component<any, any> {
     }
   }
 
+  beforeUpload = (file) => {
+    console.log('file', file)
+  }
 
   changeImage = (info) => {
     const status = info.file.status;

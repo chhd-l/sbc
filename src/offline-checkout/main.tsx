@@ -26,7 +26,8 @@ class Checkout extends React.Component<any, any> {
       cateList: [],
       consents: [],
       selectedConsents: [],
-      orderId: ''
+      orderId: '',
+      paymentMethods: null
     };
   }
 
@@ -226,8 +227,10 @@ class Checkout extends React.Component<any, any> {
         2
       ),
       payPspItemEnum: paymentMethod,
-      tradeItems: list.map((p) => ({ skuId: p.goodsInfoId, num: p.quantity }))
+      tradeItems: list.map((p) => ({ skuId: p.goodsInfoId, num: p.quantity })),
+      posTypeEnum: paymentMethod === 'ONJ Credit card' ? 1 : null
     };
+
     this.setState({ loading: true });
     webapi
       .checkout(params)
@@ -251,7 +254,8 @@ class Checkout extends React.Component<any, any> {
             this.setState(
               {
                 orderId: context.tid,
-                loading: false
+                loading: false,
+                paymentMethods: paymentMethod
               },
               this.showQueryModal
             );
@@ -295,16 +299,17 @@ class Checkout extends React.Component<any, any> {
       cancelText: noText,
       centered: true,
       onOk: this.queryOrderStatus,
-      onCancel: () => {}
+      onCancel: () => { }
     });
   };
 
   queryOrderStatus = () => {
-    const { orderId } = this.state;
+    const { orderId, paymentMethods } = this.state;
     this.setState({ loading: true });
     webapi
       .queryStatus({
-        tidList: [orderId]
+        tidList: [orderId],
+        posTypeEnum: paymentMethods === 'ONJ Credit card' ? 1 : null
       })
       .then((data) => {
         if (data.res.code === Const.SUCCESS_CODE) {

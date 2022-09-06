@@ -41,7 +41,9 @@ jest.mock('../webapi', () => {
                     url: 'https://shopsit.royalcanin.com/fr/shop/light-weight-care-25240300R16',
                     redirectionUrl: 'https://shopsit.royalcanin.com/fr/shop',
                     status: 1,
-                    code: 301
+                    code: 301,
+                    encodeUrl:
+                      'https://www.shop.royalcanin.com.tr/tr/kitten-jelly-%28x12%29-415001020_INNERBOX_12_UNIT_TR.html'
                   }
                   // {
                   //   url: 'https://shopsit.royalcanin.com/fr/shop/light-weight-care-25240300R15',

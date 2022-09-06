@@ -4,7 +4,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import AddNewRedirectionModal from './AddNewRedirectionModal';
 
 function List(props: any) {
-  const { dataSource, Onchange, loading, init, pageNum, redirectionDel } = props;
+  const { dataSource, Onchange, loading, init, pageNum, redirectionDel, onPageChange, total } = props;
   const [modalVisable, setModalVisable] = useState(false);
   const [RedirectionData, setRedirectionData] = useState(null);
   const [current, setcurrent] = useState(1);
@@ -82,9 +82,12 @@ function List(props: any) {
     },
   ];
   // console.log({ dataSource, Onchange, loading, init, pageNum, redirectionDel });
-  useEffect(() => {
-    setcurrent(pageNum)
-  }, [dataSource?.length])
+  // useEffect(() => {
+  //   if (pageNum === 1) {
+  //     setcurrent(pageNum)
+  //   }
+
+  // }, [pageNum])
   return (
     <div>
       <Table
@@ -93,10 +96,11 @@ function List(props: any) {
         columns={columns}
         loading={loading}
         pagination={{
-          current: current,
-          total: dataSource?.length || 0,
+          current: pageNum,
+          total: total || 0,
           onChange: (page: number, pageSize?: number) => {
-            setcurrent(page)
+            setcurrent(page);
+            onPageChange(page, pageSize)
           }
         }}
       />

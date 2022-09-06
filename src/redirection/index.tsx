@@ -15,7 +15,8 @@ export default class Redirection extends Component<any, any> {
         url: ''
       },
       dataSource: [],
-      pageNum: 0
+      pageNum: 0,
+      dataList: [],
     }
   }
 
@@ -32,6 +33,17 @@ export default class Redirection extends Component<any, any> {
       this.init();
     })
   }
+
+  //前端分页
+  onPageChange = (pageNum, pageSize = 10) => {
+    const { dataSource } = this.state;
+    const dataList = dataSource.slice((pageNum - 1) * pageSize, pageNum * pageSize);
+    this.setState({
+      dataList,
+      pageNum
+    })
+  }
+
   // 查询方法
   init = () => {
     this.setState({
@@ -47,8 +59,10 @@ export default class Redirection extends Component<any, any> {
           return a.createTime < b.createTime ? 1 : -1;
         });
       }
+      const dataList = res.context?.redirectionUrlVOList.slice(0, 10);
       this.setState({
         dataSource: res.context?.redirectionUrlVOList,
+        dataList,
         SearchListloading: false,
         pageNum: 1
       })
@@ -112,7 +126,7 @@ export default class Redirection extends Component<any, any> {
   }
 
   render() {
-    const { dataSource, SearchListloading, pageNum } = this.state;
+    const { dataSource, SearchListloading, pageNum, dataList } = this.state;
     return (
       <div className='content-redirection'>
         <AuthWrapper functionName="f_redirection_list">
@@ -122,7 +136,16 @@ export default class Redirection extends Component<any, any> {
               <SearchHead onSearch={this.onSearch} init={this.init} />
             </div>
             <div className="container">
-              <SearchList pageNum={pageNum} dataSource={dataSource.length > 0 ? dataSource : []} Onchange={this.statusOnchange} loading={SearchListloading} init={this.init} redirectionDel={this.redirectionDel} />
+              <SearchList
+                total={dataSource?.length || 0}
+                pageNum={pageNum}
+                dataSource={dataList.length > 0 ? dataList : []}
+                Onchange={this.statusOnchange}
+                loading={SearchListloading}
+                init={this.init}
+                redirectionDel={this.redirectionDel}
+                onPageChange={this.onPageChange}
+              />
             </div>
           </div>
         </AuthWrapper>

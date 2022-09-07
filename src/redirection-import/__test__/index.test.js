@@ -78,7 +78,7 @@ describe('Redirection import Test', () => {
       const downloadnext = screen.getByTestId('downloadnext');
       await userEvent.click(downloadnext);
       const file = document.querySelector('input[type="file"]');
-      console.log('file', file);
+      // console.log('file', file);
       // order.offline.paymenttype
       //   {
       //     "file": {
@@ -127,15 +127,7 @@ describe('Redirection import Test', () => {
 
       fireEvent.change(file, {
         target: {
-          value: {
-            uid: 'rc-upload-1662453976460-7',
-            lastModified: 1662454026555,
-            lastModifiedDate: '2022-09-06T08:47:06.555Z',
-            name: 'URL_redirection_template_202209060847.xls',
-            size: 226304,
-            type: 'application/vnd.ms-excel',
-            webkitRelativePath: ''
-          }
+          files: new File(['sdsajdsa'], 'shsjsj', { type: 'xls/xlsx' })
         }
       });
       debug();

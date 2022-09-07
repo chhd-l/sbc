@@ -11,12 +11,13 @@ export default class Payment extends React.Component<any, any> {
     super(props);
     this.state = {
       showConfirm: false,
-      paymentMethod: ''
+      paymentMethod: '',
+      posTypeEnum: null,
     };
   }
 
-  onSelectPayment = (paymentMethod: string) => {
-    this.setState({ showConfirm: true, paymentMethod });
+  onSelectPayment = (paymentMethod: string, posTypeEnum?: string) => {
+    this.setState({ showConfirm: true, paymentMethod, posTypeEnum });
   };
 
   onCancelPayment = () => {
@@ -25,9 +26,9 @@ export default class Payment extends React.Component<any, any> {
 
   onConfirmPayment = () => {
     const { onPay } = this.props;
-    const { paymentMethod } = this.state;
+    const { paymentMethod, posTypeEnum } = this.state;
     if (onPay) {
-      onPay(paymentMethod);
+      onPay(paymentMethod, posTypeEnum);
       this.setState({ showConfirm: false });
     }
   };
@@ -52,7 +53,7 @@ export default class Payment extends React.Component<any, any> {
               <span className="action-tag"><FormattedMessage id="Order.offline.creditCard" /></span>
             </Card>
           </Col>
-          <Col span={6} onClick={() => this.onSelectPayment('ONJ Credit card')}>
+          <Col span={6} onClick={() => this.onSelectPayment('ADYEN_POS', 'ONJ Credit card')}>
             <Card bordered={false} className="text-align-center c-box">
               <div style={{ padding: '30px 0' }}><img src={cardImg} height="60" alt="" /></div>
               <span className="action-tag"><FormattedMessage id="Order.offline.ONJcreditCard" /></span>
